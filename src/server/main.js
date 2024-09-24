@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import ViteExpress from "vite-express";
 import cors from 'cors';
 import dotenv from 'dotenv';
-import User from './userSchema.js';// Import the default export (User model)
+import User from './Schemas/userSchema.js';// Import the default export (User model)
 import DB from './config/DB.js';
 dotenv.config();
 
