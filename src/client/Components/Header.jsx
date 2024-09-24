@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { AppBar, Toolbar, Typography, Button, Box, IconButton, Menu, MenuItem } from '@mui/material';
 import { Link } from 'react-router-dom';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+// import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -35,7 +35,7 @@ const Header = () => {
           onMouseEnter={handleMenuOpen} // Open on hover
           onClick={handleMenuOpen} // Also open on click
         >
-          <AccountCircleIcon />
+          
         </IconButton>
 
         <Menu

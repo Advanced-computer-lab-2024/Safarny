@@ -2,7 +2,7 @@
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import './SideBar.css'; // Custom CSS for styling
-import HomeIcon from '@mui/icons-material/Home';
+// import HomeIcon from '@mui/icons-material/Home';
 
 const SideBar = () => {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ const SideBar = () => {
   return (
     <div className="sidebar">
       <Button onClick={() => navigate('/admin')}>
-        <HomeIcon />
+        {/* <HomeIcon /> */}
         HomePage
       </Button>
       <Button onClick={() => navigate('/tourguidesadmin')}>
