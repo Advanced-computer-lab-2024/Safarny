@@ -1,6 +1,6 @@
 import express from "express";
 import ViteExpress from "vite-express";
-const dotenv = require("dotenv");
+import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
