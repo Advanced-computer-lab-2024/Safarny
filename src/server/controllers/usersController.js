@@ -4,6 +4,10 @@ import AsyncHandler from 'express-async-handler';
 const getUsers = AsyncHandler(async (req, res) => {
     const { type } = req.query; // Get the user type from query parameters
 
+    if (!type) {
+        return res.status(400).json({ message: 'User type is required' });
+    }
+
     try {
         // Find users with the specified type
         const users = await User.find({ type });
