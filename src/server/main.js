@@ -7,14 +7,10 @@ import dotenv from 'dotenv';
 import User from './models/userModel.js';// Import the default export (User model)
 import DB from './config/DB.js';
 import signUp from './routes/signUpRoutes.js';
+import Users from './routes/usersRoutes.js';
+import login from './routes/loginRoutes.js';
 dotenv.config();
 
-//const mongourl = "mongodb+srv://omarwalid351:QqhqQqccTFDEFTtF@cluster0.qrpfb.mongodb.net/ACL";
-//const mongourl = process.env.MONGO_URL;
-
-/*if (!mongourl) {
-    throw new Error("MONGO_URL is not defined in the environment variables");
-}*/
 
 const app = express();
 app.use(cors());
@@ -22,18 +18,11 @@ app.use(bodyParser.json());
 app.use(express.json());
 const port = process.env.PORT ||3000;
 
-/*mongoose.connect(mongourl, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => {
-    console.log("Database connected");
-}).catch((e) => {
-    console.log(e);
-});*/
+
 
 DB();
 
-app.post('/signup', async (req, res) => {
+/*app.post('/signup', async (req, res) => {
     const { email, username, password,nationality,mobile,employed,type } = req.body;
     
     try {
@@ -49,7 +38,7 @@ app.post('/signup', async (req, res) => {
     }
   });
 
-  app.post('/addadmin', async (req, res) => {
+app.post('/addadmin', async (req, res) => {
     const { email, password,type ,username} = req.body;
     
     try {
@@ -67,7 +56,9 @@ app.post('/signup', async (req, res) => {
     }
   });
 
-  app.get('/users', async (req, res) => {
+
+
+app.get('/users', async (req, res) => {
     const { type } = req.query; // Get the user type from query parameters
   
     try {
@@ -82,7 +73,7 @@ app.post('/signup', async (req, res) => {
     }
   });
 
-  app.delete('/users/:id', async (req, res) => {
+app.delete('/users/:id', async (req, res) => {
     const userId = req.params.id;
   
     try {
@@ -97,7 +88,9 @@ app.post('/signup', async (req, res) => {
     }
   });
 
-  app.post('/login', async (req, res) => {
+ */
+
+app.post('/login', async (req, res) => {
     const { email, password,type } = req.body;
 
     try {
@@ -125,7 +118,9 @@ app.post('/signup', async (req, res) => {
 
 
 app.use('/signup',signUp)
-
+app.use('/signup/addadmin',signUp)
+app.use('/users',Users)
+app.use('/login',login)
 
 ViteExpress.listen(app, 3000, () => {
     console.log(`Server running on port: ${port}`);

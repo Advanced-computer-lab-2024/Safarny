@@ -1,6 +1,10 @@
 import { Router } from "express";
 const router = Router();
+import { signUp, addAdmin } from "../controllers/signUpController.js";
+import {protect} from "../middleware/authMiddleware.js";
 
-//import { signUp, addAdmin, getUsers } from "../controllers/signUpController.js";
+
+router.post('/',signUp);
+router.post('/addadmin',addAdmin);
 
 export default router;
