@@ -4,24 +4,33 @@ import bodyParser from 'body-parser';
 import ViteExpress from "vite-express";
 import cors from 'cors';
 import dotenv from 'dotenv';
-import User from './userSchema.js'; // Import the default export (User model)
+import User from './userSchema.js';// Import the default export (User model)
+import DB from './config/DB.js';
 dotenv.config();
 
-const mongourl = "mongodb+srv://omarwalid351:QqhqQqccTFDEFTtF@cluster0.qrpfb.mongodb.net/ACL";
+//const mongourl = "mongodb+srv://omarwalid351:QqhqQqccTFDEFTtF@cluster0.qrpfb.mongodb.net/ACL";
+//const mongourl = process.env.MONGO_URL;
+
+/*if (!mongourl) {
+    throw new Error("MONGO_URL is not defined in the environment variables");
+}*/
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
-const port = 3000;
+const port = process.env.PORT ||3000;
 
-mongoose.connect(mongourl, {
+/*mongoose.connect(mongourl, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
     console.log("Database connected");
 }).catch((e) => {
     console.log(e);
-});
+});*/
+
+DB();
 
 app.post('/signup', async (req, res) => {
     const { email, username, password,nationality,mobile,employed,type } = req.body;
