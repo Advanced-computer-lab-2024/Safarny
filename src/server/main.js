@@ -4,8 +4,9 @@ import bodyParser from 'body-parser';
 import ViteExpress from "vite-express";
 import cors from 'cors';
 import dotenv from 'dotenv';
-import User from './Schemas/userSchema.js';// Import the default export (User model)
+import User from './models/userModel.js';// Import the default export (User model)
 import DB from './config/DB.js';
+import signUp from './routes/signUpRoutes.js';
 dotenv.config();
 
 //const mongourl = "mongodb+srv://omarwalid351:QqhqQqccTFDEFTtF@cluster0.qrpfb.mongodb.net/ACL";
@@ -122,6 +123,8 @@ app.post('/signup', async (req, res) => {
     }
 });
 
+
+app.use('/signup',signUp)
 
 
 ViteExpress.listen(app, 3000, () => {
