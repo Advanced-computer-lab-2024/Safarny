@@ -4,16 +4,16 @@ import Header from './components/Header';
 import Products from './Products';
 import Landmarks from './Landmarks';
 import SignIn from './SignIn';
-import SignUp from './pages/SignUp';
-import TourGuide from './pages/TourGuide';
-import Advertiser from './pages/Advertiser';
-import Seller from './pages/Seller';
-import Admin from './pages/Admin/Admin';
-import TourGuideAmin from './pages/Admin/TourGuideAmin';
-import TouristsAdmin from './pages/Admin/TouristsAdmin';
-import SellersAdmin from './pages/Admin/SellersAdmin';
-import AdvertisersAdmin from './pages/Admin/AdvertisersAdmin';
-import AdminList from './pages/Admin/AdminList';
+import SignUp from '/src/client/components/Signup/Signup';
+// import TourGuide from './pages/TourGuide';
+// import Advertiser from './pages/Advertiser';
+// import Seller from './pages/Seller';
+import Admin from '/src/client/components/Admin/Admin';
+import TourGuideAmin from '/src/client/components/Admin/TourGuideAmin';
+import TouristsAdmin from '/src/client/components/Admin/TouristsAdmin';
+import SellersAdmin from '/src/client/components/Admin/SellersAdmin';
+import AdvertisersAdmin from '/src/client/components/Admin/AdvertisersAdmin';
+import AdminList from '/src/client/components/Admin/AdminList';
 
 
 function App() {
@@ -36,9 +36,9 @@ function App() {
       <Routes>
         <Route path="/products" element={<Products />} />
         <Route path="/landmarks" element={<Landmarks />} />
-        <Route path="/TourGuide" element={<TourGuide />} />
-        <Route path="/Advertiser" element={<Advertiser />} />
-        <Route path="/Seller" element={<Seller />} />
+        {/* <Route path="/TourGuide" element={<TourGuide />} /> */}
+        {/* <Route path="/Advertiser" element={<Advertiser />} /> */}
+        {/* <Route path="/Seller" element={<Seller />} /> */}
         <Route path="/Admin" element={<Admin />} />
         <Route path="/tourguidesadmin" element={<TourGuideAmin />} />
         <Route path="/touristsadmin" element={<TouristsAdmin />} />

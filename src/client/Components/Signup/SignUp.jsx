@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import styles from './SignUp.module.css';
 
 const SignUp = () => {
   const [username, setUserName] = useState('');
@@ -14,9 +15,8 @@ const SignUp = () => {
   const [success, setSuccess] = useState(false);
   const type = "tourist";
 
-  const navigate = useNavigate(); // Initialize useNavigate outside the function
+  const navigate = useNavigate();
 
-  // Form submit handler
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -31,7 +31,6 @@ const SignUp = () => {
     };
 
     try {
-      // Post the form data to the backend
       const response = await axios.post('http://localhost:3000/signup', userData);
 
       if (response.status === 201) {
@@ -46,13 +45,13 @@ const SignUp = () => {
   };
 
   return (
-    <div className="signup-form">
+    <div className={styles.signupForm}>
       <h2>Sign Up</h2>
 
-      {success && <p className="success-message">Sign up successful!</p>}
-      {error && <p className="error-message">{error}</p>}
+      {success && <p className={styles.successMessage}>Sign up successful!</p>}
+      {error && <p className={styles.errorMessage}>{error}</p>}
 
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} className={styles.formContainer}>
         <Form.Group controlId="email">
           <Form.Label>Email</Form.Label>
           <Form.Control
