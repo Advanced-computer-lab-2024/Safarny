@@ -88,7 +88,7 @@ app.delete('/users/:id', async (req, res) => {
     }
   });
 
- */
+
 
 app.post('/login', async (req, res) => {
     const { email, password,type } = req.body;
@@ -115,7 +115,7 @@ app.post('/login', async (req, res) => {
         return res.status(500).json({ message: 'Server error' });
     }
 });
-
+*/
 
 app.use('/signup',signUp)
 app.use('/signup/addadmin',signUp)
