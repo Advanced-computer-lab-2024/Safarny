@@ -3,6 +3,8 @@ import React from 'react';
 import Header from './components/Header';
 import Products from './Products';
 import Landmarks from './Landmarks';
+import Homepage from '/src/client/components/Home/Homepage';
+import Footer from '/src/client/components/Footer/Footer';
 import SignIn from './SignIn';
 import SignUp from '/src/client/components/Signup/Signup';
 // import TourGuide from './pages/TourGuide';
@@ -32,8 +34,9 @@ function App() {
 
   return (
     <Router>
-      <Header />
+      {/* <Header /> */}
       <Routes>
+        <Route path="/" element={<Homepage />} />
         <Route path="/products" element={<Products />} />
         <Route path="/landmarks" element={<Landmarks />} />
         {/* <Route path="/TourGuide" element={<TourGuide />} /> */}
