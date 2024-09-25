@@ -1,0 +1,71 @@
+:root {
+    --primary-color: #1a1a1a;
+    --secondary-color: #333;
+    --background-color: #dcdbdb;
+    --text-color: #616161;
+    --header-color: white;
+    --form-background: #2a2a2a;
+    --border-radius: 1rem;
+  }
+  
+  .signupForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: var(--background-color);
+  }
+  
+  h2 {
+    color: var(--header-color);
+    margin-bottom: 1rem;
+  }
+  
+  .successMessage, .errorMessage {
+    color: var(--text-color);
+  }
+  
+  .formContainer {
+    background-color: var(--form-background);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    margin: auto;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  label {
+    display: flex;
+    flex-direction: column;
+    color: var(--text-color);
+  }
+  
+  input, select {
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+  }
+  
+  button {
+    padding: 1rem 2rem;
+    background-color: var(--primary-color);
+    color: var(--header-color);
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background-color: lighten(var(--primary-color), 10%);
+  }
+  
