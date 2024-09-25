@@ -70,4 +70,4 @@ const updateUser = AsyncHandler(async (req, res) => {
     }
 });
 
-export { getUsers, deleteUser, getSingleUser };
+export { getUsers, deleteUser, getSingleUser, updateUser };
