@@ -1,6 +1,7 @@
 import User from "../models/userModel.js";
 import AsyncHandler from 'express-async-handler';
 import mongoose from 'mongoose';
+import userModel from "../models/userModel.js";
 
 const getUsers = AsyncHandler(async (req, res) => {
     const { type } = req.query; // Get the user type from query parameters
@@ -52,6 +53,20 @@ const getSingleUser = AsyncHandler(async (req, res) => {
     } catch (error) {
         console.error('Error getting user:', error);
         res.status(500).json({ message: 'Server error' });
+    }
+});
+
+const updateUser = AsyncHandler(async (req, res) => {
+    try {
+        const { id, username, email, password, mobile} = req.body;
+        const user = await userModel.findOneAndUpdate({ id }, { username, email, password, mobile }, { new: true });
+        if (user) {
+            res.status(200).json(user);
+        } else {
+            res.status(404).json({ error: 'User not found' });
+        }
+    } catch (error) {
+        res.status(400).json({ error: 'An error occurred while updating the user' });
     }
 });
 

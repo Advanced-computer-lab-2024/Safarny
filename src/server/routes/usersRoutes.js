@@ -5,4 +5,5 @@ import {getUsers,deleteUser, getSingleUser} from "../controllers/usersController
 router.get('/',getUsers);
 router.delete('/:id',deleteUser);
 router.get('/about',getSingleUser);
+router.put('/update',updateUser);
 export default router;
