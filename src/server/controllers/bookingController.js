@@ -1,4 +1,4 @@
-const Booking = require("../Models/Booking.js");
+const Booking = require("Booking.js");
 const mongoose = require("mongoose");
 
 const createBooking = async (req, res) => {
@@ -9,7 +9,9 @@ const createBooking = async (req, res) => {
 };
 
 const getBookings = async (req, res) => {
-  const bookings = await Booking.find().populate('itinerary').populate('tourist');
+  const bookings = await Booking.find()
+    .populate("itinerary")
+    .populate("tourist");
   res.status(200).json(bookings);
 };
 
@@ -21,7 +23,9 @@ const updateBooking = async (req, res) => {
     id,
     { itinerary, tourist, bookingDate, status },
     { new: true }
-  ).populate('itinerary').populate('tourist');
+  )
+    .populate("itinerary")
+    .populate("tourist");
   res.status(200).json(updatedBooking);
 };
 
