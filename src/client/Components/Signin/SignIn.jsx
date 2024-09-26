@@ -1,7 +1,8 @@
-import axios from 'axios';
 import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import Footer from '/src/client/Components/Footer/Footer';
+import styles from './SignIn.module.css';  // Retain the same styles
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
@@ -10,35 +11,32 @@ const SignIn = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Payload to send
-    const userData = { 
-      email, 
-      password };
+    const userData = { email, password };
 
     try {
-      // Post the form data to the backend
+      // Send the request to the backend
       const response = await axios.post('http://localhost:3000/login', userData);
 
       if (response.status === 200) {
         setSuccess(true);
         setError('');
-        if(response.data.type==="tourist"){
-          navigate('/products'); 
-        }
-        else if(response.data.type==="seller"){
-          navigate('/Seller'); 
-        }
-        else if(response.data.type==="admin"){
-          navigate('/Admin'); 
+        // Redirect based on the user type received from the backend
+        if (response.data.type === 'tourist') {
+          navigate('/products');
+        } else if (response.data.type === 'seller') {
+          navigate('/Seller');
+        } else if (response.data.type === 'admin') {
+          navigate('/Admin');
         }
       }
     } catch (err) {
-      
       if (err.response) {
-        setError(err.response.data.message); // Error message from backend (email/password incorrect)
+        setError(err.response.data.message);  // Backend error (e.g., invalid credentials)
       } else {
         setError('An unexpected error occurred. Please try again.');
       }
@@ -47,39 +45,51 @@ const SignIn = () => {
   };
 
   return (
-    <div className="signin-form">
-      <h2>Sign In</h2>
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <h1>Safarny</h1>
+        <nav className={styles.nav}>
+          <Link to="/" className={styles.button}>Back to Home</Link>
+        </nav>
+      </header>
 
-      {success && <p className="success-message">Sign in successful!</p>}
-      {error && <p className="error-message">{error}</p>}
+      <div className={styles.formContainer}>
+        <h2>Sign In</h2>
 
-      <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="email">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </Form.Group>
+        {/* Show success or error messages */}
+        {success && <p className={styles.successMessage}>Sign in successful!</p>}
+        {error && <p className={styles.errorMessage}>{error}</p>}
 
-        <Form.Group controlId="password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </Form.Group>
+        {/* Form structure with state handlers */}
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <label>
+            Email:
+            <input
+              type="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            Password:
+            <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </label>
 
-        <Button variant="primary" type="submit">
-          Sign In
-        </Button>
-      </Form>
+          <button type="submit" className={styles.button}>
+            Sign In
+          </button>
+        </form>
+      </div>
+
+      <Footer />
     </div>
   );
 };
