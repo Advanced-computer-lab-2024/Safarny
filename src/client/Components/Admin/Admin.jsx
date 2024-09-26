@@ -1,11 +1,11 @@
 
 import React from 'react';
-// import SideBar from '../SideBar.tsx';
+import SideBar from '../SideBar'
 
 const Admin = () => {
   return (
     <div style={{ display: 'flex' }}>
-      {/* <SideBar /> */}
+      <SideBar />
       <div style={{ marginLeft: '250px', padding: '20px' }}> {/* Adjust the margin */}
         admin
       </div>

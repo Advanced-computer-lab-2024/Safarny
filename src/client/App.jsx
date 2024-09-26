@@ -11,9 +11,9 @@ import SignUp from '/src/client/components/Signup/Signup';
 // import Advertiser from './pages/Advertiser';
 // import Seller from './pages/Seller';
 import Admin from '/src/client/components/Admin/Admin';
-import TourGuideAmin from '/src/client/components/Admin/TourGuideAmin';
-import TouristsAdmin from '/src/client/components/Admin/TouristsAdmin';
-import SellersAdmin from '/src/client/components/Admin/SellersAdmin';
+import TourGuideAmin from './Components/Admin/TourGuideAmin';
+import TouristsAdmin from './Components/Admin/TouristsAdmin';
+import SellersAdmin from './Components/Admin/SellersAdmin';
 import AdvertisersAdmin from '/src/client/components/Admin/AdvertisersAdmin';
 import AdminList from '/src/client/components/Admin/AdminList';
 

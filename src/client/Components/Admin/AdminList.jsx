@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import SideBar from '../../components/SideBar';
-import DataTable2 from '../../components/Grids/AdminGrid';
+import SideBar from '../SideBar';
+import DataTable2 from '../Grids/AdminGrid';
 import { Button, Modal, TextField, Typography, Card, CardContent, CardActions, Alert } from '@mui/material';
 import axios from 'axios';
 
@@ -22,7 +22,7 @@ const AdminList = () => {
         setSuccess(false);  // Reset success state when closing modal
     };
 
-    const handleAdd = async (e: React.FormEvent) => {
+    const handleAdd = async (e) => {
         e.preventDefault();
         const userData = { email, password, username, type };
 
