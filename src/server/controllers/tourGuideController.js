@@ -31,4 +31,9 @@ const deleteTourGuide = async (req, res) => {
   res.status(200).json({ message: "Tour guide deleted successfully" });
 };
 
-module.exports = { createTourGuide, getTourGuides, updateTourGuide, deleteTourGuide };
+module.exports = {
+  createTourGuide,
+  getTourGuides,
+  updateTourGuide,
+  deleteTourGuide,
+};
