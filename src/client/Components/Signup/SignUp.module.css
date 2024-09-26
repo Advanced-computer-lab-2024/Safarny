@@ -87,6 +87,13 @@ label {
   color: var(--text-color);
 }
 
+.logo {
+  height: 8rem;
+  margin-right: 1rem;
+  position: absolute;
+  left: 4rem;
+}
+
 input,
 select {
   padding: 1rem;
