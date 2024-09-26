@@ -4,19 +4,19 @@ const Schema = mongoose.Schema;
 const itinerarySchema = new Schema(
   {
     name: {
+      type: String, 
+      required: true,
+    },
+    tags: [{
+      type: Schema.Types.ObjectId,
+      ref: "Tags",
+      required: true,
+    }],
+    category: { // use ref same as tags?
       type: [String], 
       required: true,
     },
-    tag: { //for now, but i'm not sure ....
-      type: [String],
-      enum: ["historic areas", "beaches", "family-friendly", "shopping", "budget-friendly"], // Restrict to specific categories 
-      required: true,
-    },
-    category: {
-      type: [String], 
-      required: true,
-    },
-    activities: {
+    activities: { // use ref same as tags?
       type: [String], // Array of strings for activities
       required: true,
     },
