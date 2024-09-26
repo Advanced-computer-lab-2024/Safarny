@@ -5,7 +5,7 @@ import Products from './Products';
 import Landmarks from './Landmarks';
 import Homepage from '/src/client/components/Home/Homepage';
 import Footer from '/src/client/components/Footer/Footer';
-import SignIn from './SignIn';
+import SignIn from '/src/client/Components/Signin/SignIn';
 import SignUp from '/src/client/components/Signup/Signup';
 // import TourGuide from './pages/TourGuide';
 // import Advertiser from './pages/Advertiser';
