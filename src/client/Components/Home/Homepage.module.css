@@ -33,7 +33,7 @@
     z-index: 1000;
     height: var(--header-height);
     border-radius: var(--border-radius);
-    width: 100%;
+    width: 90%;
     transition: background-color 0.3s;
   }
   

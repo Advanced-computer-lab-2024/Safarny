@@ -81,6 +81,11 @@
     width: 95%;
   }
   
+/* .footer{
+    position: absolute;
+    bottom: -10rem;
+} */
+
   label {
     display: flex;
     flex-direction: column;

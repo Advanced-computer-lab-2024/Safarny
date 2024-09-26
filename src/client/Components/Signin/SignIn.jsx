@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Footer from '/src/client/Components/Footer/Footer';
-import styles from './SignIn.module.css';  // Retain the same styles
+import styles from './SignIn.module.css'; 
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
