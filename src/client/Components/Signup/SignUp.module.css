@@ -6,6 +6,7 @@
   --header-color: white;
   --form-background: #2a2a2a;
   --border-radius: 1rem;
+  --small-text-color: white;
 }
 
 .container {
@@ -84,7 +85,7 @@ h2 {
 label {
   display: flex;
   flex-direction: column;
-  color: var(--text-color);
+  color: var(--small-text-color);
 }
 
 .logo {
