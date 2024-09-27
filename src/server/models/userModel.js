@@ -9,6 +9,7 @@ const userModel = new mongoose.Schema(
     mobile: String,
     employed: String,
     type: String,
+    age : Number,
   },
   {
     collection: "datainfo",

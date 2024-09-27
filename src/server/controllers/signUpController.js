@@ -2,11 +2,11 @@ import AsyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 
 const signUp = AsyncHandler(async (req, res) => {
-    const { email, username, password,nationality,mobile,employed,type } = req.body;
+    const { email, username, password,nationality,mobile,employed,type,age } = req.body;
 
     try {
         // Create a new user
-        const newUser = new User({ email, username, password,nationality,mobile,employed,type });
+        const newUser = new User({ email, username, password,nationality,mobile,employed,type,age });
 
         // Save user to the database
         await newUser.save();
