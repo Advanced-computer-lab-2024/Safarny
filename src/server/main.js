@@ -11,6 +11,7 @@ import Users from './routes/usersRoutes.js';
 import login from './routes/loginRoutes.js';
 import tourguide from './routes/iteneraryRoutes.js';
 import touristItinerary from './routes/touristItineraryRoutes.js';
+import Posts from './routes/postsRoutes.js'
 dotenv.config();
 
 const app = express();
@@ -20,6 +21,8 @@ app.use(express.json());
 const port = process.env.PORT ||3000;
 DB();
 
+
+app.use('/posting',Posts)
 app.use('/signup',signUp)
 app.use('/signup/addadmin',signUp)
 app.use('/users',Users)
