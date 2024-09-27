@@ -1,6 +1,6 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import bodyParser from 'body-parser';
+import express from "express";
+import mongoose from "mongoose";
+import bodyParser from "body-parser";
 import ViteExpress from "vite-express";
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -11,10 +11,10 @@ import Users from './routes/usersRoutes.js';
 import login from './routes/loginRoutes.js';
 import tourguide from './routes/iteneraryRoutes.js';
 import touristItinerary from './routes/touristItineraryRoutes.js';
+import Posts from './routes/postsRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'; 
 
 dotenv.config();
-
 
 const app = express();
 app.use(cors());
@@ -23,6 +23,8 @@ app.use(express.json());
 const port = process.env.PORT ||3000;
 DB();
 
+
+app.use('/posting',Posts)
 app.use('/signup',signUp)
 app.use('/signup/addadmin',signUp)
 app.use('/users',Users)
@@ -32,5 +34,5 @@ app.use('/touristItinerary', touristItinerary)
 app.use('/admin', adminRoutes);
 
 ViteExpress.listen(app, 3000, () => {
-    console.log(`Server running on port: ${port}`);
+  console.log(`Server running on port: ${port}`);
 });

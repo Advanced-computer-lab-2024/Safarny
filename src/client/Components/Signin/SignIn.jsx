@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Footer from '/src/client/Components/Footer/Footer';
-import styles from './SignIn.module.css';  // Retain the same styles
+import Logo from '/src/client/Assets/Img/logo.png';
+import styles from './SignIn.module.css'; 
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
@@ -47,6 +48,7 @@ const SignIn = () => {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
+      <img src={Logo} alt="Safarny Logo" className={styles.logo} />
         <h1>Safarny</h1>
         <nav className={styles.nav}>
           <Link to="/" className={styles.button}>Back to Home</Link>

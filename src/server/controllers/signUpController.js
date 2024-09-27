@@ -1,12 +1,14 @@
 import AsyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
+import TourGuide from '../models/tourGuide.js';
+
 
 const signUp = AsyncHandler(async (req, res) => {
-    const { email, username, password,nationality,mobile,employed,type } = req.body;
+    const { email, username, password,nationality,mobile,employed,type,age } = req.body;
 
     try {
         // Create a new user
-        const newUser = new User({ email, username, password,nationality,mobile,employed,type });
+        const newUser = new User({ email, username, password,nationality,mobile,employed,type,age });
 
         // Save user to the database
         await newUser.save();
@@ -16,6 +18,23 @@ const signUp = AsyncHandler(async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 });
+
+const signUpOthers = AsyncHandler(async (req, res) => {
+    const { email, username, password } = req.body;
+
+    try {
+        // Create a new tour guide
+        const newTourGuide = new TourGuide({ email, username, password });
+
+        // Save tour guide to the database
+        await newTourGuide.save();
+
+        res.status(201).json({ message: 'Tour guide registered successfully' });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
 
 const addAdmin = AsyncHandler(async (req, res) => {
     const { email, password,type ,username} = req.body;
@@ -37,4 +56,4 @@ const addAdmin = AsyncHandler(async (req, res) => {
 
 
 
-export { signUp, addAdmin };
+export { signUp, signUpOthers,addAdmin };

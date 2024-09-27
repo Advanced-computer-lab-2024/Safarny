@@ -71,3 +71,78 @@ const updateUser = AsyncHandler(async (req, res) => {
 });
 
 export { getUsers, deleteUser, getSingleUser, updateUser };
+
+
+// Controller for creating a new profile
+export const createProfile = async (req, res) => {
+  try {
+    const { username, email, password, nationality, mobile, employed, type, YearOfExp, PrevWork } = req.body;
+
+    // Create a new Profile
+    const newProfile = new User({
+      username,
+      email,
+      password,
+      nationality,
+      mobile,
+      employed,
+      type,
+      YearOfExp,
+      PrevWork
+    });
+
+    // Save the new profile to the database
+    const savedProfile = await newProfile.save();
+
+    res.status(201).json({
+      message: 'Profile created successfully',
+      profile: savedProfile,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Controller for reading (getting) a profile by ID
+export const getProfileById = async (req, res) => {
+  try {
+    const profileId = req.params.id;
+
+    // Find the profile by its ID
+    const profile = await User.findById(profileId);
+
+    if (!profile) {
+      return res.status(404).json({ message: 'Profile not found' });
+    }
+
+    res.status(200).json(profile);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Controller for updating a profile by ID
+export const updateProfileById = async (req, res) => {
+  try {
+    const profileId = req.params.id;
+    const { username, email, password, nationality, mobile, employed, type, YearOfExp, PrevWork } = req.body;
+
+    // Find the profile by its ID and update it with the new data
+    const updatedProfile = await User.findByIdAndUpdate(
+      profileId,
+      { username, email, password, nationality, mobile, employed, type, YearOfExp, PrevWork },
+      { new: true, runValidators: true } // Return the updated profile
+    );
+
+    if (!updatedProfile) {
+      return res.status(404).json({ message: 'Profile not found' });
+    }
+
+    res.status(200).json({
+      message: 'Profile updated successfully',
+      profile: updatedProfile,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

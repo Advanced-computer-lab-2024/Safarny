@@ -1,5 +1,5 @@
 // import React from 'react'
-import SideBar from '../../components/SideBar'
+import SideBar from '../SideBar'
 // import DataTable from '../../components/Grids/GridCol'
 
 const TourGuideAmin = () => {

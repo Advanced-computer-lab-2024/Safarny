@@ -9,9 +9,6 @@ const columns = [
   { field: 'id', headerName: 'ID', width: 250 },
   { field: 'username', headerName: 'Username', width: 130 },
   { field: 'email', headerName: 'Email', width: 150 },
-  { field: 'nationality', headerName: 'Nationality', width: 130 },
-  { field: 'mobile', headerName: 'Mobile', width: 130 },
-  { field: 'employed', headerName: 'Employed', width: 90 },
   { field: 'type', headerName: 'Type', width: 90 },
 ];
 
@@ -22,7 +19,7 @@ export default function DataTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/users?type=tourist');
+        const response = await axios.get('http://localhost:3000/users?type=admin');
         const formattedRows = response.data.map((user) => ({
           id: user._id,
           username: user.username,

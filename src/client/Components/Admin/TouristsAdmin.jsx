@@ -1,6 +1,6 @@
-// import React from 'react'
-import SideBar from '../../components/SideBar'
-import DataTable from '../../components/Grids/GridCol'
+import React from 'react'
+import SideBar from '../SideBar'
+import DataTable from '../Grids/GridCol'
 
 const TouristsAdmin = () => {
   return (
