@@ -16,6 +16,8 @@ import TouristsAdmin from '/src/client/components/Admin/TouristsAdmin';
 import SellersAdmin from '/src/client/components/Admin/SellersAdmin';
 import AdvertisersAdmin from '/src/client/components/Admin/AdvertisersAdmin';
 import AdminList from '/src/client/components/Admin/AdminList';
+import AdminAddGovernor from '/src/client/components/Admin/AdminAddGovernor';
+
 
 
 function App() {
@@ -47,9 +49,11 @@ function App() {
         <Route path="/touristsadmin" element={<TouristsAdmin />} />
         <Route path="/sellersadmin" element={<SellersAdmin />} />
         <Route path="/advertisersadmin" element={<AdvertisersAdmin />} />
+        <Route path="/adminaddgovernor" element={<AdminAddGovernor />} />
         <Route path="/adminlist" element={<AdminList />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
+        
       </Routes>
     </Router>
   );
