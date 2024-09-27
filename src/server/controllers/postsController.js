@@ -1,7 +1,7 @@
-import Post from "../models/Posts.js";
+const Post = require("../models/Posts.js");
 
 // Controller for creating a new post (product)
-export const createPost = async (req, res) => {
+const createPost = async (req, res) => {
   try {
     const { details, price, quantity, imageurl } = req.body;
 
@@ -17,7 +17,7 @@ export const createPost = async (req, res) => {
     const savedPost = await newPost.save();
 
     res.status(201).json({
-      message: 'Post created successfully',
+      message: "Post created successfully",
       post: savedPost,
     });
   } catch (err) {
@@ -26,7 +26,7 @@ export const createPost = async (req, res) => {
 };
 
 // Controller to get all posts (products)
-export const getAllPosts = async (req, res) => {
+const getAllPosts = async (req, res) => {
   try {
     const posts = await Post.find(); // Fetch all posts
     res.status(200).json(posts);
@@ -36,7 +36,7 @@ export const getAllPosts = async (req, res) => {
 };
 
 // Controller to update a post (product) by its _id
-export const updatePostById = async (req, res) => {
+const updatePostById = async (req, res) => {
   try {
     const postId = req.params.id;
     const { details, price, quantity, imageurl } = req.body;
@@ -49,11 +49,11 @@ export const updatePostById = async (req, res) => {
     );
 
     if (!updatedPost) {
-      return res.status(404).json({ message: 'Post not found' });
+      return res.status(404).json({ message: "Post not found" });
     }
 
     res.status(200).json({
-      message: 'Post updated successfully',
+      message: "Post updated successfully",
       post: updatedPost,
     });
   } catch (err) {
@@ -62,7 +62,7 @@ export const updatePostById = async (req, res) => {
 };
 
 // Controller to delete a post (product) by its _id
-export const deletePostById = async (req, res) => {
+const deletePostById = async (req, res) => {
   try {
     const postId = req.params.id;
 
@@ -70,11 +70,18 @@ export const deletePostById = async (req, res) => {
     const deletedPost = await Post.findByIdAndDelete(postId);
 
     if (!deletedPost) {
-      return res.status(404).json({ message: 'Post not found' });
+      return res.status(404).json({ message: "Post not found" });
     }
 
-    res.status(200).json({ message: 'Post deleted successfully' });
+    res.status(200).json({ message: "Post deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+};
+
+module.exports = {
+  createPost,
+  getAllPosts,
+  updatePostById,
+  deletePostById,
 };
