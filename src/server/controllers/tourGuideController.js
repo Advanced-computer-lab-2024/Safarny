@@ -1,3 +1,5 @@
+import post from "../models/userModel.js";
+
 const tourGuideModel = require("TourGuide.js");
 const { default: mongoose } = require("mongoose");
 

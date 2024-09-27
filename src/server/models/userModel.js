@@ -10,6 +10,9 @@ const userModel = new mongoose.Schema(
     employed: String,
     type: String,
     age : Number,
+      YearOfExp:Number,
+      PrevWork:String,
+
   },
   {
     collection: "datainfo",

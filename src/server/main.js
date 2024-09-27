@@ -30,6 +30,7 @@ app.use('/login',login)
 app.use('/tourguide',tourguide)
 app.use('/touristItinerary', touristItinerary)
 
+
 ViteExpress.listen(app, 3000, () => {
   console.log(`Server running on port: ${port}`);
 });

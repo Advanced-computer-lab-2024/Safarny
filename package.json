@@ -1,5 +1,5 @@
 {
-  "name": "Safarny",
+  "name": "c",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -40,5 +40,9 @@
     "@vitejs/plugin-react": "^4.2.0",
     "nodemon": "^3.0.1",
     "vite": "^5.0.2"
-  }
+  },
+  "description": "",
+  "main": "vite.config.js",
+  "author": "",
+  "license": "ISC"
 }
