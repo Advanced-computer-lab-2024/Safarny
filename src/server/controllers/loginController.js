@@ -20,6 +20,7 @@ const login = AsyncHandler(async (req, res) => {
 
         res.status(200).json({
             message: 'Sign-in successful',
+            id: user._id,
             type: user.type
         });
     } catch (err) {
