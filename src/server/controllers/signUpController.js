@@ -61,6 +61,4 @@ const addAdmin = AsyncHandler(async (req, res) => {
   }
 });
 
-
-
-export { signUp, signUpOthers,addAdmin };
+module.exports = { signUp, signUpOthers,addAdmin };
