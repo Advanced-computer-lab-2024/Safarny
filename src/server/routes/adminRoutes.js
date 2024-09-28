@@ -1,6 +1,6 @@
-const { express } = require("express");
-const router = express.Router();
-import { addGovernor } from "../controllers/addgovernorController.js";
+const { Router } = require("express");
+const router = Router();
+const { addGovernor } = require("../controllers/addgovernorController.js");
 
-router.post('/add-governor', addGovernor);
-export default router;
+router.post("/add-governor", addGovernor);
+module.exports = router;

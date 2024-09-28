@@ -1,25 +1,24 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import React from 'react';
-import Header from './components/Header';
-import Products from './Products';
-import Landmarks from './Landmarks';
-import Homepage from '/src/client/components/Home/Homepage';
-import Footer from '/src/client/components/Footer/Footer';
-import SignIn from '/src/client/Components/Signin/SignIn';
-import SignUp from '/src/client/components/Signup/Signup';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React from "react";
+import Header from "./Components/Header";
+import Products from "./Products";
+import Landmarks from "./Landmarks";
+import Homepage from "./Components/Home/Homepage";
+import Footer from "./Components/Footer/Footer";
+import SignIn from "./Components/Signin/SignIn";
+import SignUp from "./Components/Signup/Signup";
 // import TourGuide from './pages/TourGuide';
 // import Advertiser from './pages/Advertiser';
 // import Seller from './pages/Seller';
-import Admin from '/src/client/components/Admin/Admin';
-import TourGuideAmin from './Components/Admin/TourGuideAmin';
-import TouristsAdmin from './Components/Admin/TouristsAdmin';
-import SellersAdmin from './Components/Admin/SellersAdmin';
-import AdvertisersAdmin from '/src/client/components/Admin/AdvertisersAdmin';
-import AdminList from '/src/client/components/Admin/AdminList';
-const {AdminAddGovernor} = require("/src/client/components/Admin/AdminAddGovernor");
+import Admin from "./Components/Admin/Admin";
+import TourGuideAmin from "./Components/Admin/TourGuideAmin";
+import TouristsAdmin from "./Components/Admin/TouristsAdmin";
+import SellersAdmin from "./Components/Admin/SellersAdmin";
+import AdvertisersAdmin from "./Components/Admin/AdvertisersAdmin";
+import AdminList from "./Components/Admin/AdminList";
+import AdminAddGovernor from "./Components/Admin/AdminAddGovernor";
 
-import Profile from '/src/client/Components/Profile/Profile';
-
+import Profile from "./Components/Profile/Profile";
 
 function App() {
   // const [message, setMessage] = useState('');
@@ -29,7 +28,7 @@ function App() {
   // }, []);
 
   // const fetchname = async () => {
-    
+
   //     const response = await axios.get(`http://localhost:3000/first`);
   //     setMessage(response.data.name);
 
@@ -55,7 +54,6 @@ function App() {
         <Route path="/adminlist" element={<AdminList />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
-        
       </Routes>
     </Router>
   );

@@ -11,9 +11,8 @@ const Users = require("./routes/usersRoutes.js");
 const login = require("./routes/loginRoutes.js");
 const itinerary = require("./routes/itineraryRoutes.js");
 const Posts = require("./routes/postsRoutes.js");
-const tourguide = require("./routes/iteneraryRoutes.js");
-const touristItinerary = require("./routes/touristItineraryRoutes.js");
-const Posts = require("./routes/postsRoutes.js");
+// const tourguide = require("./routes/iteneraryRoutes.js");
+// const touristItinerary = require("./routes/touristItineraryRoutes.js");
 const adminRoutes = require("./routes/adminRoutes.js");
 const historicalplacesRoutes = require("./routes/historicalplacesRoutes.js");
 
@@ -31,8 +30,8 @@ app.use("/signup", signUp);
 app.use("/signup/addadmin", signUp);
 app.use("/users", Users);
 app.use("/login", login);
-app.use("/tourguide", tourguide);
-app.use("/touristItinerary", touristItinerary);
+// app.use("/tourguide", tourguide);
+// app.use("/touristItinerary", touristItinerary);
 app.use("/admin", adminRoutes);
 app.use("/historicalplaces", historicalplacesRoutes);
 
