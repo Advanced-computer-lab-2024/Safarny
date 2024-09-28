@@ -12,6 +12,8 @@ import login from './routes/loginRoutes.js';
 import tourguide from './routes/iteneraryRoutes.js';
 import touristItinerary from './routes/touristItineraryRoutes.js';
 import Posts from './routes/postsRoutes.js'
+import historicalplacesRoutes from './routes/historicalplacesRoutes.js';
+
 dotenv.config();
 
 const app = express();
@@ -29,6 +31,9 @@ app.use('/users',Users)
 app.use('/login',login)
 app.use('/tourguide',tourguide)
 app.use('/touristItinerary', touristItinerary)
+app.use('/historicalplaces', historicalplacesRoutes);
+
+
 
 
 ViteExpress.listen(app, 3000, () => {
