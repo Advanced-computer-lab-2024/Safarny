@@ -11,7 +11,6 @@ const tagsSchema = new Schema(
     itinerary: [{
       type: Schema.Types.ObjectId,
       ref: "Itinerary",
-      required: true,
     }],
   },
   { timestamps: true }
