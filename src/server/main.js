@@ -12,7 +12,7 @@ import login from './routes/loginRoutes.js';
 import tourguide from './routes/iteneraryRoutes.js';
 import touristItinerary from './routes/touristItineraryRoutes.js';
 import Posts from './routes/postsRoutes.js'
-const {adminRoutes} = require ("./routes/adminRoutes.js"); 
+import adminRoutes from './routes/adminRoutes.js'; 
 import historicalplacesRoutes from './routes/historicalplacesRoutes.js';
 
 dotenv.config();

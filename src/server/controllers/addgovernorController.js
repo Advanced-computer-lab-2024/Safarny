@@ -1,5 +1,6 @@
-const {User} = require( "../models/userModel.js");
-const { AsyncHandler } = require( "express-async-handler");  // Ensure this import is here
+import User from "../models/userModel.js";
+import AsyncHandler from 'express-async-handler';  // Ensure this import is here
+
 const addGovernor = AsyncHandler(async (req, res) => {
     const { username, email, password, nationality, mobile, employed } = req.body;
 
@@ -27,4 +28,4 @@ const addGovernor = AsyncHandler(async (req, res) => {
         return res.status(500).json({ message: 'Server error' });
     }
 });
-module.exports= { addGovernor }; 
+export { addGovernor }; 

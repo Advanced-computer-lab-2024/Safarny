@@ -16,7 +16,7 @@ import TouristsAdmin from './Components/Admin/TouristsAdmin';
 import SellersAdmin from './Components/Admin/SellersAdmin';
 import AdvertisersAdmin from '/src/client/components/Admin/AdvertisersAdmin';
 import AdminList from '/src/client/components/Admin/AdminList';
-const {AdminAddGovernor} = require("/src/client/components/Admin/AdminAddGovernor");
+import AdminAddGovernor from '/src/client/components/Admin/AdminAddGovernor';
 
 import Profile from '/src/client/Components/Profile/Profile';
 
