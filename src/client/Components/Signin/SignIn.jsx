@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Footer from '/src/client/Components/Footer/Footer';
 import Logo from '/src/client/Assets/Img/logo.png';
-import styles from './SignIn.module.css'; 
+import styles from './SignIn.module.css';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
@@ -27,12 +27,13 @@ const SignIn = () => {
         setSuccess(true);
         setError('');
         // Redirect based on the user type received from the backend
+        const userId = response.data.id; // Ensure the ID is correctly extracted
         if (response.data.type === 'tourist') {
-          navigate('/Profile');
+          navigate('/Profile', { state: { userId } });
         } else if (response.data.type === 'seller') {
-          navigate('/Seller');
+          navigate('/Profile', { state: { userId } });
         } else if (response.data.type === 'admin') {
-          navigate('/Admin');
+          navigate('/Profile', { state: { userId } });
         }
       }
     } catch (err) {
