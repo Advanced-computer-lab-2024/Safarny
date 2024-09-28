@@ -34,7 +34,7 @@ const createItinerary = async (req, res) => {
 // Get all itineraries
 const getAllItineraries = async (_, res) => {
   try {
-    const itineraries = await Itinerary.find();
+    const itineraries = await Itinerary.find().populate('tags');
     res.status(200).send(itineraries);
   } catch (error) {
     res.status(500).send(error);

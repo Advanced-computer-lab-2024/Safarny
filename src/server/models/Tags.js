@@ -6,12 +6,13 @@ const tagsSchema = new Schema(
     name: {
       type: String,
       required: true,
+      unique: true,
     },
-    itinerary: {
+    itinerary: [{
       type: Schema.Types.ObjectId,
       ref: "Itinerary",
       required: true,
-    },
+    }],
   },
   { timestamps: true }
 );
