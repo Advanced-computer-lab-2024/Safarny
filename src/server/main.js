@@ -12,7 +12,8 @@ import login from './routes/loginRoutes.js';
 import tourguide from './routes/iteneraryRoutes.js';
 import touristItinerary from './routes/touristItineraryRoutes.js';
 import Posts from './routes/postsRoutes.js'
-import adminRoutes from './routes/adminRoutes.js'; 
+const {adminRoutes} = require ("./routes/adminRoutes.js"); 
+import historicalplacesRoutes from './routes/historicalplacesRoutes.js';
 
 dotenv.config();
 
@@ -32,6 +33,10 @@ app.use('/login',login)
 app.use('/tourguide',tourguide)
 app.use('/touristItinerary', touristItinerary)
 app.use('/admin', adminRoutes);
+app.use('/historicalplaces', historicalplacesRoutes);
+
+
+
 
 ViteExpress.listen(app, 3000, () => {
   console.log(`Server running on port: ${port}`);

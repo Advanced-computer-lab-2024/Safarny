@@ -16,8 +16,9 @@ import TouristsAdmin from './Components/Admin/TouristsAdmin';
 import SellersAdmin from './Components/Admin/SellersAdmin';
 import AdvertisersAdmin from '/src/client/components/Admin/AdvertisersAdmin';
 import AdminList from '/src/client/components/Admin/AdminList';
-import AdminAddGovernor from '/src/client/components/Admin/AdminAddGovernor';
+const {AdminAddGovernor} = require("/src/client/components/Admin/AdminAddGovernor");
 
+import Profile from '/src/client/Components/Profile/Profile';
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/landmarks" element={<Landmarks />} />
         {/* <Route path="/TourGuide" element={<TourGuide />} /> */}
         {/* <Route path="/Advertiser" element={<Advertiser />} /> */}
