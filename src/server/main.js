@@ -12,6 +12,7 @@ import login from './routes/loginRoutes.js';
 import tourguide from './routes/iteneraryRoutes.js';
 import touristItinerary from './routes/touristItineraryRoutes.js';
 import Posts from './routes/postsRoutes.js'
+const {adminRoutes} = require ("./routes/adminRoutes.js"); 
 import historicalplacesRoutes from './routes/historicalplacesRoutes.js';
 
 dotenv.config();
@@ -31,6 +32,7 @@ app.use('/users',Users)
 app.use('/login',login)
 app.use('/tourguide',tourguide)
 app.use('/touristItinerary', touristItinerary)
+app.use('/admin', adminRoutes);
 app.use('/historicalplaces', historicalplacesRoutes);
 
 

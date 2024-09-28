@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import {getUsers,deleteUser, getSingleUser, updateUser,createProfile ,getProfileById, updateProfileById} from "../controllers/usersController.js"; 
+import { getUsers, deleteUser, getSingleUser, updateUser,createProfile ,getProfileById, updateProfileById } from "../controllers/usersController.js"; 
 
 
 router.get('/',getUsers);
