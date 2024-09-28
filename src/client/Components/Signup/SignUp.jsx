@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Footer from '/src/client/Components/Footer/Footer';  
@@ -16,6 +18,23 @@ const SignUp = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const type = "tourist";  // Assuming default user type is 'tourist'
+  const [DOB, setDob] = useState('');
+  const age = calculateAge(DOB);
+
+
+  function calculateAge(dob) {
+    const dobDate = new Date(dob);
+    const today = new Date();
+    
+    let age = today.getFullYear() - dobDate.getFullYear();
+    
+    const monthDiff = today.getMonth() - dobDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dobDate.getDate())) {
+      age--;
+    }
+  
+    return age;
+  }
 
   const navigate = useNavigate();
 
@@ -30,7 +49,8 @@ const SignUp = () => {
       mobile,
       nationality,
       employed,
-      type
+      type,
+      age
     };
 
     try {
@@ -93,6 +113,14 @@ const SignUp = () => {
               required
             />
           </label>
+          <label htmlFor="dob">Date of Birth:</label>
+          <DatePicker
+            selected={DOB}
+            onChange={(date) => setDob(date)}
+            dateFormat="MM/dd/yyyy"
+            className="form-control"
+            placeholderText="Select your date of birth"
+          />
           <label>
             Mobile:
             <input

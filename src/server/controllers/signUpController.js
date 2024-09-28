@@ -26,6 +26,23 @@ const signUp = AsyncHandler(async (req, res) => {
   }
 });
 
+const signUpOthers = AsyncHandler(async (req, res) => {
+    const { email, username, password } = req.body;
+
+    try {
+        // Create a new tour guide
+        const newTourGuide = new TourGuide({ email, username, password });
+
+        // Save tour guide to the database
+        await newTourGuide.save();
+
+        res.status(201).json({ message: 'Tour guide registered successfully' });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+
 const addAdmin = AsyncHandler(async (req, res) => {
   const { email, password, type, username } = req.body;
 
@@ -44,4 +61,6 @@ const addAdmin = AsyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { signUp, addAdmin };
+
+
+export { signUp, signUpOthers,addAdmin };
