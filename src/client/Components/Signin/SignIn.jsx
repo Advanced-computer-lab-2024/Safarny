@@ -28,7 +28,7 @@ const SignIn = () => {
         setError('');
         // Redirect based on the user type received from the backend
         if (response.data.type === 'tourist') {
-          navigate('/products');
+          navigate('/Profile');
         } else if (response.data.type === 'seller') {
           navigate('/Seller');
         } else if (response.data.type === 'admin') {
