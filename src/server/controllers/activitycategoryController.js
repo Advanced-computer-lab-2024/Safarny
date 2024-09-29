@@ -1,18 +1,27 @@
 import ActivityCategory from "../models/ActivityCategory.js"; // Ensure this import is correct
 import AsyncHandler from 'express-async-handler';
-import User from "../models/userModel.js";  // Ensure this import is here
-const Category = require("../models/ActivityCategory.js");
-const mongoose = require("mongoose");
-
-const createCategory = async (req, res) => {
+import User from "../models/userModel.js";
+const createCategory = AsyncHandler (async  (req, res) => {
     const { type } = req.body;
-    const newCategory = new Category({ type });
-    await newCategory.save();
-    res.status(201).json(newCategory);
-};
+    if (!type) {
+        return res.status(400).json({ message: 'Type is required.' });
+    }
+    try {
+        // Create the new tourism governor
+        const newCategory = await User.create({
+            type,
+        });
+
+        // Return the created governor user
+        return res.status(201).json(newCategory);
+    } catch (err) {
+        console.error('Error adding category:', err);
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
 
 const getCategories = async (req, res) => {
-    const categories = await Category.find();
+    const categories = await ActivityCategory.find();
     res.status(200).json(categories);
 };
 
@@ -20,7 +29,7 @@ const updateCategory = async (req, res) => {
     const { id } = req.params; //must have the category id
     const { type } = req.body;
 
-    const updatedCategory = await Category.findByIdAndUpdate(
+    const updatedCategory = await ActivityCategory.findByIdAndUpdate(
         id,
         { type },
         { new: true }
@@ -31,8 +40,8 @@ const updateCategory = async (req, res) => {
 const deleteCategory = async (req, res) => {
     const { id } = req.params;
 
-    await Category.findByIdAndDelete(id);
+    await ActivityCategory.findByIdAndDelete(id);
     res.status(200).json({ message: "Category deleted successfully" });
 };
 
-module.exports = { createCategory, getCategories, updateCategory, deleteCategory };
+export { createCategory, getCategories, updateCategory, deleteCategory };
