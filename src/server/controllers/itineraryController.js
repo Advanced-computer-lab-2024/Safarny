@@ -1,21 +1,40 @@
-const express = require("express");
-const Itinerary = require("../models/Itinerary"); 
+const Itinerary = require("../models/Itinerary.js");
 
-// Create a new itinerary
 const createItinerary = async (req, res) => {
+  const requiredFields = [
+    "activities",
+    "locations",
+    "timeline",
+    "duration",
+    "language",
+    "price",
+    "availableDates",
+    "availableTimes",
+    "accessibility",
+    "pickupLocation",
+    "dropoffLocation",
+  ];
+  const missingFields = requiredFields.filter((field) => !req.body[field]);
+
+  if (missingFields.length > 0) {
+    return res
+      .status(400)
+      .send({ error: `Missing required fields: ${missingFields.join(", ")}` });
+  }
+
   try {
     const itinerary = new Itinerary(req.body);
     await itinerary.save();
     res.status(201).send(itinerary);
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send({ error: error.message });
   }
 };
 
 // Get all itineraries
-const getAllItineraries = async (req, res) => {
+const getAllItineraries = async (_, res) => {
   try {
-    const itineraries = await Itinerary.find();
+    const itineraries = await Itinerary.find().populate('tags');
     res.status(200).send(itineraries);
   } catch (error) {
     res.status(500).send(error);
@@ -99,12 +118,10 @@ const updateItineraryTagById = async (req, res) => {
 
   try {
     const itinerary = await Itinerary.findById(req.params.id);
-
     if (!itinerary) {
       return res.status(404).send();
     }
-
-    itinerary.tag = tags;
+    itinerary.tags = tags;
     await itinerary.save();
     res.status(200).send(itinerary);
   } catch (error) {

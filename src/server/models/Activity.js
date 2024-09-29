@@ -1,20 +1,40 @@
-import mongoose from 'mongoose';
+const mongoose = require("mongoose");
 
 const activitySchema = new mongoose.Schema({
-    date: { type: String, required: true },
-    time: { type: String, required: true },
-    location: { type: String, required: true },  // Human-readable location name
-    coordinates: {
-        lat: { type: Number, required: true },
-        lng: { type: Number, required: true }
+  name: {
+    type: String,
+    required: true,
+  },
+  location: {
+    type: String,
+    required: true,
+  },
+  coordinates: {
+    lat: { type: Number },
+    lng: { type: Number },
+  },
+  duration: {
+    type: Number, // Duration in minutes
+    required: true,
+  },
+  timeline: {
+    type: String,
+    required: true,
+  },
+  activityCategory: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "ActivityCategory",
     },
-    price: { type: Number, required: true },
-    category: { type: String, required: true },
-    tags: [String],
-    specialDiscount: { type: String },
-    bookingOpen: { type: Boolean, default: true }
+  ],
+  price: {
+    type: Number,
+    required: true,
+  },
+  specialDiscount: { type: String },
+  bookingOpen: { type: Boolean, default: true },
+  date: { type: String, required: true },
 });
 
-const Activity = mongoose.model('Activity', activitySchema);
-
-export default Activity;
+const Activity = mongoose.model("Activity", activitySchema);
+module.exports = Activity;
