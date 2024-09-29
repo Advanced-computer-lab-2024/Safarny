@@ -45,4 +45,9 @@ const deleteCategory = async (req, res) => {
   res.status(200).json({ message: "Category deleted successfully" });
 };
 
-export { createCategory, getCategories, updateCategory, deleteCategory };
+module.exports = {
+  createCategory,
+  getCategories,
+  updateCategory,
+  deleteCategory,
+};

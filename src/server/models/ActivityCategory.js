@@ -1,13 +1,16 @@
-import mongoose from 'mongoose';
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const ActivityCategorySchema = new mongoose.Schema({
-    type: {
-        type: String,
-        required: true
-    }
+  type: {
+    type: String,
+    required: true,
+  },
 });
 
-const ActivityCategory = mongoose.model('ActivityCategory', ActivityCategorySchema);
+const ActivityCategory = mongoose.model(
+  "ActivityCategory",
+  ActivityCategorySchema
+);
 
-export default ActivityCategory;
+module.exports = ActivityCategory;
