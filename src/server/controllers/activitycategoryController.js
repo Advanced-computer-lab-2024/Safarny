@@ -14,7 +14,6 @@ const createCategory = async (req, res) => {
     });
     await newCategory.save();
 
-    // Return the created governor user
     return res.status(201).json(newCategory);
   } catch (err) {
     console.error("Error adding category:", err);
