@@ -16,6 +16,14 @@ const activitySchema = new mongoose.Schema({
     timeline: {
         type: String,
         required: true
+    },
+    category: {
+        type: Object,
+        required: true
+    },
+    price: {
+        type: Number,
+        required: true
     }
 });
 
