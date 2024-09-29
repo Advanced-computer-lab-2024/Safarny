@@ -4,6 +4,9 @@ import styles from './Profile.module.css';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
 
+
+
+import UpdateProfilePage from '/src/client/Components/UpdateProfile/UpdateProfile'; //n
 const Profile = () => {
   const location = useLocation();
   const { userId } = location.state; // Get the user ID from the state
@@ -12,13 +15,18 @@ const Profile = () => {
     email: '',
   });
 
+
+ 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        
         const response = await fetch(`/users/${userId}`); // Use the ID from the state
+
         if (!response.ok) {
           throw new Error('Failed to fetch user data');
         }
+        
         const { password, __v, _id, ...userData } = await response.json(); // Exclude the password, _v, and id fields
         setUserInfo(userData);
       } catch (error) {
@@ -28,6 +36,12 @@ const Profile = () => {
 
     fetchUserData();
   }, [userId]);
+
+  
+  const handleUpdateClick = () => {
+    localStorage.setItem('userId', userId);
+    window.location.href = '/UpdateProfile';
+  };
 
   return (
     <div className={styles.container}>
@@ -50,6 +64,10 @@ const Profile = () => {
           ))}
         </section>
       </main>
+
+      <button onClick={handleUpdateClick} className={styles.updateButton}>
+        Update Profile
+      </button>
 
       <Footer />
     </div>
