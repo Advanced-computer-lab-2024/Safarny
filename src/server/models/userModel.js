@@ -2,13 +2,17 @@ const mongoose = require("mongoose");
 
 const userModel = new mongoose.Schema(
   {
-    //Default
+    //Default (Admin/ToursimGovernor/...)
     username: { type: String, required: true, unique: true },
     email: String,
     password: String,
 
     //Role
-    type: String,
+    role: {
+      type: String,
+      enum: ["Admin", "TourismGovernor", "Tourist", "TourGuide", "Seller", "Advertiser"],
+      required: true
+    },
 
     //Tourist
     nationality: String,
