@@ -17,7 +17,9 @@ const adminRoutes = require("./routes/adminRoutes.js");
 const historicalplacesRoutes = require("./routes/historicalplacesRoutes.js");
 const tagsRoutes = require("./routes/tagsRoutes.js");
 
-const touristUpdate = require( './routes/touristUpdateInfoRoutes.js');
+const touristUpdate = require("./routes/touristUpdateInfoRoutes.js");
+
+const ActivityCategoriesRoutes = require("./routes/ActivityCategoriesRoutes.js");
 
 dotenv.config();
 
@@ -38,6 +40,7 @@ app.use("/login", login);
 app.use("/admin", adminRoutes);
 app.use("/historicalplaces", historicalplacesRoutes);
 app.use("/tag", tagsRoutes);
+app.use("/api/categories", ActivityCategoriesRoutes);
 
 ViteExpress.listen(app, 3000, () => {
   console.log(`Server running on port: ${port}`);
