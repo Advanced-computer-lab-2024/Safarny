@@ -1,11 +1,17 @@
-import express from 'express';
-const router = express.Router();
-import { addGovernor }  from "../controllers/addgovernorController.js";
-import { createCategory, getCategories, updateCategory, deleteCategory } from "../controllers/activitycategoryController.js";
-router.post('/add-governor', addGovernor);
-router.post('/api/categories', createCategory);
-router.get('/api/categories', getCategories);
-router.put('/api/categories/:id', updateCategory);
-router.delete('/api/categories/:id', deleteCategory);
+const { Router } = require("express");
+const router = Router();
+const { addGovernor } = require("../controllers/addgovernorController.js");
+const {
+  createCategory,
+  getCategories,
+  updateCategory,
+  deleteCategory,
+} = require("../controllers/activitycategoryController.js");
 
-export default router;
+router.post("/add-governor", addGovernor);
+router.post("/api/categories", createCategory);
+router.get("/api/categories", getCategories);
+router.put("/api/categories/:id", updateCategory);
+router.delete("/api/categories/:id", deleteCategory);
+
+module.exports = router;

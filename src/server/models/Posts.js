@@ -1,11 +1,11 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const Posts = new mongoose.Schema(
   {
     details: String,
     price: Number,
     quantity: Number,
-    imageurl:String,
+    imageurl: String,
   },
   {
     collection: "Posts",
@@ -13,4 +13,4 @@ const Posts = new mongoose.Schema(
 );
 
 const Post = mongoose.model("Posts", Posts);
-export default Post;
+module.exports = Post;

@@ -4,22 +4,25 @@ const Schema = mongoose.Schema;
 const itinerarySchema = new Schema(
   {
     name: {
-      type: String, 
+      type: String,
       required: true,
     },
-    tags: [{
-      type: Schema.Types.ObjectId,
-      ref: "Tags",
-      required: true,
-    }],
-    category: { // use ref same as tags?
-      type: [String], 
-      required: true,
-    },
-    activities: { // use ref same as tags?
-      type: [String], // Array of strings for activities
+    tags: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Tags",
+      },
+    ],
+    category: {
+      type: [String],
       required: true,
     },
+    activities: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Activity",
+      },
+    ],
     locations: {
       type: [String], // Array of strings for locations to be visited
       required: true,
@@ -57,7 +60,7 @@ const itinerarySchema = new Schema(
       required: true,
     },
     dropoffLocation: {
-      type: String, // Dropoff location 
+      type: String, // Dropoff location
       required: true,
     },
   },

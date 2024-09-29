@@ -1,8 +1,8 @@
 {
-  "name": "c",
+  "name": "safarny",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev": "nodemon src/server/main.js -w src/server",
     "start": "cross-env NODE_ENV=production node src/server/main.js",
@@ -30,7 +30,7 @@
     "react-dom": "^18.3.1",
     "react-icons": "^5.3.0",
     "react-router-dom": "^6.26.2",
-    "Safarny": "file:",
+    "safarny": "file:",
     "vite-express": "*"
   },
   "devDependencies": {
