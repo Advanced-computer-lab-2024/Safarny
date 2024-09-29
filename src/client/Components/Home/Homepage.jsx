@@ -58,6 +58,7 @@ const Homepage = () => {
           <div className={`${styles.menu} ${menuOpen ? styles.open : ''}`}>
             <Link to="/signin" className={styles.button}>Sign In</Link>
             <Link to="/signup" className={styles.button}>Sign Up</Link>
+            <Link to="/signupextra" className={styles.button}>Sign Up Extra</Link>
           </div>
         </nav>
       </header>
