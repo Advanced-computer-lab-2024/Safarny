@@ -1,13 +1,8 @@
-import express from "express";
-//const express = require('express');
+const express = require("express");
 const router = express.Router();
-//const { updateTouristProfile, getTouristProfile } = require('../controllers/touristController');
-//import  updateTouristProfile from '../controllers/touristUpdateInfoController.js';
-import updateTouristProfileById from '../controllers/touristUpdateInfoController.js';
-//import { updateTouristProfile } from "../controllers/touristUpdateInfoController";
+const updateTouristProfileById = require("../controllers/touristUpdateInfoController.js");
+
 // Route to update tourist profile
-router.put('/update/:id', updateTouristProfileById);
+router.put("/update/:id", updateTouristProfileById);
 
-//module.exports = router;
-export default router;
-
+module.exports = router;

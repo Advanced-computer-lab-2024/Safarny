@@ -17,7 +17,7 @@ const adminRoutes = require("./routes/adminRoutes.js");
 const historicalplacesRoutes = require("./routes/historicalplacesRoutes.js");
 const tagsRoutes = require("./routes/tagsRoutes.js");
 
-import touristUpdate from './routes/touristUpdateInfoRoutes.js';
+const touristUpdate = require( './routes/touristUpdateInfoRoutes.js');
 
 dotenv.config();
 

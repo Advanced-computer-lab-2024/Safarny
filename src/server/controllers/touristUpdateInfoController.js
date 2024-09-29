@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import User from '../models/userModel.js';
+const mongoose = require('mongoose');
+const User = require('../models/userModel.js');
 
 const updateTouristProfileById = async (req, res) => {
   // Extract the ID from the URL and remove any leading colon
@@ -51,4 +51,4 @@ const updateTouristProfileById = async (req, res) => {
   }
 };
 
-export default updateTouristProfileById;
+module.exports = updateTouristProfileById;
