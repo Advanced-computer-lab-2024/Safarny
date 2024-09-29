@@ -52,14 +52,15 @@ const Homepage = () => {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-      <img src={Logo} alt="Safarny Logo" className={styles.logo} />
+        <img src={Logo} alt="Safarny Logo" className={styles.logo} />
         <h1>Safarny</h1>
-        <nav className={styles.nav}>
-          <div className={`${styles.menu} ${menuOpen ? styles.open : ''}`}>
-            <Link to="/signin" className={styles.button}>Sign In</Link>
-            <Link to="/signup" className={styles.button}>Sign Up</Link>
-            <Link to="/signupextra" className={styles.button}>Sign Up Extra</Link>
-          </div>
+        <button className={styles.burger} onClick={toggleMenu}>
+          <span className={styles.burgerIcon}>&#9776;</span>
+        </button>
+        <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
+          <Link to="/signin" className={styles.button}>Sign In</Link>
+          <Link to="/signup" className={styles.button}>Sign Up</Link>
+          <Link to="/signupextra" className={styles.button}>Sign Up Extra</Link>
         </nav>
       </header>
       <main className={styles.main}>
