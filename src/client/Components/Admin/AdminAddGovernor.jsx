@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-const AddGovernor = () => {
+const AdminAddGovernor = () => {
   // State to hold form data
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    nationality: '',
-    mobile: '',
-    employed: ''
+    username: "",
+    email: "",
+    password: "",
+    nationality: "",
+    mobile: "",
+    employed: "",
   });
 
   // State to show success or error message
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -28,12 +28,12 @@ const AddGovernor = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3000/admin/add-governor', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3000/admin/add-governor", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
 
       if (response.ok) {
@@ -41,20 +41,20 @@ const AddGovernor = () => {
         setMessage(`Success: ${data.message}`);
         // Clear form after successful submission
         setFormData({
-          username: '',
-          email: '',
-          password: '',
-          nationality: '',
-          mobile: '',
-          employed: ''
+          username: "",
+          email: "",
+          password: "",
+          nationality: "",
+          mobile: "",
+          employed: "",
         });
       } else {
         const error = await response.json();
         setMessage(`Error: ${error.message}`);
       }
     } catch (error) {
-      console.error('Error:', error);
-      setMessage('An error occurred while adding the governor');
+      console.error("Error:", error);
+      setMessage("An error occurred while adding the governor");
     }
   };
 
@@ -142,4 +142,4 @@ const AddGovernor = () => {
   );
 };
 
-export default AddGovernor;
+export default AdminAddGovernor;

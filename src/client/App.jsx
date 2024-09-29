@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import React from 'react';
 import Header from './components/Header';
 import Products from './Products';
@@ -7,6 +7,8 @@ import Homepage from '/src/client/components/Home/Homepage';
 import Footer from '/src/client/components/Footer/Footer';
 import SignIn from '/src/client/Components/Signin/SignIn';
 import SignUp from '/src/client/components/Signup/Signup';
+import SignUpExtra from '/src/client/components/SignupExtra/SignUpExtra';
+
 // import TourGuide from './pages/TourGuide';
 // import Advertiser from './pages/Advertiser';
 // import Seller from './pages/Seller';
@@ -17,9 +19,10 @@ import SellersAdmin from './Components/Admin/SellersAdmin';
 import AdvertisersAdmin from '/src/client/components/Admin/AdvertisersAdmin';
 import AdminList from '/src/client/components/Admin/AdminList';
 import AdminAddGovernor from '/src/client/components/Admin/AdminAddGovernor';
-import UpdateProfilePage from '/src/client/Components/UpdateProfile/UpdateProfile'; //n
+
 import Profile from '/src/client/Components/Profile/Profile';
 
+import Profile from "./Components/Profile/Profile";
 
 function App() {
   // const [message, setMessage] = useState('');
@@ -29,7 +32,7 @@ function App() {
   // }, []);
 
   // const fetchname = async () => {
-    
+
   //     const response = await axios.get(`http://localhost:3000/first`);
   //     setMessage(response.data.name);
 
@@ -38,6 +41,7 @@ function App() {
   return (
     <Router>
       {/* <Header /> */}
+
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/products" element={<Products />} />
@@ -55,8 +59,7 @@ function App() {
         <Route path="/adminlist" element={<AdminList />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/UpdateProfile" element={<UpdateProfilePage />} />     
-
+        
       </Routes>
     </Router>
   );
