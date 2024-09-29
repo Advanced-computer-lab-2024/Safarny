@@ -65,15 +65,12 @@ function App() {
         <Route path="/adminlist" element={<AdminList />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
-<<<<<<< HEAD
         <Route path="/signupextra" element={<SignUpExtra />} />
-=======
         <Route path="/AdvertiserMain" element={<MainPage />} />
         <Route path="/create" element={<CreateActivity />} />
         <Route path="/read" element={<ReadActivities />} />
         <Route path="/update" element={<UpdateActivity />} />
         <Route path="/delete" element={<DeleteActivity />} />
->>>>>>> 5784841dedae1e498586a962b720b9d7f6a60701
       </Routes>
     </Router>
   );
