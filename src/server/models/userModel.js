@@ -8,17 +8,7 @@ const userModel = new mongoose.Schema(
     password: String,
 
     //Role
-    role: {
-      type: String,
-      enum: [
-        "Admin",
-        "TourismGovernor",
-        "Tourist",
-        "TourGuide",
-        "Seller",
-        "Advertiser",
-      ],
-    },
+    type: String,
 
     //Tourist
     nationality: String,

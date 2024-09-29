@@ -28,11 +28,11 @@ const SignIn = () => {
         setError('');
         // Redirect based on the user type received from the backend
         const userId = response.data.id; // Ensure the ID is correctly extracted
-        if (response.data.type === 'Tourist') {
+        if (response.data.type === 'tourist') {
           navigate('/Profile', { state: { userId } });
-        } else if (response.data.type === 'Seller') {
+        } else if (response.data.type === 'seller') {
           navigate('/Profile', { state: { userId } });
-        } else if (response.data.type === 'Admin') {
+        } else if (response.data.type === 'admin') {
           navigate('/Profile', { state: { userId } });
         }
       }
