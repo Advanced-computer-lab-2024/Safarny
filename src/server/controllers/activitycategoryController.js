@@ -9,7 +9,7 @@ const createCategory = async (req, res) => {
   }
   try {
     // Create the new tourism governor
-    const newCategory = newActivityCategory({
+    const newCategory = new ActivityCategory({
       type,
     });
     await newCategory.save();
@@ -23,7 +23,7 @@ const createCategory = async (req, res) => {
 };
 
 const getCategories = async (req, res) => {
-  const categories = await ActivityCategory.find();
+  const categories = await ActivityCategory.find().populate("activities");
   res.status(200).json(categories);
 };
 

@@ -6,6 +6,12 @@ const ActivityCategorySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  activities: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Activity",
+    },
+  ],
 });
 
 const ActivityCategory = mongoose.model(
