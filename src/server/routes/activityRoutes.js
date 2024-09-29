@@ -1,5 +1,5 @@
-import express from 'express';
-import { createActivity, getActivities, getActivityById, updateActivity, deleteActivity } from '../controllers/activityController.js';
+const express = require('express');
+const { createActivity, getActivities, getActivityById, updateActivity, deleteActivity } = require('../controllers/activityController.js');
 
 const router = express.Router();
 
@@ -13,4 +13,4 @@ router.route('/:id')
     .put(updateActivity)
     .delete(deleteActivity);
 
-export default router;
+module.exports = router;

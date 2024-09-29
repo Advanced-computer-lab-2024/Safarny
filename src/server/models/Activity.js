@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+const ActivityCategory = require("./ActivityCategory.js");
 
 const activitySchema = new mongoose.Schema({
   name: {

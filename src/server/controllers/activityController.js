@@ -1,5 +1,5 @@
-import AsyncHandler from 'express-async-handler';
-import Activity from '../models/Activity.js';
+const AsyncHandler = require('express-async-handler');
+const Activity = require('../models/Activity.js');
 
 // Create an activity
 const createActivity = AsyncHandler(async (req, res) => {
@@ -81,4 +81,4 @@ const deleteActivity = AsyncHandler(async (req, res) => {
     }
 });
 
-export { createActivity, getActivities, getActivityById, updateActivity, deleteActivity };
+module.exports = { createActivity, getActivities, getActivityById, updateActivity, deleteActivity };

@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-import Activity from './Activity.js';
-
+const Activity = require("./Activity.js");
 
 const itinerarySchema = new Schema(
   {
@@ -65,7 +64,7 @@ const itinerarySchema = new Schema(
       type: String, // Dropoff location
       required: true,
     },
-    activities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Activity' }]  
+    activities: [{ type: mongoose.Schema.Types.ObjectId, ref: "Activity" }],
   },
   { timestamps: true }
 );

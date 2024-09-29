@@ -24,7 +24,7 @@ import DeleteActivity from '/src/client/Components/Activity/DeleteActivity';
 import MainPage from '/src/client/Components/Activity/MainPage';
 
 
-import Profile from '/src/client/Components/Profile/Profile';
+// import Profile from '/src/client/Components/Profile/Profile';
 
 import Profile from "./Components/Profile/Profile";
 
