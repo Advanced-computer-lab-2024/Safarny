@@ -1,6 +1,3 @@
-import ActivityCategory from "../models/ActivityCategory.js"; // Ensure this import is correct
-import AsyncHandler from 'express-async-handler';
-import User from "../models/userModel.js";  // Ensure this import is here
 const Category = require("../models/ActivityCategory.js");
 const mongoose = require("mongoose");
 
