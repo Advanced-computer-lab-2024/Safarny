@@ -8,13 +8,11 @@ const createCategory = async (req, res) => {
     return res.status(400).json({ message: "Type is required." });
   }
   try {
-    // Create the new tourism governor
     const newCategory = new ActivityCategory({
       type,
     });
     await newCategory.save();
 
-    // Return the created governor user
     return res.status(201).json(newCategory);
   } catch (err) {
     console.error("Error adding category:", err);
