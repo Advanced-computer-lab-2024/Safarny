@@ -12,6 +12,7 @@ const userModel = new mongoose.Schema(
     age : Number,
       YearOfExp:Number,
       PrevWork:String,
+    wallet: Number  
 
   },
   {

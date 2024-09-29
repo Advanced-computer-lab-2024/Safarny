@@ -15,6 +15,8 @@ import Posts from './routes/postsRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'; 
 import historicalplacesRoutes from './routes/historicalplacesRoutes.js';
 
+import touristUpdate from './routes/touristUpdateInfoRoutes.js';
+
 dotenv.config();
 
 const app = express();
@@ -35,7 +37,7 @@ app.use('/touristItinerary', touristItinerary)
 app.use('/admin', adminRoutes);
 app.use('/historicalplaces', historicalplacesRoutes);
 
-
+app.use('/touristUpdate',touristUpdate);
 
 
 ViteExpress.listen(app, 3000, () => {
