@@ -18,9 +18,16 @@ import TouristsAdmin from './Components/Admin/TouristsAdmin';
 import SellersAdmin from './Components/Admin/SellersAdmin';
 import AdvertisersAdmin from '/src/client/components/Admin/AdvertisersAdmin';
 import AdminList from '/src/client/components/Admin/AdminList';
-import AdminAddGovernor from '/src/client/components/Admin/AdminAddGovernor';
+import AdminAddGovernor from '/src/client/Components/Admin/AdminAddGovernor';
+import CreateActivity from '/src/client/Components/Activity/CreateActivity';
+import ReadActivities from '/src/client/Components/Activity/ReadActivity';
+import UpdateActivity from '/src/client/Components/Activity/UpdateActivity';
+import DeleteActivity from '/src/client/Components/Activity/DeleteActivity';
+import MainPage from '/src/client/Components/Activity/MainPage';
+import UpdateProfile from '/src/client/Components/UpdateProfile/UpdateProfile';
 
-import Profile from '/src/client/Components/Profile/Profile';
+
+// import Profile from '/src/client/Components/Profile/Profile';
 
 import Profile from "./Components/Profile/Profile";
 
@@ -59,7 +66,13 @@ function App() {
         <Route path="/adminlist" element={<AdminList />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
-        
+        <Route path="/signupextra" element={<SignUpExtra />} />
+        <Route path="/AdvertiserMain" element={<MainPage />} />
+        <Route path="/create" element={<CreateActivity />} />
+        <Route path="/read" element={<ReadActivities />} />
+        <Route path="/update" element={<UpdateActivity />} />
+        <Route path="/delete" element={<DeleteActivity />} />
+        <Route path="/UpdateProfile" element={<UpdateProfile />} />
       </Routes>
     </Router>
   );
