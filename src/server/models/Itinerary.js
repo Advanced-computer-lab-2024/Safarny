@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const Activity = require("./Activity.js");
 
 const itinerarySchema = new Schema(
   {
@@ -63,9 +64,13 @@ const itinerarySchema = new Schema(
       type: String, // Dropoff location
       required: true,
     },
+    activities: [{ type: mongoose.Schema.Types.ObjectId, ref: "Activity" }],
   },
   { timestamps: true }
 );
+itinerarySchema.methods.getActivities = async function () {
+  return await Activity.find({ _id: { $in: this.activities } });
+};
 
 const Itinerary = mongoose.model("Itinerary", itinerarySchema);
 module.exports = Itinerary;

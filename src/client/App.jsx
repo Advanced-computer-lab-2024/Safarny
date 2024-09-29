@@ -1,22 +1,30 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import React from "react";
-import Header from "./Components/Header";
-import Products from "./Products";
-import Landmarks from "./Landmarks";
-import Homepage from "./Components/Home/Homepage";
-import Footer from "./Components/Footer/Footer";
-import SignIn from "./Components/Signin/SignIn";
-import SignUp from "./Components/Signup/Signup";
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import React from 'react';
+import Header from './components/Header';
+import Products from './Products';
+import Landmarks from './Landmarks';
+import Homepage from '/src/client/components/Home/Homepage';
+import Footer from '/src/client/components/Footer/Footer';
+import SignIn from '/src/client/Components/Signin/SignIn';
+import SignUp from '/src/client/components/Signup/Signup';
 // import TourGuide from './pages/TourGuide';
 // import Advertiser from './pages/Advertiser';
 // import Seller from './pages/Seller';
-import Admin from "./Components/Admin/Admin";
-import TourGuideAmin from "./Components/Admin/TourGuideAmin";
-import TouristsAdmin from "./Components/Admin/TouristsAdmin";
-import SellersAdmin from "./Components/Admin/SellersAdmin";
-import AdvertisersAdmin from "./Components/Admin/AdvertisersAdmin";
-import AdminList from "./Components/Admin/AdminList";
-import AdminAddGovernor from "./Components/Admin/AdminAddGovernor";
+import Admin from '/src/client/components/Admin/Admin';
+import TourGuideAmin from './Components/Admin/TourGuideAmin';
+import TouristsAdmin from './Components/Admin/TouristsAdmin';
+import SellersAdmin from './Components/Admin/SellersAdmin';
+import AdvertisersAdmin from '/src/client/components/Admin/AdvertisersAdmin';
+import AdminList from '/src/client/components/Admin/AdminList';
+import AdminAddGovernor from '/src/client/Components/Admin/AdminAddGovernor';
+import CreateActivity from '/src/client/Components/Activity/CreateActivity';
+import ReadActivities from '/src/client/Components/Activity/ReadActivity';
+import UpdateActivity from '/src/client/Components/Activity/UpdateActivity';
+import DeleteActivity from '/src/client/Components/Activity/DeleteActivity';
+import MainPage from '/src/client/Components/Activity/MainPage';
+
+
+// import Profile from '/src/client/Components/Profile/Profile';
 
 import Profile from "./Components/Profile/Profile";
 
@@ -37,6 +45,7 @@ function App() {
   return (
     <Router>
       {/* <Header /> */}
+
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/products" element={<Products />} />
@@ -54,6 +63,11 @@ function App() {
         <Route path="/adminlist" element={<AdminList />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/AdvertiserMain" element={<MainPage />} />
+        <Route path="/create" element={<CreateActivity />} />
+        <Route path="/read" element={<ReadActivities />} />
+        <Route path="/update" element={<UpdateActivity />} />
+        <Route path="/delete" element={<DeleteActivity />} />
       </Routes>
     </Router>
   );

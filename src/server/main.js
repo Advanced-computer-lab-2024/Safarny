@@ -20,6 +20,8 @@ const tagsRoutes = require("./routes/tagsRoutes.js");
 const touristUpdate = require("./routes/touristUpdateInfoRoutes.js");
 
 const ActivityCategoriesRoutes = require("./routes/ActivityCategoriesRoutes.js");
+const activityRoutes = require( './routes/activityRoutes.js');
+
 
 dotenv.config();
 
@@ -41,6 +43,8 @@ app.use("/admin", adminRoutes);
 app.use("/historicalplaces", historicalplacesRoutes);
 app.use("/tag", tagsRoutes);
 app.use("/api/categories", ActivityCategoriesRoutes);
+app.use('/api/activities', activityRoutes);
+
 
 ViteExpress.listen(app, 3000, () => {
   console.log(`Server running on port: ${port}`);
