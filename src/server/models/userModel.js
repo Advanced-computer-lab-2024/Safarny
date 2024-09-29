@@ -10,8 +10,14 @@ const userModel = new mongoose.Schema(
     //Role
     role: {
       type: String,
-      enum: ["Admin", "TourismGovernor", "Tourist", "TourGuide", "Seller", "Advertiser"],
-      required: true
+      enum: [
+        "Admin",
+        "TourismGovernor",
+        "Tourist",
+        "TourGuide",
+        "Seller",
+        "Advertiser",
+      ],
     },
 
     //Tourist
