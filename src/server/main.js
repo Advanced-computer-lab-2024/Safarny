@@ -14,6 +14,8 @@ import touristItinerary from './routes/touristItineraryRoutes.js';
 import Posts from './routes/postsRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'; 
 import historicalplacesRoutes from './routes/historicalplacesRoutes.js';
+import activityRoutes from './routes/activityRoutes.js';
+
 
 dotenv.config();
 
@@ -34,6 +36,7 @@ app.use('/tourguide',tourguide)
 app.use('/touristItinerary', touristItinerary)
 app.use('/admin', adminRoutes);
 app.use('/historicalplaces', historicalplacesRoutes);
+app.use('/api/activities', activityRoutes);
 
 
 

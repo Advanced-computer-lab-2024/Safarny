@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import React from 'react';
 import Header from './components/Header';
 import Products from './Products';
@@ -16,7 +16,13 @@ import TouristsAdmin from './Components/Admin/TouristsAdmin';
 import SellersAdmin from './Components/Admin/SellersAdmin';
 import AdvertisersAdmin from '/src/client/components/Admin/AdvertisersAdmin';
 import AdminList from '/src/client/components/Admin/AdminList';
-import AdminAddGovernor from '/src/client/components/Admin/AdminAddGovernor';
+import AdminAddGovernor from '/src/client/Components/Admin/AdminAddGovernor';
+import CreateActivity from '/src/client/Components/Activity/CreateActivity';
+import ReadActivities from '/src/client/Components/Activity/ReadActivity';
+import UpdateActivity from '/src/client/Components/Activity/UpdateActivity';
+import DeleteActivity from '/src/client/Components/Activity/DeleteActivity';
+import MainPage from '/src/client/Components/Activity/MainPage';
+
 
 import Profile from '/src/client/Components/Profile/Profile';
 
@@ -29,7 +35,7 @@ function App() {
   // }, []);
 
   // const fetchname = async () => {
-    
+
   //     const response = await axios.get(`http://localhost:3000/first`);
   //     setMessage(response.data.name);
 
@@ -38,6 +44,7 @@ function App() {
   return (
     <Router>
       {/* <Header /> */}
+
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/products" element={<Products />} />
@@ -55,7 +62,11 @@ function App() {
         <Route path="/adminlist" element={<AdminList />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
-        
+        <Route path="/AdvertiserMain" element={<MainPage />} />
+        <Route path="/create" element={<CreateActivity />} />
+        <Route path="/read" element={<ReadActivities />} />
+        <Route path="/update" element={<UpdateActivity />} />
+        <Route path="/delete" element={<DeleteActivity />} />
       </Routes>
     </Router>
   );
