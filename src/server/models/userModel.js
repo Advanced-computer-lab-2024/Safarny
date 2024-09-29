@@ -1,19 +1,51 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const userModel = new mongoose.Schema(
   {
+    //Default (Admin/ToursimGovernor/...)
     username: { type: String, required: true, unique: true },
     email: String,
     password: String,
+
+    //Role
+    role: {
+      type: String,
+      enum: [
+        "Admin",
+        "TourismGovernor",
+        "Tourist",
+        "TourGuide",
+        "Seller",
+        "Advertiser",
+      ],
+    },
+
+    //Tourist
     nationality: String,
-    mobile: String,
     employed: String,
-    type: String,
+    wallet: Number,
+    DOB: Date,
+    age: Number,
+    mobile: String,
+
+    //TourGuide
+    YearOfExp: Number,
+    PrevWork: String,
+
+    //Seller
+    description: String,
+    fname: String,
+    lname: String,
+
+    //Advertiser
+    CompanyName: String,
+    CompanyLink: String,
+    CompanyHotline: Number,
   },
   {
-    collection: "datainfo",
+    collection: "User",
   }
 );
 
-const User = mongoose.model("datainfo", userModel);
-export default User;
+const User = mongoose.model("User", userModel);
+module.exports = User;

@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import mongoose from "mongoose";
+const { Schema } = mongoose;
 
 const tourGuideSchema = new Schema(
   {
@@ -12,12 +12,24 @@ const tourGuideSchema = new Schema(
       required: true,
     },
     password: {
-      type: Number,
+      type: String,
       required: true,
+    },
+    mobile: {
+      type: String,
+      required: false,
+    },
+    yearsOfExperience: {
+      type: Number,
+      required: false,
+    },
+    previousWork: {
+      type: String,
+        required: false,
     },
   },
   { timestamps: true }
 );
 
 const TourGuide = mongoose.model("TourGuide", tourGuideSchema);
-module.exports = TourGuide;
+export default TourGuide;

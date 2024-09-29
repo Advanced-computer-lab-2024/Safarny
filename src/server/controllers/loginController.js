@@ -1,8 +1,8 @@
-import User from "../models/userModel.js";
-import AsyncHandler from 'express-async-handler';
+const User = require("../models/userModel.js");
+const AsyncHandler = require('express-async-handler');
 
 const login = AsyncHandler(async (req, res) => {
-    const { email, password,type } = req.body;
+    const { email, password, type } = req.body;
 
     try {
         // Find the user by email
@@ -14,12 +14,13 @@ const login = AsyncHandler(async (req, res) => {
         }
 
         // Check if password matches
-        if(password!=user.password){
-            return res.status(500).json({ message: 'Password is incorrect ' })
+        if (password != user.password) {
+            return res.status(500).json({ message: 'Password is incorrect ' });
         }
 
         res.status(200).json({
             message: 'Sign-in successful',
+            id: user._id,
             type: user.type
         });
     } catch (err) {
@@ -27,4 +28,4 @@ const login = AsyncHandler(async (req, res) => {
     }
 });
 
-export default login;
+module.exports = login;

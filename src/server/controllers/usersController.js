@@ -1,73 +1,191 @@
-import User from "../models/userModel.js";
-import AsyncHandler from 'express-async-handler';
-import mongoose from 'mongoose';
-import userModel from "../models/userModel.js";
+const User = require("../models/userModel.js");
+const AsyncHandler = require("express-async-handler");
+const mongoose = require("mongoose");
+const userModel = require("../models/userModel.js");
 
 const getUsers = AsyncHandler(async (req, res) => {
-    const { type } = req.query; // Get the user type from query parameters
+  const { type } = req.query; // Get the user type from query parameters
 
-    if (!type) {
-        return res.status(400).json({ message: 'User type is required' });
-    }
+  if (!type) {
+    return res.status(400).json({ message: "User type is required" });
+  }
 
-    try {
-        // Find users with the specified type
-        const users = await User.find({ type });
+  try {
+    // Find users with the specified type
+    const users = await User.find({ type });
 
-        // Return the users found
-        return res.status(200).json(users);
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ message: 'Server error' });
-    }
+    // Return the users found
+    return res.status(200).json(users);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
 });
 
 const deleteUser = AsyncHandler(async (req, res) => {
-    const userId = req.params.id;
+  const userId = req.params.id;
 
-    try {
-        const deletedUser = await User.findByIdAndDelete(userId);
-        if (!deletedUser) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        res.status(200).json({ message: 'User deleted successfully' });
-    } catch (error) {
-        console.error('Error deleting user:', error);
-        res.status(500).json({ message: 'Server error' });
+  try {
+    const deletedUser = await User.findByIdAndDelete(userId);
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
     }
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 const getSingleUser = AsyncHandler(async (req, res) => {
-    const userId = req.query.id;
+  const userId = req.query.id;
 
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-        return res.status(400).json({ message: 'Invalid user ID' });
-    }
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ message: "Invalid user ID" });
+  }
 
-    try {
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        res.status(200).json(user);
-    } catch (error) {
-        console.error('Error getting user:', error);
-        res.status(500).json({ message: 'Server error' });
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Error getting user:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 const updateUser = AsyncHandler(async (req, res) => {
-    try {
-        const { id, username, email, password, mobile} = req.body;
-        const user = await userModel.findOneAndUpdate({ id }, { username, email, password, mobile }, { new: true });
-        if (user) {
-            res.status(200).json(user);
-        } else {
-            res.status(404).json({ error: 'User not found' });
-        }
-    } catch (error) {
-        res.status(400).json({ error: 'An error occurred while updating the user' });
+  try {
+    const { id, username, email, password, mobile } = req.body;
+    const user = await userModel.findOneAndUpdate(
+      { id },
+      { username, email, password, mobile },
+      { new: true }
+    );
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(404).json({ error: "User not found" });
     }
+  } catch (error) {
+    res
+      .status(400)
+      .json({ error: "An error occurred while updating the user" });
+  }
 });
 
-export { getUsers, deleteUser, getSingleUser, updateUser };
+// Controller for creating a new profile
+const createProfile = async (req, res) => {
+  try {
+    const {
+      username,
+      email,
+      password,
+      nationality,
+      mobile,
+      employed,
+      type,
+      YearOfExp,
+      PrevWork,
+    } = req.body;
+
+    // Create a new Profile
+    const newProfile = new User({
+      username,
+      email,
+      password,
+      nationality,
+      mobile,
+      employed,
+      type,
+      YearOfExp,
+      PrevWork,
+    });
+
+    // Save the new profile to the database
+    const savedProfile = await newProfile.save();
+
+    res.status(201).json({
+      message: "Profile created successfully",
+      profile: savedProfile,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Controller for reading (getting) a profile by ID
+const getProfileById = async (req, res) => {
+  try {
+    const profileId = req.params.id;
+
+    // Find the profile by its ID
+    const profile = await User.findById(profileId);
+
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    res.status(200).json(profile);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Controller for updating a profile by ID
+const updateProfileById = async (req, res) => {
+  try {
+    const profileId = req.params.id;
+    const {
+      username,
+      email,
+      password,
+      nationality,
+      mobile,
+      employed,
+      type,
+      YearOfExp,
+      PrevWork,
+    } = req.body;
+
+    // Find the profile by its ID and update it with the new data
+    const updatedProfile = await User.findByIdAndUpdate(
+      profileId,
+      {
+        username,
+        email,
+        password,
+        nationality,
+        mobile,
+        employed,
+        type,
+        YearOfExp,
+        PrevWork,
+      },
+      { new: true, runValidators: true } // Return the updated profile
+    );
+
+    if (!updatedProfile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    res.status(200).json({
+      message: "Profile updated successfully",
+      profile: updatedProfile,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+module.exports = {
+  getUsers,
+  deleteUser,
+  getSingleUser,
+  updateUser,
+  createProfile,
+  getProfileById,
+  updateProfileById,
+};

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import React from 'react';
 import Header from './components/Header';
 import Products from './Products';
@@ -18,7 +18,17 @@ import TouristsAdmin from './Components/Admin/TouristsAdmin';
 import SellersAdmin from './Components/Admin/SellersAdmin';
 import AdvertisersAdmin from '/src/client/components/Admin/AdvertisersAdmin';
 import AdminList from '/src/client/components/Admin/AdminList';
+import AdminAddGovernor from '/src/client/Components/Admin/AdminAddGovernor';
+import CreateActivity from '/src/client/Components/Activity/CreateActivity';
+import ReadActivities from '/src/client/Components/Activity/ReadActivity';
+import UpdateActivity from '/src/client/Components/Activity/UpdateActivity';
+import DeleteActivity from '/src/client/Components/Activity/DeleteActivity';
+import MainPage from '/src/client/Components/Activity/MainPage';
 
+
+// import Profile from '/src/client/Components/Profile/Profile';
+
+import Profile from "./Components/Profile/Profile";
 
 function App() {
   // const [message, setMessage] = useState('');
@@ -28,7 +38,7 @@ function App() {
   // }, []);
 
   // const fetchname = async () => {
-    
+
   //     const response = await axios.get(`http://localhost:3000/first`);
   //     setMessage(response.data.name);
 
@@ -37,9 +47,11 @@ function App() {
   return (
     <Router>
       {/* <Header /> */}
+
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/landmarks" element={<Landmarks />} />
         {/* <Route path="/TourGuide" element={<TourGuide />} /> */}
         {/* <Route path="/Advertiser" element={<Advertiser />} /> */}
@@ -49,10 +61,19 @@ function App() {
         <Route path="/touristsadmin" element={<TouristsAdmin />} />
         <Route path="/sellersadmin" element={<SellersAdmin />} />
         <Route path="/advertisersadmin" element={<AdvertisersAdmin />} />
+        <Route path="/adminaddgovernor" element={<AdminAddGovernor />} />
         <Route path="/adminlist" element={<AdminList />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
+<<<<<<< HEAD
         <Route path="/signupextra" element={<SignUpExtra />} />
+=======
+        <Route path="/AdvertiserMain" element={<MainPage />} />
+        <Route path="/create" element={<CreateActivity />} />
+        <Route path="/read" element={<ReadActivities />} />
+        <Route path="/update" element={<UpdateActivity />} />
+        <Route path="/delete" element={<DeleteActivity />} />
+>>>>>>> 5784841dedae1e498586a962b720b9d7f6a60701
       </Routes>
     </Router>
   );

@@ -1,25 +1,29 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const Activity = require("./Activity.js");
 
 const itinerarySchema = new Schema(
   {
     name: {
-      type: String, 
+      type: String,
       required: true,
     },
-    tags: [{
-      type: Schema.Types.ObjectId,
-      ref: "Tags",
-      required: true,
-    }],
-    category: { // use ref same as tags?
-      type: [String], 
-      required: true,
-    },
-    activities: { // use ref same as tags?
-      type: [String], // Array of strings for activities
+    tags: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Tags",
+      },
+    ],
+    category: {
+      type: [String],
       required: true,
     },
+    activities: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Activity",
+      },
+    ],
     locations: {
       type: [String], // Array of strings for locations to be visited
       required: true,
@@ -57,12 +61,16 @@ const itinerarySchema = new Schema(
       required: true,
     },
     dropoffLocation: {
-      type: String, // Dropoff location 
+      type: String, // Dropoff location
       required: true,
     },
+    activities: [{ type: mongoose.Schema.Types.ObjectId, ref: "Activity" }],
   },
   { timestamps: true }
 );
+itinerarySchema.methods.getActivities = async function () {
+  return await Activity.find({ _id: { $in: this.activities } });
+};
 
 const Itinerary = mongoose.model("Itinerary", itinerarySchema);
 module.exports = Itinerary;
