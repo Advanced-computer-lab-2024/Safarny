@@ -1,15 +1,15 @@
-const advertiserModel = require("Advertiser.js");
+const advertiserModel = require("../models/userModel.js");
 const { default: mongoose } = require("mongoose");
 
 const createAdvertiser = async (req, res) => {
   const { username, email, password } = req.body;
-  const newAdvertiser = new advertiserModel({ username, email, password });
+  const newAdvertiser = new advertiserModel({ username, email, password ,type:"Advertiser"});
   await newAdvertiser.save();
   res.status(201).json(newAdvertiser);
 };
 
 const getAdvertisers = async (req, res) => {
-  const advertisers = await advertiserModel.find();
+  const advertisers = await advertiserModel.find({type:"Advertiser"});
   res.status(200).json(advertisers);
 };
 
@@ -17,7 +17,7 @@ const updateAdvertiser = async (req, res) => {
   const { username, email, password } = req.body;
 
   const updatedAdvertiser = await advertiserModel.findOneAndUpdate(
-    { email },
+    { email, type: "Advertiser" },
     { username, password },
     { new: true }
   );

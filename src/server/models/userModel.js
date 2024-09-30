@@ -4,11 +4,22 @@ const userModel = new mongoose.Schema(
   {
     //Default (Admin/ToursimGovernor/...)
     username: { type: String, required: true, unique: true },
-    email: String,
-    password: String,
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
 
     //Role
-    type: String,
+    role: {
+      type: String,
+      enum: [
+        "Admin",
+        "TourismGovernor",
+        "Tourist",
+        "TourGuide",
+        "Seller",
+        "Advertiser",
+      ],
+      required: true,
+    },
 
     //Tourist
     nationality: String,

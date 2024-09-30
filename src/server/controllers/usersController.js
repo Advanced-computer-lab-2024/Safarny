@@ -3,6 +3,19 @@ const AsyncHandler = require("express-async-handler");
 const mongoose = require("mongoose");
 const userModel = require("../models/userModel.js");
 
+const getAllUsers = AsyncHandler(async (req, res) => {
+  try {
+    // Find all users
+    const users = await User.find();
+
+    // Return the users found
+    return res.status(200).json(users);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
 const getUsers = AsyncHandler(async (req, res) => {
   const { type } = req.query; // Get the user type from query parameters
 
@@ -188,4 +201,5 @@ module.exports = {
   createProfile,
   getProfileById,
   updateProfileById,
+  getAllUsers, // Export the new function
 };
