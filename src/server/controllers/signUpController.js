@@ -1,7 +1,6 @@
 const AsyncHandler = require("express-async-handler");
 const User = require("../models/userModel.js");
 const jwt = require("jsonwebtoken");
-const { useRevalidator } = require("react-router-dom");
 
 //Tourist SingUp
 const signUp = AsyncHandler(async (req, res) => {
@@ -18,7 +17,7 @@ const signUp = AsyncHandler(async (req, res) => {
       mobile,
       DOB,
       employed,
-      type: "Tourist",
+      role: "Tourist",
     });
 
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
@@ -28,13 +27,11 @@ const signUp = AsyncHandler(async (req, res) => {
     // Save user to the database
     await newUser.save();
 
-    res
-      .status(201)
-      .json({
-        token,
-        data: { user: newUser },
-        message: "User registered successfully",
-      });
+    res.status(201).json({
+      token,
+      data: { user: newUser },
+      message: "Tourist registered successfully",
+    });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -42,16 +39,22 @@ const signUp = AsyncHandler(async (req, res) => {
 
 //Admin-TourGuide-ToursimGoverner-Seller-Advertiser SingUp
 const signUpOthers = AsyncHandler(async (req, res) => {
-  const { email, username, password } = req.body;
+  const { email, username, password, role } = req.body;
 
   try {
-    // Create a new tour guide
-    const newTourGuide = new TourGuide({ email, username, password });
+    const newUser = new User({ email, username, password, role });
 
-    // Save tour guide to the database
-    await newTourGuide.save();
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.LOGIN_EXPIRES_IN,
+    });
 
-    res.status(201).json({ message: "Tour guide registered successfully" });
+    await newUser.save();
+
+    res.status(201).json({
+      token,
+      data: { user: newUser },
+      message: `user with role ${role} registered successfully`,
+    });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -66,7 +69,7 @@ const addAdmin = AsyncHandler(async (req, res) => {
 
     // Save user to the database
     await newUser.save();
-    res.status(201).json({ message: "UsAdminer registered successfully" });
+    res.status(201).json({ message: "Admin registered successfully" });
   } catch (err) {
     console.error(err);
     res.status(400).json({ error: err.message });

@@ -1,5 +1,9 @@
 const User = require("../models/userModel.js");
 const AsyncHandler = require("express-async-handler");
+const dotenv = require("dotenv");
+const jwt = require("jsonwebtoken");
+
+dotenv.config();
 
 const login = AsyncHandler(async (req, res) => {
   const email = req.body.email;
@@ -26,15 +30,14 @@ const login = AsyncHandler(async (req, res) => {
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.LOGIN_EXPIRES_IN,
-      });
-  
+      expiresIn: process.env.LOGIN_EXPIRES_IN,
+    });
 
     res.status(200).json({
+      token,
       message: "Sign-in successful",
       id: user._id,
       type: user.type,
-      token,
     });
   } catch (err) {
     return res.status(500).json({ message: "Server error" });
