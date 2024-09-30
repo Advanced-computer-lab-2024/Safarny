@@ -49,11 +49,7 @@ const addAdmin = AsyncHandler(async (req, res) => {
   try {
     // Create a new user
     const newUser = new User({ email, password, type, username });
-
-    // Save user to the database
-    console.log("hehe1");
     await newUser.save();
-    console.log("hehe2");
     res.status(201).json({ message: "UsAdminer registered successfully" });
   } catch (err) {
     console.error(err);
