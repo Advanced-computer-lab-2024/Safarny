@@ -24,6 +24,7 @@ import ReadActivities from '/src/client/Components/Activity/ReadActivity';
 import UpdateActivity from '/src/client/Components/Activity/UpdateActivity';
 import DeleteActivity from '/src/client/Components/Activity/DeleteActivity';
 import MainPage from '/src/client/Components/Activity/MainPage';
+import UpdateProfile from '/src/client/Components/UpdateProfile/UpdateProfile';
 
 
 // import Profile from '/src/client/Components/Profile/Profile';
@@ -71,6 +72,7 @@ function App() {
         <Route path="/read" element={<ReadActivities />} />
         <Route path="/update" element={<UpdateActivity />} />
         <Route path="/delete" element={<DeleteActivity />} />
+        <Route path="/UpdateProfile" element={<UpdateProfile />} />
       </Routes>
     </Router>
   );
