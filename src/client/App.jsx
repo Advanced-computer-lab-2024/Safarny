@@ -8,7 +8,6 @@ import Footer from '/src/client/components/Footer/Footer';
 import SignIn from '/src/client/Components/Signin/SignIn';
 import SignUp from '/src/client/components/Signup/Signup';
 import SignUpExtra from '/src/client/components/SignupExtra/SignUpExtra';
-
 // import TourGuide from './pages/TourGuide';
 // import Advertiser from './pages/Advertiser';
 // import Seller from './pages/Seller';
@@ -26,29 +25,14 @@ import DeleteActivity from '/src/client/Components/Activity/DeleteActivity';
 import MainPage from '/src/client/Components/Activity/MainPage';
 import UpdateProfile from '/src/client/Components/UpdateProfile/UpdateProfile';
 
-
 // import Profile from '/src/client/Components/Profile/Profile';
 
 import Profile from "./Components/Profile/Profile";
+import GetTags from './Components/Tags/getTags'; // Import the GetTags component
 
 function App() {
-  // const [message, setMessage] = useState('');
-
-  // useEffect(() => {
-  //     fetchname();
-  // }, []);
-
-  // const fetchname = async () => {
-
-  //     const response = await axios.get(`http://localhost:3000/first`);
-  //     setMessage(response.data.name);
-
-  // };
-
   return (
     <Router>
-      {/* <Header /> */}
-
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/products" element={<Products />} />
@@ -73,6 +57,7 @@ function App() {
         <Route path="/update" element={<UpdateActivity />} />
         <Route path="/delete" element={<DeleteActivity />} />
         <Route path="/UpdateProfile" element={<UpdateProfile />} />
+        <Route path="/tags" element={<GetTags />} />
       </Routes>
     </Router>
   );
