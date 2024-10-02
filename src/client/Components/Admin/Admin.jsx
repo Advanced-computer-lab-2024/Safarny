@@ -2,21 +2,21 @@ import React, { useState, useEffect } from 'react';
 import SideBar from '../SideBar';
 import { Button, Modal, TextField, Typography, Card, CardContent, CardActions, Alert } from '@mui/material';
 import axios from 'axios';
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from '../../../server/config/Firebase';
 
 const Admin = () => {
-  // States
   const [openModal, setOpenModal] = useState(false);
   const [posts, setPosts] = useState([]);
   const [currentPost, setCurrentPost] = useState({ details: '', price: '', quantity: '', imageurl: '' });
   const [editingPostId, setEditingPostId] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  // Fetch all posts on component mount
   useEffect(() => {
     fetchPosts();
   }, []);
 
-  // Fetch all posts from the API
   const fetchPosts = async () => {
     try {
       const response = await axios.get('/posting/posts');
@@ -26,60 +26,84 @@ const Admin = () => {
     }
   };
 
-  // Handle modal open
   const handleOpenModal = () => {
     setCurrentPost({ details: '', price: '', quantity: '', imageurl: '' });
-    setEditingPostId(null); // Reset editing post ID
+    setEditingPostId(null);
     setOpenModal(true);
   };
 
-  // Handle modal close
   const handleCloseModal = () => {
     setOpenModal(false);
     setErrorMessage('');
+    setSelectedImage(null);
   };
 
-  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCurrentPost({ ...currentPost, [name]: value });
   };
 
-  // Handle post submission (Create or Update)
+  const handleImageChange = (e) => {
+    setSelectedImage(e.target.files[0]);
+  };
+
+  const uploadImage = async (file) => {
+    if (!file) return null;
+
+    const storageRef = ref(storage, `images/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    return new Promise((resolve, reject) => {
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log(`Upload is ${progress}% done`);
+        },
+        (error) => reject(error),
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log("File available at", downloadURL);
+            resolve(downloadURL);
+          });
+        }
+      );
+    });
+  };
+
   const handleSubmitPost = async () => {
-    if (editingPostId) {
-      // Edit existing post
-      try {
-        await axios.put(`/posting/posts/${editingPostId}`, currentPost);
-        fetchPosts();
-        handleCloseModal();
-      } catch (error) {
-        setErrorMessage('Failed to update post');
+    let imageUrl = currentPost.imageurl;
+
+    if (selectedImage) {
+      imageUrl = await uploadImage(selectedImage);
+      if (!imageUrl) return;
+    }
+
+    const postData = { ...currentPost, imageurl: imageUrl };
+
+    try {
+      if (editingPostId) {
+        await axios.put(`/posting/posts/${editingPostId}`, postData);
+      } else {
+        await axios.post('/posting/posts', postData);
       }
-    } else {
-      // Add new post
-      try {
-        await axios.post('/posting/posts', currentPost);
-        fetchPosts();
-        handleCloseModal();
-      } catch (error) {
-        setErrorMessage('Failed to add post');
-      }
+      fetchPosts();
+      handleCloseModal();
+    } catch (error) {
+      setErrorMessage(`Failed to ${editingPostId ? 'update' : 'add'} post`);
     }
   };
 
-  // Handle post edit (opens modal)
   const handleEditPost = (post) => {
     setCurrentPost(post);
     setEditingPostId(post._id);
     setOpenModal(true);
   };
 
-  // Handle post delete
   const handleDeletePost = async (postId) => {
     try {
       await axios.delete(`/posting/posts/${postId}`);
-      fetchPosts(); // Refresh posts after deletion
+      fetchPosts();
     } catch (error) {
       setErrorMessage('Failed to delete post');
     }
@@ -97,13 +121,14 @@ const Admin = () => {
         {/* Display all posts */}
         <div style={{ marginTop: '20px' }}>
           {posts.map((post) => (
-            <Card key={post._id} sx={{ maxWidth: 345, margin: '10px', backgroundColor: 'white', }}>
+            <Card key={post._id} sx={{ maxWidth: 345, margin: '10px', backgroundColor: 'white' }}>
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
                   {post.details}
                 </Typography>
-                <div>Price : {post.price}</div>
-                <div>Quantity : {post.quantity}</div>
+                <div>Price: {post.price}</div>
+                <div>Quantity: {post.quantity}</div>
+                <img src={post.imageurl} alt="Post" style={{ width: '100%', height: 'auto' }} />
               </CardContent>
               <CardActions>
                 <Button size="small" color="primary" onClick={() => handleEditPost(post)}>
@@ -148,13 +173,11 @@ const Admin = () => {
             onChange={handleInputChange}
             margin="normal"
           />
-          <TextField
-            fullWidth
-            label="Image URL"
-            name="imageurl"
-            value={currentPost.imageurl}
-            onChange={handleInputChange}
-            margin="normal"
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            style={{ margin: '10px 0' }}
           />
           <Button
             variant="contained"
