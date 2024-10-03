@@ -29,6 +29,11 @@ import UpdateProfile from '/src/client/Components/UpdateProfile/UpdateProfile';
 
 import Profile from "./Components/Profile/Profile";
 import GetTags from './Components/Tags/getTags'; // Import the GetTags component
+import CreateTags from './Components/Tags/createTags';
+import EditTags from './Components/Tags/editTags';
+import DeleteTags from './Components/Tags/deleteTags';
+
+
 
 function App() {
   return (
@@ -58,6 +63,9 @@ function App() {
         <Route path="/delete" element={<DeleteActivity />} />
         <Route path="/UpdateProfile" element={<UpdateProfile />} />
         <Route path="/tags" element={<GetTags />} />
+        <Route path="/createtags" element={<CreateTags />} />
+        <Route path="/edittags/:id" element={<EditTags />} />
+        <Route path="/deletetags" element={<DeleteTags />} />
       </Routes>
     </Router>
   );
