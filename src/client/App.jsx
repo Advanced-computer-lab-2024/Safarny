@@ -7,7 +7,7 @@ import Homepage from '/src/client/components/Home/Homepage';
 import Footer from '/src/client/components/Footer/Footer';
 import SignIn from '/src/client/Components/Signin/SignIn';
 import SignUp from '/src/client/components/Signup/Signup';
-import SignUpExtra from '/src/client/components/SignupExtra/SignUpExtra';
+import SignUpExtra from './Components/SignupExtra/SignUpExtra';
 // import TourGuide from './pages/TourGuide';
 // import Advertiser from './pages/Advertiser';
 // import Seller from './pages/Seller';

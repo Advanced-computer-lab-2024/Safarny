@@ -1,30 +1,26 @@
-const {User} = require( "../models/userModel.js");
+const { User } = require("../models/userModel.js");
 
 const addGovernor = async (req, res) => {
-    const { username, email, password, nationality, mobile, employed } = req.body;
+  const { username, email, password } = req.body;
 
-    // Basic validation
-    if (!username || !email || !password) {
-        return res.status(400).json({ message: 'Username, email, and password are required' });
-    }
+  if (!username || !email || !password) {
+    return res
+      .status(400)
+      .json({ message: "Username, email, and password are required" });
+  }
 
-    try {
-        // Create the new tourism governor
-        const newGovernor = await User.create({
-            username,
-            email,
-            password,
-            nationality,
-            mobile,
-            employed,
-            type: 'governor'
-        });
+  try {
+    const newGovernor = await User.create({
+      username,
+      email,
+      password,
+      role: "ToursimGoverner",
+    });
 
-        // Return the created governor user
-        return res.status(201).json(newGovernor);
-    } catch (err) {
-        console.error('Error adding governor:', err);
-        return res.status(500).json({ message: 'Server error' });
-    }
+    return res.status(201).json(newGovernor);
+  } catch (err) {
+    console.error("Error adding governor:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
 };
-module.exports= { addGovernor }; 
+module.exports = { addGovernor };

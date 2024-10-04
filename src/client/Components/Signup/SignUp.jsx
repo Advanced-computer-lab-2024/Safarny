@@ -17,7 +17,6 @@ const SignUp = () => {
   const [employed, setEmployed] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const type = "tourist";  // Assuming default user type is 'tourist'
   const [DOB, setDob] = useState('');
   const age = calculateAge(DOB);
 
@@ -49,12 +48,12 @@ const SignUp = () => {
       mobile,
       nationality,
       employed,
-      type,
+      DOB,
       age
     };
 
     try {
-      const response = await axios.post('http://localhost:3000/signup', userData);
+      const response = await axios.post('http://localhost:3000/guest/tourist-signup', userData);
       if (response.status === 201) {
         setSuccess(true);
         setError('');

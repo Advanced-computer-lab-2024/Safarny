@@ -1,9 +1,10 @@
 const { Router } = require("express");
-const { getUsers, deleteUser, getSingleUser, updateUser,createProfile ,getProfileById, updateProfileById } = require("../controllers/usersController.js");
+const { getUsers,getAllUsers, deleteUser, getSingleUser, updateUser,createProfile ,getProfileById, updateProfileById } = require("../controllers/usersController.js");
 
 const router = Router();
 
 router.get("/", getUsers);
+router.get("/all", getAllUsers);
 router.delete("/:id", deleteUser);
 router.get("/about", getSingleUser);
 router.put("/update", updateUser);
