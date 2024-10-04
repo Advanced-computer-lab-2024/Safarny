@@ -30,15 +30,10 @@ const protect = asyncHandler(async (req, res, next) => {
 
       next();
     } catch (error) {
-      console.error(error);
-      res.status(401);
-      throw new Error("Not authorized, token failed");
+      res.status(401).json({ message: error.message });
     }
-  }
-
-  if (!token) {
-    res.status(401);
-    throw new Error("Not authorized, no token");
+  } else {
+    res.status(401).json({ message: "Not authorized or No token" });
   }
 });
 
@@ -47,8 +42,7 @@ const restrict = (...role) => {
     if (role.includes(req.user.role)) {
       next();
     } else {
-      res.status(401);
-      throw new Error(`Not authorized as an ${req.user.role}`);
+      res.status(401).json({ message: "Not authorized, insufficient permissions" });
     }
   };
 };

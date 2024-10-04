@@ -135,8 +135,18 @@ const getActivitiesFiltered = AsyncHandler(async (req, res) => {
   if (category) filter.category = category;
   if (rating) filter.rating = rating;
 
-  const activities = await Activity.find(filter);
-  res.json(activities);
+  const activities = await Activity.find().populate("activityCategory");
+
+  const FilteredActivities = activities.filter((activity) => {
+    for (let key in filter) {
+      if (activity[key] !== filter[key]) {
+        return false;
+      }
+    }
+    return true;
+  });
+  res.json(FilteredActivities);
+  
 });
 
 // Get sorted activities

@@ -4,7 +4,7 @@ const userModel = new mongoose.Schema(
   {
     //Default (Admin/ToursimGovernor/...)
     username: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
+    email: { type: String, unique: true },
     password: { type: String, required: true },
 
     //Role
@@ -24,7 +24,7 @@ const userModel = new mongoose.Schema(
     //Tourist
     nationality: String,
     employed: String,
-    wallet: Number,
+    wallet: { type: Number, default: 0 },
     DOB: Date,
     age: Number,
     mobile: String,
@@ -35,8 +35,7 @@ const userModel = new mongoose.Schema(
 
     //Seller
     description: String,
-    fname: String,
-    lname: String,
+    sellerName: String,
 
     //Advertiser
     CompanyName: String,
