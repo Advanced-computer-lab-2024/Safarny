@@ -32,6 +32,8 @@ import GetTags from './Components/Tags/getTags'; // Import the GetTags component
 import CreateTags from './Components/Tags/createTags';
 import EditTags from './Components/Tags/editTags';
 import DeleteTags from './Components/Tags/deleteTags';
+import Tags from './Components/Tags/tags';
+
 
 
 
@@ -62,10 +64,11 @@ function App() {
         <Route path="/update" element={<UpdateActivity />} />
         <Route path="/delete" element={<DeleteActivity />} />
         <Route path="/UpdateProfile" element={<UpdateProfile />} />
-        <Route path="/tags" element={<GetTags />} />
+        <Route path="/gettags" element={<GetTags />} />
         <Route path="/createtags" element={<CreateTags />} />
         <Route path="/edittags/:id" element={<EditTags />} />
         <Route path="/deletetags" element={<DeleteTags />} />
+        <Route path="/tags" element={<Tags />} />
       </Routes>
     </Router>
   );
