@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -13,28 +13,49 @@ L.Icon.Default.mergeOptions({
 });
 
 const CreateActivity = () => {
-    const [activity, setActivity] = useState({
+    const [tags, setTags] = useState([]);
+    const [categories, setCategories] = useState([]); // State to store categories
+    const [message, setMessage] = useState('');
+
+    const [activityDetails, setActivityDetails] = useState({
         date: '',
         time: '',
         location: '',
         coordinates: { lat: null, lng: null },
         price: '',
         category: '',
-        tags: '',
+        tags: [],
         specialDiscount: '',
         bookingOpen: true,
     });
 
-    const [message, setMessage] = useState('');
+    // Fetching tags and categories from backend
+    useEffect(() => {
+        const fetchTagsAndCategories = async () => {
+            try {
+                const tagResponse = await axios.get('http://localhost:3000/tag');
+                setTags(tagResponse.data || []); // Set tags or default to an empty array if no data
+
+                const categoryResponse = await axios.get('http://localhost:3000/api/categories');
+                console.log('Fetched categories:', categoryResponse.data); // Log categories for debugging
+                setCategories(categoryResponse.data || []); // Set categories or default to an empty array
+            } catch (error) {
+                console.error('Error fetching tags or categories:', error);
+                setCategories([]); // Default to empty array if API call fails
+            }
+        };
+
+        fetchTagsAndCategories();
+    }, []);
 
     const handleChange = (e) => {
-        setActivity({ ...activity, [e.target.name]: e.target.value });
+        setActivityDetails({ ...activityDetails, [e.target.name]: e.target.value });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/api/activities', activity);
+            await axios.post('http://localhost:3000/api/activities', activityDetails);
             setMessage('Activity created successfully!');
         } catch (error) {
             console.error('Error creating activity:', error);
@@ -45,10 +66,9 @@ const CreateActivity = () => {
     const LocationMap = () => {
         useMapEvents({
             click(e) {
-                setActivity({
-                    ...activity,
+                setActivityDetails({
+                    ...activityDetails,
                     coordinates: { lat: e.latlng.lat, lng: e.latlng.lng },
-                    location: `(${e.latlng.lat}, ${e.latlng.lng})`, // Update location based on coordinates
                 });
             },
         });
@@ -58,17 +78,18 @@ const CreateActivity = () => {
     return (
         <div style={{ padding: '20px' }}>
             <h2>Create Activity</h2>
-            <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
+
+            <form onSubmit={handleSubmit}>
                 <div>
                     <label>
                         Date:
-                        <input name="date" type="date" onChange={handleChange} required />
+                        <input name="date" type="date" value={activityDetails.date} onChange={handleChange} required />
                     </label>
                 </div>
                 <div>
                     <label>
                         Time:
-                        <input name="time" type="time" onChange={handleChange} required />
+                        <input name="time" type="time" value={activityDetails.time} onChange={handleChange} required />
                     </label>
                 </div>
                 <div>
@@ -77,39 +98,76 @@ const CreateActivity = () => {
                         <input
                             name="location"
                             type="text"
-                            placeholder="Enter location"
-                            value={activity.location}
+                            value={activityDetails.location}
                             onChange={handleChange}
+                            placeholder="Enter location name"
                         />
                     </label>
                 </div>
                 <div>
                     <label>
                         Price:
-                        <input name="price" type="number" placeholder="Price" onChange={handleChange} required />
+                        <input name="price" type="number" value={activityDetails.price} onChange={handleChange} required />
                     </label>
                 </div>
+                
+                {/* Category Section */}
                 <div>
                     <label>
                         Category:
-                        <input name="category" type="text" placeholder="Category" onChange={handleChange} required />
+                        <select
+                            name="category"
+                            value={activityDetails.category}
+                            onChange={handleChange}
+                            required
+                        >
+                            <option value="">Select Category</option>
+                            {Array.isArray(categories) && categories.length > 0 ? (
+                                categories.map((category) => (
+                                    <option key={category._id} value={category._id}>
+                                        {category.type}
+                                    </option>
+                                ))
+                            ) : (
+                                <option disabled>No categories available</option>
+                            )}
+                        </select>
                     </label>
                 </div>
+
+                {/* Tags Section */}
                 <div>
                     <label>
                         Tags:
-                        <input
+                        <select
                             name="tags"
-                            type="text"
-                            placeholder="Comma-separated tags"
-                            onChange={handleChange}
-                        />
+                            multiple
+                            value={activityDetails.tags}
+                            onChange={(e) =>
+                                setActivityDetails({
+                                    ...activityDetails,
+                                    tags: [...e.target.selectedOptions].map(o => o.value), // Send ObjectIds
+                                })
+                            }
+                        >
+                            {tags.map((tag) => (
+                                <option key={tag._id} value={tag._id}>
+                                    {tag.name}
+                                </option>
+                            ))}
+                        </select>
                     </label>
                 </div>
+
                 <div>
                     <label>
                         Special Discount:
-                        <input name="specialDiscount" type="text" placeholder="Special Discount" onChange={handleChange} />
+                        <input
+                            name="specialDiscount"
+                            type="text"
+                            value={activityDetails.specialDiscount}
+                            onChange={handleChange}
+                        />
                     </label>
                 </div>
                 <div>
@@ -117,28 +175,28 @@ const CreateActivity = () => {
                         Booking Open:
                         <input
                             type="checkbox"
-                            checked={activity.bookingOpen}
-                            onChange={(e) => setActivity({ ...activity, bookingOpen: e.target.checked })}
+                            checked={activityDetails.bookingOpen}
+                            onChange={(e) => setActivityDetails({ ...activityDetails, bookingOpen: e.target.checked })}
                         />
                     </label>
                 </div>
+
+                {/* Map Container for selecting coordinates */}
+                <div style={{ height: '400px', width: '100%', marginTop: '20px' }}>
+                    <MapContainer center={[activityDetails.coordinates.lat || 51.505, activityDetails.coordinates.lng || -0.09]} zoom={13} style={{ height: '100%', width: '100%' }}>
+                        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                        <LocationMap />
+                        {activityDetails.coordinates.lat && activityDetails.coordinates.lng && (
+                            <Marker position={[activityDetails.coordinates.lat, activityDetails.coordinates.lng]} />
+                        )}
+                    </MapContainer>
+                </div>
+
+                <button type="submit" style={{ marginTop: '10px' }}>
+                    Create Activity
+                </button>
+                {message && <p style={{ color: 'red' }}>{message}</p>}
             </form>
-
-            {/* Map Container moved to the end */}
-            <div style={{ height: '400px', width: '100%', marginTop: '20px' }}>
-                <MapContainer center={[51.505, -0.09]} zoom={13} style={{ height: '100%', width: '100%' }}>
-                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                    <LocationMap />
-                    {activity.coordinates.lat && activity.coordinates.lng && (
-                        <Marker position={[activity.coordinates.lat, activity.coordinates.lng]} />
-                    )}
-                </MapContainer>
-            </div>
-
-            <button type="submit" onClick={handleSubmit} style={{ marginTop: '10px' }}>
-                Create Activity
-            </button>
-            {message && <p style={{ color: 'red' }}>{message}</p>}
         </div>
     );
 };

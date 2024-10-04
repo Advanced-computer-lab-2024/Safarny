@@ -15,6 +15,8 @@ L.Icon.Default.mergeOptions({
 const UpdateActivity = () => {
     const [activities, setActivities] = useState([]);
     const [selectedActivity, setSelectedActivity] = useState(null);
+    const [categories, setCategories] = useState([]);
+    const [tags, setTags] = useState([]);
     const [message, setMessage] = useState('');
 
     const [activityDetails, setActivityDetails] = useState({
@@ -23,36 +25,61 @@ const UpdateActivity = () => {
         location: '',
         coordinates: { lat: null, lng: null },
         price: '',
-        category: '',
-        tags: '',
+        categories: [],  // Treating categories as an array
+        tags: [],  // Tags as array
         specialDiscount: '',
         bookingOpen: true,
     });
 
+    // Fetch activities, categories, and tags
     useEffect(() => {
-        const fetchActivities = async () => {
-            const response = await axios.get('http://localhost:3000/api/activities');
-            setActivities(response.data);
+        const fetchData = async () => {
+            try {
+                const activityResponse = await axios.get('http://localhost:3000/api/activities');
+                setActivities(activityResponse.data);
+
+                const categoriesResponse = await axios.get('http://localhost:3000/api/categories');
+                setCategories(categoriesResponse.data || []); // Ensure it's an array
+
+                const tagsResponse = await axios.get('http://localhost:3000/tag');
+                setTags(tagsResponse.data || []); // Ensure it's an array
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
         };
 
-        fetchActivities();
+        fetchData();
     }, []);
 
     const handleSelectChange = (e) => {
         const selectedId = e.target.value;
         const activity = activities.find((act) => act._id === selectedId);
         setSelectedActivity(activity);
-        setActivityDetails({
-            date: activity.date,
-            time: activity.time,
-            location: activity.location,
-            coordinates: activity.coordinates,
-            price: activity.price,
-            category: activity.category,
-            tags: activity.tags.join(', '),
-            specialDiscount: activity.specialDiscount,
-            bookingOpen: activity.bookingOpen,
-        });
+        if (activity) {
+            setActivityDetails({
+                date: activity.date,
+                time: activity.time,
+                location: activity.location,
+                coordinates: activity.coordinates,
+                price: activity.price,
+                categories: activity.categories || [],  // Ensure it's an array
+                tags: activity.tags || [],  // Ensure it's an array
+                specialDiscount: activity.specialDiscount,
+                bookingOpen: activity.bookingOpen,
+            });
+        } else {
+            setActivityDetails({
+                date: '',
+                time: '',
+                location: '',
+                coordinates: { lat: null, lng: null },
+                price: '',
+                categories: [],
+                tags: [],
+                specialDiscount: '',
+                bookingOpen: true,
+            });
+        }
     };
 
     const handleChange = (e) => {
@@ -61,8 +88,17 @@ const UpdateActivity = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!selectedActivity) {
+            setMessage('Please select an activity to update.');
+            return;
+        }
+
         try {
-            await axios.put(`http://localhost:3000/api/activities/${selectedActivity._id}`, activityDetails);
+            await axios.put(`http://localhost:3000/api/activities/${selectedActivity._id}`, {
+                ...activityDetails,
+                categories: activityDetails.categories,
+                tags: activityDetails.tags
+            });
             setMessage('Activity updated successfully!');
         } catch (error) {
             console.error('Error updating activity:', error);
@@ -73,12 +109,10 @@ const UpdateActivity = () => {
     const LocationMap = () => {
         useMapEvents({
             click(e) {
-                // Set the coordinates and clear the location field to allow user input
+                // Set coordinates when clicking on map
                 setActivityDetails({
                     ...activityDetails,
                     coordinates: { lat: e.latlng.lat, lng: e.latlng.lng },
-                    // Commenting out the automatic location update
-                    // location: `(${e.latlng.lat}, ${e.latlng.lng})`,
                 });
             },
         });
@@ -137,19 +171,45 @@ const UpdateActivity = () => {
                     <div>
                         <label>
                             Category:
-                            <input name="category" type="text" value={activityDetails.category} onChange={handleChange} required />
+                            <select
+                                name="categories"
+                                multiple
+                                value={activityDetails.categories}
+                                onChange={(e) =>
+                                    setActivityDetails({ 
+                                        ...activityDetails, 
+                                        categories: [...e.target.selectedOptions].map(o => o.value) 
+                                    })
+                                }
+                            >
+                                {categories.map((cat) => (
+                                    <option key={cat._id} value={cat._id}>
+                                        {cat.type}
+                                    </option>
+                                ))}
+                            </select>
                         </label>
                     </div>
                     <div>
                         <label>
                             Tags:
-                            <input
+                            <select
                                 name="tags"
-                                type="text"
+                                multiple
                                 value={activityDetails.tags}
-                                onChange={handleChange}
-                                placeholder="Comma-separated tags"
-                            />
+                                onChange={(e) =>
+                                    setActivityDetails({ 
+                                        ...activityDetails, 
+                                        tags: [...e.target.selectedOptions].map(o => o.value) 
+                                    })
+                                }
+                            >
+                                {tags.map((tag) => (
+                                    <option key={tag._id} value={tag._id}>
+                                        {tag.name}
+                                    </option>
+                                ))}
+                            </select>
                         </label>
                     </div>
                     <div>
@@ -176,7 +236,11 @@ const UpdateActivity = () => {
 
                     {/* Map Container at the end */}
                     <div style={{ height: '400px', width: '100%', marginTop: '20px' }}>
-                        <MapContainer center={[activityDetails.coordinates.lat || 51.505, activityDetails.coordinates.lng || -0.09]} zoom={13} style={{ height: '100%', width: '100%' }}>
+                        <MapContainer
+                            center={[activityDetails.coordinates.lat || 51.505, activityDetails.coordinates.lng || -0.09]}
+                            zoom={13}
+                            style={{ height: '100%', width: '100%' }}
+                        >
                             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                             <LocationMap />
                             {activityDetails.coordinates.lat && activityDetails.coordinates.lng && (

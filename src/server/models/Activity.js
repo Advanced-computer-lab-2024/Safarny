@@ -1,29 +1,14 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const ActivityCategory = require("./ActivityCategory.js");
+const Tags = require("./Tags.js")
 
 const activitySchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
   location: {
     type: String,
     required: true,
   },
-  coordinates: {
-    lat: { type: Number },
-    lng: { type: Number },
-  },
-  duration: {
-    type: Number, // Duration in minutes
-    required: true,
-  },
-  timeline: {
-    type: String,
-    required: true,
-  },
-  activityCategory: [
+  category: [
     {
       type: Schema.Types.ObjectId,
       ref: "ActivityCategory",
@@ -36,6 +21,17 @@ const activitySchema = new mongoose.Schema({
   specialDiscount: { type: String },
   bookingOpen: { type: Boolean, default: true },
   date: { type: String, required: true },
+  time: { type: String, required: true },
+  coordinates: {
+        lat: { type: Number, required: true },
+        lng: { type: Number, required: true }
+    },
+  tags: [
+    {
+    type: Schema.Types.ObjectId,
+    ref: "Tags",
+  },
+  ],
 });
 
 const Activity = mongoose.model("Activity", activitySchema);
