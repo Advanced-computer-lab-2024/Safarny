@@ -44,6 +44,7 @@ app.use("/historicalplaces", historicalplacesRoutes);
 app.use("/tag", tagsRoutes);
 app.use("/api/categories", ActivityCategoriesRoutes);
 app.use('/api/activities', activityRoutes);
+app.use('/iternary', itinerary);
 
 
 ViteExpress.listen(app, 3000, () => {

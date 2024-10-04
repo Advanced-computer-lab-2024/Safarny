@@ -178,7 +178,33 @@ const updateProfileById = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+
 };
+
+const updateAcceptedStatus = async (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid ID" });
+    }
+    const { accepted } = req.body; 
+    const updatedDocument = await userModel.findByIdAndUpdate(
+      id,
+      { Status: accepted }, 
+      { new: true }           
+    );
+    if (!updatedDocument) {
+      return res.status(404).json({ message: "Document not found" });
+    }
+    res.status(200).json(updatedDocument);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error updating Accepted status", error });
+  }
+};
+
+
+
 
 module.exports = {
   getUsers,
@@ -188,4 +214,5 @@ module.exports = {
   createProfile,
   getProfileById,
   updateProfileById,
+  updateAcceptedStatus
 };

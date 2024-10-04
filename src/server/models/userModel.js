@@ -31,6 +31,11 @@ const userModel = new mongoose.Schema(
     CompanyName: String,
     CompanyLink: String,
     CompanyHotline: Number,
+
+    Status: {
+    type: String,
+    default: 'Not Accepted',
+  }
   },
   {
     collection: "User",

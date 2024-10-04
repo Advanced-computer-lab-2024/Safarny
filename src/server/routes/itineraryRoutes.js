@@ -10,7 +10,7 @@ const {
 } = require("../controllers/itineraryController.js");
 
 router.post("/", createItinerary);
-router.get("/", getAllItineraries);
+router.get("/get", getAllItineraries);
 router.get("/:id", getItineraryById);
 router.delete("/:id", deleteItineraryById);
 router.patch("/:id", updateItineraryById);
