@@ -30,7 +30,7 @@ console.log(userId);
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/users/${userId}`);
+        const response = await axios.get(`http://localhost:3000/tourist/${userId}`);
         setUserInfo(response.data);
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -45,7 +45,7 @@ console.log(userId);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`http://localhost:3000/users/${userId}`, userInfo);
+      const response = await axios.put(`http://localhost:3000/tourist/${userId}`, userInfo);
       setSuccessMessage(response.data.message);
       setErrorMessage('');
     } catch (error) {
@@ -121,7 +121,7 @@ console.log(userId);
             Type:
             <input
               type="text"
-              value={userInfo.type}
+              value={userInfo.role}
               onChange={(e) => setUserInfo({ ...userInfo, type: e.target.value })}
               required
             />
