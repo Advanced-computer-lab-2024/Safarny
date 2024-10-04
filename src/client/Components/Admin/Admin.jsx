@@ -19,7 +19,7 @@ const Admin = () => {
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get('/posting/posts');
+      const response = await axios.get('/admin/products');
       setPosts(response.data);
     } catch (error) {
       setErrorMessage('Failed to fetch posts');

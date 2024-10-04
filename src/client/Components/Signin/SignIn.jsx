@@ -41,6 +41,9 @@ const SignIn = () => {
         else if (response.data.type === 'Advertiser') {
           navigate('/Profile', { state: { userId } });
         }
+        else if (response.data.type === 'admin') {
+          navigate('/admin');
+        }
 
       }
     } catch (err) {
