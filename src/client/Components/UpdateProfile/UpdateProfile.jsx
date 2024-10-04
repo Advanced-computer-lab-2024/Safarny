@@ -18,10 +18,7 @@ console.log(userId);
     nationality: '',
     mobile: '',
     employed: '',
-    type: '',
-    age: '',
-    YearOfExp: '',
-    PrevWork: '',
+    age: ''
   });
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -116,16 +113,7 @@ console.log(userId);
               onChange={(e) => setUserInfo({ ...userInfo, employed: e.target.value })}
               required
             />
-          </label>
-          <label>
-            Type:
-            <input
-              type="text"
-              value={userInfo.role}
-              onChange={(e) => setUserInfo({ ...userInfo, type: e.target.value })}
-              required
-            />
-          </label>
+          </label>         
           <label>
             Age:
             <input
@@ -135,24 +123,7 @@ console.log(userId);
               required
             />
           </label>
-          <label>
-            Years of Experience:
-            <input
-              type="number"
-              value={userInfo.YearOfExp}
-              onChange={(e) => setUserInfo({ ...userInfo, YearOfExp: e.target.value })}
-              required
-            />
-          </label>
-          <label>
-            Previous Work:
-            <input
-              type="text"
-              value={userInfo.PrevWork}
-              onChange={(e) => setUserInfo({ ...userInfo, PrevWork: e.target.value })}
-              required
-            />
-          </label>
+          
 
           <button type="submit" className={styles.button}>
             Update Profile
