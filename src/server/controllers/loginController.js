@@ -37,7 +37,7 @@ const login = AsyncHandler(async (req, res) => {
       token,
       message: "Sign-in successful",
       id: user._id,
-      type: user.type,
+      type: user.role,
     });
   } catch (err) {
     return res.status(500).json({ message: "Server error" });

@@ -1,5 +1,8 @@
 const { Router } = require("express");
+const usersController = require("../controllers/usersController.js");
 const router = Router();
+
+router.get("/profile", usersController.getSingleUser);
 /*
     1-get/edit this Tourist details
     2-get (musseum, historicalPlace, activty, itinerary) details by (name, category, tag)
