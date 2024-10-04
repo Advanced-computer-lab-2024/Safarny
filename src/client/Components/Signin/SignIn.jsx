@@ -21,7 +21,7 @@ const SignIn = () => {
 
     try {
       // Send the request to the backend
-      const response = await axios.post('http://localhost:3000/login', userData);
+      const response = await axios.post('http://localhost:3000/guest/login', userData);
 
       if (response.status === 200) {
         setSuccess(true);
