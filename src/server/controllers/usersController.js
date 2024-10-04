@@ -200,10 +200,10 @@ const updateAcceptedStatus = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: "Invalid ID" });
     }
-    const { accepted } = req.body; 
+    const { Status } = req.body; 
     const updatedDocument = await userModel.findByIdAndUpdate(
       id,
-      { Status: accepted }, 
+      { Status }, 
       { new: true }           
     );
     if (!updatedDocument) {

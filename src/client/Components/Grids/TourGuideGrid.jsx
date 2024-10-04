@@ -9,28 +9,26 @@ const columns = [
   { field: 'id', headerName: 'ID', width: 250 },
   { field: 'username', headerName: 'Username', width: 130 },
   { field: 'email', headerName: 'Email', width: 150 },
-  { field: 'nationality', headerName: 'Nationality', width: 130 },
-  { field: 'mobile', headerName: 'Mobile', width: 130 },
-  { field: 'employed', headerName: 'Employed', width: 90 },
+  { field: 'PrevWork', headerName: 'PrevWork', width: 130 },
+  { field: 'YearOfExp', headerName: 'Year Of Exp', width: 130 },
   { field: 'type', headerName: 'Type', width: 90 },
-  { field: 'Status', headerName: 'Status', width: 90 },
+  { field: 'Status', headerName: 'Status', width: 110 },
 ];
 
-export default function TourGuideDataTable() {
+export default function DataTable2() {
   const [rows, setRows] = useState([]);  // Remove typing annotations
   const [selectedRows, setSelectedRows] = useState([]);  // Remove typing annotations
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/users/?role=TourGuide');
+        const response = await axios.get('http://localhost:3000/admin/getUsers?role=TourGuide');
         const formattedRows = response.data.map((user) => ({
           id: user._id,
           username: user.username,
           email: user.email,
-          nationality: user.nationality,
-          mobile: user.mobile,
-          employed: user.employed,
+          PrevWork: user.PrevWork,
+          YearOfExp: user.YearOfExp,
           type: user.role,
           Status: user.Status,
         }));
@@ -47,7 +45,7 @@ export default function TourGuideDataTable() {
     try {
       await Promise.all(
         selectedRows.map(rowId =>
-          axios.delete(`http://localhost:3000/users/${rowId}`)
+          axios.delete(`http://localhost:3000/admin/deleteUser/${rowId}`)
         )
       );
       // Refetch data or update state to remove deleted rows
@@ -62,7 +60,7 @@ export default function TourGuideDataTable() {
     try {
       await Promise.all(
         selectedRows.map(rowId => 
-          axios.put(`http://localhost:3000/users/Status/${rowId}`, { Status: "Accepted" })
+          axios.put(`http://localhost:3000/admin/updateUserStatus/${rowId}`, { Status: "Accepted" })
         )
       );
       // Optionally refetch data or update the state

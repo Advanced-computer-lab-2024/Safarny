@@ -9,6 +9,8 @@ const historicalPlaceSchema = new mongoose.Schema(
     openingHours: { type: String, required: true }, // Opening hours (e.g., "9:00 AM - 5:00 PM")
     ticketPrices: { type: Number, required: true }, // Ticket price for entry
     tags: [{ type: mongoose.Schema.Types.ObjectId, ref: "Tags" }], // Reference to tags
+    createdby: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // Reference to the ToursimGovernor who created the historical place
+    vistitedby: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Reference to the tourists who visited the historical place
   },
   {
     collection: "historicalplaces", // Name of the collection in MongoDB

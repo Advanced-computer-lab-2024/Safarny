@@ -15,40 +15,33 @@ const SignIn = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Payload to send
+  
     const userData = { email, password };
-
+  
     try {
-      // Send the request to the backend
       const response = await axios.post('http://localhost:3000/guest/login', userData);
-
+      
       if (response.status === 200) {
+        // Check if the user is accepted
+        if (response.data.status !== 'Accepted') {
+          setError('Your account is not accepted yet. Please wait for approval.');
+          setSuccess(false);
+          return; // Stop further execution
+        }
+  
         setSuccess(true);
         setError('');
-        // Redirect based on the user type received from the backend
-        const userId = response.data.id; // Ensure the ID is correctly extracted
-        if (response.data.type === 'Tourist') {
+        const userId = response.data.id;
+        // Assuming 'type' and 'status' are part of the response data
+        if (['Tourist', 'Seller','TourGuide', 'Advertiser'].includes(response.data.type)) {
           navigate('/Profile', { state: { userId } });
-        } else if (response.data.type === 'Seller') {
-          navigate('/Profile', { state: { userId } });
-        } else if (response.data.type === 'Admin') {
-          navigate('/Profile', { state: { userId } });
-        }
-        else if (response.data.type === 'TourGuide') {
-          navigate('/Profile', { state: { userId } });
-        }
-        else if (response.data.type === 'Advertiser') {
-          navigate('/Profile', { state: { userId } });
-        }
-        else if (response.data.type === 'admin') {
+        } else if (response.data.type === 'admin') {
           navigate('/admin');
         }
-
       }
     } catch (err) {
       if (err.response) {
-        setError(err.response.data.message);  // Backend error (e.g., invalid credentials)
+        setError(err.response.data.message);
       } else {
         setError('An unexpected error occurred. Please try again.');
       }

@@ -9,28 +9,26 @@ const columns = [
   { field: 'id', headerName: 'ID', width: 250 },
   { field: 'username', headerName: 'Username', width: 130 },
   { field: 'email', headerName: 'Email', width: 150 },
-  { field: 'nationality', headerName: 'Nationality', width: 130 },
-  { field: 'mobile', headerName: 'Mobile', width: 130 },
-  { field: 'employed', headerName: 'Employed', width: 90 },
+  { field: 'description', headerName: 'description', width: 130 },
+  { field: 'sellerName', headerName: 'seller Name', width: 130 },
   { field: 'type', headerName: 'Type', width: 90 },
   { field: 'Status', headerName: 'Status', width: 110 },
 ];
 
-export default function DataTable() {
+export default function DataTable3() {
   const [rows, setRows] = useState([]);  // Remove typing annotations
   const [selectedRows, setSelectedRows] = useState([]);  // Remove typing annotations
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/admin/getUsers?role=Tourist');
+        const response = await axios.get('http://localhost:3000/admin/getUsers?role=Seller');
         const formattedRows = response.data.map((user) => ({
           id: user._id,
           username: user.username,
           email: user.email,
-          nationality: user.nationality,
-          mobile: user.mobile,
-          employed: user.employed,
+          description: user.description,
+          sellerName: user.sellerName,
           type: user.role,
           Status: user.Status,
         }));
