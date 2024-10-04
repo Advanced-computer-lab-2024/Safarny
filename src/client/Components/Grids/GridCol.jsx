@@ -22,7 +22,7 @@ export default function DataTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/users?type=tourist');
+        const response = await axios.get('http://localhost:3000/users/?type=tourist');
         const formattedRows = response.data.map((user) => ({
           id: user._id,
           username: user.username,

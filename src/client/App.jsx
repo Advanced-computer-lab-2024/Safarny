@@ -8,7 +8,6 @@ import Footer from '/src/client/components/Footer/Footer';
 import SignIn from '/src/client/Components/Signin/SignIn';
 import SignUp from '/src/client/components/Signup/Signup';
 import SignUpExtra from '/src/client/components/SignupExtra/SignUpExtra';
-
 // import TourGuide from './pages/TourGuide';
 // import Advertiser from './pages/Advertiser';
 // import Seller from './pages/Seller';
@@ -24,30 +23,23 @@ import ReadActivities from '/src/client/Components/Activity/ReadActivity';
 import UpdateActivity from '/src/client/Components/Activity/UpdateActivity';
 import DeleteActivity from '/src/client/Components/Activity/DeleteActivity';
 import MainPage from '/src/client/Components/Activity/MainPage';
-
+import UpdateProfile from '/src/client/Components/UpdateProfile/UpdateProfile';
 
 // import Profile from '/src/client/Components/Profile/Profile';
 
 import Profile from "./Components/Profile/Profile";
+import GetTags from './Components/Tags/getTags'; // Import the GetTags component
+import CreateTags from './Components/Tags/createTags';
+import EditTags from './Components/Tags/editTags';
+import DeleteTags from './Components/Tags/deleteTags';
+import Tags from './Components/Tags/tags';
+
+
+
 
 function App() {
-  // const [message, setMessage] = useState('');
-
-  // useEffect(() => {
-  //     fetchname();
-  // }, []);
-
-  // const fetchname = async () => {
-
-  //     const response = await axios.get(`http://localhost:3000/first`);
-  //     setMessage(response.data.name);
-
-  // };
-
   return (
     <Router>
-      {/* <Header /> */}
-
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/products" element={<Products />} />
@@ -71,6 +63,12 @@ function App() {
         <Route path="/read" element={<ReadActivities />} />
         <Route path="/update" element={<UpdateActivity />} />
         <Route path="/delete" element={<DeleteActivity />} />
+        <Route path="/UpdateProfile" element={<UpdateProfile />} />
+        <Route path="/gettags" element={<GetTags />} />
+        <Route path="/createtags" element={<CreateTags />} />
+        <Route path="/edittags/:id" element={<EditTags />} />
+        <Route path="/deletetags" element={<DeleteTags />} />
+        <Route path="/tags" element={<Tags />} />
       </Routes>
     </Router>
   );

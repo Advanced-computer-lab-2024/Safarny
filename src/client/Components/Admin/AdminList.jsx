@@ -27,7 +27,7 @@ const AdminList = () => {
         const userData = { email, password, username, type };
 
         try {
-            const response = await axios.post('http://localhost:3000/addadmin', userData);
+            const response = await axios.post('http://localhost:3000/signup/addadmin/addadmin', userData);
             if (response.status === 201) {
                 setSuccess(true);
                 setError('');
