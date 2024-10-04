@@ -1,14 +1,13 @@
 // import React from 'react'
 import SideBar from '../SideBar'
-// import DataTable from '../../components/Grids/GridCol'
+import DataTable2 from '../Grids/TourGuideGrid'
 
 const TourGuideAmin = () => {
   return (
     <div style={{ display: 'flex' }}>
       <SideBar />
       <div style={{ marginLeft: '250px', padding: '20px' }}> {/* Adjust the margin */}
-        {/* <DataTable/> */}
-        TourGuide
+        <DataTable2/>
       </div>
     </div>
   )
