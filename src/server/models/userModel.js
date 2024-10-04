@@ -33,19 +33,63 @@ const userModel = new mongoose.Schema(
     YearOfExp: Number,
     PrevWork: String,
 
+    //Tourist/TourGuide
+    itineraries: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Itinerary",
+      },
+    ],
+
     //Seller
     description: String,
     sellerName: String,
+    posts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Posts",
+      },
+    ],
 
     //Advertiser
     CompanyName: String,
     CompanyLink: String,
     CompanyHotline: Number,
+    acttivities: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Activity",
+      },
+    ],
+
+    //TourismGovernor
+    historicalPlaces: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "historicalplaces",
+      },
+    ],
+
+    //TourismGovernor/Admin
+    tags: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Tags",
+      },
+    ],
+
+    //Admin
+    activityCategories: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ActivityCategory",
+      },
+    ],
 
     Status: {
-    type: String,
-    default: 'Not Accepted',
-  }
+      type: String,
+      default: "Not Accepted",
+    },
   },
   {
     collection: "User",
