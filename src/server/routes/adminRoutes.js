@@ -24,6 +24,14 @@ const {
   getAllUsers, // Export the new function
   updateAcceptedStatus
   } = require("../controllers/usersController.js");
+const {
+    createTag,
+    getAllTags,
+    getAllTagsFilter,
+    getTagById,
+    updateTagById,
+    deleteTagById,
+} = require('../controllers/tagsController');
 
 
 router.get("/getUsers", getUsers);   
@@ -40,6 +48,20 @@ router.get("/products", getAllPosts);
 // Route for updating a post (product) by ID
 router.put("/products/:id", updatePostById);
 router.delete("/products/:id", deletePostById);
+
+
+router.post('/tag', createTag);
+
+router.get('/tag', getAllTags);
+
+router.get('/tag/filter/:name', getAllTagsFilter);
+
+router.get('/tag/:id', getTagById);
+
+router.put('/tag/:id', updateTagById);
+
+router.delete('/tag/:id', deleteTagById);
+
 
 module.exports = router;
 
