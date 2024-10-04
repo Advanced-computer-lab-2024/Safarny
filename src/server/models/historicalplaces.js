@@ -8,6 +8,7 @@ const historicalPlaceSchema = new mongoose.Schema(
     location: { type: String, required: true }, // Location (address or name of the place)
     openingHours: { type: String, required: true }, // Opening hours (e.g., "9:00 AM - 5:00 PM")
     ticketPrices: { type: Number, required: true }, // Ticket price for entry
+    tags: [{ type: mongoose.Schema.Types.ObjectId, ref: "Tags" }], // Reference to tags
   },
   {
     collection: "historicalplaces", // Name of the collection in MongoDB

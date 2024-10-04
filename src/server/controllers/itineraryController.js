@@ -1,29 +1,51 @@
 const Itinerary = require("../models/Itinerary.js");
+const Tag = require("../models/Tags.js");
 
 const createItinerary = async (req, res) => {
-  const requiredFields = [
-    "activities",
-    "locations",
-    "timeline",
-    "duration",
-    "language",
-    "price",
-    "availableDates",
-    "availableTimes",
-    "accessibility",
-    "pickupLocation",
-    "dropoffLocation",
-  ];
-  const missingFields = requiredFields.filter((field) => !req.body[field]);
-
-  if (missingFields.length > 0) {
-    return res
-      .status(400)
-      .send({ error: `Missing required fields: ${missingFields.join(", ")}` });
-  }
-
   try {
-    const itinerary = new Itinerary(req.body);
+    const {
+      name,
+      activities,
+      locations,
+      timeline,
+      duration,
+      language,
+      price,
+      availableDates,
+      availableTimes,
+      accessibility,
+      pickupLocation,
+      dropoffLocation,
+      tagNames,
+    } = req.body;
+
+    let tagsId = [];
+
+    for (let tagName of tagNames) {
+      let tag = await Tag.findOne({ name: tagName });
+
+      if (!tag) {
+        return res.status(400).send({ error: `Tag ${tagName} does not exist` });
+      }
+      tagsId.push(tag._id);
+    }
+
+    const itinerary = new Itinerary({
+      name,
+      activities,
+      locations,
+      timeline,
+      duration,
+      language,
+      price,
+      availableDates,
+      availableTimes,
+      accessibility,
+      pickupLocation,
+      dropoffLocation,
+      tags: tagsId,
+    });
+
     await itinerary.save();
     res.status(201).send(itinerary);
   } catch (error) {
@@ -31,17 +53,15 @@ const createItinerary = async (req, res) => {
   }
 };
 
-// Get all itineraries
 const getAllItineraries = async (_, res) => {
   try {
-    const itineraries = await Itinerary.find().populate('tags');
-    res.status(200).send(itineraries);
+    const itineraries = await Itinerary.find().populate("tags");
+    res.status(200).send({ message: "Success", data: itineraries });
   } catch (error) {
     res.status(500).send(error);
   }
 };
 
-// Get a specific itinerary by ID
 const getItineraryById = async (req, res) => {
   try {
     const itinerary = await Itinerary.findById(req.params.id);
@@ -54,7 +74,6 @@ const getItineraryById = async (req, res) => {
   }
 };
 
-// Update an itinerary by ID
 const updateItineraryById = async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = [
@@ -93,7 +112,6 @@ const updateItineraryById = async (req, res) => {
   }
 };
 
-// Delete an itinerary by ID
 const deleteItineraryById = async (req, res) => {
   try {
     const itinerary = await Itinerary.findByIdAndDelete(req.params.id);
@@ -108,7 +126,6 @@ const deleteItineraryById = async (req, res) => {
   }
 };
 
-// Update the tags of an itinerary by ID
 const updateItineraryTagById = async (req, res) => {
   const { tags } = req.body;
 
@@ -129,6 +146,40 @@ const updateItineraryTagById = async (req, res) => {
   }
 };
 
+const getItinerariesSorted = async (req, res) => {
+  const { sortBy } = req.query;
+  const sortCriteria = {};
+
+  if (sortBy) {
+    const [field, order] = sortBy.split(":");
+    sortCriteria[field] = order === "desc" ? -1 : 1;
+  }
+
+  try {
+    const itineraries = await Itinerary.find().sort(sortCriteria);
+    res.status(200).send(itineraries);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+const getItinerariesFiltered = async (req, res) => {
+  const { price, date, tags, language } = req.query;
+  const filter = {};
+
+  if (price) filter.price = price;
+  if (date) filter.availableDates = date;
+  if (tags) filter.tags = { $in: tags.split(",") };
+  if (language) filter.language = language;
+
+  try {
+    const itineraries = await Itinerary.find(filter);
+    res.status(200).send(itineraries);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
 module.exports = {
   createItinerary,
   getAllItineraries,
@@ -136,4 +187,6 @@ module.exports = {
   updateItineraryById,
   deleteItineraryById,
   updateItineraryTagById,
+  getItinerariesSorted,
+  getItinerariesFiltered,
 };

@@ -37,7 +37,7 @@ const SignUpExtra = () => {
       username,
       password,
       email,
-      userType,
+      role: userType,
       websiteLink,
       hotline,
       companyProfile,
@@ -49,10 +49,7 @@ const SignUpExtra = () => {
     };
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/signupextra",
-        userData
-      );
+      const response = await axios.post("/guest/others-signup", userData);
       if (response.status === 201) {
         setSuccess(true);
         setError("");
@@ -129,7 +126,7 @@ const SignUpExtra = () => {
               required
             >
               <option value="">Select Role</option>
-              <option value="Tour Guide">Tour Guide</option>
+              <option value="TourGuide">Tour Guide</option>
               <option value="Advertiser">Advertiser</option>
               <option value="Seller">Seller</option>
             </select>

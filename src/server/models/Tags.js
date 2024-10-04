@@ -12,6 +12,10 @@ const tagsSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Itinerary",
     }],
+    historicalPLaces: [{
+      type: Schema.Types.ObjectId,
+      ref: "historicalplaces",
+    }],
   },
   { timestamps: true }
 );
