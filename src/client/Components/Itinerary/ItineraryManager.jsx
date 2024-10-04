@@ -9,7 +9,7 @@ const ItineraryManager = () => {
     // Fetch itineraries when the component mounts
     useEffect(() => {
         const fetchItineraries = async () => {
-            const response = await fetch('/touristItinerary'); // Adjust the URL if needed
+            const response = await fetch('http://localhost:3000/iternary/get'); // Adjust the URL if needed
             const data = await response.json();
             setItineraries(data);
         };

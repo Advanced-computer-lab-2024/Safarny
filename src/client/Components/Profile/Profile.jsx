@@ -21,7 +21,7 @@ const Profile = () => {
     const fetchUserData = async () => {
       try {
         
-        const response = await fetch(`/users/${userId}`); // Use the ID from the state
+        const response = await fetch(`/tourist/profile?id=${userId}`); // Use the ID from the state
 
         if (!response.ok) {
           throw new Error('Failed to fetch user data');

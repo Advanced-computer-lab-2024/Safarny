@@ -92,6 +92,20 @@ const Homepage = () => {
                   <p>{descriptions[index]}</p>
                 </div>
               )}
+              {expandedCard === 6 && (
+              <div className={styles.description}>
+                <Link to="/giftshop" className={styles.giftShopLink}>
+                  Visit Gift Shop
+                </Link>
+              </div>
+            )}
+            {expandedCard === 1 && (
+              <div className={styles.description}>
+                <Link to="/Plans" className={styles.giftShopLink}>
+                  View Our Plans
+                </Link>
+              </div>
+            )}
             </div>
           ))}
         </section>

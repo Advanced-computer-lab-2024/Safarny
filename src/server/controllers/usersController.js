@@ -3,16 +3,29 @@ const AsyncHandler = require("express-async-handler");
 const mongoose = require("mongoose");
 const userModel = require("../models/userModel.js");
 
-const getUsers = AsyncHandler(async (req, res) => {
-  const { type } = req.query; // Get the user type from query parameters
+const getAllUsers = AsyncHandler(async (req, res) => {
+  try {
+    // Find all users
+    const users = await User.find();
 
-  if (!type) {
-    return res.status(400).json({ message: "User type is required" });
+    // Return the users found
+    return res.status(200).json(users);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
+const getUsers = AsyncHandler(async (req, res) => {
+  const { role } = req.query; // Get the user type from query parameters
+
+  if (!role) {
+    return res.status(400).json({ message: "User role is required" });
   }
 
   try {
     // Find users with the specified type
-    const users = await User.find({ type });
+    const users = await User.find({ role });
 
     // Return the users found
     return res.status(200).json(users);
@@ -86,7 +99,7 @@ const createProfile = async (req, res) => {
       nationality,
       mobile,
       employed,
-      type,
+      role,
       YearOfExp,
       PrevWork,
     } = req.body;
@@ -99,7 +112,7 @@ const createProfile = async (req, res) => {
       nationality,
       mobile,
       employed,
-      type,
+      role,
       YearOfExp,
       PrevWork,
     });
@@ -145,7 +158,7 @@ const updateProfileById = async (req, res) => {
       nationality,
       mobile,
       employed,
-      type,
+      role,
       YearOfExp,
       PrevWork,
     } = req.body;
@@ -160,7 +173,7 @@ const updateProfileById = async (req, res) => {
         nationality,
         mobile,
         employed,
-        type,
+        role,
         YearOfExp,
         PrevWork,
       },
@@ -178,7 +191,33 @@ const updateProfileById = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+
 };
+
+const updateAcceptedStatus = async (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid ID" });
+    }
+    const { accepted } = req.body; 
+    const updatedDocument = await userModel.findByIdAndUpdate(
+      id,
+      { Status: accepted }, 
+      { new: true }           
+    );
+    if (!updatedDocument) {
+      return res.status(404).json({ message: "Document not found" });
+    }
+    res.status(200).json(updatedDocument);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error updating Accepted status", error });
+  }
+};
+
+
+
 
 module.exports = {
   getUsers,
@@ -188,4 +227,6 @@ module.exports = {
   createProfile,
   getProfileById,
   updateProfileById,
+  getAllUsers, // Export the new function
+  updateAcceptedStatus
 };

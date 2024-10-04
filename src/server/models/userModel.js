@@ -4,16 +4,27 @@ const userModel = new mongoose.Schema(
   {
     //Default (Admin/ToursimGovernor/...)
     username: { type: String, required: true, unique: true },
-    email: String,
-    password: String,
+    email: { type: String, unique: true },
+    password: { type: String, required: true },
 
     //Role
-    type: String,
+    role: {
+      type: String,
+      enum: [
+        "Admin",
+        "TourismGovernor",
+        "Tourist",
+        "TourGuide",
+        "Seller",
+        "Advertiser",
+      ],
+      required: true,
+    },
 
     //Tourist
     nationality: String,
     employed: String,
-    wallet: Number,
+    wallet: { type: Number, default: 0 },
     DOB: Date,
     age: Number,
     mobile: String,
@@ -24,13 +35,17 @@ const userModel = new mongoose.Schema(
 
     //Seller
     description: String,
-    fname: String,
-    lname: String,
+    sellerName: String,
 
     //Advertiser
     CompanyName: String,
     CompanyLink: String,
     CompanyHotline: Number,
+
+    Status: {
+    type: String,
+    default: 'Not Accepted',
+  }
   },
   {
     collection: "User",

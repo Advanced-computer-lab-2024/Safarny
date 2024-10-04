@@ -64,7 +64,6 @@ const itinerarySchema = new Schema(
       type: String, // Dropoff location
       required: true,
     },
-    activities: [{ type: mongoose.Schema.Types.ObjectId, ref: "Activity" }],
   },
   { timestamps: true }
 );
