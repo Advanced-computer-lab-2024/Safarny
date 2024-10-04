@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const EditTags = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [tagName, setTagName] = useState('');
   const [message, setMessage] = useState('');
 
   useEffect(() => {
     const fetchTag = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/tag/${id}`);
+        const response = await axios.get(`http://localhost:3000/admin/tag/${id}`);
         setTagName(response.data.name);
       } catch (error) {
         console.error('Error fetching tag:', error);
@@ -24,8 +25,9 @@ const EditTags = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:3000/tag/${id}`, { name: tagName });
+      await axios.put(`http://localhost:3000/admin/tag/${id}`, { name: tagName });
       setMessage('Tag updated successfully!');
+      navigate('/admin'); // Navigate back to the Admin page
     } catch (error) {
       console.error('Error updating tag:', error);
       setMessage('Failed to update tag.');

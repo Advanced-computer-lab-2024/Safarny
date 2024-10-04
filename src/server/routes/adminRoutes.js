@@ -2,27 +2,36 @@ const { Router } = require("express");
 const router = Router();
 
 const {
-  createPost,
-  getAllPosts,
-  updatePostById,
-  deletePostById,
+    createPost,
+    getAllPosts,
+    updatePostById,
+    deletePostById,
 } = require("../controllers/postsController.js");
 
 const { addAdmin } = require("../controllers/signUpController.js");
 
 const {
-  getUsers,
-  deleteUser,
-  getSingleUser,
-  updateUser,
-  createProfile,
-  getProfileById,
-  updateProfileById,
-  getAllUsers,
-  updateAcceptedStatus,
+    getUsers,
+    deleteUser,
+    getSingleUser,
+    updateUser,
+    createProfile,
+    getProfileById,
+    updateProfileById,
+    getAllUsers,
+    updateAcceptedStatus,
 } = require("../controllers/usersController.js");
 
 const { addGovernor } = require("../controllers/addgovernorController.js");
+
+const {
+    createTag,
+    getAllTags,
+    getAllTagsFilter,
+    getTagById,
+    updateTagById,
+    deleteTagById,
+} = require('../controllers/tagsController');
 
 /*
     1-post toursimGoverner
@@ -37,6 +46,36 @@ const { addGovernor } = require("../controllers/addgovernorController.js");
     10-get all products by price
     11-get all products sorted by rating
 */
+
+router.get("/getUsers", getUsers);   
+router.delete("/deleteUser/:id", deleteUser);
+router.put("/updateUser/:id", updateUser);   
+router.put("/updateUserStatus/:id", updateAcceptedStatus);       
+router.post("/addAdmin", addAdmin);  
+router.post("/createProduct", createPost);
+
+
+// Route for getting all posts (products)
+router.get("/products", getAllPosts);
+
+// Route for updating a post (product) by ID
+router.put("/products/:id", updatePostById);
+router.delete("/products/:id", deletePostById);
+
+
+router.post('/tag', createTag);
+
+router.get('/tag', getAllTags);
+
+router.get('/tag/filter/:name', getAllTagsFilter);
+
+router.get('/tag/:id', getTagById);
+
+router.put('/tag/:id', updateTagById);
+
+router.delete('/tag/:id', deleteTagById);
+
+
 
 router.post("/add-governor", addGovernor);
 

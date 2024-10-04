@@ -4,6 +4,7 @@ import { Button, Modal, TextField, Typography, Card, CardContent, CardActions, A
 import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from '../../../server/config/Firebase';
+import Tags from './tagAdmin'; // Import the Tags component
 
 const Admin = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -12,10 +13,13 @@ const Admin = () => {
   const [editingPostId, setEditingPostId] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedSection, setSelectedSection] = useState('posts'); // State to manage selected section
 
   useEffect(() => {
-    fetchPosts();
-  }, []);
+    if (selectedSection === 'posts') {
+      fetchPosts();
+    }
+  }, [selectedSection]);
 
   const fetchPosts = async () => {
     try {
@@ -83,9 +87,9 @@ const Admin = () => {
 
     try {
       if (editingPostId) {
-        await axios.put(`/posting/posts/${editingPostId}`, postData);
+        await axios.put(`/admin/products/${editingPostId}`, postData);
       } else {
-        await axios.post('/posting/posts', postData);
+        await axios.post('/admin/createProduct', postData);
       }
       fetchPosts();
       handleCloseModal();
@@ -102,7 +106,7 @@ const Admin = () => {
 
   const handleDeletePost = async (postId) => {
     try {
-      await axios.delete(`/posting/posts/${postId}`);
+      await axios.delete(`/admin/products/${postId}`);
       fetchPosts();
     } catch (error) {
       setErrorMessage('Failed to delete post');
@@ -113,37 +117,44 @@ const Admin = () => {
     <div style={{ display: 'flex' }}>
       <SideBar />
       <div style={{ marginLeft: '250px', padding: '20px' }}>
-        <Button variant="contained" color="primary" onClick={handleOpenModal}>
-          Add Post
-        </Button>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+          <Button variant="contained" color="primary" onClick={handleOpenModal}>
+            Add Post
+          </Button>
+          <Button variant="contained" color="secondary" onClick={() => setSelectedSection('tags')}>
+            Manage Tags
+          </Button>
+        </div>
         {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 
-        {/* Display all posts */}
-        <div style={{ marginTop: '20px' }}>
-          {posts.map((post) => (
-            <Card key={post._id} sx={{ maxWidth: 345, margin: '10px', backgroundColor: 'white' }}>
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  {post.details}
-                </Typography>
-                <div>Price: {post.price}</div>
-                <div>Quantity: {post.quantity}</div>
-                <img src={post.imageurl} alt="Post" style={{ width: '100%', height: 'auto' }} />
-              </CardContent>
-              <CardActions>
-                <Button size="small" color="primary" onClick={() => handleEditPost(post)}>
-                  Edit
-                </Button>
-                <Button size="small" color="secondary" onClick={() => handleDeletePost(post._id)}>
-                  Delete
-                </Button>
-              </CardActions>
-            </Card>
-          ))}
-        </div>
+        {selectedSection === 'posts' && (
+          <div style={{ marginTop: '20px' }}>
+            {posts.map((post) => (
+              <Card key={post._id} sx={{ maxWidth: 345, margin: '10px', backgroundColor: 'white' }}>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {post.details}
+                  </Typography>
+                  <div>Price: {post.price}</div>
+                  <div>Quantity: {post.quantity}</div>
+                  <img src={post.imageurl} alt="Post" style={{ width: '100%', height: 'auto' }} />
+                </CardContent>
+                <CardActions>
+                  <Button size="small" color="primary" onClick={() => handleEditPost(post)}>
+                    Edit
+                  </Button>
+                  <Button size="small" color="secondary" onClick={() => handleDeletePost(post._id)}>
+                    Delete
+                  </Button>
+                </CardActions>
+              </Card>
+            ))}
+          </div>
+        )}
+
+        {selectedSection === 'tags' && <Tags />} {/* Render Tags component */}
       </div>
 
-      {/* Modal for Adding/Editing Post */}
       <Modal open={openModal} onClose={handleCloseModal}>
         <div style={{ padding: '20px', backgroundColor: 'white', margin: '100px auto', width: '400px' }}>
           <Typography variant="h6">{editingPostId ? 'Edit Post' : 'Add New Post'}</Typography>

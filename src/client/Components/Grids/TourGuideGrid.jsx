@@ -16,14 +16,14 @@ const columns = [
   { field: 'Status', headerName: 'Status', width: 90 },
 ];
 
-export default function DataTable() {
+export default function TourGuideDataTable() {
   const [rows, setRows] = useState([]);  // Remove typing annotations
   const [selectedRows, setSelectedRows] = useState([]);  // Remove typing annotations
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/users/?role=Tour Guide');
+        const response = await axios.get('http://localhost:3000/users/?role=TourGuide');
         const formattedRows = response.data.map((user) => ({
           id: user._id,
           username: user.username,
