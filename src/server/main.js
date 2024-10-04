@@ -45,6 +45,7 @@ DB();
 // app.use('/api/activities', activityRoutes);
 
 app.use("/guest", guestRoutes);
+
 app.use("/tourguide", tourGuideRoutes);
 
 ViteExpress.listen(app, 3000, () => {

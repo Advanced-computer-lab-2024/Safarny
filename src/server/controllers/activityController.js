@@ -1,6 +1,7 @@
 const AsyncHandler = require("express-async-handler");
 const Activity = require("../models/Activity.js");
 const ActivityCategory = require("../models/ActivityCategory.js");
+const Tag = require("../models/Tags.js");
 
 // Create an activity
 const createActivity = AsyncHandler(async (req, res) => {
@@ -11,7 +12,7 @@ const createActivity = AsyncHandler(async (req, res) => {
     coordinates,
     price,
     category,
-    tags,
+    tagNames,
     specialDiscount,
     bookingOpen,
   } = req.body;
@@ -22,6 +23,18 @@ const createActivity = AsyncHandler(async (req, res) => {
   }
 
   try {
+    let tagIds = [];
+
+    // Iterate over each tag name in the request
+    for (let tagName of tagNames) {
+      let tag = await Tag.findOne({ name: tagName });
+
+      if (!tag) {
+        return res.status(400).send({ error: `Tag ${tagName} does not exist` });
+      }
+      tagIds.push(tag._id);
+    }
+
     const newActivity = new Activity({
       date,
       time,
@@ -29,7 +42,7 @@ const createActivity = AsyncHandler(async (req, res) => {
       coordinates,
       price,
       category,
-      tags,
+      tags: tagIds,
       specialDiscount,
       bookingOpen,
     });
@@ -112,6 +125,34 @@ const addCategoryToActivity = AsyncHandler(async (req, res) => {
   }
 });
 
+// Get filtered activities
+const getActivitiesFiltered = AsyncHandler(async (req, res) => {
+  const { price, date, category, rating } = req.query;
+  const filter = {};
+
+  if (price) filter.price = price;
+  if (date) filter.date = date;
+  if (category) filter.category = category;
+  if (rating) filter.rating = rating;
+
+  const activities = await Activity.find(filter);
+  res.json(activities);
+});
+
+// Get sorted activities
+const getActivitiesSorted = AsyncHandler(async (req, res) => {
+  const { sortBy } = req.query;
+  const sortCriteria = {};
+
+  if (sortBy) {
+    const [field, order] = sortBy.split(":");
+    sortCriteria[field] = order === "desc" ? -1 : 1;
+  }
+
+  const activities = await Activity.find().sort(sortCriteria);
+  res.json(activities);
+});
+
 module.exports = {
   createActivity,
   getActivities,
@@ -119,4 +160,6 @@ module.exports = {
   updateActivity,
   deleteActivity,
   addCategoryToActivity,
+  getActivitiesFiltered,
+  getActivitiesSorted,
 };

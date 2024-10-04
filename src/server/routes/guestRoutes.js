@@ -13,7 +13,7 @@ const login = require("../controllers/loginController.js");
 4-get all activty by (price, date, category, rating) 
 5-get all (activty, itinerary) sorted by (price, rating) 
 6-get all itinerary by (price, date, tags, language) 
-7-get all historicalPLaces by tags
+7-get all historicalPLaces by tags`
 */
 
 router.post("/login", login);
@@ -27,8 +27,6 @@ router.get(
   historicalPlaceController.getAllHistoricalPlaces
 );
 
-//TODO:
-/*
 router.get("/filter-activities", activityController.getActivitiesFiltered);
 router.get("/get-activities-sorted", activityController.getActivitiesSorted);
 router.get("/get-itineraries-sorted", itineraryController.getItinerariesSorted);
@@ -37,6 +35,5 @@ router.get(
   "/filter-historicalPlaces",
   historicalPlaceController.getHistoricalPlacesFiltered
 );
-*/
 
 module.exports = router;
