@@ -83,9 +83,9 @@ const Admin = () => {
 
     try {
       if (editingPostId) {
-        await axios.put(`/posting/posts/${editingPostId}`, postData);
+        await axios.put(`/admin/products/${editingPostId}`, postData);
       } else {
-        await axios.post('/posting/posts', postData);
+        await axios.post('/admin/createProduct', postData);
       }
       fetchPosts();
       handleCloseModal();
@@ -102,7 +102,7 @@ const Admin = () => {
 
   const handleDeletePost = async (postId) => {
     try {
-      await axios.delete(`/posting/posts/${postId}`);
+      await axios.delete(`/admin/products/${postId}`);
       fetchPosts();
     } catch (error) {
       setErrorMessage('Failed to delete post');
