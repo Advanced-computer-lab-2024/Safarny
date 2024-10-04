@@ -15,6 +15,12 @@ const Admin = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedSection, setSelectedSection] = useState('posts'); // State to manage selected section
 
+  // Search, Filter and Sort states
+  const [searchTerm, setSearchTerm] = useState('');
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+  const [sortBy, setSortBy] = useState(''); // Can be 'rating' or any other criteria
+
   useEffect(() => {
     if (selectedSection === 'posts') {
       fetchPosts();
@@ -113,6 +119,22 @@ const Admin = () => {
     }
   };
 
+  // Search, Filter, and Sort functionality
+  const filteredPosts = posts.filter((post) => {
+    const matchesSearch = post.details.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesPrice = 
+      (minPrice === '' || post.price >= minPrice) &&
+      (maxPrice === '' || post.price <= maxPrice);
+    return matchesSearch && matchesPrice;
+  });
+
+  const sortedPosts = [...filteredPosts].sort((a, b) => {
+    if (sortBy === 'rating') {
+      return b.rating - a.rating; // Adjust according to your rating property
+    }
+    return 0; // No sorting by default
+  });
+
   return (
     <div style={{ display: 'flex' }}>
       <SideBar />
@@ -125,11 +147,57 @@ const Admin = () => {
             Manage Tags
           </Button>
         </div>
+        
         {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+
+        {/* Search Bar */}
+        <TextField
+          label="Search by Name"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
+        {/* Price Filter */}
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+          <TextField
+            label="Min Price"
+            variant="outlined"
+            type="number"
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
+            style={{ marginRight: '10px' }}
+          />
+          <TextField
+            label="Max Price"
+            variant="outlined"
+            type="number"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
+          />
+        </div>
+
+        {/* Sort By */}
+        <TextField
+          label="Sort By Rating"
+          select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          SelectProps={{
+            native: true,
+          }}
+          variant="outlined"
+          style={{ marginBottom: '1rem' }}
+        >
+          <option value="">None</option>
+          <option value="rating">Rating</option>
+        </TextField>
 
         {selectedSection === 'posts' && (
           <div style={{ marginTop: '20px' }}>
-            {posts.map((post) => (
+            {sortedPosts.map((post) => (
               <Card key={post._id} sx={{ maxWidth: 345, margin: '10px', backgroundColor: 'white' }}>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
