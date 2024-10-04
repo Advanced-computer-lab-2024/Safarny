@@ -35,6 +35,13 @@ const SignIn = () => {
         } else if (response.data.type === 'Admin') {
           navigate('/Profile', { state: { userId } });
         }
+        else if (response.data.type === 'TourGuide') {
+          navigate('/Profile', { state: { userId } });
+        }
+        else if (response.data.type === 'Advertiser') {
+          navigate('/Profile', { state: { userId } });
+        }
+
       }
     } catch (err) {
       if (err.response) {

@@ -5,13 +5,15 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const createTourGuide = async (req, res) => {
-  const { username, email, password, role, YearOfExp, PreWork } = req.body;
+  console.log(req.body)
+  const { username, email, password,mobile, role, YearOfExp, PrevWork } = req.body;
   const newTourGuide = new User({
     username,
     email,
     password,
+    mobile,
     YearOfExp,
-    PreWork,
+    PrevWork,
     role: "TourGuide",
   });
   const token = jwt.sign({ id: newTourGuide._id }, process.env.JWT_SECRET, {

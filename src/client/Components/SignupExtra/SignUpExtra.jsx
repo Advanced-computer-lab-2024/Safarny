@@ -38,14 +38,14 @@ const SignUpExtra = () => {
       password,
       email,
       role: userType,
-      websiteLink,
-      hotline,
-      companyProfile,
+      CompanyLink:websiteLink,
+      CompanyHotline:hotline,
+      CompanyName:companyProfile,
       sellerName,
       description,
-      mobileNumber,
-      experience,
-      previousWork,
+      mobile:mobileNumber,
+      YearOfExp:experience,
+      PrevWork:previousWork,
     };
 
     try {
