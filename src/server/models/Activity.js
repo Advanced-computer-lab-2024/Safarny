@@ -21,14 +21,26 @@ const activitySchema = new mongoose.Schema({
   date: { type: String, required: true },
   time: { type: String, required: true },
   coordinates: {
-        lat: { type: Number, required: true },
-        lng: { type: Number, required: true }
-    },
+    lat: { type: Number, required: true },
+    lng: { type: Number, required: true },
+  },
   tags: [
     {
+      type: Schema.Types.ObjectId,
+      ref: "Tags",
+    },
+  ],
+  //advertiser
+  createdby: {
     type: Schema.Types.ObjectId,
-    ref: "Tags",
+    ref: "User",
   },
+  //tourist
+  boughtby: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
   ],
 });
 

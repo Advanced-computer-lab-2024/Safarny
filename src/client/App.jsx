@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import React from 'react';
 import Header from './components/Header';
-import Products from './Products';
+// import Products from './Products';
 import Landmarks from './Landmarks';
 import Homepage from '/src/client/components/Home/Homepage';
 import Footer from '/src/client/components/Footer/Footer';
@@ -27,6 +27,7 @@ import UpdateProfile from '/src/client/Components/UpdateProfile/UpdateProfile';
 import Plans from './Components/Plans/plans';
 import ItineraryManager from './Components/Itinerary/ItineraryManager';
 // import Profile from '/src/client/Components/Profile/Profile';
+import ProductList from './Components/ProductView/ProductList';
 
 import Profile from "./Components/Profile/Profile";
 import GetTags from './Components/Tags/getTags'; // Import the GetTags component
@@ -43,7 +44,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Homepage />} />
-        <Route path="/products" element={<Products />} />
+        <Route path="/products" element={<ProductList />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/landmarks" element={<Landmarks />} />
         {/* <Route path="/TourGuide" element={<TourGuide />} /> */}

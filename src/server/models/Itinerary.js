@@ -8,6 +8,18 @@ const itinerarySchema = new Schema(
       type: String,
       required: true,
     },
+    //tourist
+    boughtby: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    //tourguide
+    createdby: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
     tags: [
       {
         type: Schema.Types.ObjectId,

@@ -12,6 +12,11 @@ const ActivityCategorySchema = new mongoose.Schema({
       ref: "Activity",
     },
   ],
+  //Admin
+  createdby: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 const ActivityCategory = mongoose.model(
