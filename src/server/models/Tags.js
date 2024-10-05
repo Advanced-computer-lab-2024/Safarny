@@ -8,14 +8,30 @@ const tagsSchema = new Schema(
       required: true,
       unique: true,
     },
-    itinerary: [{
+    itinerary: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Itinerary",
+      },
+    ],
+    historicalPLaces: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "historicalplaces",
+      },
+    ],
+    activities: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Activity",
+      },
+    ],
+
+    //Admin/TourismGovernor
+    createdby: {
       type: Schema.Types.ObjectId,
-      ref: "Itinerary",
-    }],
-    historicalPLaces: [{
-      type: Schema.Types.ObjectId,
-      ref: "historicalplaces",
-    }],
+      ref: "User",
+    },
   },
   { timestamps: true }
 );
