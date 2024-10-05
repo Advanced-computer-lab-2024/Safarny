@@ -1,4 +1,4 @@
-return (
+{/*}return (
     <div className={styles.container}>
       <header className={styles.header}>
         <img src={Logo} alt="Safarny Logo" className={styles.logo} />
@@ -63,7 +63,7 @@ return (
                     <p>Location: {item.location}</p>
                     <p>Opening Hours: {item.openingHours}</p>
                     <p>Ticket Prices: ${item.ticketPrices}</p>
-                    {/* Add more fields as necessary */}
+                 
                 </li>
             ))}
         </ul>
@@ -91,7 +91,7 @@ return (
           </div>
         )}
 
-        {/* Itineraries Results */}
+      
         {results.itineraries.length > 0 && (
           <div className={styles.results}>
             <h3>Itineraries Results:</h3>
@@ -137,4 +137,4 @@ return (
       <Footer />
     </div>
   );
-};
+}; */}
