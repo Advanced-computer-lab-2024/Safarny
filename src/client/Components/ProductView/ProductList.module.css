@@ -39,7 +39,7 @@
   position: relative;
   z-index: 1;
   cursor: pointer;
-  width: calc(33.333% - 2rem);
+  width: calc(30% - 2rem);
 }
 
 .productCard:hover {

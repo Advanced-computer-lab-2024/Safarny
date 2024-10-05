@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button, Modal, TextField, Typography, Card, CardContent, Alert } from '@mui/material';
 import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../../server/config/Firebase';
 
 const CreatePost = () => {
+  const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true); // Open the modal by default for creating a post
   const [currentPost, setCurrentPost] = useState({ details: '', price: '', quantity: '', imageurl: '' });
   const [selectedImage, setSelectedImage] = useState(null);
