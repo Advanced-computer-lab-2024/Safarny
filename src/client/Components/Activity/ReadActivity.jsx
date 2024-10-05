@@ -5,7 +5,7 @@ const ReadActivities = () => {
 
     useEffect(() => {
         const fetchActivities = async () => {
-            const response = await fetch('/api/activities');
+            const response = await fetch('/advertiser/');
             const data = await response.json();
             setActivities(data);
         };

@@ -35,13 +35,14 @@ const UpdateActivity = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const activityResponse = await axios.get('http://localhost:3000/api/activities');
+                const activityResponse = await axios.get('http://localhost:3000/advertiser/');
                 setActivities(activityResponse.data);
+                
 
-                const categoriesResponse = await axios.get('http://localhost:3000/api/categories');
+                const categoriesResponse = await axios.get('http://localhost:3000/advertiser/GetCategories');
                 setCategories(categoriesResponse.data || []); // Ensure it's an array
 
-                const tagsResponse = await axios.get('http://localhost:3000/tag');
+                const tagsResponse = await axios.get('http://localhost:3000/admin/tag');
                 setTags(tagsResponse.data || []); // Ensure it's an array
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -94,7 +95,7 @@ const UpdateActivity = () => {
         }
 
         try {
-            await axios.put(`http://localhost:3000/api/activities/${selectedActivity._id}`, {
+            await axios.put(`http://localhost:3000/advertiser/${selectedActivity._id}`, {
                 ...activityDetails,
                 categories: activityDetails.categories,
                 tags: activityDetails.tags

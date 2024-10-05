@@ -33,10 +33,10 @@ const CreateActivity = () => {
     useEffect(() => {
         const fetchTagsAndCategories = async () => {
             try {
-                const tagResponse = await axios.get('http://localhost:3000/tag');
+                const tagResponse = await axios.get('http://localhost:3000/admin/tag');
                 setTags(tagResponse.data || []); // Set tags or default to an empty array if no data
 
-                const categoryResponse = await axios.get('http://localhost:3000/api/categories');
+                const categoryResponse = await axios.get('http://localhost:3000/advertiser/GetCategories');
                 console.log('Fetched categories:', categoryResponse.data); // Log categories for debugging
                 setCategories(categoryResponse.data || []); // Set categories or default to an empty array
             } catch (error) {
@@ -55,7 +55,7 @@ const CreateActivity = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:3000/api/activities', activityDetails);
+            await axios.post('http://localhost:3000/advertiser', activityDetails);
             setMessage('Activity created successfully!');
         } catch (error) {
             console.error('Error creating activity:', error);

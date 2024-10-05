@@ -24,6 +24,7 @@ const touristRoutes = require("./routes/touristRoutes.js");
 const sellerRoutes = require("./routes/sellerRoutes.js");
 const adminRoutes = require("./routes/adminRoutes.js");
 const ToursimGovernerRoutes = require("./routes/ToursimGovernerRoutes.js");
+const AdvertiserRoutes = require("./routes/advertiserRoutes.js");
 
 dotenv.config();
 
@@ -49,6 +50,8 @@ DB();
 // app.use('/api/activities', activityRoutes);
 
 app.use("/admin", adminRoutes);
+
+app.use("/advertiser",AdvertiserRoutes);
 
 app.use("/guest", guestRoutes);
 

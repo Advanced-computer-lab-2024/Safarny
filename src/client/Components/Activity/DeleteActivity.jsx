@@ -9,7 +9,7 @@ const DeleteActivity = () => {
     useEffect(() => {
         const fetchActivities = async () => {
             try {
-                const response = await axios.get('/api/activities'); // Replace with your actual endpoint
+                const response = await axios.get('/advertiser/'); // Replace with your actual endpoint
                 setActivities(response.data);
             } catch (error) {
                 console.error('Error fetching activities:', error);
@@ -21,7 +21,7 @@ const DeleteActivity = () => {
 
     const handleDelete = async () => {
         try {
-            await axios.delete(`/api/activities/${selectedActivityId}`);
+            await axios.delete(`/advertiser/${selectedActivityId}`);
             // Optionally refresh the activities list
             setActivities(activities.filter(activity => activity._id !== selectedActivityId));
         } catch (error) {
