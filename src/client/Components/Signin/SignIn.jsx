@@ -43,7 +43,7 @@ const SignIn = () => {
       setSuccess(true);
       setError('');
       const userId = id; // Assuming `id` is the user identifier in the response
-      if (['Tourist', 'Seller', 'TourGuide', 'Advertiser'].includes(type)) {
+      if (['Tourist', 'Seller', 'TourGuide', 'Advertiser','TourismGovernor'].includes(type)) {
         navigate('/Profile', { state: { userId } });
       }
   
