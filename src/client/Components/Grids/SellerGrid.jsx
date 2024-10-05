@@ -100,7 +100,7 @@ export default function DataTable3() {
         onClick={handleUpdate}
         sx={{ marginTop: 2 }}
       >
-        Update Selected
+        Accept into system
       </Button>
       </div>
       )}
