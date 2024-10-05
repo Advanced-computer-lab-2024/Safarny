@@ -21,7 +21,7 @@ const GetTags = () => {
     <div>
       <h1>Tags</h1>
       <ul>
-        {tags.map(tag => (
+        {Array.isArray(tags) && tags.map(tag => (
           <li key={tag._id}>{tag.name}</li>
         ))}
       </ul>

@@ -8,7 +8,7 @@ import Footer from '/src/client/components/Footer/Footer';
 import SignIn from '/src/client/Components/Signin/SignIn';
 import SignUp from '/src/client/components/Signup/Signup';
 import SignUpExtra from './Components/SignupExtra/SignUpExtra';
-// import TourGuide from './pages/TourGuide';
+import TourGuide from './Pages/TourGuide';
 // import Advertiser from './pages/Advertiser';
 // import Seller from './pages/Seller';
 import Admin from '/src/client/components/Admin/Admin';
@@ -47,7 +47,7 @@ function App() {
         <Route path="/products" element={<ProductList />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/landmarks" element={<Landmarks />} />
-        {/* <Route path="/TourGuide" element={<TourGuide />} /> */}
+        <Route path="/TourGuide" element={<TourGuide />} />
         {/* <Route path="/Advertiser" element={<Advertiser />} /> */}
         {/* <Route path="/Seller" element={<Seller />} /> */}
         <Route path="/Admin" element={<Admin />} />

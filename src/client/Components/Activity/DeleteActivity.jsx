@@ -34,7 +34,7 @@ const DeleteActivity = () => {
             <h2>Delete Activity</h2>
             <select onChange={(e) => setSelectedActivityId(e.target.value)} value={selectedActivityId}>
                 <option value="">Select an Activity</option>
-                {activities.map(activity => (
+                {Array.isArray(activities) && activities.length > 0 &&activities.map(activity => (
                     <option key={activity._id} value={activity._id}>
                         {activity.location} - {activity.date}
                     </option>

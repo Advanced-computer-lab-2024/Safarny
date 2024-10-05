@@ -4,6 +4,9 @@ import styles from './Profile.module.css';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
 import UpdateProfilePage from '/src/client/Components/UpdateProfile/UpdateProfile';
+//import { useNavigate } from 'react-router-dom'; // n
+
+
 
 const Profile = () => {
   const location = useLocation();
@@ -37,11 +40,15 @@ const Profile = () => {
     localStorage.setItem('userId', userId);
     window.location.href = '/UpdateProfile';
   };
-
   const handleProductViewClick = () => {
     navigate('/products'); // Navigate to the product list page
+
   };
 
+  //const navigate2 = useNavigate();//n
+  const handleUpdateClick2 = () => {
+    navigate('/Search');
+  };
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -67,10 +74,13 @@ const Profile = () => {
       <button onClick={handleUpdateClick} className={styles.updateButton}>
         Update Profile
       </button>
-
-      {/* Button to view products */}
-      <button onClick={handleProductViewClick} className={styles.productButton}>
+       {/* Button to view products */}
+       <button onClick={handleProductViewClick} className={styles.productButton}>
         View Products
+      </button>
+
+      <button onClick={handleUpdateClick2} className={styles.searchButton}>
+        Search
       </button>
 
       <Footer />
