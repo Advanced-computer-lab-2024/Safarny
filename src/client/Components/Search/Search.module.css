@@ -124,3 +124,16 @@ h1 {
     color: red;
     text-align: center;
 }
+
+
+.imageContainer {
+    display: flex;
+    gap: 10px; /* Space between images */
+}
+
+.resultImage {
+    width: 100px; /* Adjust size as necessary */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 5px;
+}
+
