@@ -4,7 +4,7 @@ import styles from './Profile.module.css';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
 import UpdateProfilePage from '/src/client/Components/UpdateProfile/UpdateProfile';
-import { useNavigate } from 'react-router-dom'; // n
+//import { useNavigate } from 'react-router-dom'; // n
 
 
 
@@ -45,9 +45,9 @@ const Profile = () => {
 
   };
 
-  const navigate2 = useNavigate();//n
+  //const navigate2 = useNavigate();//n
   const handleUpdateClick2 = () => {
-    navigate2('/Search');
+    navigate('/Search');
   };
   return (
     <div className={styles.container}>
