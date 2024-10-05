@@ -5,6 +5,7 @@ import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from '../../../server/config/Firebase';
 import Tags from './tagAdmin'; // Import the Tags component
+import { Link } from 'react-router-dom';
 
 const Admin = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -146,6 +147,16 @@ const Admin = () => {
           <Button variant="contained" color="secondary" onClick={() => setSelectedSection('tags')}>
             Manage Tags
           </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            component={Link} // Use Link component for navigation
+            to="/adminaddgovernor" // Adjust the path according to your routing
+            style={{ marginLeft: '20px' }} // Add margin for spacing
+          >
+            Add Governor
+          </Button>
+
         </div>
         
         {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
