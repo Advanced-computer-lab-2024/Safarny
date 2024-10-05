@@ -1,4 +1,4 @@
-// return (
+// {/*}return (
 //     <div className={styles.container}>
 //       <header className={styles.header}>
 //         <img src={Logo} alt="Safarny Logo" className={styles.logo} />
@@ -8,38 +8,38 @@
 //         </nav>
 //       </header>
 
-//       <main className={styles.main}>
-//         <h2>Search for Activities or Itineraries</h2>
+// //       <main className={styles.main}>
+// //         <h2>Search for Activities or Itineraries</h2>
 
-//         {error && <p className={styles.errorMessage}>{error}</p>}
+// //         {error && <p className={styles.errorMessage}>{error}</p>}
 
-//         <form onSubmit={handleSearch} className={styles.form}>
-//           <label>
-//             Search Query:
-//             <input
-//               type="text"
-//               value={query}
-//               onChange={(e) => setQuery(e.target.value)}
-//               required
-//             />
-//           </label>
-//           <label>
-//             Type:
-//             <select
-//               value={type}
-//               onChange={(e) => setType(e.target.value)}
-//               required
-//             >
-//               <option value="">Select Type</option>
-//               <option value="historical">Historical Places</option>
-//               <option value="activity">Activities</option>
-//               <option value="itinerary">Itineraries</option>
-//             </select>
-//           </label>
-//           <button type="submit" className={styles.button}>
-//             Search
-//           </button>
-//         </form>
+// //         <form onSubmit={handleSearch} className={styles.form}>
+// //           <label>
+// //             Search Query:
+// //             <input
+// //               type="text"
+// //               value={query}
+// //               onChange={(e) => setQuery(e.target.value)}
+// //               required
+// //             />
+// //           </label>
+// //           <label>
+// //             Type:
+// //             <select
+// //               value={type}
+// //               onChange={(e) => setType(e.target.value)}
+// //               required
+// //             >
+// //               <option value="">Select Type</option>
+// //               <option value="historical">Historical Places</option>
+// //               <option value="activity">Activities</option>
+// //               <option value="itinerary">Itineraries</option>
+// //             </select>
+// //           </label>
+// //           <button type="submit" className={styles.button}>
+// //             Search
+// //           </button>
+// //         </form>
 
 //         {results.historicalPlaces && results.historicalPlaces.length > 0 && (
 //     <div className={styles.results}>
@@ -63,35 +63,35 @@
 //                     <p>Location: {item.location}</p>
 //                     <p>Opening Hours: {item.openingHours}</p>
 //                     <p>Ticket Prices: ${item.ticketPrices}</p>
-//                     {/* Add more fields as necessary */}
+                 
 //                 </li>
 //             ))}
 //         </ul>
 //     </div>
 // )}
 
-//         {results.activities.length > 0 && (
-//           <div className={styles.results}>
-//             <h3>Activities Results:</h3>
-//             <ul>
-//               {results.activities.map(item => (
-//                 <li key={item._id}>
-//                   <h4>{item.category}</h4>
-//                   <p>Date: {item.date}</p>
-//                   <p>Time: {item.time}</p>
-//                   <p>Location: {item.location}</p>
-//                   <p>Coordinates: {JSON.stringify(item.coordinates)}</p>
-//                   <p>Price: ${item.price}</p>
-//                   <p>Tags: {item.tags.join(', ')}</p>
-//                   <p>Special Discount: {item.specialDiscount}</p>
-//                   <p>Booking Open: {item.bookingOpen ? 'Yes' : 'No'}</p>
-//                 </li>
-//               ))}
-//             </ul>
-//           </div>
-//         )}
+// //         {results.activities.length > 0 && (
+// //           <div className={styles.results}>
+// //             <h3>Activities Results:</h3>
+// //             <ul>
+// //               {results.activities.map(item => (
+// //                 <li key={item._id}>
+// //                   <h4>{item.category}</h4>
+// //                   <p>Date: {item.date}</p>
+// //                   <p>Time: {item.time}</p>
+// //                   <p>Location: {item.location}</p>
+// //                   <p>Coordinates: {JSON.stringify(item.coordinates)}</p>
+// //                   <p>Price: ${item.price}</p>
+// //                   <p>Tags: {item.tags.join(', ')}</p>
+// //                   <p>Special Discount: {item.specialDiscount}</p>
+// //                   <p>Booking Open: {item.bookingOpen ? 'Yes' : 'No'}</p>
+// //                 </li>
+// //               ))}
+// //             </ul>
+// //           </div>
+// //         )}
 
-//         {/* Itineraries Results */}
+      
 //         {results.itineraries.length > 0 && (
 //           <div className={styles.results}>
 //             <h3>Itineraries Results:</h3>
@@ -125,16 +125,16 @@
 //           <p>No historical places found for your search query.</p>
 //         )}
         
-//         {results.activities.length === 0 && type === 'activity' && (
-//           <p>No activities found for your search query.</p>
-//         )}
+// //         {results.activities.length === 0 && type === 'activity' && (
+// //           <p>No activities found for your search query.</p>
+// //         )}
 
-//         {results.itineraries.length === 0 && type === 'itinerary' && (
-//           <p>No itineraries found for your search query.</p>
-//         )}
-//       </main>
+// //         {results.itineraries.length === 0 && type === 'itinerary' && (
+// //           <p>No itineraries found for your search query.</p>
+// //         )}
+// //       </main>
 
 //       <Footer />
 //     </div>
 //   );
-// };
+// }; */}
