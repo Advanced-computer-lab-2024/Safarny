@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const usersController = require("../controllers/usersController.js");
+const searchController = require('../controllers/searchController.js');
 const router = Router();
 
 router.get("/profile", usersController.getSingleUser);
@@ -9,6 +10,7 @@ router.put("/update", usersController.updateUser);
 // Route for creating a new profile
 router.post("/create", usersController.createProfile);
 
+router.get("/search", searchController.search);
 // Route for getting a profile by ID
 router.get("/:id", usersController.getProfileById);
 

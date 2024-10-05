@@ -1,66 +1,84 @@
-//const Museum = require('./models/Museum'); // Adjust path as necessary
-const Activity = require('../models/Activity'); // Adjust path as necessary
-const Itinerary = require('../models/Itinerary'); // Adjust path as necessary
+const Activity = require('../models/Activity'); 
+const Itinerary = require('../models/Itinerary'); 
 const HistoricalPlaces = require('../models/historicalplaces'); 
 
-
-// Search Controller
 const searchController = {
     search: async (req, res) => {
-        const { query } = req.query; // Get the search query from the request
+        const { query, type } = req.query; // Get the search query and type from the request
         try {
-            // Search in all relevant collections
-            const historicalPlaces = await HistoricalPlaces.find({
-                $or: [
-                    { name: { $regex: query, $options: 'i' } }, // Search by name
-                    { category: { $regex: query, $options: 'i' } }, // Search by category
-                    { tags: { $regex: query, $options: 'i' } } // Search by tags
-                ]
-            });
+            let results = {
+                historicalPlaces: [],
+                activities: [],
+                itineraries: []
+            };
 
-            const activities = await Activity.find({
-                $or: [
-                    { name: { $regex: query, $options: 'i' } },
-                    { category: { $regex: query, $options: 'i' } },
-                    { tags: { $regex: query, $options: 'i' } }
-                ]
-            });
+            // Check which type of search to perform
+            if (!query) {
+                return res.status(400).json({ success: false, message: 'Query parameter is required' });
+            }
 
-            const itineraries = await Itinerary.find({
-                $or: [
-                    { name: { $regex: query, $options: 'i' } },
-                    { category: { $regex: query, $options: 'i' } },
-                    { tags: { $regex: query, $options: 'i' } }
-                ]
-            });
+            if (type === 'historicalPlaces') {
+                results.historicalPlaces = await HistoricalPlaces.find({
+                    $or: [
+                        { description: { $regex: query, $options: 'i' } }
+                      //  { category: { $regex: query, $options: 'i' } },
+                       // { tags: { $regex: query, $options: 'i' } }
+                    ]
+                });
+            } else if (type === 'activities') {
+                results.activities = await Activity.find({
+                    $or: [
+                     //   { name: { $regex: query, $options: 'i' } },
+                        { category: { $regex: query, $options: 'i' } },
+                        { tags: { $regex: query, $options: 'i' } }
+                    ]
+                });
+            } else if (type === 'itineraries') {
+                results.itineraries = await Itinerary.find({
+                    $or: [
+                        { name: { $regex: query, $options: 'i' } },
+                        { category: { $regex: query, $options: 'i' } },
+                        { tags: { $regex: query, $options: 'i' } }
+                    ]
+                });
+            } /*
+            else {
+                // If no type is specified, search in all collections
+                results.historicalPlaces = await HistoricalPlaces.find({
+                    $or: [
+                        { description: { $regex: query, $options: 'i' } },
+                        { category: { $regex: query, $options: 'i' } },
+                        { tags: { $regex: query, $options: 'i' } }
+                    ]
+                });
 
-            /*
-            const itineraries = await Itinerary.find({
-                $or: [
-                    { name: { $regex: query, $options: 'i' } },
-                    { category: { $regex: query, $options: 'i' } },
-                    { tags: { $regex: query, $options: 'i' } }
-                ]
-            });
+                results.activities = await Activity.find({
+                    $or: [
+                        { name: { $regex: query, $options: 'i' } },
+                        { category: { $regex: query, $options: 'i' } },
+                        { tags: { $regex: query, $options: 'i' } }
+                    ]
+                });
+
+                results.itineraries = await Itinerary.find({
+                    $or: [
+                        { name: { $regex: query, $options: 'i' } },
+                        { category: { $regex: query, $options: 'i' } },
+                        { tags: { $regex: query, $options: 'i' } }
+                    ]
+                });
+            }
             */
-
-
-
-
-
-
 
             // Return all results
             return res.status(200).json({
                 success: true,
-                museums,
-                activities,
-                itineraries
+                results
             });
         } catch (error) {
             return res.status(500).json({
                 success: false,
-                message: 'Error searching',
+                message: 'Not Found',
                 error: error.message
             });
         }
