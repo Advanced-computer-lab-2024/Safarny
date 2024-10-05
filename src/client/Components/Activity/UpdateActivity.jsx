@@ -127,7 +127,7 @@ const UpdateActivity = () => {
                     Select Activity:
                     <select onChange={handleSelectChange} value={selectedActivity ? selectedActivity._id : ''}>
                         <option value="">Select an activity</option>
-                        {activities.map((activity) => (
+                        {Array.isArray(activities) && activities.length > 0 && activities.map((activity) => (
                             <option key={activity._id} value={activity._id}>
                                 {activity.location} - {activity.date} {activity.time}
                             </option>

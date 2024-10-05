@@ -150,11 +150,15 @@ const CreateActivity = () => {
                                 })
                             }
                         >
-                            {tags.map((tag) => (
-                                <option key={tag._id} value={tag._id}>
-                                    {tag.name}
-                                </option>
-                            ))}
+                            {Array.isArray(tags) && tags.length > 0 ? (
+                                tags.map((tag) => (
+                                    <option key={tag._id} value={tag._id}>
+                                        {tag.name}
+                                    </option>
+                                ))
+                            ) : (
+                                <option disabled>No tags available</option>
+                            )}
                         </select>
                     </label>
                 </div>
