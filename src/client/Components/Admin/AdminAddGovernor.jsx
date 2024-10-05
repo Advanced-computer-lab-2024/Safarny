@@ -1,20 +1,14 @@
 import React, { useState } from "react";
 
 const AdminAddGovernor = () => {
-  // State to hold form data
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
-    nationality: "",
-    mobile: "",
-    employed: "",
   });
 
-  // State to show success or error message
   const [message, setMessage] = useState("");
 
-  // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -23,9 +17,14 @@ const AdminAddGovernor = () => {
     }));
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Ensure required fields are provided
+    if (!formData.username || !formData.email || !formData.password) {
+      setMessage("Username, email, and password are required");
+      return;
+    }
 
     try {
       const response = await fetch("http://localhost:3000/admin/add-governor", {
@@ -38,15 +37,12 @@ const AdminAddGovernor = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setMessage(`Success: ${data.message}`);
-        // Clear form after successful submission
+        setMessage("Tourism Governor added successfully");
+        // Reset the form after successful submission
         setFormData({
           username: "",
           email: "",
           password: "",
-          nationality: "",
-          mobile: "",
-          employed: "",
         });
       } else {
         const error = await response.json();
@@ -94,42 +90,6 @@ const AdminAddGovernor = () => {
             type="password"
             name="password"
             value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-
-        <label>
-          Nationality:
-          <input
-            type="text"
-            name="nationality"
-            value={formData.nationality}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-
-        <label>
-          Mobile:
-          <input
-            type="tel"
-            name="mobile"
-            value={formData.mobile}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-
-        <label>
-          Employed:
-          <input
-            type="text"
-            name="employed"
-            value={formData.employed}
             onChange={handleChange}
             required
           />
