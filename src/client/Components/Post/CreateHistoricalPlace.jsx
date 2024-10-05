@@ -13,7 +13,7 @@ const CreateHistoricalPlace = () => {
     location: '',
     openingHours: '',
     ticketPrices: '',
-    tags: '',
+    tagNames: '',
     pictures: '',
   });
   const [selectedImage, setSelectedImage] = useState(null);
@@ -66,15 +66,19 @@ const CreateHistoricalPlace = () => {
       if (!imageUrl) return;
     }
 
-    const placeData = { ...historicalPlace, pictures: imageUrl };
+    // Split tagNames by comma and trim whitespace
+    const tagsArray = historicalPlace.tagNames.split(',').map(tag => tag.trim());
+
+    const placeData = { ...historicalPlace, pictures: imageUrl, tagNames: tagsArray };
 
     try {
-      // Updated backend route to match the Express route for creating a historical place
-      await axios.post('http://localhost:3000/toursimgovernor/places', placeData); 
+      await axios.post('http://localhost:3000/toursimgovernor/places', placeData);
       handleCloseModal();
+      navigate('/profile');
     } catch (error) {
-      setErrorMessage('Failed to add historical place');
-      console.error(error); // Optional: log the error for debugging purposes
+      setErrorMessage(`Failed to add historical place: ${error.response.data.error}`);
+      console.error('Error creating historical place:', error);
+      console.log('Request payload:', placeData);
     }
   };
 
@@ -83,7 +87,7 @@ const CreateHistoricalPlace = () => {
       <div style={{ padding: '20px', backgroundColor: 'white', margin: '100px auto', width: '400px' }}>
         <Typography variant="h6">Create Historical Place</Typography>
         {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-        
+
         <TextField
           fullWidth
           label="Description"

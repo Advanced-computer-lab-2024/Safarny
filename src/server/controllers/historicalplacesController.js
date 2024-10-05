@@ -12,14 +12,15 @@ const createHistoricalPlace = async (req, res) => {
       tagNames,
     } = req.body;
 
+    if (!description || !location || !openingHours || !ticketPrices || !tagNames) {
+      return res.status(400).send({ error: 'All fields are required' });
+    }
+
     let tagsId = [];
-
     for (let tagName of tagNames) {
-      let tag = await Tag.findOne({ name: tagName });
-
+      let tag = await Tag.findOne({ name: { $regex: new RegExp(`^${tagName}$`, 'i') } });
       if (!tag) {
-        return res.status(400).send({ error: `Tag ${tagName} does not exist` });  
-
+        return res.status(400).send({ error: `Tag ${tagName} does not exist` });
       }
       tagsId.push(tag._id);
     }
@@ -33,14 +34,12 @@ const createHistoricalPlace = async (req, res) => {
       tags: tagsId,
     });
 
-    await newPlace.save();
+    const savedPlace = await newPlace.save();
     res.status(201).send(savedPlace);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-};
-
-const getAllHistoricalPlaces = async (req, res) => {
+};const getAllHistoricalPlaces = async (req, res) => {
   try {
     const places = await HistoricalPlace.find();
   } catch (err) {
