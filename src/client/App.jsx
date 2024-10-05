@@ -33,6 +33,7 @@ import Search from './Components/Search/Search';
 import Profile from "./Components/Profile/Profile";
 import GetTags from './Components/Tags/getTags'; // Import the GetTags component
 import CreateTags from './Components/Tags/createTags';
+import CreateHistoricalPlace from './Components/Post/CreateHistoricalPlace';
 import EditTags from './Components/Tags/editTags';
 import DeleteTags from './Components/Tags/deleteTags';
 import Tags from './Components/Tags/tags';
@@ -89,6 +90,7 @@ function App() {
         <Route path="/iternaries" element={<ItineraryManager />} />
         <Route path="/create-post" element={<CreatePost />} />
         <Route path="/UpcomingActivites" element={<UpcomingActivites />} />
+        <Route path="/create-historical-place" element={<CreateHistoricalPlace />} />
         
       </Routes>
     </Router>
