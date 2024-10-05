@@ -129,6 +129,7 @@ const SignUpExtra = () => {
               <option value="TourGuide">Tour Guide</option>
               <option value="Advertiser">Advertiser</option>
               <option value="Seller">Seller</option>
+              <option value="tourismgovernor">tourism governor</option>
             </select>
           </label>
 
