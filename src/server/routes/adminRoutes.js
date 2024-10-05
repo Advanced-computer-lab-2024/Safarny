@@ -2,6 +2,13 @@ const { Router } = require("express");
 const router = Router();
 
 const {
+    createCategory,
+    getCategories,
+    updateCategory,
+    deleteCategory,
+} = require("../controllers/activitycategoryController.js");
+
+const {
     createPost,
     getAllPosts,
     updatePostById,
@@ -92,5 +99,10 @@ router.get("/products", getAllPosts);
 // Route for updating a post (product) by ID
 router.put("/products/:id", updatePostById);
 router.delete("/products/:id", deletePostById);
+
+router.post("/category", createCategory);
+router.get("/category", getCategories);
+router.put("/category/:id", updateCategory);
+router.delete("/category/:id", deleteCategory);
 
 module.exports = router;

@@ -9,7 +9,8 @@ const addGovernor = async (req, res) => {
             username,
             email,
             password,
-            role: "TourismGovernor" // Ensure the role is set correctly
+            role: "TourismGovernor", // Ensure the role is set correctly
+            Status:"Accepted"
         });
 
         return res.status(201).json({ message: "Governor added successfully", governor: newGovernor });

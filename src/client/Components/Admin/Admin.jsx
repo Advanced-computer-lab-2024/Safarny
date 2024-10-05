@@ -6,6 +6,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from '../../../server/config/Firebase';
 import Tags from './tagAdmin'; // Import the Tags component
 import { Link } from 'react-router-dom';
+import ActivityCategory from './ActivityCategory';
 
 const Admin = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -141,23 +142,25 @@ const Admin = () => {
       <SideBar />
       <div style={{ marginLeft: '250px', padding: '20px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-          <Button variant="contained" color="primary" onClick={handleOpenModal}>
-            Add Post
-          </Button>
-          <Button variant="contained" color="secondary" onClick={() => setSelectedSection('tags')}>
-            Manage Tags
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            component={Link} // Use Link component for navigation
-            to="/adminaddgovernor" // Adjust the path according to your routing
-            style={{ marginLeft: '20px' }} // Add margin for spacing
-          >
-            Add Governor
-          </Button>
-
-        </div>
+  <Button variant="contained" color="primary" onClick={handleOpenModal} style={{ marginRight: '10px' }}>
+    Add Post
+  </Button>
+  <Button variant="contained" color="secondary" onClick={() => setSelectedSection('tags')} style={{ marginRight: '10px' }}>
+    Manage Tags
+  </Button>
+  <Button variant="contained" color="secondary" onClick={() => setSelectedSection('ActivityCategory')} style={{ marginRight: '10px' }}>
+    Manage categories
+  </Button>
+  <Button
+    variant="contained"
+    color="primary"
+    component={Link}
+    to="/adminaddgovernor"
+    style={{ marginLeft: '20px' }}
+  >
+    Add Governor
+  </Button>
+</div>
         
         {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 
@@ -232,6 +235,7 @@ const Admin = () => {
         )}
 
         {selectedSection === 'tags' && <Tags />} {/* Render Tags component */}
+        {selectedSection === 'ActivityCategory' && <ActivityCategory />} {/* Render ActivityCategory component */}
       </div>
 
       <Modal open={openModal} onClose={handleCloseModal}>
