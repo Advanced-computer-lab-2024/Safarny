@@ -4,7 +4,7 @@ import styles from './Profile.module.css';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
 
-
+import { useNavigate } from 'react-router-dom'; // n
 
 import UpdateProfilePage from '/src/client/Components/UpdateProfile/UpdateProfile'; //n
 const Profile = () => {
@@ -42,6 +42,10 @@ const Profile = () => {
     localStorage.setItem('userId', userId);
     window.location.href = '/UpdateProfile';
   };
+  const navigate = useNavigate();//n
+  const handleUpdateClick2 = () => {
+    navigate('/Search');
+  };
 
   return (
     <div className={styles.container}>
@@ -67,6 +71,10 @@ const Profile = () => {
 
       <button onClick={handleUpdateClick} className={styles.updateButton}>
         Update Profile
+      </button>
+
+      <button onClick={handleUpdateClick2} className={styles.searchButton}>
+        Search
       </button>
 
       <Footer />
