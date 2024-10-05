@@ -6,9 +6,18 @@
     --header-color: white;
     --header-height: 4rem;
     --border-radius: 1rem;
+    --card-background: #2a2a2a;
+    --card-hover: #444;
+    --glow-color: #958efa;
+  }
+  
+body{
+    width: 100%;
+    height: 100%;
+    position: relative;
 }
 
-.container {
+  .container {
     font-family: 'Arial', sans-serif;
     color: var(--text-color);
     background-color: var(--background-color);
@@ -16,12 +25,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
+    position: absolute;
+    top: 0;
     width: 100%;
     height: 100%;
-}
-
-.header {
+  }
+  
+  .header {
     position: sticky;
     top: 0;
     background-color: var(--primary-color);
@@ -34,59 +44,71 @@
     height: var(--header-height);
     border-radius: var(--border-radius);
     width: 90%;
-}
-
-.header h1 {
+    transition: background-color 0.3s;
+  }
+  
+  .header h1 {
     margin: 0;
     font-size: 1.5rem;
     color: var(--header-color);
-}
-
-.logo {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
     height: 8rem;
     margin-right: 1rem;
     position: absolute;
     left: 4rem;
-}
-
-.nav {
+  }
+  
+  .nav {
     display: flex;
     gap: 1rem;
     justify-content: center;
-}
+  }
 
-.button {
+  .button {
     text-decoration: none;
     padding: 0.5rem 1rem;
+    bottom: 150px;
     background-color: var(--secondary-color);
     color: var(--header-color);
     border-radius: 0.5rem;
     transition: background-color 0.3s;
-}
-
-.button:hover {
+    margin-right: 0.5rem;
+  }
+  
+  .button:hover {
     background-color: lighten(var(--header-color), 10%);
-}
-
-.main {
+  }
+  
+  .main {
     padding: 2rem 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgba(108, 106, 106, 0.8);
+    background-color: rgba(107, 106, 108, 0.8);
     border-radius: 1rem;
     margin-top: 2rem;
     width: 75%;
     margin-bottom: 50px;
-}
-
-.intro {
+    
+  }
+  
+  .intro {
     text-align: center;
-}
+  }
 
-h1 {
+  h1 {
     color: white;
-}
+  }
+  
+  p, h5 {
+    color: white;
+    margin: 0.5rem 0;
+    
+  }
 
 .searchInput {
     padding: 10px;

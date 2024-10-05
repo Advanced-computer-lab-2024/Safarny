@@ -31,7 +31,7 @@ const searchController = {
                     ]
                 });  
             } else if (type === 'activity') {
-                results.activities = await Activity.find.populate({
+                results.activities = await Activity.find({
                     $or: [
                      
                         { category: { $regex: query, $options: 'i' } },

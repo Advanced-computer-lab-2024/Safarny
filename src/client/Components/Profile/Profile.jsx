@@ -4,9 +4,6 @@ import styles from './Profile.module.css';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
 import UpdateProfilePage from '/src/client/Components/UpdateProfile/UpdateProfile';
-//import { useNavigate } from 'react-router-dom'; // n
-
-
 
 const Profile = () => {
   const location = useLocation();
@@ -15,24 +12,28 @@ const Profile = () => {
   const [userInfo, setUserInfo] = useState({
     username: '',
     email: '',
+    role: '',
   });
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        console.log('Fetching user data for userId:', userId); // Log userId for debugging
         const response = await fetch(`/tourist/profile?id=${userId}`); // Use the ID from the state
-
+  
         if (!response.ok) {
+          console.error('Failed to fetch user data. Status:', response.status); // Log status code
           throw new Error('Failed to fetch user data');
         }
-
+  
         const { password, __v, _id, ...userData } = await response.json(); // Exclude the password, _v, and id fields
+        console.log('Fetched user data:', userData); // Log fetched user data
         setUserInfo(userData);
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('Error fetching user data:', error); // Log any errors
       }
     };
-
+  
     fetchUserData();
   }, [userId]);
 
@@ -40,15 +41,19 @@ const Profile = () => {
     localStorage.setItem('userId', userId);
     window.location.href = '/UpdateProfile';
   };
+  
   const handleProductViewClick = () => {
     navigate('/products'); // Navigate to the product list page
-
   };
 
-  //const navigate2 = useNavigate();//n
+  const handlePostClick = () => {
+    navigate('/create-post'); // Navigate to the Create Post page
+  };
+
   const handleUpdateClick2 = () => {
     navigate('/Search');
   };
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -74,14 +79,22 @@ const Profile = () => {
       <button onClick={handleUpdateClick} className={styles.updateButton}>
         Update Profile
       </button>
-       {/* Button to view products */}
-       <button onClick={handleProductViewClick} className={styles.productButton}>
+
+      {/* Button to view products */}
+      <button onClick={handleProductViewClick} className={styles.productButton}>
         View Products
       </button>
 
       <button onClick={handleUpdateClick2} className={styles.searchButton}>
         Search
       </button>
+
+      {/* Conditionally render the "Post" button only if the user role is "Seller" */}
+      {userInfo.role === 'Seller' && (
+        <button onClick={handlePostClick} className={styles.postButton}>
+          Post
+        </button>
+      )}
 
       <Footer />
     </div>

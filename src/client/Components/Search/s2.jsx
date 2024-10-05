@@ -1,56 +1,4 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import Footer from '/src/client/components/Footer/Footer';
-import Logo from '/src/client/Assets/Img/logo.png';
-import styles from './Search.module.css';
-import { Link } from 'react-router-dom';
-
-const Search = () => {
-  const [query, setQuery] = useState('');
-  const [type, setType] = useState(''); // Define type as per your needs (e.g., 'historical', 'activity')
-  const [results, setResults] = useState([]);
-  const [error, setError] = useState('');
-
-  // Handle form submission
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    console.log('Submitting form with:', { query, type }); // Add this line
-  
-    
-    if (!query) {
-      setError('Please enter a search query.');
-      return;
-    }
-    console.log({ query, type }); // Log them before sending
-
-
-    try {
-      const response = await axios.get('http://localhost:3000/tourist/search', {
-        params: { query, type },
-      });
-      
-
-
-      //console.log('API Response:', response.data);
-      console.log('Response:', response);  // Log the full response to inspect it
-      console.log('Search Results:', response.data.results); // Add this line
-
-      if (response.data.success) {
-        setResults(response.data.results);
-        
-        setError('');
-      } else {
-        setResults([]);
-        setError(response.data.message);
-      }
-    } catch (err) {
-      console.error('Error occurred while searching:', err);
-      setResults([]);
-      setError('An error occurred while searching.');
-    }
-  };
-
-  return (
+return (
     <div className={styles.container}>
       <header className={styles.header}>
         <img src={Logo} alt="Safarny Logo" className={styles.logo} />
@@ -121,11 +69,72 @@ const Search = () => {
         </ul>
     </div>
 )}
+
+        {results.activities.length > 0 && (
+          <div className={styles.results}>
+            <h3>Activities Results:</h3>
+            <ul>
+              {results.activities.map(item => (
+                <li key={item._id}>
+                  <h4>{item.category}</h4>
+                  <p>Date: {item.date}</p>
+                  <p>Time: {item.time}</p>
+                  <p>Location: {item.location}</p>
+                  <p>Coordinates: {JSON.stringify(item.coordinates)}</p>
+                  <p>Price: ${item.price}</p>
+                  <p>Tags: {item.tags.join(', ')}</p>
+                  <p>Special Discount: {item.specialDiscount}</p>
+                  <p>Booking Open: {item.bookingOpen ? 'Yes' : 'No'}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Itineraries Results */}
+        {results.itineraries.length > 0 && (
+          <div className={styles.results}>
+            <h3>Itineraries Results:</h3>
+            <ul>
+              {results.itineraries.map(item => (
+                <li key={item._id}>
+                  <h4>Name: {item.name}</h4>
+                  <p>Description: {item.description}</p>
+                  <p>Date: {new Date(item.date).toLocaleDateString()}</p>
+                  <p>Type: {item.type}</p>
+                  <p>Pick-Up Location: {item.pickUpLocation}</p>
+                  <p>Drop-Off Location: {item.dropOffLocation}</p>
+                  <p>Accessibility: {item.accessibility ? 'Yes' : 'No'}</p>
+                  <p>Price: ${item.price}</p>
+                  <p>Available Dates: {item.availableDates.join(', ')}</p>
+                  <h5>Activities:</h5>
+                  <ul>
+                    {item.activities.map((activity, index) => (
+                      <li key={index}>
+                        <p>Language: {activity.language}</p>
+                        <p>Price: ${activity.price}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )} 
+        {results.historicalPlaces.length === 0 && type === 'historical' && (
+          <p>No historical places found for your search query.</p>
+        )}
         
+        {results.activities.length === 0 && type === 'activity' && (
+          <p>No activities found for your search query.</p>
+        )}
+
+        {results.itineraries.length === 0 && type === 'itinerary' && (
+          <p>No itineraries found for your search query.</p>
+        )}
       </main>
 
       <Footer />
     </div>
   );
 };
-export default Search;
