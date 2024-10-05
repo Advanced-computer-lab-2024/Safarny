@@ -21,9 +21,8 @@ const SignIn = () => {
     try {
       const response = await axios.post('http://localhost:3000/guest/login', userData);
       
-      if (response.status === 200) {
         // Check if the user is accepted
-        if (response.data.status !== 'Accepted') {
+        if (response.data.Status !== 'Accepted') {
           setError('Your account is not accepted yet. Please wait for approval.');
           setSuccess(false);
           return; // Stop further execution
@@ -35,10 +34,10 @@ const SignIn = () => {
         // Assuming 'type' and 'status' are part of the response data
         if (['Tourist', 'Seller','TourGuide', 'Advertiser'].includes(response.data.type)) {
           navigate('/Profile', { state: { userId } });
-        } else if (response.data.type === 'admin') {
+        } else if (response.data.type === 'admin' || response.data.type === 'Admin') {
           navigate('/admin');
         }
-      }
+      
     } catch (err) {
       if (err.response) {
         setError(err.response.data.message);

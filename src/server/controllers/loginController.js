@@ -38,6 +38,7 @@ const login = AsyncHandler(async (req, res) => {
       message: "Sign-in successful",
       id: user._id,
       type: user.role,
+      Status: user.Status
     });
   } catch (err) {
     return res.status(500).json({ message: "Server error" });
