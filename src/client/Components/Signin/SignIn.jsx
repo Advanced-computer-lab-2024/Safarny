@@ -20,24 +20,33 @@ const SignIn = () => {
   
     try {
       const response = await axios.post('http://localhost:3000/guest/login', userData);
-      
-        // Check if the user is accepted
-        if (response.data.Status !== 'Accepted') {
-          setError('Your account is not accepted yet. Please wait for approval.');
-          setSuccess(false);
-          return; // Stop further execution
-        }
   
+      // Assuming 'type', 'status', and 'id' are part of the response data
+      const { type, Status, id } = response.data;
+  
+      // If the user is 'admin', sign in without checking status
+      if (type === 'admin' || type === 'Admin') {
         setSuccess(true);
         setError('');
-        const userId = response.data.id;
-        // Assuming 'type' and 'status' are part of the response data
-        if (['Tourist', 'Seller','TourGuide', 'Advertiser'].includes(response.data.type)) {
-          navigate('/Profile', { state: { userId } });
-        } else if (response.data.type === 'admin' || response.data.type === 'Admin') {
-          navigate('/admin');
-        }
-      
+        navigate('/admin');
+        return; // Stop further execution for admin
+      }
+  
+      // For non-admin users, check if the account is accepted
+      if (Status !== 'Accepted') {
+        setError('Your account is not accepted yet. Please wait for approval.');
+        setSuccess(false);
+        return; // Stop further execution if the account is not accepted
+      }
+  
+      // If account is accepted, proceed to the profile
+      setSuccess(true);
+      setError('');
+      const userId = id; // Assuming `id` is the user identifier in the response
+      if (['Tourist', 'Seller', 'TourGuide', 'Advertiser'].includes(type)) {
+        navigate('/Profile', { state: { userId } });
+      }
+  
     } catch (err) {
       if (err.response) {
         setError(err.response.data.message);
@@ -47,6 +56,7 @@ const SignIn = () => {
       setSuccess(false);
     }
   };
+  
 
   return (
     <div className={styles.container}>
