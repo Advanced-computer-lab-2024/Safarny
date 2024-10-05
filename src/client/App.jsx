@@ -24,6 +24,7 @@ import UpdateActivity from '/src/client/Components/Activity/UpdateActivity';
 import DeleteActivity from '/src/client/Components/Activity/DeleteActivity';
 import MainPage from '/src/client/Components/Activity/MainPage';
 import UpdateProfile from '/src/client/Components/UpdateProfile/UpdateProfile';
+import Search from './Components/Search/Search'
 import Plans from './Components/Plans/plans';
 import ItineraryManager from './Components/Itinerary/ItineraryManager';
 // import Profile from '/src/client/Components/Profile/Profile';
@@ -66,6 +67,8 @@ function App() {
         <Route path="/update" element={<UpdateActivity />} />
         <Route path="/delete" element={<DeleteActivity />} />
         <Route path="/UpdateProfile" element={<UpdateProfile />} />
+        <Route path="/Search" element={<Search />} />
+
         <Route path="/gettags" element={<GetTags />} />
         <Route path="/createtags" element={<CreateTags />} />
         <Route path="/edittags/:id" element={<EditTags />} />
