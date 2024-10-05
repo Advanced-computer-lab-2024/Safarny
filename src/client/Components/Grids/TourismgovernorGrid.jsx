@@ -4,37 +4,37 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import axios from 'axios';
 
-// Define the columns for the tourism data grid
+// Define the columns for Tourism Governor
 const columns = [
   { field: 'id', headerName: 'ID', width: 250 },
-  { field: 'touristName', headerName: 'Tourist Name', width: 150 },
+  { field: 'username', headerName: 'Username', width: 130 },
   { field: 'email', headerName: 'Email', width: 150 },
-  { field: 'destination', headerName: 'Destination', width: 150 },
-  { field: 'tourGuide', headerName: 'Tour Guide', width: 150 },
-  { field: 'packageType', headerName: 'Package Type', width: 130 },
-  { field: 'Status', headerName: 'Status', width: 110 },
+  { field: 'description', headerName: 'Description', width: 130 },
+  { field: 'region', headerName: 'Region', width: 130 },
+  { field: 'role', headerName: 'Role', width: 90 },
+  { field: 'status', headerName: 'Status', width: 110 },
 ];
 
-export default function TourismGrid() {
+export default function TourismGovernorGrid() {
   const [rows, setRows] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/admin/getTourists');
-        const formattedRows = response.data.map((tourist) => ({
-          id: tourist._id,
-          touristName: tourist.touristName,
-          email: tourist.email,
-          destination: tourist.destination,
-          tourGuide: tourist.tourGuide,
-          packageType: tourist.packageType,
-          Status: tourist.Status,
+        const response = await axios.get('http://localhost:3000/admin/getUsers?role=TourismGovernor');
+        const formattedRows = response.data.map((user) => ({
+          id: user._id,
+          username: user.username,
+          email: user.email,
+          description: user.description,
+          region: user.region, // Assuming region is a field for Tourism Governor
+          role: user.role,
+          status: user.status,
         }));
         setRows(formattedRows);
       } catch (error) {
-        console.error('Error fetching tourists:', error);
+        console.error('Error fetching tourism governors:', error);
       }
     };
 
@@ -45,14 +45,14 @@ export default function TourismGrid() {
     try {
       await Promise.all(
         selectedRows.map(rowId =>
-          axios.delete(`http://localhost:3000/admin/deleteTourist/${rowId}`)
+          axios.delete(`http://localhost:3000/admin/deleteUser/${rowId}`)
         )
       );
       // Refetch data or update state to remove deleted rows
       setRows(rows.filter(row => !selectedRows.includes(row.id)));
       setSelectedRows([]); // Clear selection after deletion
     } catch (error) {
-      console.error('Error deleting tourists:', error);
+      console.error('Error deleting users:', error);
     }
   };
 
@@ -60,14 +60,14 @@ export default function TourismGrid() {
     try {
       await Promise.all(
         selectedRows.map(rowId => 
-          axios.put(`http://localhost:3000/admin/updateTouristStatus/${rowId}`, { Status: "Confirmed" })
+          axios.put(`http://localhost:3000/admin/updateUserStatus/${rowId}`, { status: "Accepted" })
         )
       );
       // Optionally refetch data or update the state
-      setRows(rows.map(row => selectedRows.includes(row.id) ? { ...row, Status: "Confirmed" } : row));
+      setRows(rows.map(row => selectedRows.includes(row.id) ? { ...row, status: "Accepted" } : row));
       setSelectedRows([]); // Clear selection after update
     } catch (error) {
-      console.error('Error updating tourists:', error);
+      console.error('Error updating users:', error);
     }
   };
 
@@ -100,7 +100,7 @@ export default function TourismGrid() {
         onClick={handleUpdate}
         sx={{ marginTop: 2 }}
       >
-        Update Selected
+        Accept into system
       </Button>
       </div>
       )}
