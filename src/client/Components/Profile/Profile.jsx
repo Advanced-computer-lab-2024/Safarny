@@ -3,7 +3,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './Profile.module.css';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
-import UpdateProfilePage from '/src/client/Components/UpdateProfile/UpdateProfile';
 
 const Profile = () => {
   const location = useLocation();
@@ -50,6 +49,10 @@ const Profile = () => {
     navigate('/create-post'); // Navigate to the Create Post page
   };
 
+  const handleCreateHistoricalPlaceClick = () => {
+    navigate('/create-historical-place'); // Navigate to the create historical place form
+  };
+
   const handleUpdateClick2 = () => {
     navigate('/Search');
   };
@@ -87,6 +90,11 @@ const Profile = () => {
 
       <button onClick={handleUpdateClick2} className={styles.searchButton}>
         Search
+      </button>
+
+      {/* Button to create historical places */}
+      <button onClick={handleCreateHistoricalPlaceClick} className={styles.createPlaceButton}>
+        Create Historical Place
       </button>
 
       {/* Conditionally render the "Post" button only if the user role is "Seller" */}

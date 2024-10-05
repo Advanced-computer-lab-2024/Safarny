@@ -29,6 +29,7 @@ import ItineraryManager from './Components/Itinerary/ItineraryManager';
 // import Profile from '/src/client/Components/Profile/Profile';
 import ProductList from './Components/ProductView/ProductList';
 import CreatePost from './Components/Post/CreatePost'; 
+import CreateHistoricalPlace from './Components/Post/CreateHistoricalPlace';
 import Search from './Components/Search/Search';
 import Profile from "./Components/Profile/Profile";
 import GetTags from './Components/Tags/getTags'; // Import the GetTags component
@@ -76,6 +77,8 @@ function App() {
         <Route path="/tags" element={<Tags />} />
         <Route path="/iternaries" element={<ItineraryManager />} />
         <Route path="/create-post" element={<CreatePost />} />
+        <Route path="/create-historical-place" element={<CreateHistoricalPlace />} />
+
       </Routes>
     </Router>
   );
