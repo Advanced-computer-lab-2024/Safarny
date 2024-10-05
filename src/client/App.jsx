@@ -36,7 +36,11 @@ import CreateTags from './Components/Tags/createTags';
 import EditTags from './Components/Tags/editTags';
 import DeleteTags from './Components/Tags/deleteTags';
 import Tags from './Components/Tags/tags';
-
+import Getcategory from "./Components/ActivityCategories/getcategory";
+import CreateCategory from './Components/ActivityCategories/createcategory';
+import Editcategory from './Components/ActivityCategories/editcategory';
+import Deletecategory from './Components/ActivityCategories/deletecategory';
+import ActivityCategory from './Components/ActivityCategories/category';
 
 
 
@@ -74,6 +78,11 @@ function App() {
         <Route path="/edittags/:id" element={<EditTags />} />
         <Route path="/deletetags" element={<DeleteTags />} />
         <Route path="/tags" element={<Tags />} />
+        <Route path="/getcategory" element={<Getcategory />} />
+        <Route path="/createcategory" element={<CreateCategory />} />
+        <Route path="/editcategory/:id" element={<Editcategory />} />
+        <Route path="/deletecategory" element={<Deletecategory />} />
+        <Route path="/category" element={<ActivityCategory />} />
         <Route path="/iternaries" element={<ItineraryManager />} />
         <Route path="/create-post" element={<CreatePost />} />
       </Routes>
