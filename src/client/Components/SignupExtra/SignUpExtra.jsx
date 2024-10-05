@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import "./SignUpExtra.css";
 import Footer from "/src/client/Components/Footer/Footer";
 import Logo from "/src/client/Assets/Img/logo.png";
-import styles from "/src/client/Components/Signup/SignUp.module.css";
+import styles from "/src/client/Components/Signup/SignUp.module.css"; // Import your signup styles
 
 const SignUpExtra = () => {
   const [username, setUsername] = useState("");
@@ -38,14 +37,14 @@ const SignUpExtra = () => {
       password,
       email,
       role: userType,
-      CompanyLink:websiteLink,
-      CompanyHotline:hotline,
-      CompanyName:companyProfile,
+      CompanyLink: websiteLink,
+      CompanyHotline: hotline,
+      CompanyName: companyProfile,
       sellerName,
       description,
-      mobile:mobileNumber,
-      YearOfExp:experience,
-      PrevWork:previousWork,
+      mobile: mobileNumber,
+      YearOfExp: experience,
+      PrevWork: previousWork,
     };
 
     try {
@@ -74,7 +73,7 @@ const SignUpExtra = () => {
   };
 
   return (
-    <div className="container">
+    <div className={styles.container}> {/* Use styles from SignUp.module.css */}
       <header className={styles.header}>
         <img src={Logo} alt="Safarny Logo" className={styles.logo} />
         <h1>Safarny</h1>
@@ -85,12 +84,12 @@ const SignUpExtra = () => {
         </nav>
       </header>
 
-      <div className="formContainer">
+      <div className={styles.formContainer}> {/* Use styles from SignUp.module.css */}
         <h2>Sign up extra</h2>
-        {success && <p className="successMessage">Sign up successful!</p>}
-        {error && <p className="errorMessage">{error}</p>}
+        {success && <p className={styles.successMessage}>Sign up successful!</p>} {/* Use styles from SignUp.module.css */}
+        {error && <p className={styles.errorMessage}>{error}</p>} {/* Use styles from SignUp.module.css */}
 
-        <form onSubmit={handleSubmit} className="form">
+        <form onSubmit={handleSubmit} className={styles.form}> {/* Use styles from SignUp.module.css */}
           <label>
             Username:
             <input
@@ -218,7 +217,7 @@ const SignUpExtra = () => {
             </>
           )}
 
-          <button type="submit" className="button">
+          <button type="submit" className={styles.button}> {/* Use styles from SignUp.module.css */}
             Sign Up
           </button>
         </form>

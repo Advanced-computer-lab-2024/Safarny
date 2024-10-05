@@ -3,7 +3,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './Profile.module.css';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
-import UpdateProfilePage from '/src/client/Components/UpdateProfile/UpdateProfile';
 
 const Profile = () => {
   const location = useLocation();
@@ -14,6 +13,8 @@ const Profile = () => {
     email: '',
     role: '',
   });
+
+  const [showButtons, setShowButtons] = useState(false); //n
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -50,8 +51,25 @@ const Profile = () => {
     navigate('/create-post'); // Navigate to the Create Post page
   };
 
+  const handleCreateHistoricalPlaceClick = () => {
+    navigate('/create-historical-place'); // Navigate to the create historical place form
+  };
+
   const handleUpdateClick2 = () => {
     navigate('/Search');
+  };
+  const handleViewButtonClick = () => {
+    setShowButtons(prevShow => !prevShow); // Toggle the visibility of buttons 1, 2, and 3. //n
+  };
+
+  const handleUpcomingActivitiesClick = () => {
+    navigate('/UpcomingActivites');
+  };
+  const handleUpcomingItinerariesClick = () => {
+    navigate('/UpcomingItineraries');
+  };
+  const handleUpcomingHistoricalPlacesClick = () => {
+    navigate('/UpcomingHistoricalPlaces');
   };
 
   return (
@@ -89,11 +107,26 @@ const Profile = () => {
         Search
       </button>
 
+      {/* Button to create historical places */}
+      <button onClick={handleCreateHistoricalPlaceClick} className={styles.createPlaceButton}>
+        Create Historical Place
+      </button>
+
       {/* Conditionally render the "Post" button only if the user role is "Seller" */}
       {userInfo.role === 'Seller' && (
         <button onClick={handlePostClick} className={styles.postButton}>
           Post
         </button>
+      )}
+      <button onClick={handleViewButtonClick} className={styles.mainButton}>
+        View Upcoming Events
+      </button>
+      {showButtons && (
+        <div className={styles.buttonGroup}>
+          <button className={styles.subButton} onClick={handleUpcomingActivitiesClick} > Upcoming Activities</button>
+          <button className={styles.subButton} onClick={handleUpcomingItinerariesClick} >Upcoming Itineraries</button>
+          <button className={styles.subButton} onClick={handleUpcomingHistoricalPlacesClick} >Upcoming Historical Places</button>
+        </div>
       )}
 
       <Footer />
