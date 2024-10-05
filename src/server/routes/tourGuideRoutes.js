@@ -9,47 +9,30 @@ const { protect, restrict } = require("../middleware/authMiddleWare.js");
     1-get all this TourGuide Itinerary
     2-get/edit this TourGuide details
     3-CRUD on Itinerary
-    4-CRUD on TouristItinerary ??
 */
 
-router
-  .route("/get-my-tourguide-details")
-  .get(protect, restrict("TourGuide"), usersController.getSingleUser);
+router.route("/get-my-tourguide-details").get(usersController.getSingleUser);
 
 router
   .route("/edit-my-tourguide-profile/:id")
-  .put(protect, restrict("TourGuide"), usersController.updateProfileById);
+  .put(usersController.updateProfileById);
 
-router
-  .route("/create-itineraries")
-  .post(protect, restrict("TourGuide"), itineraryController.createItinerary);
+router.route("/create-itineraries").post(itineraryController.createItinerary);
 
-router
-  .route("/get-itineraries")
-  .get(protect, restrict("TourGuide"), itineraryController.getAllItineraries);
+router.route("/get-itineraries").get(itineraryController.getAllItineraries);
 
-router
-  .route("/get-itineraries/:id")
-  .get(protect, restrict("TourGuide"), itineraryController.getItineraryById);
+router.route("/get-itineraries/:id").get(itineraryController.getItineraryById);
 
 router
   .route("/edit-itineraries/:id")
-  .put(protect, restrict("TourGuide"), itineraryController.updateItineraryById);
+  .put(itineraryController.updateItineraryById);
 
 router
   .route("/delete-itineraries/:id")
-  .delete(
-    protect,
-    restrict("TourGuide"),
-    itineraryController.deleteItineraryById
-  );
+  .delete(itineraryController.deleteItineraryById);
 
 router
   .route("/edit-itineraries/:id/tags")
-  .patch(
-    protect,
-    restrict("TourGuide"),
-    itineraryController.updateItineraryTagById
-  );
+  .patch(itineraryController.updateItineraryTagById);
 
 module.exports = router;
