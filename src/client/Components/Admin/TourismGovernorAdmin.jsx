@@ -1,6 +1,6 @@
 import React from 'react'
 import SideBar from '../SideBar'
-import TourismGrid from '../Grids/TourismgovernorGrid.jsx'
+import TourismGrid from '../Grids/TourismGrid.jsx'
 //import './TourismGovernorAdmin.css'
 
 const TourismGovernorAdmin = () => {
