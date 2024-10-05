@@ -29,7 +29,6 @@ import ItineraryManager from './Components/Itinerary/ItineraryManager';
 // import Profile from '/src/client/Components/Profile/Profile';
 import ProductList from './Components/ProductView/ProductList';
 import CreatePost from './Components/Post/CreatePost'; 
-import CreateHistoricalPlace from './Components/Post/CreateHistoricalPlace';
 import Search from './Components/Search/Search';
 import Profile from "./Components/Profile/Profile";
 import GetTags from './Components/Tags/getTags'; // Import the GetTags component
@@ -37,6 +36,14 @@ import CreateTags from './Components/Tags/createTags';
 import EditTags from './Components/Tags/editTags';
 import DeleteTags from './Components/Tags/deleteTags';
 import Tags from './Components/Tags/tags';
+import Getcategory from "./Components/ActivityCategories/getcategory";
+import CreateCategory from './Components/ActivityCategories/createcategory';
+import Editcategory from './Components/ActivityCategories/editcategory';
+import Deletecategory from './Components/ActivityCategories/deletecategory';
+import ActivityCategory from './Components/ActivityCategories/category';
+import UpcomingActivites from './Components/UpcomingEvents/UpcomingActivities';
+//import UpcomingHistoricalPlaces from './Components/UpcomingEvents/UpcomingHistoricalPlaces';
+//import UpcomingItineraries from './Components/UpcomingEvents/UpcomingItineraries';
 
 
 
@@ -69,16 +76,20 @@ function App() {
         <Route path="/delete" element={<DeleteActivity />} />
         <Route path="/UpdateProfile" element={<UpdateProfile />} />
         <Route path="/Search" element={<Search />} />
-        
         <Route path="/gettags" element={<GetTags />} />
         <Route path="/createtags" element={<CreateTags />} />
         <Route path="/edittags/:id" element={<EditTags />} />
         <Route path="/deletetags" element={<DeleteTags />} />
         <Route path="/tags" element={<Tags />} />
+        <Route path="/getcategory" element={<Getcategory />} />
+        <Route path="/createcategory" element={<CreateCategory />} />
+        <Route path="/editcategory/:id" element={<Editcategory />} />
+        <Route path="/deletecategory" element={<Deletecategory />} />
+        <Route path="/category" element={<ActivityCategory />} />
         <Route path="/iternaries" element={<ItineraryManager />} />
         <Route path="/create-post" element={<CreatePost />} />
-        <Route path="/create-historical-place" element={<CreateHistoricalPlace />} />
-
+        <Route path="/UpcomingActivites" element={<UpcomingActivites />} />
+        
       </Routes>
     </Router>
   );

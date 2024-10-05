@@ -14,6 +14,8 @@ const Profile = () => {
     role: '',
   });
 
+  const [showButtons, setShowButtons] = useState(false); //n
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -55,6 +57,19 @@ const Profile = () => {
 
   const handleUpdateClick2 = () => {
     navigate('/Search');
+  };
+  const handleViewButtonClick = () => {
+    setShowButtons(prevShow => !prevShow); // Toggle the visibility of buttons 1, 2, and 3. //n
+  };
+
+  const handleUpcomingActivitiesClick = () => {
+    navigate('/UpcomingActivites');
+  };
+  const handleUpcomingItinerariesClick = () => {
+    navigate('/UpcomingItineraries');
+  };
+  const handleUpcomingHistoricalPlacesClick = () => {
+    navigate('/UpcomingHistoricalPlaces');
   };
 
   return (
@@ -102,6 +117,16 @@ const Profile = () => {
         <button onClick={handlePostClick} className={styles.postButton}>
           Post
         </button>
+      )}
+      <button onClick={handleViewButtonClick} className={styles.mainButton}>
+        View Upcoming Events
+      </button>
+      {showButtons && (
+        <div className={styles.buttonGroup}>
+          <button className={styles.subButton} onClick={handleUpcomingActivitiesClick} > Upcoming Activities</button>
+          <button className={styles.subButton} onClick={handleUpcomingItinerariesClick} >Upcoming Itineraries</button>
+          <button className={styles.subButton} onClick={handleUpcomingHistoricalPlacesClick} >Upcoming Historical Places</button>
+        </div>
       )}
 
       <Footer />

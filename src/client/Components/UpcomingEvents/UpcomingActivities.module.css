@@ -28,7 +28,7 @@ body{
     position: absolute;
     top: 0;
     width: 100%;
-    height: 150%;
+    height: 100%;
   }
   
   .header {
@@ -107,54 +107,24 @@ body{
     margin: 0.5rem 0;
     
   }
-
-  .updateButton {
-    position: absolute; /*Use absolute positioning to align it with respect to the container */
-    bottom: 100px; /* This will place the button above the footer */
-    right: 80px;
-   
-    padding: 10px 20px;
-    background-color: var(--secondary-color);
-    color: var(--header-color);
-    font-size: 16px;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-    cursor: pointer;
-  }
-  
-  .updateButton:hover {
-    background-color: lighten(var(--header-color), 10%);
-  }
-  .mainButton {
-    position: absolute;
-    color: var(--header-color);
-    background-color: var(--secondary-color);
-    top: 100px;  /* Adjust the top margin if needed */
-    left: 20px; /* Aligns it to the left */
-    padding: 10px 20px;
-    font-size: 18px;
-    z-index: 1;  /* Ensures it's above other elements */
-  }
-  
-  /* Buttons 1, 2, 3 will appear below the main button */
-  .buttonGroup {
-    color: var(--header-color);
-    background-color: var(--secondary-color);
-    position: absolute;
-    top: 150px;  /* Adjust to place right under the main button */
-    left: 20px;
+  .activityList {
     display: flex;
-    flex-direction: column;  /* Aligns buttons vertically */
-    gap: 10px;  /* Adds space between buttons */
+    flex-direction: column;
+    gap: 20px; /* Space between boxes */
   }
   
-  /* Style for each sub button */
-  .subButton {
-    padding: 10px 15px;
-    color: var(--header-color);
-    background-color: var(--secondary-color);
-    font-size: 16px;
-    cursor: pointer;
+  .activityItem {
+    background-color: #000000; /* White background for each box */
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 15px; /* Inner padding */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+  }
+  
+  .activityItem h3 {
+    margin: 0 0 10px; /* Space below the heading */
+  }
+  
+  .activityItem p {
+    margin: 5px 0; /* Space between paragraphs */
   }

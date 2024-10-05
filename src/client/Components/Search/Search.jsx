@@ -61,7 +61,7 @@ const Search = () => {
       </header>
 
       <main className={styles.main}>
-        <h2>Search for Activities or Itineraries</h2>
+        <h2>Search for new adventures</h2>
 
         {error && <p className={styles.errorMessage}>{error}</p>}
 
