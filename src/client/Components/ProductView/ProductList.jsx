@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Logo from '/src/client/Assets/Img/logo.png';
+import Footer from '/src/client/components/Footer/Footer';
 import styles from './ProductList.module.css';
 
 const ProductList = () => {
@@ -54,6 +57,13 @@ const ProductList = () => {
 
   return (
     <div className={styles.container}>
+      <header className={styles.header}>
+        <img src={Logo} alt="Safarny Logo" className={styles.logo} />
+        <h1>Safarny</h1>
+        <nav className={styles.nav}>
+          <Link to="/" className={styles.button}>Back to Home</Link>
+        </nav>
+      </header>
       <h1>Product List</h1>
       
       {/* Search Input */}
@@ -102,6 +112,7 @@ const ProductList = () => {
       ) : (
         <p>No products available</p>
       )}
+      <Footer />
     </div>
   );
 };
