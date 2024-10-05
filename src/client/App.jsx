@@ -36,6 +36,9 @@ import CreateTags from './Components/Tags/createTags';
 import EditTags from './Components/Tags/editTags';
 import DeleteTags from './Components/Tags/deleteTags';
 import Tags from './Components/Tags/tags';
+import UpcomingActivites from './Components/UpcomingEvents/UpcomingActivities';
+//import UpcomingHistoricalPlaces from './Components/UpcomingEvents/UpcomingHistoricalPlaces';
+//import UpcomingItineraries from './Components/UpcomingEvents/UpcomingItineraries';
 
 
 
@@ -68,7 +71,6 @@ function App() {
         <Route path="/delete" element={<DeleteActivity />} />
         <Route path="/UpdateProfile" element={<UpdateProfile />} />
         <Route path="/Search" element={<Search />} />
-        
         <Route path="/gettags" element={<GetTags />} />
         <Route path="/createtags" element={<CreateTags />} />
         <Route path="/edittags/:id" element={<EditTags />} />
@@ -76,6 +78,8 @@ function App() {
         <Route path="/tags" element={<Tags />} />
         <Route path="/iternaries" element={<ItineraryManager />} />
         <Route path="/create-post" element={<CreatePost />} />
+        <Route path="/UpcomingActivites" element={<UpcomingActivites />} />
+        
       </Routes>
     </Router>
   );
