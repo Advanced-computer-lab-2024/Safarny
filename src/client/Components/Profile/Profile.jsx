@@ -104,7 +104,7 @@ const Profile = () => {
           <button onClick={handleCreateHistoricalPlaceClick} className={styles.createPlaceButton}>
             Create Historical Place
           </button>
-        </div>
+
 
         {userInfo.role === 'Seller' && (
             <button onClick={handlePostClick} className={styles.postButton}>
@@ -115,7 +115,7 @@ const Profile = () => {
         <button onClick={handleViewButtonClick} className={styles.mainButton}>
           View Upcoming Events
         </button>
-
+        </div>
         {showButtons && (
             <div className={styles.buttonGroup}>
               <button className={styles.subButton} onClick={handleUpcomingActivitiesClick}>
