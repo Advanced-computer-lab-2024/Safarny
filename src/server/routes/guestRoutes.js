@@ -36,4 +36,5 @@ router.get(
   historicalPlaceController.getHistoricalPlacesFiltered
 );
 
+router.get("/get-historicalPlaces-sorted",historicalPlaceController.getHistoricalPlacesSorted);
 module.exports = router;
