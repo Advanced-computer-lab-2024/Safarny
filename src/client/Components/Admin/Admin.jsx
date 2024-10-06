@@ -124,7 +124,7 @@ const Admin = () => {
   // Search, Filter, and Sort functionality
   const filteredPosts = posts.filter((post) => {
     const matchesSearch = post.details.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesPrice = 
+    const matchesPrice =
       (minPrice === '' || post.price >= minPrice) &&
       (maxPrice === '' || post.price <= maxPrice);
     return matchesSearch && matchesPrice;
@@ -142,26 +142,35 @@ const Admin = () => {
       <SideBar />
       <div style={{ marginLeft: '250px', padding: '20px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-  <Button variant="contained" color="primary" onClick={handleOpenModal} style={{ marginRight: '10px' }}>
-    Add Post
-  </Button>
-  <Button variant="contained" color="secondary" onClick={() => setSelectedSection('tags')} style={{ marginRight: '10px' }}>
-    Manage Tags
-  </Button>
-  <Button variant="contained" color="secondary" onClick={() => setSelectedSection('ActivityCategory')} style={{ marginRight: '10px' }}>
-    Manage categories
-  </Button>
-  <Button
-    variant="contained"
-    color="primary"
-    component={Link}
-    to="/adminaddgovernor"
-    style={{ marginLeft: '20px' }}
-  >
-    Add Governor
-  </Button>
-</div>
-        
+          <Button variant="contained" color="primary" onClick={handleOpenModal} style={{ marginRight: '10px' }}>
+            Add Post
+          </Button>
+          <Button variant="contained" color="secondary" onClick={() => setSelectedSection('tags')} style={{ marginRight: '10px' }}>
+            Manage Tags
+          </Button>
+          <Button variant="contained" color="secondary" onClick={() => setSelectedSection('ActivityCategory')} style={{ marginRight: '10px' }}>
+            Manage categories
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            component={Link}
+            to="/adminaddgovernor"
+            style={{ marginLeft: '20px' }}
+          >
+            Add Governor
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            component={Link}
+            to="/"
+            style={{ marginLeft: '20px' }}
+          >
+            Home
+          </Button>
+        </div>
+
         {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 
         {/* Search Bar */}
