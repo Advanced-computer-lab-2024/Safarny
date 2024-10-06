@@ -159,7 +159,7 @@ const getActivitiesSorted = AsyncHandler(async (req, res) => {
     sortCriteria[field] = order === "desc" ? -1 : 1;
   }
 
-  const activities = await Activity.find().sort(sortCriteria);
+  const activities = await Activity.find().populate("tags","name").populate("category","type").sort(sortCriteria);
   res.json(activities);
 });
 
