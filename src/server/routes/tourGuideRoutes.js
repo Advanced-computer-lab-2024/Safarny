@@ -3,6 +3,8 @@ const router = Router();
 
 const itineraryController = require("../controllers/itineraryController.js");
 const usersController = require("../controllers/usersController.js");
+const activityController = require("../controllers/activityController.js");
+const tagsController = require("../controllers/tagsController.js");
 const { protect, restrict } = require("../middleware/authMiddleWare.js");
 
 /*
@@ -11,7 +13,14 @@ const { protect, restrict } = require("../middleware/authMiddleWare.js");
     3-CRUD on Itinerary
 */
 
+
+router.route("/get-my-tourguide-itineraries/:tourguideId").get(itineraryController.geItinerariesFor);
+
 router.route("/get-my-tourguide-details").get(usersController.getSingleUser);
+
+router.route("/get-activities").get(activityController.getActivities);
+
+router.route("/get-tags").get(tagsController.getAllTags);
 
 router
   .route("/edit-my-tourguide-profile/:id")

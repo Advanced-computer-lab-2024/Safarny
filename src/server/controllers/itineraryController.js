@@ -180,6 +180,12 @@ const getItinerariesFiltered = async (req, res) => {
   }
 };
 
+const geItinerariesFor = async (req, res) => {
+  const { tourGuideId } = req.params;
+  const itineraries = await Itinerary.find({ createdBy: tourGuideId });
+  res.status(200).json(itineraries);
+};
+
 module.exports = {
   createItinerary,
   getAllItineraries,
@@ -189,4 +195,5 @@ module.exports = {
   updateItineraryTagById,
   getItinerariesSorted,
   getItinerariesFiltered,
+  geItinerariesFor,
 };

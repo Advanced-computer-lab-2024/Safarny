@@ -1,5 +1,4 @@
 const User = require("../models/userModel.js");
-const { default: mongoose } = require("mongoose");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -49,6 +48,7 @@ const deleteTourGuide = async (req, res) => {
   await User.findOneAndDelete({ email });
   res.status(200).json({ message: "Tour guide deleted successfully" });
 };
+
 
 module.exports = {
   createTourGuide,
