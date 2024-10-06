@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
 
-// Import getAllHistoricalPlaces from the correct path
-import { getAllHistoricalPlaces } from '/src/server/controllers/historicalplacesController';
-
 const ReadHistoricalPlace = () => {
   const [places, setPlaces] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [dateFilter, setDateFilter] = useState('');
@@ -17,8 +15,10 @@ const ReadHistoricalPlace = () => {
   useEffect(() => {
     const fetchHistoricalPlaces = async () => {
       try {
-        const placesData = await getAllHistoricalPlaces(); // Use the imported function
-        
+        const response = await axios.get('http://localhost:3000/toursimgovernor/places');
+        const placesData = response.data;
+        console.log(placesData);
+
         if (Array.isArray(placesData)) {
           setPlaces(placesData);
         } else {
@@ -34,11 +34,11 @@ const ReadHistoricalPlace = () => {
       }
     };
 
-    fetchHistoricalPlaces();  
+    fetchHistoricalPlaces();
   }, []);
 
   // Handle filtering historical places based on search term and date
-  const filteredPlaces = places.filter(place => 
+  const filteredPlaces = places.filter(place =>
     place.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
     (dateFilter ? new Date(place.date) <= new Date(dateFilter) : true)
   );
@@ -66,23 +66,23 @@ const ReadHistoricalPlace = () => {
         </nav>
       </header>
       <h1>Historical Places</h1>
-      
+
       {/* Search Input */}
-      <input 
-        type="text" 
-        placeholder="Search by name..." 
-        value={searchTerm} 
-        onChange={(e) => setSearchTerm(e.target.value)} 
+      <input
+        type="text"
+        placeholder="Search by name..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
         className={styles.searchInput}
       />
 
       {/* Date Filter */}
       <div className={styles.dateFilter}>
         <label>Filter by date (before):</label>
-        <input 
-          type="date" 
-          value={dateFilter} 
-          onChange={(e) => setDateFilter(e.target.value)} 
+        <input
+          type="date"
+          value={dateFilter}
+          onChange={(e) => setDateFilter(e.target.value)}
           className={styles.dateInput}
         />
       </div>
@@ -90,10 +90,10 @@ const ReadHistoricalPlace = () => {
       {/* Sort by Ratings */}
       <div className={styles.sortOptions}>
         <label>
-          <input 
-            type="checkbox" 
-            checked={sortByRating} 
-            onChange={() => setSortByRating(!sortByRating)} 
+          <input
+            type="checkbox"
+            checked={sortByRating}
+            onChange={() => setSortByRating(!sortByRating)}
           />
           Sort by Ratings
         </label>

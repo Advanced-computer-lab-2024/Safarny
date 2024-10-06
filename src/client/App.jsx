@@ -44,6 +44,7 @@ import Deletecategory from './Components/ActivityCategories/deletecategory';
 import ActivityCategory from './Components/ActivityCategories/category';
 import UpcomingActivites from './Components/UpcomingEvents/UpcomingActivities';
 import TourismGovernerAdmin from './Components/Admin/TourismGovernerAdmin';
+import EditTags from './Components/Tags/editTags';
 //import UpcomingHistoricalPlaces from './Components/UpcomingEvents/UpcomingHistoricalPlaces';
 //import UpcomingItineraries from './Components/UpcomingEvents/UpcomingItineraries';
 
