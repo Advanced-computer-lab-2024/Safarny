@@ -23,10 +23,23 @@ const searchController = {
 
       // Search for historical places
       if (type === "historical") {
-        results.historicalPlaces = await HistoricalPlaces.find({
-          description: { $regex: query, $options: "i" },
-        });
-      } else if (type === "activity") {
+        // Find historical places and populate tags
+        let historicalPlaces = await HistoricalPlaces.find()
+          .populate("tags", "name");
+      
+        // Filter the historical places based on description or tags
+        historicalPlaces = historicalPlaces.filter(
+          (place) =>
+            place.description.match(new RegExp(query, "i")) || // Check description
+            (place.tags && // Check if the place has tags
+              place.tags.some((tag) =>
+                tag.name.match(new RegExp(query, "i")) // Check if any tag matches the query
+              ))
+        );
+        
+        results.historicalPlaces = historicalPlaces;
+      }
+       else if (type === "activity") {
         
         let activities = await Activity.find()
           .populate("category", "type")
