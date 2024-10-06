@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
+import styles from './ReadHistoricalPlace.module.css'; // Import the CSS module
 
 const ReadHistoricalPlace = () => {
   const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [dateFilter, setDateFilter] = useState('');
-  const [sortByRating, setSortByRating] = useState(false);
+  const [openingHoursFilter, setOpeningHoursFilter] = useState('');
 
   useEffect(() => {
     const fetchHistoricalPlaces = async () => {
@@ -37,16 +37,11 @@ const ReadHistoricalPlace = () => {
     fetchHistoricalPlaces();
   }, []);
 
-  // Handle filtering historical places based on search term and date
+  // Handle filtering historical places based on search term and opening hours
   const filteredPlaces = places.filter(place =>
-    place.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (dateFilter ? new Date(place.date) <= new Date(dateFilter) : true)
+    place.description && place.description.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    (openingHoursFilter ? place.openingHours.toLowerCase().includes(openingHoursFilter.toLowerCase()) : true)
   );
-
-  // Handle sorting historical places by ratings if needed
-  const sortedPlaces = sortByRating
-    ? [...filteredPlaces].sort((a, b) => b.rating - a.rating) // Assuming 'rating' is a field in your historical place data
-    : filteredPlaces;
 
   if (loading) {
     return <p>Loading historical places...</p>;
@@ -70,44 +65,34 @@ const ReadHistoricalPlace = () => {
       {/* Search Input */}
       <input
         type="text"
-        placeholder="Search by name..."
+        placeholder="Search by description..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         className={styles.searchInput}
       />
 
-      {/* Date Filter */}
-      <div className={styles.dateFilter}>
-        <label>Filter by date (before):</label>
+      {/* Opening Hours Filter */}
+      <div className={styles.openingHoursFilter}>
+        <label>Filter by opening hours:</label>
         <input
-          type="date"
-          value={dateFilter}
-          onChange={(e) => setDateFilter(e.target.value)}
-          className={styles.dateInput}
+          type="text"
+          placeholder="e.g., monday:00 AM - 5:00 PM"
+          value={openingHoursFilter}
+          onChange={(e) => setOpeningHoursFilter(e.target.value)}
+          className={styles.openingHoursInput}
         />
       </div>
 
-      {/* Sort by Ratings */}
-      <div className={styles.sortOptions}>
-        <label>
-          <input
-            type="checkbox"
-            checked={sortByRating}
-            onChange={() => setSortByRating(!sortByRating)}
-          />
-          Sort by Ratings
-        </label>
-      </div>
-
-      {sortedPlaces.length > 0 ? (
+      {filteredPlaces.length > 0 ? (
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-          {sortedPlaces.map(place => (
+          {filteredPlaces.map(place => (
             <div className={styles.placeCard} key={place._id}>
-              <h2 className={styles.placeName}>{place.name}</h2>
-              <p>Date: {new Date(place.date).toLocaleDateString()}</p>
-              <p>Rating: {place.rating}</p>
+              <h2 className={styles.placeName}>{place.description}</h2>
+              <p>Opening Hours: {place.openingHours}</p>
               <p>Description: {place.description}</p>
-              <img className={styles.placeImage} src={place.imageurl} alt={place.name} />
+              {place.pictures && place.pictures.length > 0 && (
+                <img className={styles.placeImage} src={place.pictures[0]} alt={place.description} />
+              )}
             </div>
           ))}
         </div>
