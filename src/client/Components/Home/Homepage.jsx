@@ -64,7 +64,7 @@ const Homepage = () => {
             <Link to="/signup" className={styles.button}>Sign Up</Link>
             <Link to="/signupextra" className={styles.button}>Sign Up Extra</Link>
             <Link to="/UpcomingActivites" className={styles.button}>Upcoming Activities</Link>
-            <Link to="/UpcomingHistoricalPlaces" className={styles.button}>Upcoming Historical Places</Link>
+            <Link to="/historical-places" className={styles.button}>Upcoming Historical Places</Link>
             <Link to="/UpcomingItineraries" className={styles.button}>Upcoming Itineraries</Link>
           </nav>
         </header>
