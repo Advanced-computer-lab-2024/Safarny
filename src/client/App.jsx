@@ -47,6 +47,7 @@ import ActivityCategory from './Components/ActivityCategories/category';
 import UpcomingActivites from './Components/UpcomingEvents/UpcomingActivities';
 import TourismGovernerAdmin from './Components/Admin/TourismGovernerAdmin';
 import EditTags from './Components/Tags/editTags';
+import UpcomingItineraries from './Components/UpcomingEvents/UpcomingItineraries';
 //import UpcomingHistoricalPlaces from './Components/UpcomingEvents/UpcomingHistoricalPlaces';
 //import UpcomingItineraries from './Components/UpcomingEvents/UpcomingItineraries';
 
@@ -95,6 +96,7 @@ function App() {
         <Route path="/iternaries" element={<ItineraryManager />} />
         <Route path="/create-post" element={<CreatePost />} />
         <Route path="/UpcomingActivites" element={<UpcomingActivites />} />
+        <Route path="/UpcomingItineraries" element={<UpcomingItineraries />} />
         <Route path="/create-historical-place" element={<CreateHistoricalPlace />} />
         <Route path="/historical-places" element={<ReadHistoricalPlace />} />  {/* Route for ReadHistoricalPlace */}
         <Route path="/update-historical-place/:placeId" element={<UpdateHistoricalPlace />} />

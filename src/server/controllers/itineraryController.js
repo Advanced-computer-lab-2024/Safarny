@@ -152,11 +152,18 @@ const getItinerariesSorted = async (req, res) => {
 
   if (sortBy) {
     const [field, order] = sortBy.split(":");
-    sortCriteria[field] = order === "desc" ? -1 : 1;
+    if (field === "date") {
+      sortCriteria["availableDates"] = order === "desc" ? -1 : 1;
+    } else {
+      sortCriteria[field] = order === "desc" ? -1 : 1;
+    }
   }
 
   try {
-    const itineraries = await Itinerary.find().sort(sortCriteria);
+    const itineraries = await Itinerary.find()
+      .populate("tags", "name")
+      .populate("activities", "name")
+      .sort(sortCriteria);
     res.status(200).send(itineraries);
   } catch (error) {
     res.status(500).send(error);
