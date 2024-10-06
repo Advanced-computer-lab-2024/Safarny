@@ -5,6 +5,7 @@ import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../../server/config/Firebase';
 
+//const response = await fetch(`/TourismGovernor/profile/${userId}`);
 const CreateHistoricalPlace = () => {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true); // Open the modal by default
@@ -74,7 +75,7 @@ const CreateHistoricalPlace = () => {
     try {
       await axios.post('http://localhost:3000/toursimgovernor/places', placeData);
       handleCloseModal();
-      navigate('/profile');
+      navigate('/Profile', { state: { userId } });
     } catch (error) {
       setErrorMessage(`Failed to add historical place: ${error.response.data.error}`);
       console.error('Error creating historical place:', error);

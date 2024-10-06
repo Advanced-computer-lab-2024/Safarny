@@ -69,6 +69,15 @@ const Profile = () => {
     navigate('/UpcomingHistoricalPlaces');
   };
 
+  // New handlers for creating historical tags and viewing historical places
+  const handleCreateHistoricalTagClick = () => {
+    navigate('/create-historical-tag'); // Navigate to the create historical tag form
+  };
+
+  const handleViewHistoricalPlacesClick = () => {
+    navigate('/historical-places'); // Navigate to the historical places page
+  };
+
   return (
       <div className={styles.container}>
         <header className={styles.header}>
@@ -92,6 +101,7 @@ const Profile = () => {
         </main>
 
         <div className={styles.buttonContainer}>
+          {/* Existing buttons */}
           <button onClick={handleUpdateClick} className={styles.updateButton}>
             Update Profile
           </button>
@@ -105,17 +115,25 @@ const Profile = () => {
             Create Historical Place
           </button>
 
+          {/* New buttons */}
+          <button onClick={handleCreateHistoricalTagClick} className={styles.createTagButton}>
+            Create Historical Tag
+          </button>
+          <button onClick={handleViewHistoricalPlacesClick} className={styles.viewPlacesButton}>
+            View Historical Places
+          </button>
 
-        {userInfo.role === 'Seller' && (
-            <button onClick={handlePostClick} className={styles.postButton}>
-              Post
-            </button>
-        )}
+          {userInfo.role === 'Seller' && (
+              <button onClick={handlePostClick} className={styles.postButton}>
+                Post
+              </button>
+          )}
 
-        <button onClick={handleViewButtonClick} className={styles.mainButton}>
-          View Upcoming Events
-        </button>
+          <button onClick={handleViewButtonClick} className={styles.mainButton}>
+            View Upcoming Events
+          </button>
         </div>
+
         {showButtons && (
             <div className={styles.buttonGroup}>
               <button className={styles.subButton} onClick={handleUpcomingActivitiesClick}>
