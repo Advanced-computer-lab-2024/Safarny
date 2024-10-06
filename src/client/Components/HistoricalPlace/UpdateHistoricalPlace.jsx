@@ -22,6 +22,7 @@ const UpdateHistoricalPlace = () => {
   useEffect(() => {
     const fetchPlaceById = async () => {
       try {
+        console.log(`Fetching place with ID: ${id}`); // Log the ID
         const response = await axios.get(`http://localhost:3000/toursimgovernor/places/${id}`);
         setPlace(response.data);
         setFormData(response.data); // Initialize the form with fetched data
@@ -47,6 +48,7 @@ const UpdateHistoricalPlace = () => {
     e.preventDefault();
     setUpdating(true); // Set updating to true when starting the update
     try {
+      console.log(`Updating place with ID: ${id}`); // Log the ID
       await axios.put(`http://localhost:3000/toursimgovernor/places/${id}`, formData);
       alert('Historical place updated successfully');
     } catch (err) {
@@ -78,7 +80,7 @@ const UpdateHistoricalPlace = () => {
             name="description"
             value={formData.description}
             onChange={handleChange}
-            required // Ensure the field is required
+            required
           />
         </div>
         <div>
@@ -88,7 +90,7 @@ const UpdateHistoricalPlace = () => {
             name="pictures"
             value={formData.pictures}
             onChange={handleChange}
-            placeholder="Enter URLs separated by commas"
+            required
           />
         </div>
         <div>
@@ -98,7 +100,7 @@ const UpdateHistoricalPlace = () => {
             name="location"
             value={formData.location}
             onChange={handleChange}
-            required // Ensure the field is required
+            required
           />
         </div>
         <div>
@@ -108,7 +110,7 @@ const UpdateHistoricalPlace = () => {
             name="openingHours"
             value={formData.openingHours}
             onChange={handleChange}
-            required // Ensure the field is required
+            required
           />
         </div>
         <div>
@@ -118,7 +120,7 @@ const UpdateHistoricalPlace = () => {
             name="ticketPrices"
             value={formData.ticketPrices}
             onChange={handleChange}
-            required // Ensure the field is required
+            required
           />
         </div>
         <button type="submit" className={styles.submitButton} disabled={updating}>

@@ -100,7 +100,7 @@ function App() {
         <Route path="/UpcomingItineraries" element={<UpcomingItineraries />} />
         <Route path="/create-historical-place" element={<CreateHistoricalPlace />} />
         <Route path="/historical-places" element={<ReadHistoricalPlace />} />  {/* Route for ReadHistoricalPlace */}
-        <Route path="/update-historical-place/:placeId" element={<UpdateHistoricalPlace />} />
+        <Route path="/update-historical-place/:id" element={<UpdateHistoricalPlace />} />
         {/* <Route path="/delete-historical-place/:placeId" element={<DeleteHistoricalPlace />} /> */}
         <Route path="/historical-tags" element={<CreateHistoricalTags/>}/>
       </Routes>
