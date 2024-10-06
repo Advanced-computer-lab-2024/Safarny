@@ -146,13 +146,13 @@ const CreateActivity = () => {
                             onChange={(e) =>
                                 setActivityDetails({
                                     ...activityDetails,
-                                    tags: [...e.target.selectedOptions].map(o => o.value), // Send ObjectIds
+                                    tags: [...e.target.selectedOptions].map(o => o.value), 
                                 })
                             }
                         >
                             {Array.isArray(tags) && tags.length > 0 ? (
                                 tags.map((tag) => (
-                                    <option key={tag._id} value={tag._id}>
+                                    <option key={tag._id} value={tag.name}>
                                         {tag.name}
                                     </option>
                                 ))

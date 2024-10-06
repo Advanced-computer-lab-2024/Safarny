@@ -12,7 +12,7 @@ const createActivity = AsyncHandler(async (req, res) => {
     coordinates,
     price,
     category,
-    tagNames,
+    tags,
     specialDiscount,
     bookingOpen,
   } = req.body;
@@ -26,7 +26,7 @@ const createActivity = AsyncHandler(async (req, res) => {
     let tagIds = [];
 
     // Iterate over each tag name in the request
-    for (let tagName of tagNames) {
+    for (let tagName of tags) {
       let tag = await Tag.findOne({ name: tagName });
 
       if (!tag) {
@@ -81,7 +81,7 @@ const updateActivity = AsyncHandler(async (req, res) => {
     activity.location = req.body.location || activity.location;
     activity.coordinates = req.body.coordinates || activity.coordinates;
     activity.price = req.body.price || activity.price;
-    activity.category = req.body.category || activity.category;
+    activity.category = req.body.categories || activity.category;
     activity.tags = req.body.tags || activity.tags;
     activity.specialDiscount =
       req.body.specialDiscount || activity.specialDiscount;
