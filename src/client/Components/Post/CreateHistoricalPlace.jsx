@@ -5,10 +5,9 @@ import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../../server/config/Firebase';
 
-//const response = await fetch(`/TourismGovernor/profile/${userId}`);
 const CreateHistoricalPlace = () => {
   const navigate = useNavigate();
-  const [openModal, setOpenModal] = useState(true); // Open the modal by default
+  const [openModal, setOpenModal] = useState(true);
   const [historicalPlace, setHistoricalPlace] = useState({
     description: '',
     location: '',
@@ -19,6 +18,7 @@ const CreateHistoricalPlace = () => {
   });
   const [selectedImage, setSelectedImage] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [message, setMessage] = useState(''); // Add this line
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -59,7 +59,8 @@ const CreateHistoricalPlace = () => {
     });
   };
 
-  const handleSubmitPlace = async () => {
+  const handleSubmitPlace = async (e) => {
+    e.preventDefault();
     let imageUrl = historicalPlace.pictures;
 
     if (selectedImage) {
@@ -67,19 +68,21 @@ const CreateHistoricalPlace = () => {
       if (!imageUrl) return;
     }
 
-    // Split tagNames by comma and trim whitespace
     const tagsArray = historicalPlace.tagNames.split(',').map(tag => tag.trim());
-
     const placeData = { ...historicalPlace, pictures: imageUrl, tagNames: tagsArray };
 
     try {
-      await axios.post('http://localhost:3000/toursimgovernor/places', placeData);
-      handleCloseModal();
-      navigate('/Profile', { state: { userId } });
+      const response = await axios.post('http://localhost:3000/toursimgovernor/places', placeData);
+      if (response && response.data) {
+        setMessage('Historical place created successfully!');
+        handleCloseModal();
+        navigate('/');
+      } else {
+        throw new Error('Invalid response from server');
+      }
     } catch (error) {
-      setErrorMessage(`Failed to add historical place: ${error.response.data.error}`);
       console.error('Error creating historical place:', error);
-      console.log('Request payload:', placeData);
+      setMessage('Failed to create historical place.');
     }
   };
 
@@ -88,6 +91,7 @@ const CreateHistoricalPlace = () => {
       <div style={{ padding: '20px', backgroundColor: 'white', margin: '100px auto', width: '400px' }}>
         <Typography variant="h6">Create Historical Place</Typography>
         {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+        {message && <Alert severity="success">{message}</Alert>} {/* Add this line */}
 
         <TextField
           fullWidth

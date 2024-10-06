@@ -10,10 +10,10 @@ const CreateHistoricalTags = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/historical-tags', { name: tagName }); // Update the endpoint accordingly
+      const response = await axios.post('http://localhost:3000/toursimgovernor/historical-tags', { name: tagName }); // Update the endpoint accordingly
       setMessage('Historical tag created successfully!'); // Success message
-      setTagName(''); // Clear input field
-      navigate('/admin'); // Navigate back to the Admin page or another relevant page
+      //setTagName(''); // Clear input field
+      navigate('/'); // Navigate back to the Admin page or another relevant page
     } catch (error) {
       console.error('Error creating historical tag:', error);
       setMessage('Failed to create historical tag.'); // Error message
