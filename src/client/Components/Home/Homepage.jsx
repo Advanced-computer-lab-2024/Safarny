@@ -95,16 +95,16 @@ const Homepage = () => {
               )}
               {expandedCard === 6 && (
               <div className={styles.description}>
-                <Link to="/giftshop" className={styles.giftShopLink}>
+                {/* <Link to="/giftshop" className={styles.giftShopLink}>
                   Visit Gift Shop
-                </Link>
+                </Link> */}
               </div>
             )}
             {expandedCard === 1 && (
               <div className={styles.description}>
-                <Link to="/Plans" className={styles.giftShopLink}>
+                {/* <Link to="/Plans" className={styles.giftShopLink}>
                   View Our Plans
-                </Link>
+                </Link> */}
               </div>
             )}
             </div>
