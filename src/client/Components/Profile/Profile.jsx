@@ -76,7 +76,7 @@ const Profile = () => {
 
   // New handlers for creating historical tags and viewing historical places
   const handleCreateHistoricalTagClick = () => {
-    navigate('/create-historical-tag'); // Navigate to the create historical tag form
+    navigate('/historical-tags'); // Navigate to the create historical tag form
   };
 
   const handleViewHistoricalPlacesClick = () => {
