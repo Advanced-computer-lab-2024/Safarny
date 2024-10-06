@@ -10,13 +10,16 @@
     --card-hover: #444;
     --glow-color: #958efa;
   }
-  
+
 body{
     width: 100%;
     height: 100%;
     position: relative;
 }
-
+.buttonContainer {
+  display: flex;
+  gap: 10px; /* Adds space between buttons */
+}
   .container {
     font-family: 'Arial', sans-serif;
     color: var(--text-color);
@@ -30,7 +33,7 @@ body{
     width: 100%;
     height: 150%;
   }
-  
+
   .header {
     position: sticky;
     top: 0;
@@ -46,7 +49,7 @@ body{
     width: 90%;
     transition: background-color 0.3s;
   }
-  
+
   .header h1 {
     margin: 0;
     font-size: 1.5rem;
@@ -54,20 +57,20 @@ body{
     display: flex;
     align-items: center;
   }
-  
+
   .logo {
     height: 8rem;
     margin-right: 1rem;
     position: absolute;
     left: 4rem;
   }
-  
+
   .nav {
     display: flex;
     gap: 1rem;
     justify-content: center;
   }
-  
+
   .button {
     text-decoration: none;
     padding: 0.5rem 1rem;
@@ -77,11 +80,11 @@ body{
     transition: background-color 0.3s;
     margin-right: 0.5rem;
   }
-  
+
   .button:hover {
     background-color: lighten(var(--header-color), 10%);
   }
-  
+
   .main {
     padding: 2rem 0;
     display: flex;
@@ -93,26 +96,26 @@ body{
     width: 75%;
     margin-bottom: 50px;
   }
-  
+
   .intro {
     text-align: center;
   }
-  
+
   h1 {
     color: white;
   }
-  
+
   p, h5 {
     color: white;
     margin: 0.5rem 0;
-    
+
   }
 
   .updateButton {
     position: absolute; /*Use absolute positioning to align it with respect to the container */
     bottom: 100px; /* This will place the button above the footer */
     right: 80px;
-   
+
     padding: 10px 20px;
     background-color: var(--secondary-color);
     color: var(--header-color);
@@ -123,7 +126,7 @@ body{
     transition: background-color 0.3s ease;
     cursor: pointer;
   }
-  
+
   .updateButton:hover {
     background-color: lighten(var(--header-color), 10%);
   }
@@ -132,12 +135,12 @@ body{
     color: var(--header-color);
     background-color: var(--secondary-color);
     top: 100px;  /* Adjust the top margin if needed */
-    left: 20px; /* Aligns it to the left */
+    left: 1px; /* Aligns it to the left */
     padding: 10px 20px;
     font-size: 18px;
     z-index: 1;  /* Ensures it's above other elements */
   }
-  
+
   /* Buttons 1, 2, 3 will appear below the main button */
   .buttonGroup {
     color: var(--header-color);
@@ -149,7 +152,7 @@ body{
     flex-direction: column;  /* Aligns buttons vertically */
     gap: 10px;  /* Adds space between buttons */
   }
-  
+
   /* Style for each sub button */
   .subButton {
     padding: 10px 15px;

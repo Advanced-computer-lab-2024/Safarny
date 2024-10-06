@@ -25,7 +25,7 @@ const SideBar = () => {
       <Button onClick={() => navigate('/adminlist')}>
         Admins
       </Button>
-      <Button onClick={() => navigate('/tourismgovernoradmin')}>
+      <Button onClick={() => navigate('/tourismgoverneradmin')}>
         Tourism Governor
       </Button>
     </div>

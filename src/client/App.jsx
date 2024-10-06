@@ -34,7 +34,7 @@ import Profile from "./Components/Profile/Profile";
 import GetTags from './Components/Tags/getTags'; // Import the GetTags component
 import CreateTags from './Components/Tags/createTags';
 import CreateHistoricalPlace from './Components/Post/CreateHistoricalPlace';
-import EditTags from './Components/Tags/editTags';
+import ReadHistoricalPlace from './Components/HistoricalPlace/ReadHistoricalPlace'; // Correct import path for ReadHistoricalPlaceimport EditTags from './Components/Tags/editTags';
 import DeleteTags from './Components/Tags/deleteTags';
 import Tags from './Components/Tags/tags';
 import Getcategory from "./Components/ActivityCategories/getcategory";
@@ -43,6 +43,8 @@ import Editcategory from './Components/ActivityCategories/editcategory';
 import Deletecategory from './Components/ActivityCategories/deletecategory';
 import ActivityCategory from './Components/ActivityCategories/category';
 import UpcomingActivites from './Components/UpcomingEvents/UpcomingActivities';
+import TourismGovernerAdmin from './Components/Admin/TourismGovernerAdmin';
+import EditTags from './Components/Tags/editTags';
 //import UpcomingHistoricalPlaces from './Components/UpcomingEvents/UpcomingHistoricalPlaces';
 //import UpcomingItineraries from './Components/UpcomingEvents/UpcomingItineraries';
 
@@ -65,6 +67,7 @@ function App() {
         <Route path="/touristsadmin" element={<TouristsAdmin />} />
         <Route path="/sellersadmin" element={<SellersAdmin />} />
         <Route path="/advertisersadmin" element={<AdvertisersAdmin />} />
+        <Route path="/tourismgoverneradmin" element={<TourismGovernerAdmin />} />
         <Route path="/adminaddgovernor" element={<AdminAddGovernor />} />
         <Route path="/adminlist" element={<AdminList />} />
         <Route path="/signin" element={<SignIn />} />
@@ -91,6 +94,8 @@ function App() {
         <Route path="/create-post" element={<CreatePost />} />
         <Route path="/UpcomingActivites" element={<UpcomingActivites />} />
         <Route path="/create-historical-place" element={<CreateHistoricalPlace />} />
+        <Route path="/historical-places" element={<ReadHistoricalPlace />} />  {/* Route for ReadHistoricalPlace */}
+
         
       </Routes>
     </Router>
