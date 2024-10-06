@@ -11,10 +11,12 @@ const UpcomingActivities = () => {
     const fetchActivities = async () => {
       try {
         const response = await fetch('http://localhost:3000/guest/get-activities-sorted?sortBy=date:asc'); // Adjust the endpoint as needed
+
         if (!response.ok) {
           throw new Error('Failed to fetch activities');
         }
         const data = await response.json();
+        console.log(data);
         setActivities(data);
       } catch (error) {
         console.error('Error fetching activities:', error);
@@ -49,8 +51,13 @@ const UpcomingActivities = () => {
                 <p>Price: ${activity.price}</p>
                 <p>Category: {activity.category}</p>
                 {activity.specialDiscount && <p>Discount: {activity.specialDiscount}</p>}
-                <p>Tags: {Array.isArray(activity.tags) && activity.tags.name > 0 ? activity.tags.join(', ') : 'No tags available'}</p>
-                {/* adjust the category and tag (.name or .length) */}
+                
+                
+                {/* adjust the category and tag (.name or .length) <p>Tags: {activity.tags} </p>*/}
+
+
+
+
                 <p style={{ color: activity.bookingOpen ? 'green' : 'red' }}>
                   {activity.bookingOpen ? 'Booking Open' : 'Booking Closed'}
                 </p>

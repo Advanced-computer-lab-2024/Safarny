@@ -8,6 +8,7 @@ const activitySchema = new mongoose.Schema({
   },
   category: [
     {
+      
       type: Schema.Types.ObjectId,
       ref: "ActivityCategory",
     },

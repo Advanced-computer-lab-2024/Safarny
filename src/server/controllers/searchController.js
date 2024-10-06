@@ -27,6 +27,7 @@ const searchController = {
           description: { $regex: query, $options: "i" },
         });
       } else if (type === "activity") {
+        
         let activities = await Activity.find()
           .populate("category", "type")
           .populate("tags", "name");
@@ -43,6 +44,7 @@ const searchController = {
               ))
         );
         results.activities = activities;
+        
       } 
       
       else if (type === "itinerary") {
