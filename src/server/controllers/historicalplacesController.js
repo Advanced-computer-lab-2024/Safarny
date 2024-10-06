@@ -39,9 +39,11 @@ const createHistoricalPlace = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-};const getAllHistoricalPlaces = async (req, res) => {
+};
+const getAllHistoricalPlaces = async (req, res) => {
   try {
     const places = await HistoricalPlace.find();
+    res.status(200).json(places); // Send the response
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
