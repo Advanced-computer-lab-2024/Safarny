@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './Homepage.module.css';
 import image1 from '/src/client/Assets/Img/image1.jpg';
 import image2 from '/src/client/Assets/Img/image2.jpg';
@@ -15,6 +14,8 @@ import Footer from '/src/client/components/Footer/Footer';
 const Homepage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [expandedCard, setExpandedCard] = useState(null);
+  const [showButtons, setShowButtons] = useState(false);
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -51,68 +52,71 @@ const Homepage = () => {
   }, []);
 
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <img src={Logo} alt="Safarny Logo" className={styles.logo} />
-        <h1>Safarny</h1>
-        <button className={styles.burger} onClick={toggleMenu}>
-          <span className={styles.burgerIcon}>&#9776;</span>
-        </button>
-        <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
-          <Link to="/signin" className={styles.button}>Sign In</Link>
-          <Link to="/signup" className={styles.button}>Sign Up</Link>
-          <Link to="/signupextra" className={styles.button}>Sign Up Extra</Link>
-        </nav>
-      </header>
-      <main className={styles.main}>
-        <section className={styles.intro}>
-          <h1>Plan Your Perfect Trip</h1>
-          <h5>Our all-in-one travel platform is designed to make your vacation planning effortless and exciting!</h5>
-        </section>
-        <section className={styles.features}>
-          {[image1, image2, image3, image4, image5, image6, image7].map((image, index) => (
-            <div
-              key={index}
-              className={`${styles.card} ${expandedCard === index ? styles.expandedCard : ''}`}
-              onClick={() => handleCardClick(index)}
-            >
-              <div className={styles.cardImage}>
-                <img src={image} alt={`Feature ${index + 1}`} />
-              </div>
-              <p>{[
-                "Personalized Travel Planning",
-                "Seamless Booking",
-                "Smart Budgeting",
-                "Discover Local Gems",
-                "Real-Time Notifications",
-                "Tour Guides Itineraries",
-                "Exclusive Gift Shop"
-              ][index]}</p>
-              {expandedCard === index && (
-                <div className={styles.description}>
-                  <p>{descriptions[index]}</p>
-                </div>
-              )}
-              {expandedCard === 6 && (
-              <div className={styles.description}>
-                {/* <Link to="/giftshop" className={styles.giftShopLink}>
+      <div className={styles.container}>
+        <header className={styles.header}>
+          <img src={Logo} alt="Safarny Logo" className={styles.logo} />
+          <h1>Safarny</h1>
+          <button className={styles.burger} onClick={toggleMenu}>
+            <span className={styles.burgerIcon}>&#9776;</span>
+          </button>
+          <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
+            <Link to="/signin" className={styles.button}>Sign In</Link>
+            <Link to="/signup" className={styles.button}>Sign Up</Link>
+            <Link to="/signupextra" className={styles.button}>Sign Up Extra</Link>
+            <Link to="/UpcomingActivites" className={styles.button}>Upcoming Activities</Link>
+            <Link to="/UpcomingHistoricalPlaces" className={styles.button}>Upcoming Historical Places</Link>
+            <Link to="/UpcomingItineraries" className={styles.button}>Upcoming Itineraries</Link>
+          </nav>
+        </header>
+        <main className={styles.main}>
+          <section className={styles.intro}>
+            <h1>Plan Your Perfect Trip</h1>
+            <h5>Our all-in-one travel platform is designed to make your vacation planning effortless and exciting!</h5>
+          </section>
+          <section className={styles.features}>
+            {[image1, image2, image3, image4, image5, image6, image7].map((image, index) => (
+                <div
+                    key={index}
+                    className={`${styles.card} ${expandedCard === index ? styles.expandedCard : ''}`}
+                    onClick={() => handleCardClick(index)}
+                >
+                  <div className={styles.cardImage}>
+                    <img src={image} alt={`Feature ${index + 1}`} />
+                  </div>
+                  <p>{[
+                    "Personalized Travel Planning",
+                    "Seamless Booking",
+                    "Smart Budgeting",
+                    "Discover Local Gems",
+                    "Real-Time Notifications",
+                    "Tour Guides Itineraries",
+                    "Exclusive Gift Shop"
+                  ][index]}</p>
+                  {expandedCard === index && (
+                      <div className={styles.description}>
+                        <p>{descriptions[index]}</p>
+                      </div>
+                  )}
+                  {expandedCard === 6 && (
+                      <div className={styles.description}>
+                        {/* <Link to="/giftshop" className={styles.giftShopLink}>
                   Visit Gift Shop
                 </Link> */}
-              </div>
-            )}
-            {expandedCard === 1 && (
-              <div className={styles.description}>
-                {/* <Link to="/Plans" className={styles.giftShopLink}>
+                      </div>
+                  )}
+                  {expandedCard === 1 && (
+                      <div className={styles.description}>
+                        {/* <Link to="/Plans" className={styles.giftShopLink}>
                   View Our Plans
                 </Link> */}
-              </div>
-            )}
-            </div>
-          ))}
-        </section>
-      </main>
-      <Footer />
-    </div>
+                      </div>
+                  )}
+                </div>
+            ))}
+          </section>
+        </main>
+        <Footer />
+      </div>
   );
 };
 
