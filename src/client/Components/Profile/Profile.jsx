@@ -129,9 +129,6 @@ const Profile = () => {
             Create Historical Tag
           </button>
           )}
-          <button onClick={handleViewHistoricalPlacesClick} className={styles.viewPlacesButton}>
-            View Historical Places
-          </button>
 
           {userInfo.role === 'Seller' && (
               <button onClick={handlePostClick} className={styles.postButton}>
@@ -157,7 +154,7 @@ const Profile = () => {
               <button className={styles.subButton} onClick={handleUpcomingItinerariesClick}>
                 Upcoming Itineraries
               </button>
-              <button className={styles.subButton} onClick={handleUpcomingHistoricalPlacesClick}>
+              <button className={styles.subButton} onClick={handleViewHistoricalPlacesClick}>
                 Upcoming Historical Places
               </button>
             </div>
