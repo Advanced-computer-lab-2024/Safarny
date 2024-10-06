@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
@@ -11,13 +11,13 @@ const ReadHistoricalPlace = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [openingHoursFilter, setOpeningHoursFilter] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchHistoricalPlaces = async () => {
       try {
         const response = await axios.get('http://localhost:3000/toursimgovernor/places');
         const placesData = response.data;
-        console.log(placesData);
 
         if (Array.isArray(placesData)) {
           setPlaces(placesData);
@@ -42,6 +42,23 @@ const ReadHistoricalPlace = () => {
     place.description && place.description.toLowerCase().includes(searchTerm.toLowerCase()) &&
     (openingHoursFilter ? place.openingHours.toLowerCase().includes(openingHoursFilter.toLowerCase()) : true)
   );
+
+  // Handle updating historical places
+  const handleUpdateHistoricalPlace = (placeId) => {
+    navigate(`/update-historical-place/${placeId}`); // Redirect to update page
+  };
+
+  // Handle deleting historical places
+  const handleDeleteHistoricalPlace = async (placeId) => {
+    try {
+      await axios.delete(`http://localhost:3000/toursimgovernor/places/${placeId}`);
+      // Update the state to remove the deleted place
+      setPlaces(prevPlaces => prevPlaces.filter(place => place._id !== placeId));
+    } catch (err) {
+      console.error('Error deleting historical place:', err);
+      setError('Failed to delete historical place');
+    }
+  };
 
   if (loading) {
     return <p>Loading historical places...</p>;
@@ -83,6 +100,16 @@ const ReadHistoricalPlace = () => {
         />
       </div>
 
+      {/* Buttons for updating and deleting historical places */}
+      <div className={styles.buttonContainer}>
+        <button className={styles.updateButton} onClick={() => handleUpdateHistoricalPlace()}>
+          Update Historical Places
+        </button>
+        <button className={styles.deleteButton} onClick={() => handleDeleteHistoricalPlace()}>
+          Delete Historical Places
+        </button>
+      </div>
+
       {filteredPlaces.length > 0 ? (
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
           {filteredPlaces.map(place => (
@@ -93,6 +120,13 @@ const ReadHistoricalPlace = () => {
               {place.pictures && place.pictures.length > 0 && (
                 <img className={styles.placeImage} src={place.pictures[0]} alt={place.description} />
               )}
+              {/* Add Update and Delete buttons for each place */}
+              <button onClick={() => handleUpdateHistoricalPlace(place._id)} className={styles.updateButton}>
+                Update
+              </button>
+              <button onClick={() => handleDeleteHistoricalPlace(place._id)} className={styles.deleteButton}>
+                Delete
+              </button>
             </div>
           ))}
         </div>
