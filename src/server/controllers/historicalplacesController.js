@@ -1,5 +1,6 @@
 const HistoricalPlace = require("../models/historicalplaces.js");
-const Tag = require("../models/Tags.js");
+const Tag = require("../models/historicalTags.js");
+//const Tag = require("../models/Tags.js");
 const AsyncHandler = require("express-async-handler");
 
 const createHistoricalPlace = async (req, res) => {

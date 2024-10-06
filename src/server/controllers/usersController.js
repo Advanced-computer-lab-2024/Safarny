@@ -148,51 +148,63 @@ const getProfileById = async (req, res) => {
 };
 
 // Controller for updating a profile by ID
-const updateProfileById = async (req, res) => {
+const updateProfileById = AsyncHandler(async (req, res) => {
   try {
-    const profileId = req.params.id;
-    const {
-      username,
-      email,
-      password,
-      nationality,
-      mobile,
-      employed,
-      role,
-      YearOfExp,
-      PrevWork,
-    } = req.body;
-
-    // Find the profile by its ID and update it with the new data
-    const updatedProfile = await User.findByIdAndUpdate(
-      profileId,
-      {
-        username,
-        email,
-        password,
-        nationality,
-        mobile,
-        employed,
-        role,
-        YearOfExp,
-        PrevWork,
-      },
-      { new: true, runValidators: true } // Return the updated profile
-    );
-
-    if (!updatedProfile) {
-      return res.status(404).json({ message: "Profile not found" });
+    const { id } = req.body;
+    if (!id) {
+      return res.status(400).json({ error: "User ID is required" });
     }
 
-    res.status(200).json({
-      message: "Profile updated successfully",
-      profile: updatedProfile,
-    });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    const updateData = {
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password,
+      mobile: req.body.mobile,
+      nationality: req.body.nationality,
+      employed: req.body.employed,
+      wallet: req.body.wallet,
+      DOB: req.body.DOB,
+      age: req.body.age,
+      YearOfExp: req.body.YearOfExp,
+      PrevWork: req.body.PrevWork,
+      itineraries: req.body.itineraries,
+      description: req.body.description,
+      sellerName: req.body.sellerName,
+      posts: req.body.posts,
+      CompanyName: req.body.CompanyName,
+      CompanyLink: req.body.CompanyLink,
+      CompanyHotline: req.body.CompanyHotline,
+      activities: req.body.activities,
+      historicalPlaces: req.body.historicalPlaces,
+      tags: req.body.tags,
+      activityCategories: req.body.activityCategories,
+      Status: req.body.Status,
+    };
 
-};
+    // Remove undefined fields from updateData
+    Object.keys(updateData).forEach(key => updateData[key] === undefined && delete updateData[key]);
+
+    console.log("Update Data:", updateData); // Log the update data for debugging
+
+    const user = await userModel.findOneAndUpdate(
+        { _id: id },
+        updateData,
+        { new: true, runValidators: true }
+    );
+
+    if (user) {
+      console.log("User updated successfully:", user); // Log the updated user for debugging
+      res.status(200).json({ message: "Profile updated successfully", user });
+    } else {
+      console.log("User not found with ID:", id); // Log if user not found
+      res.status(404).json({ error: "User not found" });
+    }
+  } catch (error) {
+    console.error("Error updating user:", error); // Log the error for debugging
+    res.status(400).json({ error: "An error occurred while updating the user" });
+  }
+});
+
 
 const updateAcceptedStatus = async (req, res) => {
   try {

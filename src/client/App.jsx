@@ -39,6 +39,7 @@ import UpdateHistoricalPlace from './Components/HistoricalPlace/UpdateHistorical
 //import DeleteHistoricalPlace from './Components/HistoricalPlace/DeleteHistoricalPlace';
 import DeleteTags from './Components/Tags/deleteTags';
 import Tags from './Components/Tags/tags';
+import CreateHistoricalTags from './Components/HistoricalTags/CraeteHistoricalTags';
 import Getcategory from "./Components/ActivityCategories/getcategory";
 import CreateCategory from './Components/ActivityCategories/createcategory';
 import Editcategory from './Components/ActivityCategories/editcategory';
@@ -101,7 +102,7 @@ function App() {
         <Route path="/historical-places" element={<ReadHistoricalPlace />} />  {/* Route for ReadHistoricalPlace */}
         <Route path="/update-historical-place/:placeId" element={<UpdateHistoricalPlace />} />
         {/* <Route path="/delete-historical-place/:placeId" element={<DeleteHistoricalPlace />} /> */}
-
+        <Route path="/historical-tags" element={<CreateHistoricalTags/>}/>
       </Routes>
     </Router>
   );

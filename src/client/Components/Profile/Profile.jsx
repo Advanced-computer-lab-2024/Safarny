@@ -51,7 +51,7 @@ const Profile = () => {
   };
 
   const handleCreateHistoricalPlaceClick = () => {
-    navigate('/create-historical-place');
+    navigate('/historical-tags');
   };
 
   const handleUpdateClick2 = () => {
@@ -76,7 +76,7 @@ const Profile = () => {
 
   // New handlers for creating historical tags and viewing historical places
   const handleCreateHistoricalTagClick = () => {
-    navigate('/create-historical-tag'); // Navigate to the create historical tag form
+    navigate('/historical-tags'); // Navigate to the create historical tag form
   };
 
   const handleViewHistoricalPlacesClick = () => {
@@ -106,48 +106,43 @@ const Profile = () => {
         </main>
 
         <div className={styles.buttonContainer}>
-          {/* Existing buttons */}
-          <button onClick={handleUpdateClick} className={styles.updateButton}>
-            Update Profile
-          </button>
           <button onClick={handleProductViewClick} className={styles.productButton}>
             View Products
           </button>
           <button onClick={handleUpdateClick2} className={styles.searchButton}>
             Search
           </button>
+          <button onClick={handleUpdateClick} className={styles.searchButton}>
+            Update Profile
+          </button>
+        </div>
 
-          {userInfo.role === 'TourismGovernor' && (
-          <button onClick={handleCreateHistoricalPlaceClick} className={styles.createPlaceButton}>
+        {userInfo.role === 'TourismGovernor' && (
+            <button onClick={handleCreateHistoricalPlaceClick} className={styles.createPlaceButton}>
             Create Historical Place
           </button>
-          )}
+        )}
 
-          {/* New buttons */}
-          {userInfo.role === 'TourismGovernor' && (
+        {userInfo.role === 'TourismGovernor' && (
           <button onClick={handleCreateHistoricalTagClick} className={styles.createTagButton}>
             Create Historical Tag
           </button>
-          )}
-          <button onClick={handleViewHistoricalPlacesClick} className={styles.viewPlacesButton}>
-            View Historical Places
-          </button>
+        )}
 
-          {userInfo.role === 'Seller' && (
-              <button onClick={handlePostClick} className={styles.postButton}>
-                Post
-              </button>
-          )}
-          {userInfo.role === 'Advertiser' && (
-              <button onClick={handleAddActivity} className={styles.postButton}>
-                Add Activity
-              </button>
-          )}
+        {userInfo.role === 'Seller' && (
+            <button onClick={handlePostClick} className={styles.postButton}>
+              Post
+            </button>
+        )}
+        {userInfo.role === 'Advertiser' && (
+            <button onClick={handleAddActivity} className={styles.postButton}>
+              Add Activity
+            </button>
+        )}
 
-          <button onClick={handleViewButtonClick} className={styles.mainButton}>
-            View Upcoming Events
-          </button>
-        </div>
+        <button onClick={handleViewButtonClick} className={styles.mainButton}>
+          View Upcoming Events
+        </button>
 
         {showButtons && (
             <div className={styles.buttonGroup}>
@@ -157,7 +152,7 @@ const Profile = () => {
               <button className={styles.subButton} onClick={handleUpcomingItinerariesClick}>
                 Upcoming Itineraries
               </button>
-              <button className={styles.subButton} onClick={handleUpcomingHistoricalPlacesClick}>
+              <button className={styles.subButton} onClick={handleViewHistoricalPlacesClick}>
                 Upcoming Historical Places
               </button>
             </div>
