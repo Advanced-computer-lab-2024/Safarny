@@ -35,6 +35,8 @@ import GetTags from './Components/Tags/getTags'; // Import the GetTags component
 import CreateTags from './Components/Tags/createTags';
 import CreateHistoricalPlace from './Components/Post/CreateHistoricalPlace';
 import ReadHistoricalPlace from './Components/HistoricalPlace/ReadHistoricalPlace'; // Correct import path for ReadHistoricalPlaceimport EditTags from './Components/Tags/editTags';
+import UpdateHistoricalPlace from './Components/HistoricalPlace/UpdateHistoricalPlace';
+//import DeleteHistoricalPlace from './Components/HistoricalPlace/DeleteHistoricalPlace';
 import DeleteTags from './Components/Tags/deleteTags';
 import Tags from './Components/Tags/tags';
 import Getcategory from "./Components/ActivityCategories/getcategory";
@@ -95,8 +97,9 @@ function App() {
         <Route path="/UpcomingActivites" element={<UpcomingActivites />} />
         <Route path="/create-historical-place" element={<CreateHistoricalPlace />} />
         <Route path="/historical-places" element={<ReadHistoricalPlace />} />  {/* Route for ReadHistoricalPlace */}
+        <Route path="/update-historical-place/:placeId" element={<UpdateHistoricalPlace />} />
+        {/* <Route path="/delete-historical-place/:placeId" element={<DeleteHistoricalPlace />} /> */}
 
-        
       </Routes>
     </Router>
   );
