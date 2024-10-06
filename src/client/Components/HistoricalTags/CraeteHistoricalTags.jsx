@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const CreateHistoricalTags = () => {
-  const [tagName, setTagName] = useState(''); // For the tag name
+  const [tagName, setTagName] = useState(''); // For the selected tag name
   const [message, setMessage] = useState(''); // For success/error messages
   const navigate = useNavigate();
 
@@ -24,13 +24,19 @@ const CreateHistoricalTags = () => {
     <div>
       <h1>Create Historical Tag</h1>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
+        <label htmlFor="tag-select">Choose a historical tag:</label>
+        <select
+          id="tag-select"
           value={tagName}
           onChange={(e) => setTagName(e.target.value)}
-          placeholder="Enter historical tag name"
           required
-        />
+        >
+          <option value="">Select a tag</option>
+          <option value="Monuments">Monuments</option>
+          <option value="Museums">Museums</option>
+          <option value="Religious Sites">Religious Sites</option>
+          <option value="Palaces">Palaces</option>
+        </select>
         <button type="submit">Create Historical Tag</button>
       </form>
       {message && <p>{message}</p>}
