@@ -43,6 +43,7 @@ import Editcategory from './Components/ActivityCategories/editcategory';
 import Deletecategory from './Components/ActivityCategories/deletecategory';
 import ActivityCategory from './Components/ActivityCategories/category';
 import UpcomingActivites from './Components/UpcomingEvents/UpcomingActivities';
+import TourismGovernerAdmin from './Components/Admin/TourismGovernerAdmin';
 //import UpcomingHistoricalPlaces from './Components/UpcomingEvents/UpcomingHistoricalPlaces';
 //import UpcomingItineraries from './Components/UpcomingEvents/UpcomingItineraries';
 
@@ -65,6 +66,7 @@ function App() {
         <Route path="/touristsadmin" element={<TouristsAdmin />} />
         <Route path="/sellersadmin" element={<SellersAdmin />} />
         <Route path="/advertisersadmin" element={<AdvertisersAdmin />} />
+        <Route path="/tourismgoverneradmin" element={<TourismGovernerAdmin />} />
         <Route path="/adminaddgovernor" element={<AdminAddGovernor />} />
         <Route path="/adminlist" element={<AdminList />} />
         <Route path="/signin" element={<SignIn />} />
