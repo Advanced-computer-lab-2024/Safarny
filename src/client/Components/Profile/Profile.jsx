@@ -45,6 +45,11 @@ const Profile = () => {
     navigate('/create-post');
   };
 
+  const handleAddActivity = () => {
+    localStorage.setItem('userId', userId);
+    navigate('/AdvertiserMain');
+  };
+
   const handleCreateHistoricalPlaceClick = () => {
     navigate('/create-historical-place');
   };
@@ -111,14 +116,19 @@ const Profile = () => {
           <button onClick={handleUpdateClick2} className={styles.searchButton}>
             Search
           </button>
+
+          {userInfo.role === 'TourismGovernor' && (
           <button onClick={handleCreateHistoricalPlaceClick} className={styles.createPlaceButton}>
             Create Historical Place
           </button>
+          )}
 
           {/* New buttons */}
+          {userInfo.role === 'TourismGovernor' && (
           <button onClick={handleCreateHistoricalTagClick} className={styles.createTagButton}>
             Create Historical Tag
           </button>
+          )}
           <button onClick={handleViewHistoricalPlacesClick} className={styles.viewPlacesButton}>
             View Historical Places
           </button>
@@ -126,6 +136,11 @@ const Profile = () => {
           {userInfo.role === 'Seller' && (
               <button onClick={handlePostClick} className={styles.postButton}>
                 Post
+              </button>
+          )}
+          {userInfo.role === 'Advertiser' && (
+              <button onClick={handleAddActivity} className={styles.postButton}>
+                Add Activity
               </button>
           )}
 
