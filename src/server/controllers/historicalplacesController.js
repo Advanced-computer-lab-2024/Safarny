@@ -1,5 +1,5 @@
 const HistoricalPlace = require("../models/historicalplaces.js");
-const Tag = require("../models/Tags.js");
+const Tag = require("../models/historicalTags.js");
 
 const createHistoricalPlace = async (req, res) => {
   try {
