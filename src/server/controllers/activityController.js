@@ -99,47 +99,50 @@ const getActivityById = AsyncHandler(async (req, res) => {
 
 // Update an activity
 const updateActivity = async (req, res) => {
-  const { id } = req.params;
-  const {
-    date,
-    location,
-    price,
-    time,
-    category, // Change to singular if your model has a single category
-    tags,
-    specialDiscount,
-    bookingOpen,
-  } = req.body; // Adjust according to your model
-
-  try {
-    // Find and update the activity
-    const updatedActivity = await Activity.findByIdAndUpdate(
-      id,
-      {
-        date,
-        location,
-        price,
-        time,
-        category, // Ensure you update the singular field correctly
-        tags,
-        specialDiscount,
-        bookingOpen,
-      },
-      { new: true } // This option returns the updated document
-    );
-
-    // Handle activity not found
-    if (!updatedActivity) {
-      return res.status(404).json({ message: "Activity not found." });
+    const { id } = req.params;
+    const {
+      date,
+      location,
+      price,
+      time,
+      category, // Change to singular if your model has a single category
+      tags,
+      specialDiscount,
+      bookingOpen,
+      coordinates, // Add coordinates field
+    } = req.body; // Adjust according to your model
+  
+    try {
+      // Find and update the activity
+      const updatedActivity = await Activity.findByIdAndUpdate(
+        id,
+        {
+          date,
+          location,
+          price,
+          time,
+          category, // Ensure you update the singular field correctly
+          tags,
+          specialDiscount,
+          bookingOpen,
+          coordinates, // Update coordinates field
+        },
+        { new: true } // This option returns the updated document
+      );
+  
+      // Handle activity not found
+      if (!updatedActivity) {
+        return res.status(404).json({ message: "Activity not found." });
+      }
+  
+      // Success
+      res.status(200).json(updatedActivity);
+    } catch (error) {
+      console.error("Error updating activity:", error);
+      res.status(500).json({ message: "Error updating activity." });
     }
-
-    // Success
-    res.status(200).json(updatedActivity);
-  } catch (error) {
-    console.error("Error updating activity:", error);
-    res.status(500).json({ message: "Error updating activity." });
-  }
-};
+  };
+  
 
 // Delete an activity
 const deleteActivity = AsyncHandler(async (req, res) => {
