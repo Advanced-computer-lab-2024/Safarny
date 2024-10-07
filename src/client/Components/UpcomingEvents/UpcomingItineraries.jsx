@@ -11,11 +11,11 @@ const UpcomingItineraries = () => {
   const [date, setDate] = useState("");
   const [preferences, setPreferences] = useState([]);
   const [language, setLanguage] = useState("");
-  const [availableTags, setAvailableTags] = useState([]); 
+  const [availableTags, setAvailableTags] = useState([]);
 
   useEffect(() => {
     fetchFilteredItineraries(true);
-    fetchTags(); 
+    fetchTags();
   }, [sortCriteria]);
 
   const fetchTags = async () => {
@@ -45,11 +45,11 @@ const UpcomingItineraries = () => {
       let response;
       if (whichResponse) {
         response = await fetch(
-          `http://localhost:3000/guest/get-itineraries-sorted?${queryParams}`
+            `http://localhost:3000/guest/get-itineraries-sorted?${queryParams}`
         );
       } else {
         response = await fetch(
-          `http://localhost:3000/guest/filter-itineraries?${queryParams}`
+            `http://localhost:3000/guest/filter-itineraries?${queryParams}`
         );
       }
 
@@ -64,145 +64,156 @@ const UpcomingItineraries = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <img src={Logo} alt="Safarny Logo" className={styles.logo} />
-        <h1>Safarny</h1>
-        <nav className={styles.nav}>
-          <Link to="/" className={styles.button}>
-            Back to Home
-          </Link>
-        </nav>
-      </header>
+      <div className={styles.container}>
+        <header className={styles.header}>
+          <img src={Logo} alt="Safarny Logo" className={styles.logo} />
+          <h1>Safarny</h1>
+          <nav className={styles.nav}>
+            <Link to="/" className={styles.button}>
+              Back to Home
+            </Link>
+          </nav>
+        </header>
 
-      <main className={styles.main}>
-        <h2>Upcoming Itineraries</h2>
+        <main className={styles.main}>
+          <h2>Upcoming Itineraries</h2>
 
-        {/* Sorting options */}
-        <div className={styles.sortOptions}>
-          <button onClick={() => setSortCriteria("date")}>Sort by Date</button>
-          <button onClick={() => setSortCriteria("price")}>
-            Sort by Price
-          </button>
-          <button onClick={() => setSortCriteria("duration")}>
-            Sort by Duration
-          </button>
-        </div>
-
-        {/* Filter options */}
-        <div className={styles.filterOptions}>
-          {/* Budget Filter */}
-          <div className={styles.filterGroup}>
-            <label>Budget: </label>
-            <input
-              type="number"
-              value={budget}
-              onChange={(e) => setBudget(e.target.value)}
-              placeholder="Budget"
-            />
+          {/* Sorting options */}
+          <div className={styles.sortOptions}>
+            <button onClick={() => setSortCriteria("date")}>Sort by Date</button>
+            <button onClick={() => setSortCriteria("price")}>
+              Sort by Price
+            </button>
+            <button onClick={() => setSortCriteria("duration")}>
+              Sort by Duration
+            </button>
+            <button onClick={() => setSortCriteria("rating")}>
+              Sort by Rating
+            </button>
           </div>
 
-          {/* Date Filter */}
-          <div className={styles.filterGroup}>
-            <label>Date: </label>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-            />
+          {/* Filter options */}
+          <div className={styles.filterOptions}>
+            {/* Budget Filter */}
+            <div className={styles.filterGroup}>
+              <label>Budget: </label>
+              <input
+                  type="number"
+                  value={budget}
+                  onChange={(e) => setBudget(e.target.value)}
+                  placeholder="Budget"
+              />
+            </div>
+
+            {/* Date Filter */}
+            <div className={styles.filterGroup}>
+              <label>Date: </label>
+              <input
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+              />
+            </div>
+
+            {/* Preferences Filter - dynamically populated from API */}
+            <div className={styles.filterGroup}>
+              <label>Preferences: </label>
+              <select
+                  multiple
+                  value={preferences}
+                  onChange={(e) => {
+                    const selectedOptions = Array.from(
+                        e.target.selectedOptions
+                    ).map((option) => option.value);
+                    setPreferences(selectedOptions);
+                  }}
+              >
+                {availableTags.length > 0 ? (
+                    availableTags.map((tag) => (
+                        <option key={tag._id} value={tag.name}>
+                          {tag.name}
+                        </option>
+                    ))
+                ) : (
+                    <option disabled>Loading tags...</option>
+                )}
+              </select>
+            </div>
+
+            {/* Language Filter */}
+            <div className={styles.filterGroup}>
+              <label>Language: </label>
+              <input
+                  type="text"
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  placeholder="Language"
+              />
+            </div>
+
+            {/* Apply Filters Button */}
+            <button onClick={handleFilterClick}>Apply Filters</button>
           </div>
 
-          {/* Preferences Filter - dynamically populated from API */}
-          <div className={styles.filterGroup}>
-            <label>Preferences: </label>
-            <select
-              multiple
-              value={preferences}
-              onChange={(e) => {
-                const selectedOptions = Array.from(
-                  e.target.selectedOptions
-                ).map((option) => option.value);
-                setPreferences(selectedOptions);
-              }}
-            >
-              {availableTags.length > 0 ? (
-                availableTags.map((tag) => (
-                  <option key={tag._id} value={tag.name}>
-                    {tag.name}
-                  </option>
+          {/* Itinerary List */}
+          <section className={styles.itineraryList}>
+            {itineraries.length === 0 ? (
+                <p>No upcoming itineraries found.</p>
+            ) : (
+                itineraries.map((itinerary) => (
+                    <div key={itinerary._id} className={styles.itineraryItem}>
+                      <h3>{itinerary.name}</h3>
+                      <p>Duration: {itinerary.duration} hours</p>
+                      <p>Language: {itinerary.language}</p>
+                      <p>Price: {itinerary.price}$</p>
+                      <p>Available Dates: {itinerary.availableDates.join(", ")}</p>
+                      <p>Available Times: {itinerary.availableTimes.join(", ")}</p>
+                      <p>Accessibility: {itinerary.accessibility ? "Yes" : "No"}</p>
+                      <p>Pickup Location: {itinerary.pickupLocation}</p>
+                      <p>Dropoff Location: {itinerary.dropoffLocation}</p>
+
+                      {/* Display Rating */}
+                      <p>
+                        Rating:{" "}
+                        {itinerary.rating !== undefined
+                            ? itinerary.rating
+                            : "No rating available"}
+                      </p>
+
+                      {/* Display Tags */}
+                      {itinerary.tags && itinerary.tags.length > 0 && (
+                          <p>
+                            Tags: {itinerary.tags.map((tag) => tag.name).join(", ")}
+                          </p>
+                      )}
+
+                      {/* Display Activities */}
+                      {itinerary.activities && itinerary.activities.length > 0 && (
+                          <div>
+                            <p>Activities:</p>
+                            <ul>
+                              {itinerary.activities.map((activity) => (
+                                  <li key={activity._id}>
+                                    {activity.location} - {activity.date} at{" "}
+                                    {activity.time}
+                                    {activity.specialDiscount && (
+                                        <span> - Discount: {activity.specialDiscount}</span>
+                                    )}
+                                    {activity.price && (
+                                        <span> - Price: {activity.price}$</span>
+                                    )}
+                                  </li>
+                              ))}
+                            </ul>
+                          </div>
+                      )}
+                    </div>
                 ))
-              ) : (
-                <option disabled>Loading tags...</option>
-              )}
-            </select>
-          </div>
-
-          {/* Language Filter */}
-          <div className={styles.filterGroup}>
-            <label>Language: </label>
-            <input
-              type="text"
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-              placeholder="Language"
-            />
-          </div>
-
-          {/* Apply Filters Button */}
-          <button onClick={handleFilterClick}>Apply Filters</button>
-        </div>
-
-        {/* Itinerary List */}
-        <section className={styles.itineraryList}>
-          {itineraries.length === 0 ? (
-            <p>No upcoming itineraries found.</p>
-          ) : (
-            itineraries.map((itinerary) => (
-              <div key={itinerary._id} className={styles.itineraryItem}>
-                <h3>{itinerary.name}</h3>
-                <p>Duration: {itinerary.duration} hours</p>
-                <p>Language: {itinerary.language}</p>
-                <p>Price: {itinerary.price}$</p>
-                <p>Available Dates: {itinerary.availableDates.join(", ")}</p>
-                <p>Available Times: {itinerary.availableTimes.join(", ")}</p>
-                <p>Accessibility: {itinerary.accessibility ? "Yes" : "No"}</p>
-                <p>Pickup Location: {itinerary.pickupLocation}</p>
-                <p>Dropoff Location: {itinerary.dropoffLocation}</p>
-
-                {/* Display Tags */}
-                {itinerary.tags && itinerary.tags.length > 0 && (
-                  <p>
-                    Tags: {itinerary.tags.map((tag) => tag.name).join(", ")}
-                  </p>
-                )}
-
-                {/* Display Activities */}
-                {itinerary.activities && itinerary.activities.length > 0 && (
-                  <div>
-                    <p>Activities:</p>
-                    <ul>
-                      {itinerary.activities.map((activity) => (
-                        <li key={activity._id}>
-                          {activity.location} - {activity.date} at{" "}
-                          {activity.time}
-                          {activity.specialDiscount && (
-                            <span> - Discount: {activity.specialDiscount}</span>
-                          )}
-                          {activity.price && (
-                            <span> - Price: {activity.price}$</span>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            ))
-          )}
-        </section>
-      </main>
-      <Footer />
-    </div>
+            )}
+          </section>
+        </main>
+        <Footer />
+      </div>
   );
 };
 
