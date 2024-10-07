@@ -12,7 +12,6 @@ const UpcomingItineraries = () => {
   const [preferences, setPreferences] = useState([]);
   const [language, setLanguage] = useState("");
 
-
   useEffect(() => {
     fetchFilteredItineraries(true);
   }, [sortCriteria]);
@@ -29,16 +28,15 @@ const UpcomingItineraries = () => {
         language: language,
       }).toString();
       let response;
-      if(whichResponse){
+      if (whichResponse) {
         response = await fetch(
           `http://localhost:3000/guest/get-itineraries-sorted?${queryParams}`
         );
-      }else{
+      } else {
         response = await fetch(
           `http://localhost:3000/guest/filter-itineraries?${queryParams}`
         );
       }
-
 
       if (!response.ok) {
         throw new Error("Failed to fetch itineraries");
@@ -68,8 +66,12 @@ const UpcomingItineraries = () => {
         {/* Sorting options */}
         <div className={styles.sortOptions}>
           <button onClick={() => setSortCriteria("date")}>Sort by Date</button>
-          <button onClick={() => setSortCriteria("price")}>Sort by Price</button>
-          <button onClick={() => setSortCriteria("duration")}>Sort by Duration</button>
+          <button onClick={() => setSortCriteria("price")}>
+            Sort by Price
+          </button>
+          <button onClick={() => setSortCriteria("duration")}>
+            Sort by Duration
+          </button>
         </div>
 
         {/* Filter options */}
@@ -102,9 +104,9 @@ const UpcomingItineraries = () => {
               multiple
               value={preferences}
               onChange={(e) => {
-                const selectedOptions = Array.from(e.target.selectedOptions).map(
-                  (option) => option.value
-                );
+                const selectedOptions = Array.from(
+                  e.target.selectedOptions
+                ).map((option) => option.value);
                 setPreferences(selectedOptions);
               }}
             >
@@ -149,12 +151,30 @@ const UpcomingItineraries = () => {
 
                 {/* Display Tags */}
                 {itinerary.tags && itinerary.tags.length > 0 && (
-                  <p>Tags: {itinerary.tags.map((tag) => tag.name).join(", ")}</p>
+                  <p>
+                    Tags: {itinerary.tags.map((tag) => tag.name).join(", ")}
+                  </p>
                 )}
 
                 {/* Display Activities */}
                 {itinerary.activities && itinerary.activities.length > 0 && (
-                  <p>Activities: {itinerary.activities.map((activity) => activity.location).join(", ")}</p>
+                  <div>
+                    <p>Activities:</p>
+                    <ul>
+                      {itinerary.activities.map((activity) => (
+                        <li key={activity._id}>
+                          {activity.location} - {activity.date} at{" "}
+                          {activity.time}
+                          {activity.specialDiscount && (
+                            <span> - Discount: {activity.specialDiscount}</span>
+                          )}
+                          {activity.price && (
+                            <span> - Price: {activity.price}$</span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 )}
               </div>
             ))
