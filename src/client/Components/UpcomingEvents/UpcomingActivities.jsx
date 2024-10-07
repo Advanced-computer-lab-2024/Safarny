@@ -13,6 +13,7 @@ const UpcomingActivities = () => {
   const [dateRange, setDateRange] = useState(""); // Date range state
   const [selectedCategories, setSelectedCategories] = useState([]); // Selected categories state
   const [availableCategories, setAvailableCategories] = useState([]); // All available categories
+  const [rating, setRating] = useState(0); // Rating filter state
 
   // Fetch activities based on sorting and filtering criteria
   useEffect(() => {
@@ -24,34 +25,31 @@ const UpcomingActivities = () => {
         if (filterCriteria === "budget") {
           url = `http://localhost:3000/guest/filter-activities?minBudget=${budget[0]}&maxBudget=${budget[1]}`;
         } else if (filterCriteria === "date") {
-          url =
-            `http://localhost:3000/guest/filter-activities?&date=${dateRange}`;
+          url = `http://localhost:3000/guest/filter-activities?&date=${dateRange}`;
         } else if (
           filterCriteria === "category" &&
           selectedCategories.length > 0
         ) {
-          url =
-            `http://localhost:3000/guest/filter-activities?&category=${selectedCategories.join(
-              ","
-            )}`;
+          url = `http://localhost:3000/guest/filter-activities?&category=${selectedCategories.join(
+            ","
+          )}`;
+        } else if (filterCriteria === "rating") {
+          url = `http://localhost:3000/guest/filter-activities?&rating=${rating}`;
         }
-        
+
         const response = await fetch(url);
-        console.log(url);
-        
         if (!response.ok) {
           throw new Error("Failed to fetch activities");
         }
         const data = await response.json();
         setActivities(data);
-        console.log(data);
       } catch (error) {
         console.error("Error fetching activities:", error);
       }
     };
 
     fetchActivities();
-  }, [sortCriteria, filterCriteria, budget, dateRange, selectedCategories]);
+  }, [sortCriteria, filterCriteria, budget, dateRange, selectedCategories, rating]);
 
   // Fetch available categories
   useEffect(() => {
@@ -162,6 +160,19 @@ const UpcomingActivities = () => {
                 {category.type}
               </div>
             ))}
+          </div>
+        )}
+
+        {filterCriteria === "rating" && (
+          <div className={styles.filterInput}>
+            <label>Minimum Rating: {rating} stars</label>
+            <input
+              type="range"
+              min="0"
+              max="5"
+              value={rating}
+              onChange={(e) => setRating(e.target.value)}
+            />
           </div>
         )}
 
