@@ -139,7 +139,7 @@ const Profile = () => {
         )}
         {userInfo.role === 'Advertiser' && (
             <button onClick={handleAddActivity} className={styles.postButton}>
-              Add Activity
+              Activity
             </button>
         )}
 

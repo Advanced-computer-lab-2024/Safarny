@@ -44,7 +44,7 @@ const createHistoricalPlace = async (req, res) => {
 };
 const getAllHistoricalPlaces = async (req, res) => {
   try {
-    const places = await HistoricalPlace.find();
+    const places = await HistoricalPlace.find().populate('tags','name'); // Ensure tags are populated
     res.status(200).json(places); // Send the response
   } catch (err) {
     res.status(500).json({ error: err.message });

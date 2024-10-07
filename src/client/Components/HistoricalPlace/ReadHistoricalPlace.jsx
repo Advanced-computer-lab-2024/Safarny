@@ -111,6 +111,12 @@ const ReadHistoricalPlace = () => {
       <h2 className={styles.placeName}>{place.description}</h2>
       <p>Opening Hours: {place.openingHours}</p>
       <p>Description: {place.description}</p>
+      <p>Ticket Price: {place.ticketPrices}</p>
+      {place.tags && place.tags.length > 0 ? (
+        <p>Tags: {place.tags.map(tag => tag.name).join(', ')}</p> // Map to get tag names
+      ) : (
+        <p>No tags available</p>
+      )}
       {place.pictures && place.pictures.length > 0 && (
         <img className={styles.placeImage} src={place.pictures[0]} alt={place.description} />
       )}
