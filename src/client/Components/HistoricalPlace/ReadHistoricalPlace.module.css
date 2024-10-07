@@ -1,0 +1,148 @@
+:root {
+    --primary-color: #1a1a1a;
+    --secondary-color: #333;
+    --background-color: #dcdbdb;
+    --text-color: #121212;
+    --header-color: white;
+    --header-height: 4rem;
+    --border-radius: 1rem;
+    --card-background: #2a2a2a;
+    --card-hover: #444;
+    --glow-color: #958efa;
+}
+
+.container {
+    font-family: 'Arial', sans-serif;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    padding: 0 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.header {
+    position: sticky;
+    top: 0;
+    background-color: var(--primary-color);
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    height: var(--header-height);
+    border-radius: var(--border-radius);
+    width: 90%;
+    transition: background-color 0.3s;
+}
+
+.logo {
+    height: 8rem;
+    margin-right: 1rem;
+}
+
+.nav {
+    display: flex;
+    gap: 1rem;
+}
+
+.button {
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    background-color: var(--secondary-color);
+    color: var(--header-color);
+    border-radius: 0.5rem;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: lighten(var(--header-color), 10%);
+}
+
+h1 {
+    color: var(--primary-color);
+    margin: 2rem 0;
+}
+
+.searchInput {
+    width: 100%;
+    max-width: 400px;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius);
+    margin: 1rem 0;
+}
+
+.openingHoursFilter {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.openingHoursInput {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius);
+}
+
+.placeCard {
+    background-color: var(--card-background);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    width: calc(33% - 2rem); /* 3 cards per row with spacing */
+}
+
+.placeCard:hover {
+    transform: scale(1.02);
+}
+
+.placeName {
+    color: white;
+    margin: 0 0 10px;
+}
+
+.placeImage {
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius);
+}
+
+.updateButton,
+.deleteButton {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    margin-right: 0.5rem;
+}
+
+.updateButton {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+.deleteButton {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+.updateButton:hover {
+    background-color: #45a049; /* Darker green */
+}
+
+.deleteButton:hover {
+    background-color: #d32f2f; /* Darker red */
+}
+.mapContainer {
+    height: 200px; /* Adjust height as needed */
+    width: 100%; /* Full width */
+    border-radius: 5px; /* Optional: Rounded corners */
+    overflow: hidden; /* Optional: Prevent overflow */
+}

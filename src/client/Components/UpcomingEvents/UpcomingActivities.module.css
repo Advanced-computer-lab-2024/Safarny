@@ -16,6 +16,21 @@ body{
     height: 100%;
     position: relative;
 }
+.activityItem {
+  background-color: #000000; /* White background for each box */
+  border: 1px solid #ccc; /* Light gray border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 15px; /* Inner padding */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+  position: relative; /* Set position relative for absolute children */
+}
+
+.mapContainer {
+  height: 200px; /* Adjust height as needed */
+  width: 100%; /* Full width */
+  border-radius: 5px; /* Optional: Rounded corners */
+  overflow: hidden; /* Optional: Prevent overflow */
+}
 
   .container {
     font-family: 'Arial', sans-serif;

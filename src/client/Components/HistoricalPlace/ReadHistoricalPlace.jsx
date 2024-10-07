@@ -5,6 +5,8 @@ import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
 import styles from './ReadHistoricalPlace.module.css'; // Import the CSS module
 
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+
 const ReadHistoricalPlace = () => {
   const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -102,23 +104,42 @@ const ReadHistoricalPlace = () => {
 
       {filteredPlaces.length > 0 ? (
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-          {filteredPlaces.map(place => (
-            <div className={styles.placeCard} key={place._id}>
-              <h2 className={styles.placeName}>{place.description}</h2>
-              <p>Opening Hours: {place.openingHours}</p>
-              <p>Description: {place.description}</p>
-              {place.pictures && place.pictures.length > 0 && (
-                <img className={styles.placeImage} src={place.pictures[0]} alt={place.description} />
-              )}
-              {/* Add Update and Delete buttons for each place */}
-              <button onClick={() => handleUpdateHistoricalPlace(place._id)} className={styles.updateButton}>
-                Update
-              </button>
-              <button onClick={() => handleDeleteHistoricalPlace(place._id)} className={styles.deleteButton}>
-                Delete
-              </button>
-            </div>
-          ))}
+          {filteredPlaces.map(place => {
+  const hasCoordinates = place.coordinates && place.coordinates.lat !== undefined && place.coordinates.lng !== undefined;
+  return (
+    <div className={styles.placeCard} key={place._id}>
+      <h2 className={styles.placeName}>{place.description}</h2>
+      <p>Opening Hours: {place.openingHours}</p>
+      <p>Description: {place.description}</p>
+      {place.pictures && place.pictures.length > 0 && (
+        <img className={styles.placeImage} src={place.pictures[0]} alt={place.description} />
+      )}
+      {/* Map Container */}
+      <div className={styles.mapContainer}>
+        {hasCoordinates ? (
+          <MapContainer
+            center={[place.coordinates.lat, place.coordinates.lng]}
+            zoom={13}
+            style={{ height: '100%', width: '100%' }}
+          >
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            <Marker position={[place.coordinates.lat, place.coordinates.lng]} />
+          </MapContainer>
+        ) : (
+          <p>Coordinates not available</p>
+        )}
+      </div>
+      {/* Update and Delete Buttons */}
+      <button onClick={() => handleUpdateHistoricalPlace(place._id)} className={styles.updateButton}>
+        Update
+      </button>
+      <button onClick={() => handleDeleteHistoricalPlace(place._id)} className={styles.deleteButton}>
+        Delete
+      </button>
+    </div>
+  );
+})}
+
         </div>
       ) : (
         <p>No historical places available</p>

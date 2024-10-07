@@ -1,16 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Modal, TextField, Typography, Alert } from '@mui/material';
 import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../../server/config/Firebase';
+import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+
+// Fixing marker icon issue
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'https://unpkg.com/leaflet/dist/images/marker-icon-2x.png',
+    iconUrl: 'https://unpkg.com/leaflet/dist/images/marker-icon.png',
+    shadowUrl: 'https://unpkg.com/leaflet/dist/images/marker-shadow.png',
+});
 
 const CreateHistoricalPlace = () => {
   const navigate = useNavigate();
-  const [openModal, setOpenModal] = useState(true);
+  const [openModal, setOpenModal] = useState(true); // Open the modal by default
   const [historicalPlace, setHistoricalPlace] = useState({
     description: '',
-    location: '',
+    coordinates: { lat: null, lng: null },
     openingHours: '',
     ticketPrices: '',
     tagNames: '',
@@ -18,7 +29,21 @@ const CreateHistoricalPlace = () => {
   });
   const [selectedImage, setSelectedImage] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
-  const [message, setMessage] = useState(''); // Add this line
+  const [tags, setTags] = useState([]);
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/toursimgovernor/gettags'); // Update with your actual API endpoint
+        setTags(response.data);
+
+      } catch (error) {
+        console.error('Error fetching tags:', error);
+      }
+    };
+  
+    fetchTags();
+  }, []);
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -59,8 +84,7 @@ const CreateHistoricalPlace = () => {
     });
   };
 
-  const handleSubmitPlace = async (e) => {
-    e.preventDefault();
+  const handleSubmitPlace = async () => {
     let imageUrl = historicalPlace.pictures;
 
     if (selectedImage) {
@@ -68,44 +92,51 @@ const CreateHistoricalPlace = () => {
       if (!imageUrl) return;
     }
 
+    // Split tagNames by comma and trim whitespace
     const tagsArray = historicalPlace.tagNames.split(',').map(tag => tag.trim());
+
     const placeData = { ...historicalPlace, pictures: imageUrl, tagNames: tagsArray };
 
     try {
-      const response = await axios.post('http://localhost:3000/toursimgovernor/places', placeData);
-      if (response && response.data) {
-        setMessage('Historical place created successfully!');
-        handleCloseModal();
-        navigate('/');
-      } else {
-        throw new Error('Invalid response from server');
-      }
+      await axios.post('http://localhost:3000/toursimgovernor/places', placeData);
+      handleCloseModal();
+      navigate('/');
     } catch (error) {
+      // Check if error.response exists before accessing it
+      if (error.response && error.response.data) {
+        setErrorMessage(`Failed to add historical place: ${error.response.data.error}`);
+      } else {
+        setErrorMessage('Failed to add historical place: An unexpected error occurred');
+      }
       console.error('Error creating historical place:', error);
-      setMessage('Failed to create historical place.');
+      console.log('Request payload:', placeData);
     }
+  };
+
+  const LocationMap = () => {
+    useMapEvents({
+      click(e) {
+        setHistoricalPlace({
+          ...historicalPlace,
+          coordinates: { lat: e.latlng.lat, lng: e.latlng.lng },
+        });
+        console.log(`Coordinates selected: lat: ${e.latlng.lat}, lng: ${e.latlng.lng}`);
+      },
+    });
+    return null;
   };
 
   return (
     <Modal open={openModal} onClose={handleCloseModal}>
-      <div style={{ padding: '20px', backgroundColor: 'white', margin: '100px auto', width: '400px' }}>
+      <div style={{ padding: '20px', backgroundColor: 'white', margin: '100px auto', width: '600px' }}>
         <Typography variant="h6">Create Historical Place</Typography>
         {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-        {message && <Alert severity="success">{message}</Alert>} {/* Add this line */}
 
         <TextField
           fullWidth
           label="Description"
           name="description"
           value={historicalPlace.description}
-          onChange={handleInputChange}
-          margin="normal"
-        />
-        <TextField
-          fullWidth
-          label="Location"
-          name="location"
-          value={historicalPlace.location}
           onChange={handleInputChange}
           margin="normal"
         />
@@ -125,6 +156,16 @@ const CreateHistoricalPlace = () => {
           onChange={handleInputChange}
           margin="normal"
         />
+        {tags.length > 0 && (
+          <div>
+            <Typography variant="h6">Available Tags:</Typography>
+            <ul>
+              {tags.map((tag) => (
+                <li key={tag._id}>{tag.name}</li>
+              ))}
+            </ul>
+          </div>
+        )}
         <TextField
           fullWidth
           label="Tag Names (comma separated)"
@@ -139,6 +180,18 @@ const CreateHistoricalPlace = () => {
           onChange={handleImageChange}
           style={{ margin: '10px 0' }}
         />
+
+        {/* Map Section */}
+        <div style={{ height: '300px', marginTop: '20px' }}>
+          <MapContainer center={[51.505, -0.09]} zoom={13} style={{ height: '100%', width: '100%' }}>
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            <LocationMap />
+            {historicalPlace.coordinates.lat && historicalPlace.coordinates.lng && (
+              <Marker position={[historicalPlace.coordinates.lat, historicalPlace.coordinates.lng]} />
+            )}
+          </MapContainer>
+        </div>
+
         <Button
           variant="contained"
           color="primary"
@@ -153,3 +206,5 @@ const CreateHistoricalPlace = () => {
 };
 
 export default CreateHistoricalPlace;
+
+  

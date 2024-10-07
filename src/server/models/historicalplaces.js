@@ -5,7 +5,10 @@ const historicalPlaceSchema = new mongoose.Schema(
   {
     description: { type: String, required: true }, // Description of the historical place
     pictures: [String], // Array of image URLs (multiple pictures)
-    location: { type: String, required: true }, // Location (address or name of the place)
+    coordinates: {
+      lat: { type: Number, required: true },
+      lng: { type: Number, required: true },
+    },
     openingHours: { type: String, required: true }, // Opening hours (e.g., "9:00 AM - 5:00 PM")
     ticketPrices: { type: Number, required: true }, // Ticket price for entry
     tags: [{ type: mongoose.Schema.Types.ObjectId, ref: "Tags" }], // Reference to tags

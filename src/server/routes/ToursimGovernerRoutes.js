@@ -10,10 +10,12 @@ const {
 
 const {
   createHistoricalTag, // Import the createHistoricalTag function
+  getAllHistoricalTags
 } = require("../controllers/HistoricalTagsController"); // Adjust the path as necessary
 
 // Route to create a new historical place (POST request)
 router.post("/places", createHistoricalPlace);
+router.get("/gettags", getAllHistoricalTags);
 
 // Route to get all historical places (GET request)
 router.get("/places", getAllHistoricalPlaces);

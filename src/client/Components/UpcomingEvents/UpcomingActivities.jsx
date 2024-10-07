@@ -3,6 +3,7 @@ import styles from "./UpcomingActivities.module.css";
 import Logo from "/src/client/Assets/Img/logo.png";
 import Footer from "/src/client/components/Footer/Footer";
 import { Link } from "react-router-dom";
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 
 const UpcomingActivities = () => {
   const [activities, setActivities] = useState([]);
@@ -51,7 +52,6 @@ const UpcomingActivities = () => {
                 <p>Date: {new Date(activity.date).toLocaleDateString()}</p>
                 <p>Time: {activity.time}</p>
                 <p>Location: {activity.location}</p>
-                <p>Coordinates: {JSON.stringify(activity.coordinates)}</p>
                 <p>Price: {activity.price}$</p>
 
                 {activity.specialDiscount && (
@@ -70,6 +70,21 @@ const UpcomingActivities = () => {
                     {activity.category.map((cat) => cat.type).join(", ")}
                   </p>
                 )}
+
+                {/* Map Container */}
+                <div className={styles.mapContainer}>
+                  <MapContainer
+                    center={[activity.coordinates.lat || 51.505, activity.coordinates.lng || -0.09]}
+                    zoom={13}
+                    style={{ height: '100%', width: '100%' }}
+                  >
+                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+
+                    {activity.coordinates.lat && activity.coordinates.lng && (
+                      <Marker position={[activity.coordinates.lat, activity.coordinates.lng]} />
+                    )}
+                  </MapContainer>
+                </div>
 
                 <p style={{ color: activity.bookingOpen ? "green" : "red" }}>
                   {activity.bookingOpen ? "Booking Open" : "Booking Closed"}
