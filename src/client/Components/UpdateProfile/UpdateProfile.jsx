@@ -124,7 +124,7 @@ const UpdateProfile = () => {
         return (
           <>
             <label>
-              Company Name:
+              Company Profile:
               <input
                 type="text"
                 value={userInfo.CompanyName}
@@ -254,10 +254,11 @@ const UpdateProfile = () => {
               <label>
                 Role:
                 <input
-                  type="text"
-                  value={userInfo.role}
-                  onChange={(e) => setUserInfo({ ...userInfo, role: e.target.value })}
-                  required
+                    type="text"
+                    value={userInfo.role}
+                    onChange={(e) => setUserInfo({...userInfo, role: e.target.value})}
+                    readOnly
+                    required
                 />
               </label>
 
