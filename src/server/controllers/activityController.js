@@ -198,6 +198,10 @@ const getActivitiesSorted = AsyncHandler(async (req, res) => {
   res.json(activities);
 });
 
+
+
+
+
 module.exports = {
     createActivity,
     getActivities,

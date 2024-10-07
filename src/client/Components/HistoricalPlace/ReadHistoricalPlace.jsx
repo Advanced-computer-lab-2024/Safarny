@@ -100,16 +100,6 @@ const ReadHistoricalPlace = () => {
         />
       </div>
 
-      {/* Buttons for updating and deleting historical places */}
-      <div className={styles.buttonContainer}>
-        <button className={styles.updateButton} onClick={() => handleUpdateHistoricalPlace()}>
-          Update Historical Places
-        </button>
-        <button className={styles.deleteButton} onClick={() => handleDeleteHistoricalPlace()}>
-          Delete Historical Places
-        </button>
-      </div>
-
       {filteredPlaces.length > 0 ? (
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
           {filteredPlaces.map(place => (

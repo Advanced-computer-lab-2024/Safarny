@@ -1,5 +1,7 @@
 const HistoricalPlace = require("../models/historicalplaces.js");
-const Tag = require("../models/Tags.js");
+const Tag = require("../models/historicalTags.js");
+//const Tag = require("../models/Tags.js");
+const AsyncHandler = require("express-async-handler");
 
 const createHistoricalPlace = async (req, res) => {
   try {
@@ -119,6 +121,30 @@ const getHistoricalPlacesFiltered = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+const getHistoricalPlacesSorted = AsyncHandler(async (req, res) => {
+  const { sortBy } = req.query;
+  const sortCriteria = {};
+
+  // Parse the sortBy query parameter (e.g., "date:asc" or "date:desc")
+  if (sortBy) {
+    const [field, order] = sortBy.split(":");
+    sortCriteria[field] = order === "desc" ? -1 : 1;
+  }
+
+  try {
+    // Fetch historical places with sorting and populate tags
+    const historicalPlaces = await HistoricalPlace.find()
+      .populate("tags", "name")  // Populates the 'tags' field with tag names
+      .sort(sortCriteria);  // Sort by the provided criteria
+
+    // Send the response back with the sorted historical places
+    res.json(historicalPlaces);
+  } catch (err) {
+    // Handle any errors that occur during the process
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 module.exports = {
   createHistoricalPlace,
@@ -127,4 +153,5 @@ module.exports = {
   updateHistoricalPlaceById,
   deleteHistoricalPlaceById,
   getHistoricalPlacesFiltered,
+  getHistoricalPlacesSorted,
 };
