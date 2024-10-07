@@ -4,7 +4,7 @@ import axios from 'axios';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
 import styles from './ReadHistoricalPlace.module.css'; // Import the CSS module
-
+import styles1 from '/src/client/components/Home/Homepage.module.css';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 
 const ReadHistoricalPlace = () => {
@@ -13,6 +13,7 @@ const ReadHistoricalPlace = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [openingHoursFilter, setOpeningHoursFilter] = useState('');
+  const [tagFilter, setTagFilter] = useState(''); // Define tagFilter state
   const [userInfo, setUserInfo] = useState({ role: '' }); // Define userInfo state
   const navigate = useNavigate();
   const location = useLocation();
@@ -55,10 +56,11 @@ const ReadHistoricalPlace = () => {
     fetchHistoricalPlaces();
   }, [userId]);
 
-  // Handle filtering historical places based on search term and opening hours
+  // Handle filtering historical places based on search term, opening hours, and tag
   const filteredPlaces = places.filter(place =>
     place.description && place.description.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (openingHoursFilter ? place.openingHours.toLowerCase().includes(openingHoursFilter.toLowerCase()) : true)
+    (openingHoursFilter ? place.openingHours.toLowerCase().includes(openingHoursFilter.toLowerCase()) : true) &&
+    (tagFilter ? place.tags.some(tag => tag.name.toLowerCase().includes(tagFilter.toLowerCase())) : true)
   );
 
   // Handle updating historical places
@@ -87,9 +89,9 @@ const ReadHistoricalPlace = () => {
   }
 
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <img src={Logo} alt="Safarny Logo" className={styles.logo} />
+    <div className={styles1.container}>
+      <header className={styles1.header}>
+        <img src={Logo} alt="Safarny Logo" className={styles1.logo} />
         <h1>Safarny</h1>
         <nav className={styles.nav}>
           <Link to="/" className={styles.button}>Back to Home</Link>
@@ -115,6 +117,18 @@ const ReadHistoricalPlace = () => {
           value={openingHoursFilter}
           onChange={(e) => setOpeningHoursFilter(e.target.value)}
           className={styles.openingHoursInput}
+        />
+      </div>
+
+      {/* Tag Filter */}
+      <div className={styles.tagFilter}>
+        <label>Filter by tag:</label>
+        <input
+          type="text"
+          placeholder="e.g., historical"
+          value={tagFilter}
+          onChange={(e) => setTagFilter(e.target.value)}
+          className={styles.tagInput}
         />
       </div>
 

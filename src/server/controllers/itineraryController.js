@@ -188,16 +188,26 @@ const getItinerariesSorted = async (req, res) => {
 };
 
 const getItinerariesFiltered = async (req, res) => {
-  const { price, date, tags, language } = req.query;
+  const { minPrice, maxPrice, startDate, endDate, tags, language } = req.query;
   const filter = {};
 
-  if (price) filter.price = price;
-  if (date) filter.availableDates = date;
+  if (minPrice || maxPrice) {
+    filter.price = {};
+    if (minPrice) filter.price.$gte = parseFloat(minPrice);
+    if (maxPrice) filter.price.$lte = parseFloat(maxPrice);
+  }
+
+  if (startDate || endDate) {
+    filter.availableDates = {};
+    if (startDate) filter.availableDates.$gte = new Date(startDate);
+    if (endDate) filter.availableDates.$lte = new Date(endDate);
+  }
+
   if (tags) filter.tags = { $in: tags.split(",") };
   if (language) filter.language = language;
 
   try {
-    const itineraries = await Itinerary.find(filter);
+    const itineraries = await Itinerary.find(filter).populate("tags", "name");
     res.status(200).send(itineraries);
   } catch (error) {
     res.status(500).send(error);

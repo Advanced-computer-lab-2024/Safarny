@@ -31,7 +31,14 @@ const SignIn = () => {
         navigate('/admin');
         return; // Stop further execution for admin
       }
-  
+      const userId = id;
+      if (type === 'Tourist') {
+        setSuccess(true);
+        setError('');
+        navigate('/Profile', { state: { userId } });
+        return; // Stop further execution for admin
+      }
+      
       // For non-admin users, check if the account is accepted
       if (Status !== 'Accepted') {
         setError('Your account is not accepted yet. Please wait for approval.');
@@ -42,8 +49,8 @@ const SignIn = () => {
       // If account is accepted, proceed to the profile
       setSuccess(true);
       setError('');
-      const userId = id; // Assuming `id` is the user identifier in the response
-      if (['Tourist', 'Seller', 'TourGuide', 'Advertiser','TourismGovernor'].includes(type)) {
+       // Assuming `id` is the user identifier in the response
+      if (['Seller', 'TourGuide', 'Advertiser','TourismGovernor'].includes(type)) {
         navigate('/Profile', { state: { userId } });
       }
   

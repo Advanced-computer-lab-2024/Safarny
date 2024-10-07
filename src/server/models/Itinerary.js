@@ -76,6 +76,9 @@ const itinerarySchema = new Schema(
       type: String, // Dropoff location
       required: true,
     },
+    rating: {
+      type: Number, 
+    },
   },
   { timestamps: true }
 );
