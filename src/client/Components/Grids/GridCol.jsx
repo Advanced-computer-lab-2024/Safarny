@@ -13,7 +13,6 @@ const columns = [
   { field: 'mobile', headerName: 'Mobile', width: 130 },
   { field: 'employed', headerName: 'Employed', width: 90 },
   { field: 'type', headerName: 'Type', width: 90 },
-  { field: 'Status', headerName: 'Status', width: 110 },
 ];
 
 export default function DataTable() {
@@ -32,7 +31,6 @@ export default function DataTable() {
           mobile: user.mobile,
           employed: user.employed,
           type: user.role,
-          Status: user.Status,
         }));
         setRows(formattedRows);
       } catch (error) {
@@ -58,20 +56,20 @@ export default function DataTable() {
     }
   };
 
-  const handleUpdate = async () => {
-    try {
-      await Promise.all(
-        selectedRows.map(rowId => 
-          axios.put(`http://localhost:3000/admin/updateUserStatus/${rowId}`, { Status: "Accepted" })
-        )
-      );
-      // Optionally refetch data or update the state
-      setRows(rows.map(row => selectedRows.includes(row.id) ? { ...row, Status: "Accepted" } : row));
-      setSelectedRows([]); // Clear selection after update
-    } catch (error) {
-      console.error('Error updating users:', error);
-    }
-  };
+  // const handleUpdate = async () => {
+  //   try {
+  //     await Promise.all(
+  //       selectedRows.map(rowId => 
+  //         axios.put(`http://localhost:3000/admin/updateUserStatus/${rowId}`, { Status: "Accepted" })
+  //       )
+  //     );
+  //     // Optionally refetch data or update the state
+  //     setRows(rows.map(row => selectedRows.includes(row.id) ? { ...row, Status: "Accepted" } : row));
+  //     setSelectedRows([]); // Clear selection after update
+  //   } catch (error) {
+  //     console.error('Error updating users:', error);
+  //   }
+  // };
 
   return (
     <Paper sx={{ height: 500, width: '100%' }}>
@@ -96,14 +94,7 @@ export default function DataTable() {
         >
           Delete Selected
         </Button>
-        <Button
-        variant="contained"
-        color="success"
-        onClick={handleUpdate}
-        sx={{ marginTop: 2 }}
-      >
-        Update Selected
-      </Button>
+
       </div>
       )}
     </Paper>
