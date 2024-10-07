@@ -3,6 +3,7 @@ import axios from "axios";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { useParams } from "react-router-dom";
 
 // Fixing marker icon issue
 delete L.Icon.Default.prototype._getIconUrl;
@@ -13,6 +14,7 @@ L.Icon.Default.mergeOptions({
 });
 
 const UpdateActivity = () => {
+  const { userId } = useParams();
   const [activities, setActivities] = useState([]);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [categories, setCategories] = useState([]);
@@ -25,35 +27,34 @@ const UpdateActivity = () => {
     location: "",
     coordinates: { lat: null, lng: null },
     price: "",
-    categories: [], // Treating categories as an array
-    tags: [], // Tags as array
+    category: "", // Updated for single category
+    tags: [],
     specialDiscount: "",
     bookingOpen: true,
   });
 
-  // Fetch activities, categories, and tags
   useEffect(() => {
     const fetchData = async () => {
       try {
         const activityResponse = await axios.get(
-          "http://localhost:3000/advertiser/"
+          `/advertiser/activities/user/${userId}`
         );
         setActivities(activityResponse.data);
 
         const categoriesResponse = await axios.get(
           "http://localhost:3000/advertiser/GetCategories"
         );
-        setCategories(categoriesResponse.data || []); // Ensure it's an array
+        setCategories(categoriesResponse.data || []);
 
         const tagsResponse = await axios.get("http://localhost:3000/admin/tag");
-        setTags(tagsResponse.data || []); // Ensure it's an array
+        setTags(tagsResponse.data || []);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [userId]);
 
   const handleSelectChange = (e) => {
     const selectedId = e.target.value;
@@ -66,8 +67,8 @@ const UpdateActivity = () => {
         location: activity.location,
         coordinates: activity.coordinates,
         price: activity.price,
-        categories: activity.categories || [], // Ensure it's an array
-        tags: activity.tags || [], // Ensure it's an array
+        category: activity.category || "",
+        tags: activity.tags || [],
         specialDiscount: activity.specialDiscount,
         bookingOpen: activity.bookingOpen,
       });
@@ -78,7 +79,7 @@ const UpdateActivity = () => {
         location: "",
         coordinates: { lat: null, lng: null },
         price: "",
-        categories: [],
+        category: "",
         tags: [],
         specialDiscount: "",
         bookingOpen: true,
@@ -97,16 +98,20 @@ const UpdateActivity = () => {
       return;
     }
 
+    const payload = {
+      ...activityDetails,
+      category: activityDetails.category, // Ensure category is sent as an ID
+      tags: activityDetails.tags,
+    };
+
     try {
-      await axios.put(
+      const response = await axios.put(
         `http://localhost:3000/advertiser/${selectedActivity._id}`,
-        {
-          ...activityDetails,
-          categories: activityDetails.categories,
-          tags: activityDetails.tags,
-        }
+        payload
       );
-      setMessage("Activity updated successfully!");
+      if (response.status === 200) {
+        setMessage("Activity updated successfully!");
+      }
     } catch (error) {
       console.error("Error updating activity:", error);
       setMessage("Error updating activity: " + error.message);
@@ -116,7 +121,6 @@ const UpdateActivity = () => {
   const LocationMap = () => {
     useMapEvents({
       click(e) {
-        // Set coordinates when clicking on map
         setActivityDetails({
           ...activityDetails,
           coordinates: { lat: e.latlng.lat, lng: e.latlng.lng },
@@ -137,13 +141,11 @@ const UpdateActivity = () => {
             value={selectedActivity ? selectedActivity._id : ""}
           >
             <option value="">Select an activity</option>
-            {Array.isArray(activities) &&
-              activities.length > 0 &&
-              activities.map((activity) => (
-                <option key={activity._id} value={activity._id}>
-                  {activity.location} - {activity.date} {activity.time}
-                </option>
-              ))}
+            {activities.map((activity) => (
+              <option key={activity._id} value={activity._id}>
+                {activity.location} - {activity.date} {activity.time}
+              </option>
+            ))}
           </select>
         </label>
       </div>
@@ -202,18 +204,11 @@ const UpdateActivity = () => {
             <label>
               Category:
               <select
-                name="categories"
-                multiple
-                value={activityDetails.categories}
-                onChange={(e) =>
-                  setActivityDetails({
-                    ...activityDetails,
-                    categories: [...e.target.selectedOptions].map(
-                      (o) => o.value
-                    ),
-                  })
-                }
+                name="category"
+                value={activityDetails.category}
+                onChange={handleChange}
               >
+                <option value="">Select a category</option>
                 {categories.map((cat) => (
                   <option key={cat._id} value={cat._id}>
                     {cat.type}
@@ -271,7 +266,6 @@ const UpdateActivity = () => {
             </label>
           </div>
 
-          {/* Map Container at the end */}
           <div style={{ height: "400px", width: "100%", marginTop: "20px" }}>
             <MapContainer
               center={[

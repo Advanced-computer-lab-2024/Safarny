@@ -14,7 +14,7 @@ L.Icon.Default.mergeOptions({
 
 const CreateActivity = () => {
     const [tags, setTags] = useState([]);
-    const [categories, setCategories] = useState([]); // State to store categories
+    const [categories, setCategories] = useState([]);
     const [message, setMessage] = useState('');
 
     const [activityDetails, setActivityDetails] = useState({
@@ -27,6 +27,7 @@ const CreateActivity = () => {
         tags: [],
         specialDiscount: '',
         bookingOpen: true,
+        createdby: '', // Field for userId
     });
 
     // Fetching tags and categories from backend
@@ -34,18 +35,29 @@ const CreateActivity = () => {
         const fetchTagsAndCategories = async () => {
             try {
                 const tagResponse = await axios.get('http://localhost:3000/admin/tag');
-                setTags(tagResponse.data || []); // Set tags or default to an empty array if no data
+                setTags(tagResponse.data || []);
 
                 const categoryResponse = await axios.get('http://localhost:3000/advertiser/GetCategories');
-                console.log('Fetched categories:', categoryResponse.data); // Log categories for debugging
-                setCategories(categoryResponse.data || []); // Set categories or default to an empty array
+                console.log('Fetched categories:', categoryResponse.data);
+                setCategories(categoryResponse.data || []);
             } catch (error) {
                 console.error('Error fetching tags or categories:', error);
-                setCategories([]); // Default to empty array if API call fails
+                setCategories([]);
             }
         };
 
         fetchTagsAndCategories();
+    }, []);
+
+    useEffect(() => {
+        // Retrieve userId from localStorage and set it to the createdby field
+        const storedUserId = localStorage.getItem('userId');
+        if (storedUserId) {
+            setActivityDetails((prevDetails) => ({
+                ...prevDetails,
+                createdby: storedUserId, // Set createdby to the retrieved userId
+            }));
+        }
     }, []);
 
     const handleChange = (e) => {

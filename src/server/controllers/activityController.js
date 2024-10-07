@@ -5,55 +5,71 @@ const Tag = require("../models/Tags.js");
 
 // Create an activity
 const createActivity = AsyncHandler(async (req, res) => {
-  const {
-    date,
-    time,
-    location,
-    coordinates,
-    price,
-    category,
-    tags,
-    specialDiscount,
-    bookingOpen,
-  } = req.body;
-
-  // Basic validation
-  if (!date || !time || !location || !coordinates || !price || !category) {
-    return res.status(400).json({ error: "Missing required fields" });
-  }
-
-  try {
-    let tagIds = [];
-
-    // Iterate over each tag name in the request
-    for (let tagName of tags) {
-      let tag = await Tag.findOne({ name: tagName });
-
-      if (!tag) {
-        return res.status(400).send({ error: `Tag ${tagName} does not exist` });
-      }
-      tagIds.push(tag._id);
-    }
-
-    const newActivity = new Activity({
+    const {
       date,
       time,
       location,
       coordinates,
       price,
       category,
-      tags: tagIds,
+      tags,
       specialDiscount,
       bookingOpen,
-    });
-
-    await newActivity.save();
-    res.status(201).json(newActivity);
-  } catch (err) {
-    console.error("Error creating activity:", err);
-    res.status(400).json({ error: err.message });
-  }
-});
+    } = req.body;
+  
+    // Basic validation
+    if (!date || !time || !location || !coordinates || !price || !category || !req.body.createdby) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+  
+    try {
+      let tagIds = [];
+  
+      // Iterate over each tag name in the request
+      for (let tagName of tags) {
+        let tag = await Tag.findOne({ name: tagName });
+  
+        if (!tag) {
+          return res.status(400).send({ error: `Tag ${tagName} does not exist` });
+        }
+        tagIds.push(tag._id);
+      }
+  
+      const newActivity = new Activity({
+        date,
+        time,
+        location,
+        coordinates,
+        price,
+        category,
+        tags: tagIds,
+        specialDiscount,
+        bookingOpen,
+        createdby: req.body.createdby, // Include userId
+      });
+  
+      await newActivity.save();
+      res.status(201).json(newActivity);
+    } catch (err) {
+      console.error("Error creating activity:", err);
+      res.status(400).json({ error: err.message });
+    }
+  });
+ // Get activities by user ID
+ const getActivitiesByUserId = async (req, res) => {
+    const { userId } = req.params;
+    
+    try {
+        const activities = await Activity.find({ createdby: userId }); // Ensure 'createdby' matches your model
+        if (!activities || activities.length === 0) {
+            return res.status(404).json({ message: "No activities found for this user." });
+        }
+        res.status(200).json(activities);
+    } catch (error) {
+        console.error("Error fetching activities:", error);
+        res.status(500).json({ message: "Error fetching activities." });
+    }
+};
 
 // Get all activities
 const getActivities = AsyncHandler(async (req, res) => {
@@ -72,30 +88,49 @@ const getActivityById = AsyncHandler(async (req, res) => {
 });
 
 // Update an activity
-const updateActivity = AsyncHandler(async (req, res) => {
-  const activity = await Activity.findById(req.params.id);
+const updateActivity = async (req, res) => {
+    const { id } = req.params;
+    const {
+        date,
+        location,
+        price,
+        time,
+        category, // Change to singular if your model has a single category
+        tags,
+        specialDiscount,
+        bookingOpen
+    } = req.body; // Adjust according to your model
 
-  if (activity) {
-    activity.date = req.body.date || activity.date;
-    activity.time = req.body.time || activity.time;
-    activity.location = req.body.location || activity.location;
-    activity.coordinates = req.body.coordinates || activity.coordinates;
-    activity.price = req.body.price || activity.price;
-    activity.category = req.body.categories || activity.category;
-    activity.tags = req.body.tags || activity.tags;
-    activity.specialDiscount =
-      req.body.specialDiscount || activity.specialDiscount;
-    activity.bookingOpen =
-      req.body.bookingOpen !== undefined
-        ? req.body.bookingOpen
-        : activity.bookingOpen;
+    try {
+        // Find and update the activity
+        const updatedActivity = await Activity.findByIdAndUpdate(
+            id,
+            {
+                date,
+                location,
+                price,
+                time,
+                category, // Ensure you update the singular field correctly
+                tags,
+                specialDiscount,
+                bookingOpen,
+            },
+            { new: true } // This option returns the updated document
+        );
 
-    const updatedActivity = await activity.save();
-    res.json(updatedActivity);
-  } else {
-    res.status(404).json({ message: "Activity not found" });
-  }
-});
+        // Handle activity not found
+        if (!updatedActivity) {
+            return res.status(404).json({ message: "Activity not found." });
+        }
+
+        // Success
+        res.status(200).json(updatedActivity);
+    } catch (error) {
+        console.error("Error updating activity:", error);
+        res.status(500).json({ message: "Error updating activity." });
+    }
+};
+
 
 // Delete an activity
 const deleteActivity = AsyncHandler(async (req, res) => {
@@ -164,12 +199,13 @@ const getActivitiesSorted = AsyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  createActivity,
-  getActivities,
-  getActivityById,
-  updateActivity,
-  deleteActivity,
-  addCategoryToActivity,
-  getActivitiesFiltered,
-  getActivitiesSorted,
-};
+    createActivity,
+    getActivities,
+    getActivityById,
+    updateActivity,
+    deleteActivity,
+    addCategoryToActivity,
+    getActivitiesFiltered,
+    getActivitiesSorted,
+    getActivitiesByUserId, // Add this line
+  };

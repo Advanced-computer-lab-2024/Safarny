@@ -8,6 +8,7 @@ const {
     updateActivity,
     deleteActivity,
     addCategoryToActivity,
+    getActivitiesByUserId,
   } = require("../controllers/activityController.js");
   
   const {
@@ -26,7 +27,8 @@ const {
   // Activity routes
   router.get("/GetCategories", getCategories);
   router.route("/").get(getActivities).post(createActivity);
-  
+  router.get("/activities/user/:userId", getActivitiesByUserId); // Route for getting activities by user ID
+
   router
     .route("/:id")
     .get(getActivityById)

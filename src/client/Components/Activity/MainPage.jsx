@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const MainPage = () => {
@@ -7,29 +7,30 @@ const MainPage = () => {
     useEffect(() => {
         const storedUserId = localStorage.getItem('userId'); // Retrieve the userId from localStorage
         if (storedUserId) {
-          setUserId(storedUserId);
+            setUserId(storedUserId);
         }
-      }, []);
+    }, []);
+
     return (
         <div>
             <h1>Main Page</h1>
-            {userId}
+            {userId && <p>User ID: {userId}</p>}
             <nav>
-                <ul>
-                    <li>
-                        <Link to="/create">Create Activity</Link>
-                    </li>
-                    <li>
-                        <Link to="/read">Read Activities</Link>
-                    </li>
-                    <li>
-                        <Link to="/update">Update Activity</Link>
-                    </li>
-                    <li>
-                        <Link to="/delete">Delete Activity</Link>
-                    </li>
-                </ul>
-            </nav>
+    <ul>
+        <li>
+            <Link to={`/create/${userId}`}>Create Activity</Link>
+        </li>
+        <li>
+            <Link to={`/read/${userId}`}>Read Activities</Link>
+        </li>
+        <li>
+            <Link to={`/update/${userId}`}>Update Activity</Link>
+        </li>
+        <li>
+            <Link to={`/delete/${userId}`}>Delete Activity</Link>
+        </li>
+    </ul>
+</nav>
         </div>
     );
 };
