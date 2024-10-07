@@ -57,7 +57,7 @@ const itinerarySchema = new Schema(
       required: true,
     },
     availableDates: {
-      type: [Date], // Array of dates when the tour is available
+      type: [String], // Array of dates when the tour is available
       required: true,
     },
     availableTimes: {
