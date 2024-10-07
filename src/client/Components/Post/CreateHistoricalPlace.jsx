@@ -1,5 +1,5 @@
-import React, { useState,useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, Modal, TextField, Typography, Alert } from '@mui/material';
 import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
@@ -18,6 +18,8 @@ L.Icon.Default.mergeOptions({
 
 const CreateHistoricalPlace = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { userId: createdBy } = location.state || {}; // Retrieve createdBy from location.state
   const [openModal, setOpenModal] = useState(true); // Open the modal by default
   const [historicalPlace, setHistoricalPlace] = useState({
     description: '',
@@ -26,6 +28,7 @@ const CreateHistoricalPlace = () => {
     ticketPrices: '',
     tagNames: '',
     pictures: '',
+    createdby: createdBy || '', // Ensure createdBy is set correctly
   });
   const [selectedImage, setSelectedImage] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
@@ -36,12 +39,11 @@ const CreateHistoricalPlace = () => {
       try {
         const response = await axios.get('http://localhost:3000/toursimgovernor/gettags'); // Update with your actual API endpoint
         setTags(response.data);
-
       } catch (error) {
         console.error('Error fetching tags:', error);
       }
     };
-  
+
     fetchTags();
   }, []);
 
@@ -97,12 +99,19 @@ const CreateHistoricalPlace = () => {
 
     const placeData = { ...historicalPlace, pictures: imageUrl, tagNames: tagsArray };
 
+    // Validate required fields
+    if (!placeData.description || !placeData.coordinates.lat || !placeData.coordinates.lng || !placeData.openingHours || !placeData.ticketPrices || !placeData.tagNames.length || !placeData.createdby) {
+      setErrorMessage('All fields are required');
+      return;
+    }
+
+    console.log('Data sent in POST request:', placeData); // Print data to console
+
     try {
-      await axios.post('http://localhost:3000/toursimgovernor/places', placeData);
+      await axios.post('http://localhost:3000/toursimgovernor/placesId', placeData);
       handleCloseModal();
       navigate('/');
     } catch (error) {
-      // Check if error.response exists before accessing it
       if (error.response && error.response.data) {
         setErrorMessage(`Failed to add historical place: ${error.response.data.error}`);
       } else {
@@ -206,5 +215,3 @@ const CreateHistoricalPlace = () => {
 };
 
 export default CreateHistoricalPlace;
-
-  

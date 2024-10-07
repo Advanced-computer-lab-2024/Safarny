@@ -42,6 +42,63 @@ const createHistoricalPlace = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+const createHistoricalPlaceByGovernorId = async (req, res) => {
+  try {
+    const {
+      description,
+      pictures,
+      coordinates,
+      openingHours,
+      ticketPrices,
+      tagNames,
+      createdby, // Add createdById to the request body
+    } = req.body;
+
+
+    let tagsId = [];
+    for (let tagName of tagNames) {
+      let tag = await Tag.findOne({ name: { $regex: new RegExp(`^${tagName}$`, 'i') } });
+      if (!tag) {
+        return res.status(400).send({ error: `Tag ${tagName} does not exist` });
+      }
+      tagsId.push(tag._id);
+    }
+
+    const newPlace = new HistoricalPlace({
+      description,
+      pictures,
+      coordinates,
+      openingHours,
+      ticketPrices,
+      tags: tagsId,
+      createdby, // Set the createdById field
+    });
+
+    const savedPlace = await newPlace.save();
+    res.status(201).send(savedPlace);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+const getHistoricalPlaceByGovernorId = async (req, res) => {
+  try {
+    const { governorId } = req.params;
+
+    const places = await HistoricalPlace.find({ createdby: governorId, createdby: { $exists: true } }).populate('tags', 'name');
+
+    if (!places.length) {
+      return res.status(404).json({ message: "No historical places found for this governor" });
+    }
+
+    res.status(200).json(places);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
 const getAllHistoricalPlaces = async (req, res) => {
   try {
     const places = await HistoricalPlace.find().populate('tags','name'); // Ensure tags are populated
@@ -154,4 +211,6 @@ module.exports = {
   deleteHistoricalPlaceById,
   getHistoricalPlacesFiltered,
   getHistoricalPlacesSorted,
+  createHistoricalPlaceByGovernorId,
+  getHistoricalPlaceByGovernorId,
 };

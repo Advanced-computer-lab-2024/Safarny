@@ -14,47 +14,80 @@ const ReadHistoricalPlace = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [openingHoursFilter, setOpeningHoursFilter] = useState('');
   const [tagFilter, setTagFilter] = useState(''); // Define tagFilter state
-  const [userInfo, setUserInfo] = useState({ role: '' }); // Define userInfo state
+  const [userInfo, setUserInfo] = useState({ role: '', userId: '' }); // Define userInfo state with userId
+  const [filterByGovernor, setFilterByGovernor] = useState(false); // Define filterByGovernor state
   const navigate = useNavigate();
   const location = useLocation();
   const { userId } = location.state || {}; // Retrieve userId from location state
 
+  const fetchHistoricalPlaces = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/toursimgovernor/places');
+      const placesData = response.data;
+
+      if (Array.isArray(placesData)) {
+        setPlaces(placesData);
+      } else {
+        console.error("Expected an array, but got:", typeof placesData);
+        setError('Invalid data format received');
+      }
+
+      setLoading(false);
+    } catch (err) {
+      console.error('Error fetching historical places:', err);
+      setError('Failed to fetch historical places');
+      setLoading(false);
+    }
+  };
+
+  const fetchUserInfo = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3000/tourist/${userId}`); // Adjust the URL as needed
+      setUserInfo(response.data);
+      console.log(userInfo.role);
+    } catch (err) {
+      console.error('Error fetching user info:', err);
+    }
+  };
+
   useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/tourist/${userId}`); // Adjust the URL as needed
-        setUserInfo(response.data);
-        console.log(userInfo.role);
-      } catch (err) {
-        console.error('Error fetching user info:', err);
-      }
-    };
-
-    const fetchHistoricalPlaces = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/toursimgovernor/places');
-        const placesData = response.data;
-
-        if (Array.isArray(placesData)) {
-          setPlaces(placesData);
-        } else {
-          console.error("Expected an array, but got:", typeof placesData);
-          setError('Invalid data format received');
-        }
-
-        setLoading(false);
-      } catch (err) {
-        console.error('Error fetching historical places:', err);
-        setError('Failed to fetch historical places');
-        setLoading(false);
-      }
-    };
-
     if (userId) {
       fetchUserInfo();
     }
     fetchHistoricalPlaces();
   }, [userId]);
+
+  const fetchHistoricalPlacesByGovernor = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3000/toursimgovernor/places/governor/${userInfo.userId}`);
+      const placesData = response.data;
+
+      if (Array.isArray(placesData)) {
+        const filteredPlaces = placesData.filter(place => place.createdby); // Ensure the place has a createdby field
+        setPlaces(filteredPlaces);
+      } else {
+        console.error("Expected an array, but got:", typeof placesData);
+        setError('Invalid data format received');
+      }
+
+      setLoading(false);
+    } catch (err) {
+      console.error('Error fetching historical places:', err);
+      setError('Failed to fetch historical places');
+      setLoading(false);
+    }
+  };
+  const handleFilterByGovernor = () => {
+    setFilterByGovernor(prev => !prev);
+  };
+
+  useEffect(() => {
+    if (filterByGovernor) {
+      fetchHistoricalPlacesByGovernor();
+    } else {
+      fetchHistoricalPlaces();
+    }
+  }, [filterByGovernor]);
 
   // Handle filtering historical places based on search term, opening hours, and tag
   const filteredPlaces = places.filter(place =>
@@ -131,6 +164,13 @@ const ReadHistoricalPlace = () => {
           className={styles.tagInput}
         />
       </div>
+
+      {/* Filter by Governor Button */}
+      {userInfo.role === 'TourismGovernor' && (
+        <button onClick={handleFilterByGovernor} className={styles.filterButton}>
+          {filterByGovernor ? 'Show All Places' : 'Show My Places'}
+        </button>
+      )}
 
       {filteredPlaces.length > 0 ? (
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>

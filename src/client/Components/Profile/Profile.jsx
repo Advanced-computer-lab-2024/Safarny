@@ -51,8 +51,8 @@ const Profile = () => {
   };
 
   const handleCreateHistoricalPlaceClick = () => {
-    navigate('/create-historical-place');
-  };
+  navigate('/create-historical-place', { state: { userId } });
+};
 
   const handleUpdateClick2 = () => {
     navigate('/Search');

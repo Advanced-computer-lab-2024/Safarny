@@ -6,6 +6,8 @@ const {
   getHistoricalPlaceById,
   updateHistoricalPlaceById,
   deleteHistoricalPlaceById,
+  createHistoricalPlaceByGovernorId,
+  getHistoricalPlaceByGovernorId,
 } = require("../controllers/historicalplacesController.js");
 
 const {
@@ -31,5 +33,9 @@ router.delete("/places/:id", deleteHistoricalPlaceById);
 
 // Route to create a new historical tag (POST request)
 router.post("/historical-tags", createHistoricalTag); // New route for creating historical tags
+
+router.post("/placesId", createHistoricalPlaceByGovernorId);
+
+router.get("/places/governor/:id", getHistoricalPlaceByGovernorId);
 
 module.exports = router;
