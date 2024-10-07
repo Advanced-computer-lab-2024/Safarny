@@ -6,12 +6,14 @@ import { Link } from "react-router-dom";
 
 const UpcomingActivities = () => {
   const [activities, setActivities] = useState([]);
+  const [sortCriteria, setSortCriteria] = useState("date"); // Default sorting by date
 
+  // Fetch activities with the selected sorting criteria
   useEffect(() => {
     const fetchActivities = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/guest/get-activities-sorted?sortBy=date:asc"
+          `http://localhost:3000/guest/get-activities-sorted?sortBy=${sortCriteria}:asc`
         );
 
         if (!response.ok) {
@@ -26,7 +28,7 @@ const UpcomingActivities = () => {
     };
 
     fetchActivities();
-  }, []);
+  }, [sortCriteria]);
 
   return (
     <div className={styles.container}>
@@ -41,6 +43,14 @@ const UpcomingActivities = () => {
       </header>
       <main className={styles.main}>
         <h2>Upcoming Activities</h2>
+
+        {/* Sorting options */}
+        <div className={styles.sortOptions}>
+          <button onClick={() => setSortCriteria("date")}>Sort by Date</button>
+          <button onClick={() => setSortCriteria("price")}>Sort by Price</button>
+          <button onClick={() => setSortCriteria("rating")}>Sort by Rating</button>
+        </div>
+
         <section className={styles.activityList}>
           {activities.length === 0 ? (
             <p>No upcoming activities found.</p>
