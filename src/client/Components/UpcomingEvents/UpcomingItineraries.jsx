@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "./UpcomingActivities.module.css";
+import styles from "./UpcomingItinerary.module.css";
 import Logo from "/src/client/Assets/Img/logo.png";
 import Footer from "/src/client/components/Footer/Footer";
 import { Link } from "react-router-dom";
