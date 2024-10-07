@@ -121,21 +121,24 @@ body{
     margin: 0.5rem 0;
     
   }
+
   .activityList {
     display: flex;
-    margin-left: 1.5rem;
-    flex-direction: row;
     flex-wrap: wrap;
+    justify-content: flex-start;
     gap: 20px;
+    width: 100%;
   }
   
   .activityItem {
     background-color: #000000;
     border: 1px solid #ccc;
     border-radius: 8px;
+    margin: auto;
     padding: 15px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: calc(30% - 2rem);
+    min-width: 18.75rem;
   }
   
   .activityItem h3 {
