@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Button,
   TextField,
@@ -17,8 +18,13 @@ import {
   Tooltip,
 } from "@mui/material";
 import axios from "axios";
+import EditItineraryForm from "./EditItineraryForm"; 
+import Footer from '../Components/Footer/Footer';
 
 export default function TourGuide() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { userId } = location.state;
   const [itineraries, setItineraries] = useState([]);
   const [activities, setActivities] = useState([]);
   const [tags, setTags] = useState([]);
@@ -42,20 +48,23 @@ export default function TourGuide() {
     dropoffLocation: "",
     tagNames: [],
   });
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [selectedItinerary, setSelectedItinerary] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const tourguideId = "670155dc63c71fd000903246";
+        // const userId = "670155dc63c71fd000903246";
         const profileResponse = await axios.get(
-          `http://localhost:3000/tourguide/get-my-tourguide-details?id=${tourguideId}`
+          `http://localhost:3000/tourguide/get-my-tourguide-details?id=${userId}`
         );
         setProfile(profileResponse.data);
 
         const itinerariesResponse = await axios.get(
-          `http://localhost:3000/tourguide/get-my-tourguide-itineraries/${tourguideId}`
+          `http://localhost:3000/tourguide/get-my-tourguide-itineraries/${userId}`
         );
         setItineraries(itinerariesResponse.data);
+        console.log("itineraries: ", itinerariesResponse.data);
 
         // Fetch activities and tags
         const activitiesResponse = await axios.get(
@@ -79,24 +88,9 @@ export default function TourGuide() {
     try {
       const response = await axios.post(
         "http://localhost:3000/tourguide/create-itineraries",
-        newItinerary
+        { ...newItinerary, createdby: userId }
       );
       setItineraries([...itineraries, response.data]);
-      // setNewItinerary({
-      //   name: "",
-      //   activities: "",
-      //   locations: "",
-      //   timeline: "",
-      //   duration: "",
-      //   language: "",
-      //   price: "",
-      //   availableDates: "",
-      //   availableTimes: "",
-      //   accessibility: "",
-      //   pickupLocation: "",
-      //   dropoffLocation: "",
-      //   tagNames: "",
-      // });
     } catch (error) {
       console.error("Error creating itinerary", error);
     }
@@ -119,6 +113,48 @@ export default function TourGuide() {
     setTabValue(newValue);
   };
 
+  // Handle edit button click
+  const handleEditClick = async (itineraryId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/tourguide/get-itineraries/${itineraryId}`
+      );
+      setSelectedItinerary(response.data);
+      setEditModalOpen(true); // Open the edit modal
+    } catch (error) {
+      console.error("Error fetching itinerary", error);
+    }
+  };
+
+  // Handle delete button click
+  const handleDeleteClick = async (itineraryId) => {
+    try {
+      await axios.delete(
+        `http://localhost:3000/tourguide/delete-itineraries/${itineraryId}`
+      );
+    } catch (error) {
+      console.error("Error deleting itinerary", error);
+    }
+  };
+
+  // Handle update itinerary
+  const handleUpdateItinerary = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.put(
+        `http://localhost:3000/tourguide/edit-itineraries/${selectedItinerary._id}`,
+        selectedItinerary
+      );
+      const updatedItineraries = itineraries.map((itinerary) =>
+        itinerary._id === selectedItinerary._id ? response.data : itinerary
+      );
+      setItineraries(updatedItineraries);
+      setEditModalOpen(false); // Close the modal after saving
+    } catch (error) {
+      console.error("Error updating itinerary", error);
+    }
+  };
+
   return (
     <div className="container mx-auto p-4">
       <Typography variant="h4" component="h1" gutterBottom>
@@ -139,28 +175,80 @@ export default function TourGuide() {
             subheader="Manage your tour itineraries here."
           />
           <CardContent>
-            {Array.isArray(itineraries) &&
-              itineraries.map((itinerary) => (
-                <Box
-                  key={itinerary._id}
-                  mb={2}
-                  p={2}
-                  border={1}
-                  borderRadius={1}
-                >
-                  <Typography variant="h6">{itinerary.name}</Typography>
-                  <Typography variant="h9">{itinerary.language}</Typography>
-                  <Box mt={2}>
-                    <Button variant="outlined" color="primary" className="mr-2">
-                      Edit
-                    </Button>
-                    <Button variant="contained" color="error">
-                      Delete
-                    </Button>
-                  </Box>
+            {itineraries.map((itinerary) => (
+              <Box key={itinerary._id} mb={2} p={2} border={1} borderRadius={1}>
+                <Typography variant="h6">Name: {itinerary.name}</Typography>
+                <Typography variant="h6">
+                  Language: {itinerary.language}
+                </Typography>
+                <Typography variant="h6">
+                  Duration: {itinerary.duration} minutes
+                </Typography>
+                <Typography variant="h6">Price: ${itinerary.price}</Typography>
+                <Typography variant="h6">
+                  Accessibility: {itinerary.accessibility ? "Yes" : "No"}
+                </Typography>
+                <Typography variant="h6">
+                  Pickup Location: {itinerary.pickupLocation}
+                </Typography>
+                <Typography variant="h6">
+                  Dropoff Location: {itinerary.dropoffLocation}
+                </Typography>
+                <Typography variant="h6">
+                  Activities:{" "}
+                  {itinerary.activities &&
+                    itinerary.activities
+                      .map((activity) => activity.location)
+                      .join(", ")}
+                </Typography>
+                <Typography variant="h6">
+                  Tags:{" "}
+                  {itinerary.tags &&
+                    itinerary.tags.map((tag) => tag.name).join(", ")}
+                </Typography>
+                <Typography variant="h6">
+                  Locations: {itinerary.locations}
+                </Typography>
+                <Typography variant="h6">
+                  Timeline: {itinerary.timeline}
+                </Typography>
+                <Typography variant="h6">
+                  Available Dates: {itinerary.availableDates}
+                </Typography>
+                <Typography variant="h6">
+                  Available Times: {itinerary.availableTimes}
+                </Typography>
+                <Box mt={2}>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    className="mr-2"
+                    onClick={() => handleEditClick(itinerary._id)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => handleDeleteClick(itinerary._id)}
+                  >
+                    Delete
+                  </Button>
                 </Box>
-              ))}
+              </Box>
+            ))}
           </CardContent>
+          {selectedItinerary && (
+            <EditItineraryForm
+              open={isEditModalOpen}
+              handleClose={() => setEditModalOpen(false)}
+              itinerary={selectedItinerary}
+              setItinerary={setSelectedItinerary}
+              activities={activities}
+              tags={tags}
+              handleSubmit={handleUpdateItinerary}
+            />
+          )}
           <CardActions>
             <form onSubmit={handleCreateItinerary} style={{ width: "100%" }}>
               <Typography variant="h6" gutterBottom>
@@ -443,7 +531,7 @@ export default function TourGuide() {
           </CardActions>
         </Card>
       )}
-      {tabValue === 1 && (
+      {/* {tabValue === 1 && (
         <Card>
           <CardHeader
             title={`Your Profile - ${profile.username}`}
@@ -481,7 +569,8 @@ export default function TourGuide() {
             </form>
           </CardContent>
         </Card>
-      )}
+      )} */}
+      <Footer />
     </div>
   );
 }

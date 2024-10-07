@@ -82,6 +82,9 @@ const Profile = () => {
   const handleViewHistoricalPlacesClick = () => {
     navigate('/historical-places'); // Navigate to the historical places page
   };
+  const handleAddItinerary = () => {
+    navigate('/tourguide', { state: { userId } }); // Navigate to the historical places page
+  };
 
   return (
       <div className={styles.container}>
@@ -137,6 +140,12 @@ const Profile = () => {
         {userInfo.role === 'Advertiser' && (
             <button onClick={handleAddActivity} className={styles.postButton}>
               Add Activity
+            </button>
+        )}
+
+        {userInfo.role === 'TourGuide' && (
+            <button onClick={handleAddItinerary} className={styles.postButton}>
+              Add Itinerary
             </button>
         )}
 

@@ -41,7 +41,7 @@ router
   .delete(itineraryController.deleteItineraryById);
 
 router
-  .route("/edit-itineraries/:id/tags")
+  .route("/edit-itineraries-tag/:id/tags")
   .patch(itineraryController.updateItineraryTagById);
 
 module.exports = router;
