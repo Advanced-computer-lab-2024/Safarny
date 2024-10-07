@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+
+// Fixing Leaflet marker icon issue
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'https://unpkg.com/leaflet/dist/images/marker-icon-2x.png',
+    iconUrl: 'https://unpkg.com/leaflet/dist/images/marker-icon.png',
+    shadowUrl: 'https://unpkg.com/leaflet/dist/images/marker-shadow.png',
+});
 
 const ReadActivities = () => {
     const { userId } = useParams();
@@ -31,12 +42,10 @@ const ReadActivities = () => {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
-                console.log("Categories data:", data);
                 const categoryMap = {};
                 data.forEach(category => {
                     categoryMap[category._id] = category.type; // Mapping category ID to type
                 });
-                console.log("Category Map:", categoryMap); // Log the final category map
                 setCategories(categoryMap);
             } catch (error) {
                 console.error("Error fetching categories:", error);
@@ -78,8 +87,8 @@ const ReadActivities = () => {
                             {activity.date} - {activity.location} - {activity.price}$ - {activity.time} - 
                             
                             {/* Mapping category IDs to category types */}
-                            {activity.category && activity.category.length > 0 
-                                ? activity.category.map(catId => {
+                            {activity.categories && activity.categories.length > 0 
+                                ? activity.categories.map(catId => {
                                     const categoryType = categories[catId]; // Get category type using ID
                                     return categoryType || "Unknown Category"; // If undefined, return "Unknown Category"
                                   }).join(", ")
@@ -93,6 +102,24 @@ const ReadActivities = () => {
 
                             {/* Displaying bookingOpen status */}
                             {activity.bookingOpen ? "Booking Open" : "Booking Closed"}
+
+                            {/* Display Leaflet Map for the activity's coordinates if available */}
+                            {activity.coordinates && activity.coordinates.lat && activity.coordinates.lng && (
+                                <MapContainer
+                                    center={[activity.coordinates.lat, activity.coordinates.lng]}
+                                    zoom={13}
+                                    style={{ height: '300px', width: '100%', marginTop: '10px' }}
+                                >
+                                    <TileLayer
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    />
+                                    <Marker position={[activity.coordinates.lat, activity.coordinates.lng]}>
+                                        <Popup>
+                                            {activity.location} <br /> {activity.price}$.
+                                        </Popup>
+                                    </Marker>
+                                </MapContainer>
+                            )}
                         </li>
                     ))}
                 </ul>
