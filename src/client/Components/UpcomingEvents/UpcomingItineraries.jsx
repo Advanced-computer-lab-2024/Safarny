@@ -11,10 +11,25 @@ const UpcomingItineraries = () => {
   const [date, setDate] = useState("");
   const [preferences, setPreferences] = useState([]);
   const [language, setLanguage] = useState("");
+  const [availableTags, setAvailableTags] = useState([]); 
 
   useEffect(() => {
     fetchFilteredItineraries(true);
+    fetchTags(); 
   }, [sortCriteria]);
+
+  const fetchTags = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/tourguide/get-tags");
+      if (!response.ok) {
+        throw new Error("Failed to fetch tags");
+      }
+      const data = await response.json();
+      setAvailableTags(data);
+    } catch (error) {
+      console.error("Error fetching tags:", error);
+    }
+  };
 
   const handleFilterClick = async () => await fetchFilteredItineraries(false);
 
@@ -97,7 +112,7 @@ const UpcomingItineraries = () => {
             />
           </div>
 
-          {/* Preferences Filter */}
+          {/* Preferences Filter - dynamically populated from API */}
           <div className={styles.filterGroup}>
             <label>Preferences: </label>
             <select
@@ -110,10 +125,15 @@ const UpcomingItineraries = () => {
                 setPreferences(selectedOptions);
               }}
             >
-              <option value="historic">Historic Areas</option>
-              <option value="beaches">Beaches</option>
-              <option value="family">Family-Friendly</option>
-              <option value="shopping">Shopping</option>
+              {availableTags.length > 0 ? (
+                availableTags.map((tag) => (
+                  <option key={tag._id} value={tag.name}>
+                    {tag.name}
+                  </option>
+                ))
+              ) : (
+                <option disabled>Loading tags...</option>
+              )}
             </select>
           </div>
 

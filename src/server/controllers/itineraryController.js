@@ -186,30 +186,52 @@ const getItinerariesSorted = async (req, res) => {
     res.status(500).send(error);
   }
 };
-
 const getItinerariesFiltered = async (req, res) => {
-  const { minPrice, maxPrice, startDate, endDate, tags, language } = req.query;
-  const filter = {};
+  const { price, date, tags, language } = req.query;
 
-  if (minPrice || maxPrice) {
-    filter.price = {};
-    if (minPrice) filter.price.$gte = parseFloat(minPrice);
-    if (maxPrice) filter.price.$lte = parseFloat(maxPrice);
-  }
-
-  if (startDate || endDate) {
-    filter.availableDates = {};
-    if (startDate) filter.availableDates.$gte = new Date(startDate);
-    if (endDate) filter.availableDates.$lte = new Date(endDate);
-  }
-
-  if (tags) filter.tags = { $in: tags.split(",") };
-  if (language) filter.language = language;
-
+  const maxPrice = price ? Number(price) : Infinity;
   try {
-    const itineraries = await Itinerary.find(filter).populate("tags", "name");
-    res.status(200).send(itineraries);
+    const itineraries = await Itinerary.find()
+      .populate("tags", "name")
+      .populate("activities");
+
+    const filteredItineraries = itineraries.filter((itinerary) => {
+      let match = false;
+
+      if (maxPrice > 0 && itinerary.price <= maxPrice) {
+        match = true;
+      }
+
+      // Check if date matches
+      if (date && itinerary.availableDates.includes(date)) {
+        match = true;
+      }
+
+      if (tags) {
+        const tagsArray = tags.split(",");
+        if (itinerary.tags && itinerary.tags.length > 0) {
+          const tagMatch = itinerary.tags.some((tag) =>
+            tagsArray.includes(tag.name)
+          );
+          if (tagMatch) {
+            match = true;
+          }
+        }
+      }
+
+      if (
+        language &&
+        itinerary.language.toLowerCase().includes(language.toLowerCase())
+      ) {
+        match = true;
+      }
+
+      return match;
+    });
+
+    res.status(200).send(filteredItineraries);
   } catch (error) {
+    console.error("Error fetching filtered itineraries:", error);
     res.status(500).send(error);
   }
 };
