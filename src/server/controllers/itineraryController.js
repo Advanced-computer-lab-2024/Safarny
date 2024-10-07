@@ -179,7 +179,7 @@ const getItinerariesSorted = async (req, res) => {
   try {
     const itineraries = await Itinerary.find()
       .populate("tags", "name")
-      .populate("activities", "name")
+      .populate("activities", "location")
       .sort(sortCriteria);
     res.status(200).send(itineraries);
   } catch (error) {
