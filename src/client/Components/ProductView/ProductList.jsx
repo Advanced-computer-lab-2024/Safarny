@@ -105,6 +105,7 @@ const ProductList = () => {
               <h2 className={styles.productDetails}>{product.details}</h2>
               <p>Price: ${product.price}</p>
               <p>Quantity: {product.quantity}</p>
+              <p>Rating: {product.rating}</p>
               <img className={styles.productImage} src={product.imageurl} alt={product.details} />
             </div>
           ))}
