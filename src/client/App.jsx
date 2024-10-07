@@ -78,10 +78,10 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signupextra" element={<SignUpExtra />} />
         <Route path="/AdvertiserMain" element={<MainPage />} />
-        <Route path="/create" element={<CreateActivity />} />
-        <Route path="/read" element={<ReadActivities />} />
-        <Route path="/update" element={<UpdateActivity />} />
-        <Route path="/delete" element={<DeleteActivity />} />
+        <Route path="/create/:userId" element={<CreateActivity />} />
+        <Route path="/read/:userId" element={<ReadActivities />} />
+        <Route path="/update/:userId" element={<UpdateActivity />} />
+        <Route path="/delete/:userId" element={<DeleteActivity />} />
         <Route path="/UpdateProfile" element={<UpdateProfile />} />
         <Route path="/Search" element={<Search />} />
         <Route path="/gettags" element={<GetTags />} />

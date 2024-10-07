@@ -51,7 +51,7 @@ const Profile = () => {
   };
 
   const handleCreateHistoricalPlaceClick = () => {
-    navigate('/historical-tags');
+    navigate('/create-historical-place');
   };
 
   const handleUpdateClick2 = () => {

@@ -3,6 +3,11 @@ const Schema = mongoose.Schema;
 
 const historicalTagsSchema = new Schema(
   {
+    name: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     historicalPlaces: [
       {
         type: Schema.Types.ObjectId,
