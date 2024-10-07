@@ -6,29 +6,49 @@ import { Link } from "react-router-dom";
 
 const UpcomingItineraries = () => {
   const [itineraries, setItineraries] = useState([]);
-  const [sortCriteria, setSortCriteria] = useState("date"); // Default sorting by date
+  const [sortCriteria, setSortCriteria] = useState("date");
+  const [budget, setBudget] = useState(0);
+  const [date, setDate] = useState("");
+  const [preferences, setPreferences] = useState([]);
+  const [language, setLanguage] = useState("");
 
-  // Fetch itineraries with the selected sorting criteria
+
   useEffect(() => {
-    const fetchItineraries = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:3000/guest/get-itineraries-sorted?sortBy=${sortCriteria}:asc`
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch itineraries");
-        }
-        const data = await response.json();
-        console.log(data);
-        setItineraries(data);
-      } catch (error) {
-        console.error("Error fetching itineraries:", error);
-      }
-    };
-
-    fetchItineraries();
+    fetchFilteredItineraries(true);
   }, [sortCriteria]);
+
+  const handleFilterClick = async () => await fetchFilteredItineraries(false);
+
+  const fetchFilteredItineraries = async (whichResponse) => {
+    try {
+      const queryParams = new URLSearchParams({
+        sortBy: `${sortCriteria}:asc`,
+        price: budget,
+        date: date,
+        tags: preferences.join(","),
+        language: language,
+      }).toString();
+      let response;
+      if(whichResponse){
+        response = await fetch(
+          `http://localhost:3000/guest/get-itineraries-sorted?${queryParams}`
+        );
+      }else{
+        response = await fetch(
+          `http://localhost:3000/guest/filter-itineraries?${queryParams}`
+        );
+      }
+
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch itineraries");
+      }
+      const data = await response.json();
+      setItineraries(data);
+    } catch (error) {
+      console.error("Error fetching itineraries:", error);
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -41,6 +61,7 @@ const UpcomingItineraries = () => {
           </Link>
         </nav>
       </header>
+
       <main className={styles.main}>
         <h2>Upcoming Itineraries</h2>
 
@@ -51,6 +72,65 @@ const UpcomingItineraries = () => {
           <button onClick={() => setSortCriteria("duration")}>Sort by Duration</button>
         </div>
 
+        {/* Filter options */}
+        <div className={styles.filterOptions}>
+          {/* Budget Filter */}
+          <div className={styles.filterGroup}>
+            <label>Budget: </label>
+            <input
+              type="number"
+              value={budget}
+              onChange={(e) => setBudget(e.target.value)}
+              placeholder="Budget"
+            />
+          </div>
+
+          {/* Date Filter */}
+          <div className={styles.filterGroup}>
+            <label>Date: </label>
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
+          </div>
+
+          {/* Preferences Filter */}
+          <div className={styles.filterGroup}>
+            <label>Preferences: </label>
+            <select
+              multiple
+              value={preferences}
+              onChange={(e) => {
+                const selectedOptions = Array.from(e.target.selectedOptions).map(
+                  (option) => option.value
+                );
+                setPreferences(selectedOptions);
+              }}
+            >
+              <option value="historic">Historic Areas</option>
+              <option value="beaches">Beaches</option>
+              <option value="family">Family-Friendly</option>
+              <option value="shopping">Shopping</option>
+            </select>
+          </div>
+
+          {/* Language Filter */}
+          <div className={styles.filterGroup}>
+            <label>Language: </label>
+            <input
+              type="text"
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              placeholder="Language"
+            />
+          </div>
+
+          {/* Apply Filters Button */}
+          <button onClick={handleFilterClick}>Apply Filters</button>
+        </div>
+
+        {/* Itinerary List */}
         <section className={styles.itineraryList}>
           {itineraries.length === 0 ? (
             <p>No upcoming itineraries found.</p>
@@ -74,7 +154,7 @@ const UpcomingItineraries = () => {
 
                 {/* Display Activities */}
                 {itinerary.activities && itinerary.activities.length > 0 && (
-                  <p>Activities: {itinerary.activities.map((activity) => activity.name).join(", ")}</p>
+                  <p>Activities: {itinerary.activities.map((activity) => activity.location).join(", ")}</p>
                 )}
               </div>
             ))

@@ -13,6 +13,7 @@ const ReadHistoricalPlace = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [openingHoursFilter, setOpeningHoursFilter] = useState('');
+  const [tagFilter, setTagFilter] = useState(''); // Define tagFilter state
   const [userInfo, setUserInfo] = useState({ role: '' }); // Define userInfo state
   const navigate = useNavigate();
   const location = useLocation();
@@ -55,10 +56,11 @@ const ReadHistoricalPlace = () => {
     fetchHistoricalPlaces();
   }, [userId]);
 
-  // Handle filtering historical places based on search term and opening hours
+  // Handle filtering historical places based on search term, opening hours, and tag
   const filteredPlaces = places.filter(place =>
     place.description && place.description.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (openingHoursFilter ? place.openingHours.toLowerCase().includes(openingHoursFilter.toLowerCase()) : true)
+    (openingHoursFilter ? place.openingHours.toLowerCase().includes(openingHoursFilter.toLowerCase()) : true) &&
+    (tagFilter ? place.tags.some(tag => tag.name.toLowerCase().includes(tagFilter.toLowerCase())) : true)
   );
 
   // Handle updating historical places
@@ -115,6 +117,18 @@ const ReadHistoricalPlace = () => {
           value={openingHoursFilter}
           onChange={(e) => setOpeningHoursFilter(e.target.value)}
           className={styles.openingHoursInput}
+        />
+      </div>
+
+      {/* Tag Filter */}
+      <div className={styles.tagFilter}>
+        <label>Filter by tag:</label>
+        <input
+          type="text"
+          placeholder="e.g., historical"
+          value={tagFilter}
+          onChange={(e) => setTagFilter(e.target.value)}
+          className={styles.tagInput}
         />
       </div>
 
