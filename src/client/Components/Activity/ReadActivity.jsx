@@ -42,10 +42,12 @@ const ReadActivities = () => {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
+                console.log("Categories data:", data);
                 const categoryMap = {};
                 data.forEach(category => {
                     categoryMap[category._id] = category.type; // Mapping category ID to type
                 });
+                console.log("Category Map:", categoryMap); // Log the final category map
                 setCategories(categoryMap);
             } catch (error) {
                 console.error("Error fetching categories:", error);
@@ -87,8 +89,8 @@ const ReadActivities = () => {
                             {activity.date} - {activity.location} - {activity.price}$ - {activity.time} - 
                             
                             {/* Mapping category IDs to category types */}
-                            {activity.categories && activity.categories.length > 0 
-                                ? activity.categories.map(catId => {
+                            {activity.category && activity.category.length > 0 
+                                ? activity.category.map(catId => {
                                     const categoryType = categories[catId]; // Get category type using ID
                                     return categoryType || "Unknown Category"; // If undefined, return "Unknown Category"
                                   }).join(", ")
