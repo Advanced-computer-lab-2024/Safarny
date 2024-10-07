@@ -165,7 +165,7 @@ const UpcomingActivities = () => {
 
         {filterCriteria === "rating" && (
           <div className={styles.filterInput}>
-            <label>Minimum Rating: {rating} stars</label>
+            <label>Rating: {rating} </label>
             <input
               type="range"
               min="0"
@@ -187,6 +187,7 @@ const UpcomingActivities = () => {
                 <p>Time: {activity.time}</p>
                 <p>Location: {activity.location}</p>
                 <p>Price: {activity.price}$</p>
+                <p>Rating: {activity.rating}$</p>
 
                 {activity.specialDiscount && (
                   <p>Discount: {activity.specialDiscount}</p>
