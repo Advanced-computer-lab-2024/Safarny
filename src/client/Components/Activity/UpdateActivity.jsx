@@ -187,7 +187,6 @@ const UpdateActivity = () => {
                 placeholder="Enter new location name"
               />
             </label>
-            <small>Update the location name if necessary</small>
           </div>
           <div>
             <label>
