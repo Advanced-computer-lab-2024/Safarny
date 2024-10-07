@@ -80,7 +80,7 @@ const Profile = () => {
   };
 
   const handleViewHistoricalPlacesClick = () => {
-    navigate('/historical-places'); // Navigate to the historical places page
+    navigate('/historical-places', { state: { userId } }); // Navigate to the historical places page with userId
   };
   const handleAddItinerary = () => {
     navigate('/tourguide', { state: { userId } }); // Navigate to the historical places page

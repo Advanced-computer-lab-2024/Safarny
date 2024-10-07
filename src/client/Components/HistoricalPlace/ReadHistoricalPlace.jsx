@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
@@ -13,9 +13,22 @@ const ReadHistoricalPlace = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [openingHoursFilter, setOpeningHoursFilter] = useState('');
+  const [userInfo, setUserInfo] = useState({ role: '' }); // Define userInfo state
   const navigate = useNavigate();
+  const location = useLocation();
+  const { userId } = location.state || {}; // Retrieve userId from location state
 
   useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/tourist/${userId}`); // Adjust the URL as needed
+        setUserInfo(response.data);
+        console.log(userInfo.role);
+      } catch (err) {
+        console.error('Error fetching user info:', err);
+      }
+    };
+
     const fetchHistoricalPlaces = async () => {
       try {
         const response = await axios.get('http://localhost:3000/toursimgovernor/places');
@@ -36,8 +49,11 @@ const ReadHistoricalPlace = () => {
       }
     };
 
+    if (userId) {
+      fetchUserInfo();
+    }
     fetchHistoricalPlaces();
-  }, []);
+  }, [userId]);
 
   // Handle filtering historical places based on search term and opening hours
   const filteredPlaces = places.filter(place =>
@@ -105,47 +121,50 @@ const ReadHistoricalPlace = () => {
       {filteredPlaces.length > 0 ? (
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
           {filteredPlaces.map(place => {
-  const hasCoordinates = place.coordinates && place.coordinates.lat !== undefined && place.coordinates.lng !== undefined;
-  return (
-    <div className={styles.placeCard} key={place._id}>
-      <h2 className={styles.placeName}>{place.description}</h2>
-      <p>Opening Hours: {place.openingHours}</p>
-      <p>Description: {place.description}</p>
-      <p>Ticket Price: {place.ticketPrices}</p>
-      {place.tags && place.tags.length > 0 ? (
-        <p>Tags: {place.tags.map(tag => tag.name).join(', ')}</p> // Map to get tag names
-      ) : (
-        <p>No tags available</p>
-      )}
-      {place.pictures && place.pictures.length > 0 && (
-        <img className={styles.placeImage} src={place.pictures[0]} alt={place.description} />
-      )}
-      {/* Map Container */}
-      <div className={styles.mapContainer}>
-        {hasCoordinates ? (
-          <MapContainer
-            center={[place.coordinates.lat, place.coordinates.lng]}
-            zoom={13}
-            style={{ height: '100%', width: '100%' }}
-          >
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <Marker position={[place.coordinates.lat, place.coordinates.lng]} />
-          </MapContainer>
-        ) : (
-          <p>Coordinates not available</p>
-        )}
-      </div>
-      {/* Update and Delete Buttons */}
-      <button onClick={() => handleUpdateHistoricalPlace(place._id)} className={styles.updateButton}>
-        Update
-      </button>
-      <button onClick={() => handleDeleteHistoricalPlace(place._id)} className={styles.deleteButton}>
-        Delete
-      </button>
-    </div>
-  );
-})}
-
+            const hasCoordinates = place.coordinates && place.coordinates.lat !== undefined && place.coordinates.lng !== undefined;
+            return (
+              <div className={styles.placeCard} key={place._id}>
+                <h2 className={styles.placeName}>{place.description}</h2>
+                <p>Opening Hours: {place.openingHours}</p>
+                <p>Description: {place.description}</p>
+                <p>Ticket Price: {place.ticketPrices}</p>
+                {place.tags && place.tags.length > 0 ? (
+                  <p>Tags: {place.tags.map(tag => tag.name).join(', ')}</p> // Map to get tag names
+                ) : (
+                  <p>No tags available</p>
+                )}
+                {place.pictures && place.pictures.length > 0 && (
+                  <img className={styles.placeImage} src={place.pictures[0]} alt={place.description} />
+                )}
+                {/* Map Container */}
+                <div className={styles.mapContainer}>
+                  {hasCoordinates ? (
+                    <MapContainer
+                      center={[place.coordinates.lat, place.coordinates.lng]}
+                      zoom={13}
+                      style={{ height: '100%', width: '100%' }}
+                    >
+                      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                      <Marker position={[place.coordinates.lat, place.coordinates.lng]} />
+                    </MapContainer>
+                  ) : (
+                    <p>Coordinates not available</p>
+                  )}
+                </div>
+                {/* Update and Delete Buttons */}
+                {userInfo.role === 'TourismGovernor' && (
+                  <>
+                    <button onClick={() => handleUpdateHistoricalPlace(place._id)} className={styles.updateButton}>
+                      Update
+                    </button>
+                    <button onClick={() => handleDeleteHistoricalPlace(place._id)} className={styles.deleteButton}>
+                      Delete
+                    </button>
+                  </>
+                )}
+              </div>
+            );
+          })}
         </div>
       ) : (
         <p>No historical places available</p>
