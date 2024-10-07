@@ -3,13 +3,13 @@ import styles from "./UpcomingActivities.module.css";
 import Logo from "/src/client/Assets/Img/logo.png";
 import Footer from "/src/client/components/Footer/Footer";
 import { Link } from "react-router-dom";
-import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
 
 const UpcomingActivities = () => {
   const [activities, setActivities] = useState([]);
   const [sortCriteria, setSortCriteria] = useState("date"); // Default sorting by date
   const [filterCriteria, setFilterCriteria] = useState(""); // Filter criteria state
-  const [budget, setBudget] = useState([0, 1000]); // Budget range state
+  const [budget, setBudget] = useState([0, 0]); // Budget range state
   const [dateRange, setDateRange] = useState(""); // Date range state
   const [selectedCategories, setSelectedCategories] = useState([]); // Selected categories state
   const [availableCategories, setAvailableCategories] = useState([]); // All available categories
@@ -22,20 +22,29 @@ const UpcomingActivities = () => {
 
         // Add filter conditions
         if (filterCriteria === "budget") {
-          url = `http://localhost:3000/guest/filter-activities?&minBudget=${budget[0]}&maxBudget=${budget[1]}`;
+          url = `http://localhost:3000/guest/filter-activities?minBudget=${budget[0]}&maxBudget=${budget[1]}`;
         } else if (filterCriteria === "date") {
-          url + `http://localhost:3000/guest/filter-activities?&dateRange=${dateRange}`;
-        } else if (filterCriteria === "category" && selectedCategories.length > 0) {
-          url + `http://localhost:3000/guest/filter-activities?&categories=${selectedCategories.join(",")}`;
+          url =
+            `http://localhost:3000/guest/filter-activities?&date=${dateRange}`;
+        } else if (
+          filterCriteria === "category" &&
+          selectedCategories.length > 0
+        ) {
+          url =
+            `http://localhost:3000/guest/filter-activities?&category=${selectedCategories.join(
+              ","
+            )}`;
         }
-
+        
         const response = await fetch(url);
-
+        console.log(url);
+        
         if (!response.ok) {
           throw new Error("Failed to fetch activities");
         }
         const data = await response.json();
         setActivities(data);
+        console.log(data);
       } catch (error) {
         console.error("Error fetching activities:", error);
       }
@@ -48,7 +57,9 @@ const UpcomingActivities = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:3000/advertiser/GetCategories");
+        const response = await fetch(
+          "http://localhost:3000/advertiser/GetCategories"
+        );
         const categories = await response.json();
         setAvailableCategories(categories);
       } catch (error) {
@@ -85,8 +96,12 @@ const UpcomingActivities = () => {
         {/* Sorting options */}
         <div className={styles.sortOptions}>
           <button onClick={() => setSortCriteria("date")}>Sort by Date</button>
-          <button onClick={() => setSortCriteria("price")}>Sort by Price</button>
-          <button onClick={() => setSortCriteria("rating")}>Sort by Rating</button>
+          <button onClick={() => setSortCriteria("price")}>
+            Sort by Price
+          </button>
+          <button onClick={() => setSortCriteria("rating")}>
+            Sort by Rating
+          </button>
         </div>
 
         {/* Filter options */}
@@ -107,7 +122,9 @@ const UpcomingActivities = () => {
         {/* Conditional input for filtering */}
         {filterCriteria === "budget" && (
           <div className={styles.filterInput}>
-            <label>Budget range: {budget[0]}$ - {budget[1]}$</label>
+            <label>
+              Budget range: {budget[0]}$ - {budget[1]}$
+            </label>
             <input
               type="range"
               min="0"
@@ -128,10 +145,7 @@ const UpcomingActivities = () => {
         {filterCriteria === "date" && (
           <div className={styles.filterInput}>
             <label>Select Date Range: </label>
-            <input
-              type="date"
-              onChange={(e) => setDateRange(e.target.value)}
-            />
+            <input type="date" onChange={(e) => setDateRange(e.target.value)} />
           </div>
         )}
 
@@ -183,14 +197,22 @@ const UpcomingActivities = () => {
                 {/* Map Container */}
                 <div className={styles.mapContainer}>
                   <MapContainer
-                    center={[activity.coordinates.lat || 51.505, activity.coordinates.lng || -0.09]}
+                    center={[
+                      activity.coordinates.lat || 51.505,
+                      activity.coordinates.lng || -0.09,
+                    ]}
                     zoom={13}
-                    style={{ height: '100%', width: '100%' }}
+                    style={{ height: "100%", width: "100%" }}
                   >
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
                     {activity.coordinates.lat && activity.coordinates.lng && (
-                      <Marker position={[activity.coordinates.lat, activity.coordinates.lng]} />
+                      <Marker
+                        position={[
+                          activity.coordinates.lat,
+                          activity.coordinates.lng,
+                        ]}
+                      />
                     )}
                   </MapContainer>
                 </div>

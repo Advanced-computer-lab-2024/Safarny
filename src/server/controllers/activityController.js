@@ -170,45 +170,65 @@ const addCategoryToActivity = AsyncHandler(async (req, res) => {
 });
 
 const getActivitiesFiltered = AsyncHandler(async (req, res) => {
-  const { price, date, category, rating } = req.query;
+  const { minBudget, maxBudget, date, category, rating } = req.query;
   const filter = {};
 
-  if (price) filter.price = Number(price);
+  // Convert minBudget, maxBudget, and rating to numbers
+  const minPrice = minBudget ? Number(minBudget) : 0; // Default minPrice to 0 if not provided
+  const maxPrice = maxBudget ? Number(maxBudget) : Infinity; // Default maxPrice to Infinity if not provided
   if (date) filter.date = date;
   if (rating) filter.rating = Number(rating);
 
   const activities = await Activity.find().populate("category", "type");
 
-  console.log("Activities:", JSON.stringify(activities, null, 2));
   console.log("Filter:", filter);
 
-  const FilteredActivities = activities.filter((activity) => {
-    let match = false; 
+  // Convert the category query to an array if provided
+  const categoriesArray = category ? category.split(",") : [];
 
-    if (filter.price && activity.price === filter.price) {
+  const FilteredActivities = activities.filter((activity) => {
+    let match = false; // Tracks if any condition matches
+
+    // Check if price is within the specified range
+    if (
+      maxBudget &&
+      minBudget &&
+      activity.price >= minPrice &&
+      activity.price <= maxPrice
+    ) {
       match = true;
     }
 
+    // Check if date matches
     if (filter.date && activity.date === filter.date) {
       match = true;
     }
 
+    // Check if rating matches
     if (filter.rating && activity.rating === filter.rating) {
       match = true;
     }
 
-    if (category) {
+    // Check if any category matches from the provided categories array
+    if (categoriesArray.length > 0) {
       if (activity.category && activity.category.length > 0) {
-        const categoryMatch = activity.category.some(
-          (cat) => cat.type === category
+        const categoryMatch = activity.category.some((cat) =>
+          categoriesArray.includes(cat.type)
         );
         if (categoryMatch) {
           match = true;
         }
       }
     }
+
+    // Return true only if any of the conditions match (price, date, rating, or category)
     return match;
   });
+
+  console.log(
+    "Filtered Activities:",
+    JSON.stringify(FilteredActivities, null, 2)
+  );
 
   res.json(FilteredActivities);
 });
