@@ -8,7 +8,6 @@ const activitySchema = new mongoose.Schema({
   },
   category: [
     {
-      
       type: Schema.Types.ObjectId,
       ref: "ActivityCategory",
     },
@@ -43,6 +42,9 @@ const activitySchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+  rating: {
+    type: Number,
+  },
 });
 
 const Activity = mongoose.model("Activity", activitySchema);
