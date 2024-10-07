@@ -4,7 +4,7 @@ import axios from 'axios';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
 import styles from './ReadHistoricalPlace.module.css'; // Import the CSS module
-
+import styles1 from '/src/client/components/Home/Homepage.module.css';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 
 const ReadHistoricalPlace = () => {
@@ -87,9 +87,9 @@ const ReadHistoricalPlace = () => {
   }
 
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <img src={Logo} alt="Safarny Logo" className={styles.logo} />
+    <div className={styles1.container}>
+      <header className={styles1.header}>
+        <img src={Logo} alt="Safarny Logo" className={styles1.logo} />
         <h1>Safarny</h1>
         <nav className={styles.nav}>
           <Link to="/" className={styles.button}>Back to Home</Link>
