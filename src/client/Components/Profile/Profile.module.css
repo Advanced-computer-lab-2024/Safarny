@@ -20,144 +20,148 @@ body{
   display: flex;
   gap: 10px; /* Adds space between buttons */
 }
-  .container {
-    font-family: 'Arial', sans-serif;
-    color: var(--text-color);
-    background-color: var(--background-color);
-    padding: 0 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 150%;
-  }
+.container {
+  font-family: 'Arial', sans-serif;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  /* height: 150%; */
+}
 
-  .header {
-    position: sticky;
-    top: 0;
-    background-color: var(--primary-color);
-    padding: 1rem 2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 1000;
-    height: var(--header-height);
-    border-radius: var(--border-radius);
-    width: 90%;
-    transition: background-color 0.3s;
-  }
+.header {
+  position: sticky;
+  top: 0;
+  background-color: var(--primary-color);
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  height: var(--header-height);
+  border-radius: var(--border-radius);
+  width: 90%;
+  transition: background-color 0.3s;
+}
 
-  .header h1 {
-    margin: 0;
-    font-size: 1.5rem;
-    color: var(--header-color);
-    display: flex;
-    align-items: center;
-  }
+.header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--header-color);
+  display: flex;
+  align-items: center;
+}
 
-  .logo {
-    height: 8rem;
-    margin-right: 1rem;
-    position: absolute;
-    left: 4rem;
-  }
+.logo {
+  height: 8rem;
+  margin-right: 1rem;
+  position: absolute;
+  left: 4rem;
+}
 
-  .nav {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-  }
+.nav {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
 
-  .button {
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    background-color: var(--secondary-color);
-    color: var(--header-color);
-    border-radius: 0.5rem;
-    transition: background-color 0.3s;
-    margin-right: 0.5rem;
-  }
+.button {
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  bottom: 150px;
+  background-color: var(--secondary-color);
+  color: var(--header-color);
+  border-radius: 0.5rem;
+  transition: background-color 0.3s;
+  margin-right: 0.5rem;
+}
 
-  .button:hover {
-    background-color: lighten(var(--header-color), 10%);
-  }
+.button:hover {
+  background-color: lighten(var(--header-color), 10%);
+}
 
-  .main {
-    padding: 2rem 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: rgba(108, 106, 106, 0.8);
-    border-radius: 1rem;
-    margin-top: 2rem;
-    width: 75%;
-    margin-bottom: 50px;
-  }
+.main {
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(108, 106, 106, 0.8);
+  border-radius: 1rem;
+  margin-top: 2rem;
+  width: 75%;
+  margin-bottom: 50px;
+}
 
-  .intro {
-    text-align: center;
-  }
+.intro {
+  text-align: center;
+}
 
-  h1 {
-    color: white;
-  }
+h1 {
+  color: white;
+}
 
-  p, h5 {
-    color: white;
-    margin: 0.5rem 0;
+p, h5 {
+  color: white;
+  margin: 0.5rem 0;
+}
 
-  }
+.buttonContainer {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
 
-  .updateButton {
-    position: absolute; /*Use absolute positioning to align it with respect to the container */
-    bottom: 100px; /* This will place the button above the footer */
-    right: 80px;
+.buttonContainer button {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--secondary-color);
+  color: var(--header-color);
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
 
-    padding: 10px 20px;
-    background-color: var(--secondary-color);
-    color: var(--header-color);
-    font-size: 16px;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-    cursor: pointer;
-  }
+.buttonContainer button:hover {
+  background-color: var(--card-hover);
+  box-shadow: 0 0 10px var(--glow-color);
+}
 
-  .updateButton:hover {
-    background-color: lighten(var(--header-color), 10%);
-  }
-  .mainButton {
-    position: absolute;
-    color: var(--header-color);
-    background-color: var(--secondary-color);
-    top: 100px;  /* Adjust the top margin if needed */
-    left: 1px; /* Aligns it to the left */
-    padding: 10px 20px;
-    font-size: 18px;
-    z-index: 1;  /* Ensures it's above other elements */
-  }
+.createPlaceButton,
+.createTagButton,
+.postButton,
+.mainButton {
+  padding: 0.75rem 1.5rem;
+  margin-top: 1rem;
+  background-color: var(--secondary-color);
+  color: var(--header-color);
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
 
-  /* Buttons 1, 2, 3 will appear below the main button */
-  .buttonGroup {
-    color: var(--header-color);
-    background-color: var(--secondary-color);
-    position: absolute;
-    top: 150px;  /* Adjust to place right under the main button */
-    left: 20px;
-    display: flex;
-    flex-direction: column;  /* Aligns buttons vertically */
-    gap: 10px;  /* Adds space between buttons */
-  }
+.createPlaceButton:hover,
+.createTagButton:hover,
+.postButton:hover,
+.mainButton:hover {
+  background-color: var(--card-hover);
+  box-shadow: 0 0 10px var(--glow-color);
+}
 
-  /* Style for each sub button */
-  .subButton {
-    padding: 10px 15px;
-    color: var(--header-color);
-    background-color: var(--secondary-color);
-    font-size: 16px;
-    cursor: pointer;
-  }
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 1rem;
+  justify-content: center;
+  align-items: center;
+}

@@ -51,8 +51,8 @@ const Profile = () => {
   };
 
   const handleCreateHistoricalPlaceClick = () => {
-  navigate('/create-historical-place', { state: { userId } });
-};
+    navigate('/create-historical-place', { state: { userId } });
+  };
 
   const handleUpdateClick2 = () => {
     navigate('/Search');
@@ -70,105 +70,101 @@ const Profile = () => {
     navigate('/UpcomingItineraries');
   };
 
-  const handleUpcomingHistoricalPlacesClick = () => {
-    navigate('/UpcomingHistoricalPlaces');
-  };
-
-  // New handlers for creating historical tags and viewing historical places
-  const handleCreateHistoricalTagClick = () => {
-    navigate('/historical-tags'); // Navigate to the create historical tag form
-  };
-
   const handleViewHistoricalPlacesClick = () => {
-    navigate('/historical-places', { state: { userId } }); // Navigate to the historical places page with userId
+    navigate('/historical-places', { state: { userId } });
   };
+
+  const handleCreateHistoricalTagClick = () => {
+    navigate('/historical-tags');
+  };
+
   const handleAddItinerary = () => {
-    navigate('/tourguide', { state: { userId } }); // Navigate to the historical places page
+    navigate('/tourguide', { state: { userId } });
   };
 
   return (
-      <div className={styles.container}>
-        <header className={styles.header}>
-          <img src={Logo} alt="Safarny Logo" className={styles.logo} />
-          <h1>Safarny</h1>
-          <nav className={styles.nav}>
-            <Link to="/" className={styles.button}>Back to Home</Link>
-          </nav>
-        </header>
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <img src={Logo} alt="Safarny Logo" className={styles.logo} />
+        <h1>Safarny</h1>
+        <nav className={styles.nav}>
+          <Link to="/" className={styles.button}>Back to Home</Link>
+        </nav>
+      </header>
 
-        <main className={styles.main}>
-          <section className={styles.intro}>
-            <h1>Welcome, {userInfo.username}!</h1>
-            <h5>Your account details:</h5>
-            {Object.entries(userInfo).map(([key, value]) => (
-                <p key={key}>
-                  {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
-                </p>
-            ))}
-          </section>
-        </main>
+      <main className={styles.main}>
+        <section className={styles.intro}>
+          <h1>Welcome, {userInfo.username}!</h1>
+          <h5>Your account details:</h5>
+          {Object.entries(userInfo).map(([key, value]) => (
+            <p key={key}>
+              {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
+            </p>
+          ))}
+        </section>
+      </main>
 
-        <div className={styles.buttonContainer}>
-          <button onClick={handleProductViewClick} className={styles.productButton}>
-            View Products
-          </button>
-          <button onClick={handleUpdateClick2} className={styles.searchButton}>
-            Search
-          </button>
-          <button onClick={handleUpdateClick} className={styles.searchButton}>
-            Update Profile
-          </button>
-        </div>
+      <div className={styles.buttonContainer}>
+        <button onClick={handleProductViewClick} className={styles.productButton}>
+          View Products
+        </button>
+        <button onClick={handleUpdateClick2} className={styles.searchButton}>
+          Search
+        </button>
+        <button onClick={handleUpdateClick} className={styles.searchButton}>
+          Update Profile
+        </button>
+      </div>
 
-        {userInfo.role === 'TourismGovernor' && (
-            <button onClick={handleCreateHistoricalPlaceClick} className={styles.createPlaceButton}>
+      {userInfo.role === 'TourismGovernor' && (
+        <>
+          <button onClick={handleCreateHistoricalPlaceClick} className={styles.createPlaceButton}>
             Create Historical Place
           </button>
-        )}
-
-        {userInfo.role === 'TourismGovernor' && (
           <button onClick={handleCreateHistoricalTagClick} className={styles.createTagButton}>
             Create Historical Tag
           </button>
-        )}
+        </>
+      )}
 
-        {userInfo.role === 'Seller' && (
-            <button onClick={handlePostClick} className={styles.postButton}>
-              Post
-            </button>
-        )}
-        {userInfo.role === 'Advertiser' && (
-            <button onClick={handleAddActivity} className={styles.postButton}>
-              Activity
-            </button>
-        )}
-
-        {userInfo.role === 'TourGuide' && (
-            <button onClick={handleAddItinerary} className={styles.postButton}>
-              Add Itinerary
-            </button>
-        )}
-
-        <button onClick={handleViewButtonClick} className={styles.mainButton}>
-          View Upcoming Events
+      {userInfo.role === 'Seller' && (
+        <button onClick={handlePostClick} className={styles.postButton}>
+          Post
         </button>
+      )}
 
-        {showButtons && (
-            <div className={styles.buttonGroup}>
-              <button className={styles.subButton} onClick={handleUpcomingActivitiesClick}>
-                Upcoming Activities
-              </button>
-              <button className={styles.subButton} onClick={handleUpcomingItinerariesClick}>
-                Upcoming Itineraries
-              </button>
-              <button className={styles.subButton} onClick={handleViewHistoricalPlacesClick}>
-                Upcoming Historical Places
-              </button>
-            </div>
-        )}
+      {userInfo.role === 'Advertiser' && (
+        <button onClick={handleAddActivity} className={styles.postButton}>
+          Activity
+        </button>
+      )}
 
-        <Footer />
-      </div>
+      {userInfo.role === 'TourGuide' && (
+        <button onClick={handleAddItinerary} className={styles.postButton}>
+          Add Itinerary
+        </button>
+      )}
+
+      <button onClick={handleViewButtonClick} className={styles.mainButton}>
+        View Upcoming Events
+      </button>
+
+      {showButtons && (
+        <div className={styles.buttonGroup}>
+          <button className={styles.subButton} onClick={handleUpcomingActivitiesClick}>
+            Upcoming Activities
+          </button>
+          <button className={styles.subButton} onClick={handleUpcomingItinerariesClick}>
+            Upcoming Itineraries
+          </button>
+          <button className={styles.subButton} onClick={handleViewHistoricalPlacesClick}>
+            Upcoming Historical Places
+          </button>
+        </div>
+      )}
+
+      <Footer />
+    </div>
   );
 };
 
