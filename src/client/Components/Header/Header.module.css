@@ -10,27 +10,7 @@
     --card-hover: #444;
     --glow-color: #958efa;
   }
-  
-body{
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
 
-  .container {
-    font-family: 'Arial', sans-serif;
-    color: var(--text-color);
-    background-color: var(--background-color);
-    padding: 0 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    /* height: 100%; */
-  }
-  
   .header {
     position: sticky;
     top: 0;
@@ -47,12 +27,20 @@ body{
     transition: background-color 0.3s;
   }
   
+  .header.translucent {
+    background-color: rgba(26, 26, 26, 0.8);
+  }
+  
   .header h1 {
     margin: 0;
     font-size: 1.5rem;
     color: var(--header-color);
     display: flex;
     align-items: center;
+  }
+  
+  h1 {
+    color: white;
   }
   
   .logo {
@@ -62,50 +50,48 @@ body{
     left: 4rem;
   }
   
-  .nav {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
+  /* Burger menu */
+  .burger {
+    background: none;
+    border: none;
+    color: var(--header-color);
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 1050;
   }
-
+  
+  .burgerIcon {
+    font-size: 2rem;
+    color: white;
+  }
+  
+  .nav {
+    display: none;
+    flex-direction: column;
+    gap: 1rem;
+    position: absolute;
+    top: var(--header-height);
+    right: 0;
+    background-color: var(--primary-color);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+  }
+  
+  .navOpen {
+    display: flex;
+  }
+  
   .button {
     text-decoration: none;
     padding: 0.5rem 1rem;
-    bottom: 150px;
     background-color: var(--secondary-color);
     color: var(--header-color);
     border-radius: 0.5rem;
     transition: background-color 0.3s;
     margin-right: 0.5rem;
+    display: block;
   }
   
   .button:hover {
     background-color: lighten(var(--header-color), 10%);
-  }
-  
-  .main {
-    padding: 2rem 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: rgba(107, 106, 108, 0.8);
-    border-radius: 1rem;
-    margin-top: 2rem;
-    width: 75%;
-    margin-bottom: 50px;
-    
-  }
-  
-  .intro {
-    text-align: center;
-  }
-  
-  h1 {
-    color: white;
-  }
-  
-  p, h5 {
-    color: white;
-    margin: 0.5rem 0;
-    
   }

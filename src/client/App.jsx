@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import React from 'react';
-import Header from './components/Header';
+// import Header from './components/Header';
 // import Products from './Products';
-import Landmarks from './Landmarks';
+// import Landmarks from './Landmarks';
 import Homepage from '/src/client/components/Home/Homepage';
 import Footer from '/src/client/components/Footer/Footer';
 import SignIn from '/src/client/Components/Signin/SignIn';
@@ -62,8 +62,8 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="/products" element={<ProductList />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/landmarks" element={<Landmarks />} />
-        <Route path="/TourGuide" element={<TourGuide />} />
+        {/* <Route path="/landmarks" element={<Landmarks />} /> */}
+        {/* <Route path="/TourGuide" element={<TourGuide />} /> */}
         {/* <Route path="/Advertiser" element={<Advertiser />} /> */}
         {/* <Route path="/Seller" element={<Seller />} /> */}
         <Route path="/Admin" element={<Admin />} />
@@ -99,7 +99,7 @@ function App() {
         <Route path="/UpcomingActivites" element={<UpcomingActivites />} />
         <Route path="/UpcomingItineraries" element={<UpcomingItineraries />} />
         <Route path="/create-historical-place" element={<CreateHistoricalPlace />} />
-        <Route path="/historical-places" element={<ReadHistoricalPlace />} />  {/* Route for ReadHistoricalPlace */}
+        <Route path="/historical-places" element={<ReadHistoricalPlace />} />  
         <Route path="/update-historical-place/:id" element={<UpdateHistoricalPlace />} />
         {/* <Route path="/delete-historical-place/:placeId" element={<DeleteHistoricalPlace />} /> */}
         <Route path="/historical-tags" element={<CreateHistoricalTags/>}/>

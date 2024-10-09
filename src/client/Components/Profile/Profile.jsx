@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './Profile.module.css';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
+import Header from '/src/client/components/Header/Header';
 
 const Profile = () => {
   const location = useLocation();
@@ -84,13 +85,7 @@ const Profile = () => {
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <img src={Logo} alt="Safarny Logo" className={styles.logo} />
-        <h1>Safarny</h1>
-        <nav className={styles.nav}>
-          <Link to="/" className={styles.button}>Back to Home</Link>
-        </nav>
-      </header>
+      <Header />
 
       <main className={styles.main}>
         <section className={styles.intro}>

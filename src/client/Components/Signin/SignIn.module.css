@@ -19,44 +19,6 @@
     background-color: var(--background-color);
   }
   
-  .header {
-    position: absolute;
-    top: 0.5rem;
-    background-color: var(--primary-color);
-    padding: 1rem 2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 1000;
-    width: 90%;
-    border-radius: var(--border-radius);
-  }
-  
-  .header h1 {
-    margin: 0;
-    font-size: 1.5rem;
-    color: var(--header-color);
-  }
-  
-  .nav {
-    display: flex;
-    gap: 1rem;
-  }
-  
-  .button {
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    background-color: var(--secondary-color);
-    color: var(--header-color);
-    border-radius: 0.5rem;
-    transition: background-color 0.3s;
-  }
-  
-  .button:hover {
-    background-color: lighten(var(--secondary-color), 10%);
-  }
-  
   .formContainer {
     background-color: var(--form-background);
     padding: 2rem;
@@ -66,7 +28,7 @@
     text-align: center;
     max-width: 600px; 
     width: 100%;
-    margin: 0 auto;  
+    margin: auto;  
   }
   
   h2 {
@@ -81,18 +43,6 @@
     gap: 1rem;
     width: 95%;
   }
-  
-/* .footer{
-    position: absolute;
-    bottom: -10rem;
-} */
-
-.logo {
-  height: 8rem;
-  margin-right: 1rem;
-  position: absolute;
-  left: 4rem;
-}
 
   label {
     display: flex;

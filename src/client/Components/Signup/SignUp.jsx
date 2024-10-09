@@ -4,6 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Footer from '/src/client/Components/Footer/Footer';
+import Header from '../Header/Header';
 import Logo from '/src/client/Assets/Img/logo.png';
 import styles from './SignUp.module.css';
 
@@ -88,13 +89,7 @@ const SignUp = () => {
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <img src={Logo} alt="Safarny Logo" className={styles.logo} />
-        <h1>Safarny</h1>
-        <nav className={styles.nav}>
-          <Link to="/" className={styles.button}>Back to Home</Link>
-        </nav>
-      </header>
+      <Header />
 
       <div className={styles.formContainer}>
         <h2>Sign Up</h2>

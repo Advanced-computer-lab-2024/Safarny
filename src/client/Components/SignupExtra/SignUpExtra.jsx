@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "/src/client/Components/Footer/Footer";
+
+import Header from "/src/client/Components/Header/Header";
 import Logo from "/src/client/Assets/Img/logo.png";
 import styles from "/src/client/Components/Signup/SignUp.module.css"; // Import your signup styles
 
@@ -74,15 +76,7 @@ const SignUpExtra = () => {
 
   return (
     <div className={styles.container}> {/* Use styles from SignUp.module.css */}
-      <header className={styles.header}>
-        <img src={Logo} alt="Safarny Logo" className={styles.logo} />
-        <h1>Safarny</h1>
-        <nav className={styles.nav}>
-          <Link to="/" className={styles.button}>
-            Back to Home
-          </Link>
-        </nav>
-      </header>
+      <Header />
 
       <div className={styles.formContainer}> {/* Use styles from SignUp.module.css */}
         <h2>Sign up extra</h2>
