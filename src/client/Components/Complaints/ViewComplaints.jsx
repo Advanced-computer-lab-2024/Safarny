@@ -7,35 +7,30 @@ const ViewComplaints = () => {
     const [complaints, setComplaints] = useState([]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
-    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
-        const fetchUserRole = async () => {
+        const fetchComplaints = async () => {
             try {
                 const userId = location.state.userId;
                 console.log('User ID:', userId); // Debugging line
 
-                const userResponse = await axios.get(`/tourist/${userId}`);
-                console.log('User Response:', userResponse.data); // Debugging line
-
-                const userRole = userResponse.data.role;
-                setIsAdmin(userRole === 'admin');
-
-                const complaintsResponse = userRole === 'admin'
-                    ? await axios.get('/admin/complaints')
-                    : await axios.get(`/tourist/complaints/${userId}`);
+                const complaintsResponse = await axios.get(`/tourist/complaints/${userId}`);
                 console.log('Complaints Response:', complaintsResponse.data); // Debugging line
 
                 setComplaints(complaintsResponse.data);
             } catch (err) {
                 console.error('Error:', err); // Detailed error logging
-                setError('Error fetching complaints. Please try again.');
+                if (err.response && err.response.status === 404) {
+                    setError('No complaints found for this submitter.');
+                } else {
+                    setError('Error fetching complaints. Please try again.');
+                }
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchUserRole();
+        fetchComplaints();
     }, [location.state]);
 
     if (loading) {
@@ -48,9 +43,9 @@ const ViewComplaints = () => {
 
     return (
         <div>
-            <h2>{isAdmin ? 'All Complaints' : 'My Complaints'}</h2>
+            <h2>My Complaints</h2>
             {complaints.length === 0 ? (
-                <p>No complaints found.</p>
+                <p>No complaints found. You have not made any complaints yet.</p>
             ) : (
                 <ul>
                     {complaints.map((complaint) => (
