@@ -1,6 +1,16 @@
 const { Router } = require("express");
 const usersController = require("../controllers/usersController.js");
 const searchController = require("../controllers/searchController.js");
+
+const {
+    getAllComplaints,
+    updateComplaintById,
+    getComplaintsBySubmitterId,
+    createComplaint
+} = require('../controllers/userComplaintsController.js');
+
+
+
 const router = Router();
 /*
     1-get/edit this Tourist details
@@ -29,5 +39,10 @@ router.get("/:id", usersController.getProfileById);
 
 // Route for updating a profile by ID
 router.put("/:id", usersController.updateProfileById);
+
+router.get("/complaints", getAllComplaints);
+router.put("/complaints/:id", updateComplaintById);
+router.get("/complaints/:submitterId", getComplaintsBySubmitterId);
+router.post("/complaints", createComplaint);
 
 module.exports = router;

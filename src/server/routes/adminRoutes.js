@@ -40,6 +40,14 @@ const {
     deleteTagById,
 } = require('../controllers/tagsController');
 
+
+const {
+    getAllComplaints,
+    updateComplaintById,
+
+} = require("../controllers/userComplaintsController.js");
+
+
 /*
     1-post toursimGoverner
     2-delete user
@@ -104,5 +112,8 @@ router.post("/category", createCategory);
 router.get("/category", getCategories);
 router.put("/category/:id", updateCategory);
 router.delete("/category/:id", deleteCategory);
+
+router.get("/complaints", getAllComplaints);
+router.put("/complaints/:id", updateComplaintById);
 
 module.exports = router;

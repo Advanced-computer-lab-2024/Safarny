@@ -51,6 +51,10 @@ import EditTags from './Components/Tags/editTags';
 import UpcomingItineraries from './Components/UpcomingEvents/UpcomingItineraries';
 //import UpcomingHistoricalPlaces from './Components/UpcomingEvents/UpcomingHistoricalPlaces';
 //import UpcomingItineraries from './Components/UpcomingEvents/UpcomingItineraries';
+import CreateComplaints from "./Components/Complaints/CreateComplaints";
+import ViewComplaints from "./Components/Complaints/ViewComplaints";
+import AdminViewComplaints from "./Components/Complaints/AminViewComplaints";
+import AdminEditComplaints from "./Components/Complaints/AdminEditComplaints";
 
 
 
@@ -103,6 +107,10 @@ function App() {
         <Route path="/update-historical-place/:id" element={<UpdateHistoricalPlace />} />
         {/* <Route path="/delete-historical-place/:placeId" element={<DeleteHistoricalPlace />} /> */}
         <Route path="/historical-tags" element={<CreateHistoricalTags/>}/>
+        <Route path="/createcomplaints" element={<CreateComplaints />} />
+        <Route path="/viewcomplaints" element={<ViewComplaints />} />
+        <Route path="/adminviewcomplaints" element={<AdminViewComplaints />} />
+        <Route path="/admineditcomplaints" element={<AdminEditComplaints />} />
       </Routes>
     </Router>
   );

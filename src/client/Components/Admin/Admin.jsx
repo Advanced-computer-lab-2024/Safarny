@@ -169,6 +169,15 @@ const Admin = () => {
           >
             Home
           </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            component={Link}
+            to="/adminviewcomplaints"
+            style={{ marginLeft: '20px' }}
+          >
+            View Complaints
+          </Button>
         </div>
 
         {errorMessage && <Alert severity="error">{errorMessage}</Alert>}

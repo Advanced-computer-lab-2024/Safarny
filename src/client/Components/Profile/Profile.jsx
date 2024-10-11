@@ -83,6 +83,14 @@ const Profile = () => {
     navigate('/tourguide', { state: { userId } });
   };
 
+  const handleCreateComplaint = () => {
+    navigate('/createcomplaints', { state: { userId } });
+  }
+
+  const handleViewComplaints = () => {
+    navigate('/viewcomplaints', { state: { userId } });
+  }
+
   return (
     <div className={styles.container}>
       <Header />
@@ -138,6 +146,16 @@ const Profile = () => {
         <button onClick={handleAddItinerary} className={styles.postButton}>
           Add Itinerary
         </button>
+      )}
+      {userInfo.role === 'Tourist' && (
+          <div>
+            <button onClick={handleCreateComplaint} className={styles.postButton}>
+                Create Complaint
+             </button>
+            <button onClick={handleViewComplaints} className={styles.postButton}>
+                View Complaints
+            </button>
+        </div>
       )}
 
       <button onClick={handleViewButtonClick} className={styles.mainButton}>
