@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "/src/client/Components/Footer/Footer";
-
 import Header from "/src/client/Components/Header/Header";
-import Logo from "/src/client/Assets/Img/logo.png";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../../../server/config/Firebase"; // Adjust the path as necessary
 import styles from "/src/client/Components/Signup/SignUp.module.css"; // Import your signup styles
 
 const SignUpExtra = () => {
@@ -14,7 +14,10 @@ const SignUpExtra = () => {
   const [userType, setUserType] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-
+  
+  // Image upload state
+  const [imageFile, setImageFile] = useState(null);
+  
   // Additional state variables for the input fields based on user type
   const [websiteLink, setWebsiteLink] = useState("");
   const [hotline, setHotline] = useState("");
@@ -31,25 +34,58 @@ const SignUpExtra = () => {
 
   const navigate = useNavigate();
 
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    setImageFile(file);
+  };
+
+  const uploadImage = async (file) => {
+    const storageRef = ref(storage, `images/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    return new Promise((resolve, reject) => {
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log(`Upload is ${progress}% done`);
+        },
+        (error) => reject(error),
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            resolve(downloadURL);
+          });
+        }
+      );
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const userData = {
-      username,
-      password,
-      email,
-      role: userType,
-      CompanyLink: websiteLink,
-      CompanyHotline: hotline,
-      CompanyName: companyProfile,
-      sellerName,
-      description,
-      mobile: mobileNumber,
-      YearOfExp: experience,
-      PrevWork: previousWork,
-    };
-
+    
     try {
+      let imageUrl = null;
+      // Upload image if a file is selected
+      if (imageFile) {
+        imageUrl = await uploadImage(imageFile);
+      }
+
+      const userData = {
+        username,
+        password,
+        email,
+        role: userType,
+        image: imageUrl, // Include image URL in the user data
+        CompanyLink: websiteLink,
+        CompanyHotline: hotline,
+        CompanyName: companyProfile,
+        sellerName,
+        description,
+        mobile: mobileNumber,
+        YearOfExp: experience,
+        PrevWork: previousWork,
+      };
+
       const response = await axios.post("/guest/others-signup", userData);
       if (response.status === 201) {
         setSuccess(true);
@@ -77,12 +113,10 @@ const SignUpExtra = () => {
   return (
     <div className={styles.container}> {/* Use styles from SignUp.module.css */}
       <Header />
-
       <div className={styles.formContainer}> {/* Use styles from SignUp.module.css */}
         <h2>Sign up extra</h2>
         {success && <p className={styles.successMessage}>Sign up successful!</p>} {/* Use styles from SignUp.module.css */}
         {error && <p className={styles.errorMessage}>{error}</p>} {/* Use styles from SignUp.module.css */}
-
         <form onSubmit={handleSubmit} className={styles.form}> {/* Use styles from SignUp.module.css */}
           <label>
             Username:
@@ -124,6 +158,14 @@ const SignUpExtra = () => {
               <option value="Seller">Seller</option>
             </select>
           </label>
+
+          {/* Image upload field */}
+          {userType && (
+            <label>
+              Upload Image:
+              <input type="file" accept="image/*" onChange={handleImageUpload} required />
+            </label>
+          )}
 
           {/* Advertiser Input Fields */}
           {textBoxes[0] && (

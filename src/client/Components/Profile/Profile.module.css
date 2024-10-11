@@ -31,60 +31,7 @@ body{
   position: absolute;
   top: 0;
   width: 100%;
-  /* height: 150%; */
 }
-/* 
-.header {
-  position: sticky;
-  top: 0;
-  background-color: var(--primary-color);
-  padding: 1rem 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 1000;
-  height: var(--header-height);
-  border-radius: var(--border-radius);
-  width: 90%;
-  transition: background-color 0.3s;
-}
-
-.header h1 {
-  margin: 0;
-  font-size: 1.5rem;
-  color: var(--header-color);
-  display: flex;
-  align-items: center;
-}
-
-.logo {
-  height: 8rem;
-  margin-right: 1rem;
-  position: absolute;
-  left: 4rem;
-}
-
-.nav {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-}
-
-.button {
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  bottom: 150px;
-  background-color: var(--secondary-color);
-  color: var(--header-color);
-  border-radius: 0.5rem;
-  transition: background-color 0.3s;
-  margin-right: 0.5rem;
-}
-
-.button:hover {
-  background-color: lighten(var(--header-color), 10%);
-} */
 
 .main {
   padding: 2rem 0;
@@ -132,6 +79,19 @@ p, h5 {
 .buttonContainer button:hover {
   background-color: var(--card-hover);
   box-shadow: 0 0 10px var(--glow-color);
+}
+
+.imageUpload {
+  margin-top: 20px;
+  text-align: center; /* Center the content */
+}
+
+.profileImage {
+  margin-top: 10px;
+  max-width: 150px; /* Set a maximum width for the image */
+  max-height: 150px; /* Set a maximum height for the image */
+  border-radius: var(--border-radius); /* Match your card styles */
+  border: 2px solid var(--secondary-color); /* Add a border if needed */
 }
 
 .createPlaceButton,

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './Profile.module.css';
-import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
 import Header from '/src/client/components/Header/Header';
 
@@ -13,6 +12,7 @@ const Profile = () => {
     username: '',
     email: '',
     role: '',
+    image: '' // Added image field
   });
 
   const [showButtons, setShowButtons] = useState(false);
@@ -24,14 +24,15 @@ const Profile = () => {
         if (!response.ok) {
           throw new Error('Failed to fetch user data');
         }
-        const { password, __v, _id, ...userData } = await response.json();
-        setUserInfo(userData);
+        const { password, __v, _id, imageurl, ...userData } = await response.json();
+        setUserInfo({ ...userData, image: imageurl }); // Ensure image is set correctly
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
     };
     fetchUserData();
   }, [userId]);
+
 
   const handleUpdateClick = () => {
     localStorage.setItem('userId', userId);
@@ -99,11 +100,16 @@ const Profile = () => {
         <section className={styles.intro}>
           <h1>Welcome, {userInfo.username}!</h1>
           <h5>Your account details:</h5>
-          {Object.entries(userInfo).map(([key, value]) => (
-            <p key={key}>
-              {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
-            </p>
-          ))}
+          {Object.entries(userInfo)
+            .filter(([key]) => key !== 'image') // Exclude the image key
+            .map(([key, value]) => (
+              <p key={key}>
+                {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
+              </p>
+            ))}
+          {userInfo.image && ( // Display the profile image if available
+            <img src={userInfo.image} alt="Profile" className={styles.profileImage} />
+          )}
         </section>
       </main>
 
@@ -147,14 +153,15 @@ const Profile = () => {
           Add Itinerary
         </button>
       )}
+
       {userInfo.role === 'Tourist' && (
-          <div>
-            <button onClick={handleCreateComplaint} className={styles.postButton}>
-                Create Complaint
-             </button>
-            <button onClick={handleViewComplaints} className={styles.postButton}>
-                View Complaints
-            </button>
+        <div>
+          <button onClick={handleCreateComplaint} className={styles.postButton}>
+            Create Complaint
+          </button>
+          <button onClick={handleViewComplaints} className={styles.postButton}>
+            View Complaints
+          </button>
         </div>
       )}
 

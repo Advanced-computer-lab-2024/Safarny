@@ -12,8 +12,12 @@ const sellerSchema = new Schema(
       required: true,
     },
     password: {
-      type: Number,
+      type: String, // Changed to String for security (passwords should be strings)
       required: true,
+    },
+    image: { // New field for profile image
+      type: String,
+      default: '' // Default to an empty string if no image is provided
     },
   },
   { timestamps: true }
