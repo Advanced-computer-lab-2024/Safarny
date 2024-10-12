@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Footer from '/src/client/Components/Footer/Footer';
 import Header from '../Header/Header';
-import Logo from '/src/client/Assets/Img/logo.png';
 import styles from './SignUp.module.css';
 
 // List of countries
@@ -40,20 +39,18 @@ const SignUp = () => {
   const [employed, setEmployed] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const [DOB, setDob] = useState('');
-  const age = calculateAge(DOB);
+  const [DOB, setDob] = useState(null);
+  const [termsAccepted, setTermsAccepted] = useState(false); // New state for terms and conditions
+  const age = DOB ? calculateAge(DOB) : null;
 
   function calculateAge(dob) {
     const dobDate = new Date(dob);
     const today = new Date();
-
     let age = today.getFullYear() - dobDate.getFullYear();
-
     const monthDiff = today.getMonth() - dobDate.getMonth();
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dobDate.getDate())) {
       age--;
     }
-
     return age;
   }
 
@@ -62,6 +59,11 @@ const SignUp = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!termsAccepted) {
+      setError('You must accept the terms and conditions to sign up.');
+      return;
+    }
 
     const userData = {
       username,
@@ -96,7 +98,6 @@ const SignUp = () => {
         {success && <p className={styles.successMessage}>Sign up successful!</p>}
         {error && <p className={styles.errorMessage}>{error}</p>}
 
-        {/* Form structure with state handlers */}
         <form onSubmit={handleSubmit} className={styles.form}>
           <label>
             Name:
@@ -128,14 +129,17 @@ const SignUp = () => {
               required
             />
           </label>
-          <label htmlFor="dob">Date of Birth:</label>
-          <DatePicker
-            selected={DOB}
-            onChange={(date) => setDob(date)}
-            dateFormat="MM/dd/yyyy"
-            className="form-control"
-            placeholderText="Select your date of birth"
-          />
+          <label>
+            Date of Birth:
+            <DatePicker
+              selected={DOB}
+              onChange={(date) => setDob(date)}
+              dateFormat="MM/dd/yyyy"
+              className="form-control"
+              placeholderText="Select your date of birth"
+              required
+            />
+          </label>
           <label>
             Mobile:
             <input
@@ -171,6 +175,31 @@ const SignUp = () => {
               <option value="No">No</option>
             </select>
           </label>
+
+          {/* Terms and Conditions */}
+          <div className={styles.terms}>
+            <input
+              type="checkbox"
+              id="terms"
+              checked={termsAccepted}
+              onChange={(e) => setTermsAccepted(e.target.checked)}
+              required
+            />
+            <label htmlFor="terms">
+              I agree to the following terms and conditions:
+            </label>
+            <div className={styles.termsText}>
+              <p>
+                By signing up, you agree to the following terms and conditions:
+              </p>
+              <ul>
+                <li>You must be at least 18 years old to register.</li>
+                <li>Your personal information will be used in accordance with our privacy policy.</li>
+                <li>Your account can be suspended for any violation of the community guidelines.</li>
+                <li>We reserve the right to modify or terminate the service at any time without prior notice.</li>
+              </ul>
+            </div>
+          </div>
 
           <button type="submit" className={styles.button}>
             Sign Up

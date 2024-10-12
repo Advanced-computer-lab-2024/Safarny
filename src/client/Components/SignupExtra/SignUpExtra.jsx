@@ -7,6 +7,28 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../server/config/Firebase"; // Adjust the path as necessary
 import styles from "/src/client/Components/Signup/SignUp.module.css"; // Import your signup styles
 
+// List of countries for nationality dropdown
+const countries = [
+  "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
+  "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia",
+  "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cape Verde", "Cambodia",
+  "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo, Democratic Republic of the Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica",
+  "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia",
+  "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea",
+  "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Occupied Palestine",
+  "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kosovo", "Kuwait",
+  "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar",
+  "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova",
+  "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand",
+  "Nicaragua", "Niger", "Nigeria", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Palestine", "Panama", "Papua New Guinea",
+  "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia",
+  "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles",
+  "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Sudan", "Spain", "Sri Lanka",
+  "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga",
+  "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom",
+  "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
+];
+
 const SignUpExtra = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -14,23 +36,24 @@ const SignUpExtra = () => {
   const [userType, setUserType] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  
+
   // Image upload state
   const [imageFile, setImageFile] = useState(null);
-  
+
   // Additional state variables for the input fields based on user type
   const [websiteLink, setWebsiteLink] = useState("");
   const [hotline, setHotline] = useState("");
   const [companyProfile, setCompanyProfile] = useState("");
-
   const [sellerName, setSellerName] = useState("");
   const [description, setDescription] = useState("");
-
   const [mobileNumber, setMobileNumber] = useState("");
   const [experience, setExperience] = useState("");
   const [previousWork, setPreviousWork] = useState("");
-
+  const [nationality, setNationality] = useState(""); // New state for nationality
   const [textBoxes, setTextBoxes] = useState(new Array(3).fill(false));
+
+  // State for Terms and Conditions
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const navigate = useNavigate();
 
@@ -62,10 +85,15 @@ const SignUpExtra = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
+    // Check if terms are accepted
+    if (!termsAccepted) {
+      setError("Please accept the terms and conditions to proceed.");
+      return;
+    }
+
     try {
       let imageUrl = null;
-      // Upload image if a file is selected
       if (imageFile) {
         imageUrl = await uploadImage(imageFile);
       }
@@ -84,6 +112,7 @@ const SignUpExtra = () => {
         mobile: mobileNumber,
         YearOfExp: experience,
         PrevWork: previousWork,
+        nationality, // Include nationality in the user data
       };
 
       const response = await axios.post("/guest/others-signup", userData);
@@ -111,13 +140,13 @@ const SignUpExtra = () => {
   };
 
   return (
-    <div className={styles.container}> {/* Use styles from SignUp.module.css */}
+    <div className={styles.container}>
       <Header />
-      <div className={styles.formContainer}> {/* Use styles from SignUp.module.css */}
-        <h2>Sign up extra</h2>
-        {success && <p className={styles.successMessage}>Sign up successful!</p>} {/* Use styles from SignUp.module.css */}
-        {error && <p className={styles.errorMessage}>{error}</p>} {/* Use styles from SignUp.module.css */}
-        <form onSubmit={handleSubmit} className={styles.form}> {/* Use styles from SignUp.module.css */}
+      <div className={styles.formContainer}>
+        <h2>Sign Up Extra</h2>
+        {success && <p className={styles.successMessage}>Sign up successful!</p>}
+        {error && <p className={styles.errorMessage}>{error}</p>}
+        <form onSubmit={handleSubmit} className={styles.form}>
           <label>
             Username:
             <input
@@ -146,6 +175,17 @@ const SignUpExtra = () => {
             />
           </label>
           <label>
+            Nationality:
+            <select value={nationality} onChange={(e) => setNationality(e.target.value)} required>
+              <option value="">Select Nationality</option>
+              {countries.map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
             I am a:
             <select
               value={userType}
@@ -159,7 +199,6 @@ const SignUpExtra = () => {
             </select>
           </label>
 
-          {/* Image upload field */}
           {userType && (
             <label>
               Upload Image:
@@ -167,7 +206,6 @@ const SignUpExtra = () => {
             </label>
           )}
 
-          {/* Advertiser Input Fields */}
           {textBoxes[0] && (
             <>
               <label>
@@ -199,7 +237,6 @@ const SignUpExtra = () => {
             </>
           )}
 
-          {/* Seller Input Fields */}
           {textBoxes[1] && (
             <>
               <label>
@@ -222,7 +259,6 @@ const SignUpExtra = () => {
             </>
           )}
 
-          {/* Tour Guide Input Fields */}
           {textBoxes[2] && (
             <>
               <label>
@@ -253,7 +289,32 @@ const SignUpExtra = () => {
             </>
           )}
 
-          <button type="submit" className={styles.button}> {/* Use styles from SignUp.module.css */}
+          {/* Terms and Conditions */}
+          <div className={styles.terms}>
+            <input
+              type="checkbox"
+              id="terms"
+              checked={termsAccepted}
+              onChange={(e) => setTermsAccepted(e.target.checked)}
+              required
+            />
+            <label htmlFor="terms">
+              I agree to the following terms and conditions:
+            </label>
+            <div className={styles.termsText}>
+              <p>
+                By signing up, you agree to the following terms and conditions:
+              </p>
+              <ul>
+                <li>You must be at least 18 years old to register.</li>
+                <li>Your personal information will be used in accordance with our privacy policy.</li>
+                <li>Your account can be suspended for any violation of the community guidelines.</li>
+                <li>We reserve the right to modify or terminate the service at any time without prior notice.</li>
+              </ul>
+            </div>
+          </div> 
+
+          <button type="submit" className={styles.button}>
             Sign Up
           </button>
         </form>
