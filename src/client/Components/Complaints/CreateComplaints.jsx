@@ -20,7 +20,7 @@ const CreateComplaints = () => {
     const complaint = {
       title,
       body,
-      status: 'not started', // Hardcode status to 'not started'
+      status: 'pending', // Hardcode status to 'not started'
       submitterId,
       date: new Date().toISOString() // Add current date
     };
