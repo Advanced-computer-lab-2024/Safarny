@@ -1,19 +1,17 @@
 const Post = require("../models/Posts.js");
 
-// Controller for creating a new post (product)
 const createPost = async (req, res) => {
   try {
-    const { details, price, quantity, imageurl } = req.body;
+    const { details, price, quantity, imageurl, createdby } = req.body;
 
-    // Create a new Post (Product)
     const newPost = new Post({
       details,
       price,
       quantity,
       imageurl,
+      createdby,
     });
 
-    // Save the new post to the database
     const savedPost = await newPost.save();
 
     res.status(201).json({
@@ -25,27 +23,37 @@ const createPost = async (req, res) => {
   }
 };
 
-// Controller to get all posts (products)
 const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find(); // Fetch all posts
+    const posts = await Post.find();
     res.status(200).json(posts);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Controller to update a post (product) by its _id
+const getAllPostsBySellerId = async (req, res) => {
+  try {
+    const sellerId = req.params.sellerid;
+    const posts = await Post.find({ createdby: sellerId }).populate(
+      "createdby"
+    );
+    console.log(posts);
+    res.status(200).json(posts);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 const updatePostById = async (req, res) => {
   try {
     const postId = req.params.id;
     const { details, price, quantity, imageurl } = req.body;
 
-    // Find the post by its ID and update it with new data
     const updatedPost = await Post.findByIdAndUpdate(
       postId,
       { details, price, quantity, imageurl },
-      { new: true, runValidators: true } // Return the updated document
+      { new: true, runValidators: true }
     );
 
     if (!updatedPost) {
@@ -61,12 +69,10 @@ const updatePostById = async (req, res) => {
   }
 };
 
-// Controller to delete a post (product) by its _id
 const deletePostById = async (req, res) => {
   try {
     const postId = req.params.id;
 
-    // Find the post by its ID and delete it
     const deletedPost = await Post.findByIdAndDelete(postId);
 
     if (!deletedPost) {
@@ -84,4 +90,5 @@ module.exports = {
   getAllPosts,
   updatePostById,
   deletePostById,
+  getAllPostsBySellerId,
 };

@@ -1,52 +1,68 @@
-import React, { useState, useEffect } from 'react';
-import SideBar from '../SideBar';
-import { Button, Modal, TextField, Typography, Card, CardContent, CardActions, Alert } from '@mui/material';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+
+import {
+  Button,
+  Modal,
+  TextField,
+  Typography,
+  Card,
+  CardContent,
+  CardActions,
+  Alert,
+} from "@mui/material";
+import axios from "axios";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage } from '../../../server/config/Firebase';
-import Tags from './tagAdmin'; // Import the Tags component
-import { Link } from 'react-router-dom';
-import ActivityCategory from './ActivityCategory';
+import { storage } from "../../server/config/Firebase";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Admin = () => {
   const [openModal, setOpenModal] = useState(false);
   const [posts, setPosts] = useState([]);
-  const [currentPost, setCurrentPost] = useState({ details: '', price: '', quantity: '', imageurl: '' });
+  const [currentPost, setCurrentPost] = useState({
+    details: "",
+    price: "",
+    quantity: "",
+    imageurl: "",
+  });
   const [editingPostId, setEditingPostId] = useState(null);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedSection, setSelectedSection] = useState('posts'); // State to manage selected section
+  const [selectedSection, setSelectedSection] = useState("posts");
 
-  // Search, Filter and Sort states
-  const [searchTerm, setSearchTerm] = useState('');
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
-  const [sortBy, setSortBy] = useState(''); // Can be 'rating'` or any other criteria
+  const [searchTerm, setSearchTerm] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [sortBy, setSortBy] = useState("");
+
+  const location = useLocation();
+  const { userId } = location.state;
+  const sellerId = userId;
 
   useEffect(() => {
-    if (selectedSection === 'posts') {
+    if (selectedSection === "posts") {
       fetchPosts();
     }
   }, [selectedSection]);
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get('/admin/products');
+      const response = await axios.get(`/seller/products/${sellerId}`);
       setPosts(response.data);
+      console.log(sellerId);
     } catch (error) {
-      setErrorMessage('Failed to fetch posts');
+      setErrorMessage("Failed to fetch posts");
     }
   };
 
   const handleOpenModal = () => {
-    setCurrentPost({ details: '', price: '', quantity: '', imageurl: '' });
+    setCurrentPost({ details: "", price: "", quantity: "", imageurl: "" });
     setEditingPostId(null);
     setOpenModal(true);
   };
 
   const handleCloseModal = () => {
     setOpenModal(false);
-    setErrorMessage('');
+    setErrorMessage("");
     setSelectedImage(null);
   };
 
@@ -69,7 +85,8 @@ const Admin = () => {
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           console.log(`Upload is ${progress}% done`);
         },
         (error) => reject(error),
@@ -95,14 +112,17 @@ const Admin = () => {
 
     try {
       if (editingPostId) {
-        await axios.put(`/admin/products/${editingPostId}`, postData);
+        await axios.put(`/seller/products/${editingPostId}`, postData);
       } else {
-        await axios.post('/admin/createProduct', postData);
+        await axios.post("/seller/createProduct", {
+          ...postData,
+          createdby: sellerId,
+        });
       }
       fetchPosts();
       handleCloseModal();
     } catch (error) {
-      setErrorMessage(`Failed to ${editingPostId ? 'update' : 'add'} post`);
+      setErrorMessage(`Failed to ${editingPostId ? "update" : "add"} post`);
     }
   };
 
@@ -112,71 +132,41 @@ const Admin = () => {
     setOpenModal(true);
   };
 
-  const handleDeletePost = async (postId) => {
-    try {
-      await axios.delete(`/admin/products/${postId}`);
-      fetchPosts();
-    } catch (error) {
-      setErrorMessage('Failed to delete post');
-    }
-  };
-
   // Search, Filter, and Sort functionality
   const filteredPosts = posts.filter((post) => {
-    const matchesSearch = post.details.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = post.details
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
     const matchesPrice =
-      (minPrice === '' || post.price >= minPrice) &&
-      (maxPrice === '' || post.price <= maxPrice);
+      (minPrice === "" || post.price >= minPrice) &&
+      (maxPrice === "" || post.price <= maxPrice);
     return matchesSearch && matchesPrice;
   });
 
   const sortedPosts = [...filteredPosts].sort((a, b) => {
-    if (sortBy === 'rating') {
+    if (sortBy === "rating") {
       return b.rating - a.rating; // Adjust according to your rating property
     }
     return 0; // No sorting by default
   });
 
   return (
-    <div style={{ display: 'flex' }}>
-      <SideBar />
-      <div style={{ marginLeft: '250px', padding: '20px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-          <Button variant="contained" color="primary" onClick={handleOpenModal} style={{ marginRight: '10px' }}>
+    <div style={{ display: "flex" }}>
+      <div style={{ marginLeft: "250px", padding: "20px" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "20px",
+          }}
+        >
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleOpenModal}
+            style={{ marginRight: "10px" }}
+          >
             Add Post
-          </Button>
-          <Button variant="contained" color="secondary" onClick={() => setSelectedSection('tags')} style={{ marginRight: '10px' }}>
-            Manage Tags
-          </Button>
-          <Button variant="contained" color="secondary" onClick={() => setSelectedSection('ActivityCategory')} style={{ marginRight: '10px' }}>
-            Manage categories
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            component={Link}
-            to="/adminaddgovernor"
-            style={{ marginLeft: '20px' }}
-          >
-            Add Governor
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            component={Link}
-            to="/"
-            style={{ marginLeft: '20px' }}
-          >
-            Home
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            component={Link}
-            to="/adminviewcomplaints"
-            style={{ marginLeft: '20px' }}
-          >
-            View Complaints
           </Button>
         </div>
 
@@ -193,14 +183,20 @@ const Admin = () => {
         />
 
         {/* Price Filter */}
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "1rem",
+          }}
+        >
           <TextField
             label="Min Price"
             variant="outlined"
             type="number"
             value={minPrice}
             onChange={(e) => setMinPrice(e.target.value)}
-            style={{ marginRight: '10px' }}
+            style={{ marginRight: "10px" }}
           />
           <TextField
             label="Max Price"
@@ -221,44 +217,58 @@ const Admin = () => {
             native: true,
           }}
           variant="outlined"
-          style={{ marginBottom: '1rem' }}
+          style={{ marginBottom: "1rem" }}
         >
           <option value="">None</option>
           <option value="rating">Rating</option>
         </TextField>
 
-        {selectedSection === 'posts' && (
-          <div style={{ marginTop: '20px' }}>
+        {selectedSection === "posts" && (
+          <div style={{ marginTop: "20px" }}>
             {sortedPosts.map((post) => (
-              <Card key={post._id} sx={{ maxWidth: 345, margin: '10px', backgroundColor: 'white' }}>
+              <Card
+                key={post._id}
+                sx={{ maxWidth: 345, margin: "10px", backgroundColor: "white" }}
+              >
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
                     {post.details}
                   </Typography>
                   <div>Price: {post.price}</div>
                   <div>Quantity: {post.quantity}</div>
-                  <img src={post.imageurl} alt="Post" style={{ width: '100%', height: 'auto' }} />
+                  <img
+                    src={post.imageurl}
+                    alt="Post"
+                    style={{ width: "100%", height: "auto" }}
+                  />
                 </CardContent>
                 <CardActions>
-                  <Button size="small" color="primary" onClick={() => handleEditPost(post)}>
+                  <Button
+                    size="small"
+                    color="primary"
+                    onClick={() => handleEditPost(post)}
+                  >
                     Edit
-                  </Button>
-                  <Button size="small" color="secondary" onClick={() => handleDeletePost(post._id)}>
-                    Delete
                   </Button>
                 </CardActions>
               </Card>
             ))}
           </div>
         )}
-
-        {selectedSection === 'tags' && <Tags />} {/* Render Tags component */}
-        {selectedSection === 'ActivityCategory' && <ActivityCategory />} {/* Render ActivityCategory component */}
       </div>
 
       <Modal open={openModal} onClose={handleCloseModal}>
-        <div style={{ padding: '20px', backgroundColor: 'white', margin: '100px auto', width: '400px' }}>
-          <Typography variant="h6">{editingPostId ? 'Edit Post' : 'Add New Post'}</Typography>
+        <div
+          style={{
+            padding: "20px",
+            backgroundColor: "white",
+            margin: "100px auto",
+            width: "400px",
+          }}
+        >
+          <Typography variant="h6">
+            {editingPostId ? "Edit Post" : "Add New Post"}
+          </Typography>
           <TextField
             fullWidth
             label="Details"
@@ -289,15 +299,15 @@ const Admin = () => {
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            style={{ margin: '10px 0' }}
+            style={{ margin: "10px 0" }}
           />
           <Button
             variant="contained"
             color="primary"
             onClick={handleSubmitPost}
-            style={{ marginTop: '20px' }}
+            style={{ marginTop: "20px" }}
           >
-            {editingPostId ? 'Update Post' : 'Add Post'}
+            {editingPostId ? "Update Post" : "Add Post"}
           </Button>
         </div>
       </Modal>

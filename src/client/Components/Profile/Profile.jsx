@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import styles from './Profile.module.css';
-import Footer from '/src/client/components/Footer/Footer';
-import Header from '/src/client/components/Header/Header';
+import React, { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import styles from "./Profile.module.css";
+import Footer from "/src/client/components/Footer/Footer";
+import Header from "/src/client/components/Header/Header";
 
 const Profile = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { userId } = location.state;
   const [userInfo, setUserInfo] = useState({
-    username: '',
-    email: '',
-    role: '',
-    image: '' // Added image field
+    username: "",
+    email: "",
+    role: "",
+    image: "", // Added image field
   });
 
   const [showButtons, setShowButtons] = useState(false);
@@ -22,75 +22,79 @@ const Profile = () => {
       try {
         const response = await fetch(`/tourist/profile?id=${userId}`);
         if (!response.ok) {
-          throw new Error('Failed to fetch user data');
+          throw new Error("Failed to fetch user data");
         }
-        const { password, __v, _id, imageurl, ...userData } = await response.json();
+        const { password, __v, _id, imageurl, ...userData } =
+          await response.json();
         setUserInfo({ ...userData, image: imageurl }); // Ensure image is set correctly
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error("Error fetching user data:", error);
       }
     };
     fetchUserData();
   }, [userId]);
 
-
   const handleUpdateClick = () => {
-    localStorage.setItem('userId', userId);
-    window.location.href = '/UpdateProfile';
+    localStorage.setItem("userId", userId);
+    window.location.href = "/UpdateProfile";
   };
 
   const handleProductViewClick = () => {
-    navigate('/products');
+    navigate("/products");
+  };
+
+  const handleSellerHomeClick = () => {
+    navigate("/seller", { state: { userId } });
   };
 
   const handlePostClick = () => {
-    navigate('/create-post');
+    navigate("/create-post");
   };
 
   const handleAddActivity = () => {
-    localStorage.setItem('userId', userId);
-    navigate('/AdvertiserMain');
+    localStorage.setItem("userId", userId);
+    navigate("/AdvertiserMain");
   };
 
   const handleCreateHistoricalPlaceClick = () => {
-    navigate('/create-historical-place', { state: { userId } });
+    navigate("/create-historical-place", { state: { userId } });
   };
 
   const handleUpdateClick2 = () => {
-    navigate('/Search');
+    navigate("/Search");
   };
 
   const handleViewButtonClick = () => {
-    setShowButtons(prevShow => !prevShow);
+    setShowButtons((prevShow) => !prevShow);
   };
 
   const handleUpcomingActivitiesClick = () => {
-    navigate('/UpcomingActivites');
+    navigate("/UpcomingActivites");
   };
 
   const handleUpcomingItinerariesClick = () => {
-    navigate('/UpcomingItineraries');
+    navigate("/UpcomingItineraries");
   };
 
   const handleViewHistoricalPlacesClick = () => {
-    navigate('/historical-places', { state: { userId } });
+    navigate("/historical-places", { state: { userId } });
   };
 
   const handleCreateHistoricalTagClick = () => {
-    navigate('/historical-tags');
+    navigate("/historical-tags");
   };
 
   const handleAddItinerary = () => {
-    navigate('/tourguide', { state: { userId } });
+    navigate("/tourguide", { state: { userId } });
   };
 
   const handleCreateComplaint = () => {
-    navigate('/createcomplaints', { state: { userId } });
-  }
+    navigate("/createcomplaints", { state: { userId } });
+  };
 
   const handleViewComplaints = () => {
-    navigate('/viewcomplaints', { state: { userId } });
-  }
+    navigate("/viewcomplaints", { state: { userId } });
+  };
 
   return (
     <div className={styles.container}>
@@ -101,20 +105,27 @@ const Profile = () => {
           <h1>Welcome, {userInfo.username}!</h1>
           <h5>Your account details:</h5>
           {Object.entries(userInfo)
-            .filter(([key]) => key !== 'image') // Exclude the image key
+            .filter(([key]) => key !== "image") // Exclude the image key
             .map(([key, value]) => (
               <p key={key}>
                 {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
               </p>
             ))}
           {userInfo.image && ( // Display the profile image if available
-            <img src={userInfo.image} alt="Profile" className={styles.profileImage} />
+            <img
+              src={userInfo.image}
+              alt="Profile"
+              className={styles.profileImage}
+            />
           )}
         </section>
       </main>
 
       <div className={styles.buttonContainer}>
-        <button onClick={handleProductViewClick} className={styles.productButton}>
+        <button
+          onClick={handleProductViewClick}
+          className={styles.productButton}
+        >
           View Products
         </button>
         <button onClick={handleUpdateClick2} className={styles.searchButton}>
@@ -125,36 +136,47 @@ const Profile = () => {
         </button>
       </div>
 
-      {userInfo.role === 'TourismGovernor' && (
+      {userInfo.role === "TourismGovernor" && (
         <>
-          <button onClick={handleCreateHistoricalPlaceClick} className={styles.createPlaceButton}>
+          <button
+            onClick={handleCreateHistoricalPlaceClick}
+            className={styles.createPlaceButton}
+          >
             Create Historical Place
           </button>
-          <button onClick={handleCreateHistoricalTagClick} className={styles.createTagButton}>
+          <button
+            onClick={handleCreateHistoricalTagClick}
+            className={styles.createTagButton}
+          >
             Create Historical Tag
           </button>
         </>
       )}
 
-      {userInfo.role === 'Seller' && (
+      {userInfo.role === "Seller" && (
         <button onClick={handlePostClick} className={styles.postButton}>
           Post
         </button>
       )}
+      {userInfo.role === "Seller" && (
+        <button onClick={handleSellerHomeClick} className={styles.postButton}>
+          Seller Home
+        </button>
+      )}
 
-      {userInfo.role === 'Advertiser' && (
+      {userInfo.role === "Advertiser" && (
         <button onClick={handleAddActivity} className={styles.postButton}>
           Activity
         </button>
       )}
 
-      {userInfo.role === 'TourGuide' && (
+      {userInfo.role === "TourGuide" && (
         <button onClick={handleAddItinerary} className={styles.postButton}>
           Add Itinerary
         </button>
       )}
 
-      {userInfo.role === 'Tourist' && (
+      {userInfo.role === "Tourist" && (
         <div>
           <button onClick={handleCreateComplaint} className={styles.postButton}>
             Create Complaint
@@ -171,13 +193,22 @@ const Profile = () => {
 
       {showButtons && (
         <div className={styles.buttonGroup}>
-          <button className={styles.subButton} onClick={handleUpcomingActivitiesClick}>
+          <button
+            className={styles.subButton}
+            onClick={handleUpcomingActivitiesClick}
+          >
             Upcoming Activities
           </button>
-          <button className={styles.subButton} onClick={handleUpcomingItinerariesClick}>
+          <button
+            className={styles.subButton}
+            onClick={handleUpcomingItinerariesClick}
+          >
             Upcoming Itineraries
           </button>
-          <button className={styles.subButton} onClick={handleViewHistoricalPlacesClick}>
+          <button
+            className={styles.subButton}
+            onClick={handleViewHistoricalPlacesClick}
+          >
             Upcoming Historical Places
           </button>
         </div>

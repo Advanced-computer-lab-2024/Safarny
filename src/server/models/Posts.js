@@ -6,6 +6,10 @@ const Posts = new mongoose.Schema(
     price: Number,
     quantity: Number,
     imageurl: String,
+    createdby:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    }
   },
   {
     collection: "Posts",
