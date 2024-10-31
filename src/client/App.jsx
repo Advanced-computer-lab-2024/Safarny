@@ -49,6 +49,7 @@ import UpcomingActivites from "./Components/UpcomingEvents/UpcomingActivities";
 import TourismGovernerAdmin from "./Components/Admin/TourismGovernerAdmin";
 import EditTags from "./Components/Tags/editTags";
 import UpcomingItineraries from "./Components/UpcomingEvents/UpcomingItineraries";
+import ReadHistoricalPlaceDetails from "./Components/HistoricalPlace/ReadHistoricalPlaceDetails";
 //import UpcomingHistoricalPlaces from './Components/UpcomingEvents/UpcomingHistoricalPlaces';
 //import UpcomingItineraries from './Components/UpcomingEvents/UpcomingItineraries';
 import CreateComplaints from "./Components/Complaints/CreateComplaints";
@@ -107,6 +108,7 @@ function App() {
           element={<CreateHistoricalPlace />}
         />
         <Route path="/historical-places" element={<ReadHistoricalPlace />} />
+        <Route path="/historical-place/:id" element={<ReadHistoricalPlaceDetails />} />
         <Route
           path="/update-historical-place/:id"
           element={<UpdateHistoricalPlace />}

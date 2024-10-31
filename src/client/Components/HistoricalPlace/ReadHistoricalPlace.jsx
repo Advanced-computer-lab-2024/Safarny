@@ -100,7 +100,9 @@ const ReadHistoricalPlace = () => {
   const handleUpdateHistoricalPlace = (placeId) => {
     navigate(`/update-historical-place/${placeId}`); // Redirect to update page
   };
-
+  const handleReadHistoricalPlaceDetails = (placeId) => {
+    navigate(`/historical-place/${placeId}`); // Redirect to details page
+  }
   // Handle deleting historical places
   const handleDeleteHistoricalPlace = async (placeId) => {
     try {
@@ -146,7 +148,7 @@ const ReadHistoricalPlace = () => {
         <label>Filter by opening hours:</label>
         <input
           type="text"
-          placeholder="e.g., monday:00 AM - 5:00 PM"
+          placeholder="e.g. monday 12:00 AM - 5:00 PM"
           value={openingHoursFilter}
           onChange={(e) => setOpeningHoursFilter(e.target.value)}
           className={styles.openingHoursInput}
@@ -178,7 +180,18 @@ const ReadHistoricalPlace = () => {
             const hasCoordinates = place.coordinates && place.coordinates.lat !== undefined && place.coordinates.lng !== undefined;
             return (
               <div className={styles.placeCard} key={place._id}>
-                <h2 className={styles.placeName}>{place.description}</h2>
+                <h2 className={styles.placeName}>{place.description}
+                  <br/>
+                  <button onClick={() => handleReadHistoricalPlaceDetails(place._id)} className={styles.viewButton}>
+                    View Details
+                  </button>
+                  <button
+                      onClick={() => navigator.clipboard.writeText(`${window.location.origin}/historical-place/${place._id}`)}
+                      className={styles.copyButton}
+                  >
+                    Copy link
+                  </button>
+                </h2>
                 <p>Opening Hours: {place.openingHours}</p>
                 <p>Description: {place.description}</p>
                 <p>Ticket Price: {place.ticketPrices}</p>
@@ -193,22 +206,23 @@ const ReadHistoricalPlace = () => {
                 {/* Map Container */}
                 <div className={styles.mapContainer}>
                   {hasCoordinates ? (
-                    <MapContainer
-                      center={[place.coordinates.lat, place.coordinates.lng]}
-                      zoom={13}
-                      style={{ height: '100%', width: '100%' }}
-                    >
-                      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                      <Marker position={[place.coordinates.lat, place.coordinates.lng]} />
-                    </MapContainer>
+                      <MapContainer
+                          center={[place.coordinates.lat, place.coordinates.lng]}
+                          zoom={13}
+                          style={{height: '100%', width: '100%'}}
+                      >
+                        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
+                        <Marker position={[place.coordinates.lat, place.coordinates.lng]}/>
+                      </MapContainer>
+
                   ) : (
-                    <p>Coordinates not available</p>
+                      <p>Coordinates not available</p>
                   )}
                 </div>
                 {/* Update and Delete Buttons */}
                 {userInfo.role === 'TourismGovernor' && (
-                  <>
-                    <button onClick={() => handleUpdateHistoricalPlace(place._id)} className={styles.updateButton}>
+                    <>
+                      <button onClick={() => handleUpdateHistoricalPlace(place._id)} className={styles.updateButton}>
                       Update
                     </button>
                     <button onClick={() => handleDeleteHistoricalPlace(place._id)} className={styles.deleteButton}>
