@@ -64,7 +64,10 @@ const ReadHistoricalPlaceDetails = () => {
             <p>Location: {place.location}</p>
             <p>Opening Hours: {place.openingHours}</p>
             <p>Ticket Prices: {place.ticketPrices}</p>
-            <p>Pictures: {place.pictures}</p>
+            <p>Pictures: </p>
+            {place.pictures && place.pictures.length > 0 && (
+                <img className={styles.placeImage} src={place.pictures[0]} alt={place.description} />
+            )}
             <Footer />
         </div>
     );

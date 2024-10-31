@@ -21,7 +21,11 @@
   .nav {
     display: flex;
   }
-  
+.placeImage {
+  width: 300px; /* Adjust the width as needed */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 5px; /* Optional: Add some border radius */
+}
   .button {
     background-color: #4CAF50; /* Green */
     color: white;
