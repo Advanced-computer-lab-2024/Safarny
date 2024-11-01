@@ -1,6 +1,8 @@
 const ActivityCategory = require("../models/ActivityCategory.js");
 const User = require("../models/userModel.js");
 const mongoose = require("mongoose");
+const AsyncHandler = require("express-async-handler");
+const Activity = require("../models/Activity");
 
 const createCategory = async (req, res) => {
   const { type } = req.body;
@@ -44,9 +46,20 @@ const deleteCategory = async (req, res) => {
   res.status(200).json({ message: "Category deleted successfully" });
 };
 
+const getActivityCategoryById = async (req, res) => {
+  const { id } = req.params;
+  activityCategory = ActivityCategory.findById(id);
+
+  if (activityCategory) {
+    res.json(activityCategory);
+  } else {
+    res.status(404).json({ message: "Activity category not found" });
+  }
+};
 module.exports = {
   createCategory,
   getCategories,
   updateCategory,
   deleteCategory,
+  getActivityCategoryById,
 };

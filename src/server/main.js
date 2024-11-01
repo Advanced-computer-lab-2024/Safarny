@@ -15,8 +15,8 @@ const DB = require("./config/DB.js");
 // const historicalplacesRoutes = require("./routes/historicalplacesRoutes.js");
 // const tagsRoutes = require("./routes/tagsRoutes.js");
 // const touristUpdate = require("./routes/touristUpdateInfoRoutes.js");
-// const ActivityCategoriesRoutes = require("./routes/ActivityCategoriesRoutes.js");
-// const activityRoutes = require("./routes/activityRoutes.js");
+ const ActivityCategoriesRoutes = require("./routes/ActivityCategoriesRoutes.js");
+ const activityRoutes = require("./routes/activityRoutes.js");
 
 const guestRoutes = require("./routes/guestRoutes.js");
 const tourGuideRoutes = require("./routes/tourGuideRoutes.js");
@@ -46,7 +46,6 @@ DB();
 // app.use("/admin", adminRoutes);
 // app.use("/historicalplaces", historicalplacesRoutes);
 // app.use("/tag", tagsRoutes);
-// app.use("/api/categories", ActivityCategoriesRoutes);
 // app.use('/api/activities', activityRoutes);
 
 app.use("/admin", adminRoutes);
@@ -63,6 +62,9 @@ app.use("/seller", sellerRoutes);
 
 app.use("/toursimgovernor", ToursimGovernerRoutes);
 
+app.use('/activities', activityRoutes);
+
+app.use("/categories", ActivityCategoriesRoutes);
 ViteExpress.listen(app, 3000, () => {
   console.log(`Server running on port: ${port}`);
 });

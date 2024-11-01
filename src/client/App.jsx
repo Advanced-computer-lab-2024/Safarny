@@ -44,6 +44,7 @@ import Getcategory from "./Components/ActivityCategories/getcategory";
 import CreateCategory from "./Components/ActivityCategories/createcategory";
 import Editcategory from "./Components/ActivityCategories/editcategory";
 import Deletecategory from "./Components/ActivityCategories/deletecategory";
+//import {getActivityCategoryById} from "/src/server/controllers/activitycategoryController";
 import ActivityCategory from "./Components/ActivityCategories/category";
 import UpcomingActivites from "./Components/UpcomingEvents/UpcomingActivities";
 import TourismGovernerAdmin from "./Components/Admin/TourismGovernerAdmin";
@@ -95,9 +96,11 @@ function App() {
         <Route path="/deletetags" element={<DeleteTags />} />
         <Route path="/tags" element={<Tags />} />
         <Route path="/getcategory" element={<Getcategory />} />
+        <Route path={"/getcategory/:id"} element={<getActivityCategoryById />} />
         <Route path="/createcategory" element={<CreateCategory />} />
         <Route path="/editcategory/:id" element={<Editcategory />} />
         <Route path="/deletecategory" element={<Deletecategory />} />
+        <Route path={"/category/:id"} element={<ActivityCategory />} />
         <Route path="/category" element={<ActivityCategory />} />
         <Route path="/iternaries" element={<ItineraryManager />} />
         <Route path="/create-post" element={<CreatePost />} />
