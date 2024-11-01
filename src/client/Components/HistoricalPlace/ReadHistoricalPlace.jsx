@@ -191,6 +191,12 @@ const ReadHistoricalPlace = () => {
                   >
                     Copy link
                   </button>
+                  <button
+                      onClick={() => window.location.href = `mailto:?subject=Check out this historical place&body=${window.location.origin}/historical-place/${place._id}`}
+                      className={styles.emailButton}
+                  >
+                    Send by Email
+                  </button>
                 </h2>
                 <p>Opening Hours: {place.openingHours}</p>
                 <p>Description: {place.description}</p>
