@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./UpcomingActivities.module.css";
 import Logo from "/src/client/Assets/Img/logo.png";
 import Footer from "/src/client/components/Footer/Footer";
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 
 const UpcomingActivities = () => {
@@ -14,6 +14,7 @@ const UpcomingActivities = () => {
   const [selectedCategories, setSelectedCategories] = useState([]); // Selected categories state
   const [availableCategories, setAvailableCategories] = useState([]); // All available categories
   const [rating, setRating] = useState(0); // Rating filter state
+  const navigate = useNavigate();
 
   // Fetch activities based on sorting and filtering criteria
   useEffect(() => {
@@ -76,7 +77,9 @@ const UpcomingActivities = () => {
         : [...prev, category]
     );
   };
-
+  const handleUpcomingActivitiesDetails = (activityId) => {
+    navigate(`/UpcomingActivities/${activityId}`); // Redirect to details page
+  }
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -181,38 +184,58 @@ const UpcomingActivities = () => {
             <p>No upcoming activities found.</p>
           ) : (
             activities.map((activity) => (
-              <div key={activity._id} className={styles.activityItem}>
-                <h3>{activity.name}</h3>
-                <p>Date: {new Date(activity.date).toLocaleDateString()}</p>
-                <p>Time: {activity.time}</p>
-                <p>Location: {activity.location}</p>
-                <p>Price: {activity.price}$</p>
-                <p>Rating: {activity.rating}$</p>
+                <div key={activity._id} className={styles.activityItem}>
+                  <h3>{activity.name}</h3>
+                  <p>Date: {new Date(activity.date).toLocaleDateString()}</p>
+                  <p>Time: {activity.time}</p>
+                  <p>Location: {activity.location}</p>
+                  <p>Price: {activity.price}$</p>
+                  <p>Rating: {activity.rating}$</p>
 
-                {activity.specialDiscount && (
-                  <p>Discount: {activity.specialDiscount}</p>
-                )}
+                  {activity.specialDiscount && (
+                      <p>Discount: {activity.specialDiscount}</p>
+                  )}
 
-                {/* Display Tags */}
-                {activity.tags && activity.tags.length > 0 && (
-                  <p>Tags: {activity.tags.map((tag) => tag.name).join(", ")}</p>
-                )}
+                  {/* Display Tags */}
+                  {activity.tags && activity.tags.length > 0 && (
+                      <p>Tags: {activity.tags.map((tag) => tag.name).join(", ")}</p>
+                  )}
 
-                {/* Display Categories */}
-                {activity.category && activity.category.length > 0 && (
+                  {/* Display Categories */}
+                  {activity.category && activity.category.length > 0 && (
+                      <p>
+                        Category:{" "}
+                        {activity.category.map((cat) => cat.type).join(", ")}
+                      </p>)}
+                    <p style={{color: activity.bookingOpen ? "green" : "red"}}>
+                  {activity.bookingOpen ? "Booking: Open" : "Booking: Closed"}
+                </p>
                   <p>
-                    Category:{" "}
-                    {activity.category.map((cat) => cat.type).join(", ")}
+                    <button
+                        onClick={() => navigator.clipboard.writeText(`${window.location.origin}/UpcomingActivities/${activity._id}`)}
+                        className={styles.copyButton}
+                    >
+                      Copy link
+                    </button>
+                    <button onClick={() => handleUpcomingActivitiesDetails(activity._id)} className={styles.viewButton}>
+                      View Details
+                    </button>
+                    <button
+                        onClick={() => window.location.href = `mailto:?subject=Check out this historical place&body=${window.location.origin}/UpcomingActivities/${activity._id}`}
+                        className={styles.emailButton}
+                    >
+                      Send by Email
+                    </button>
                   </p>
-                )}
+                  )
 
-                {/* Map Container */}
-                <div className={styles.mapContainer}>
-                  <MapContainer
-                    center={[
-                      activity.coordinates.lat || 51.505,
-                      activity.coordinates.lng || -0.09,
-                    ]}
+                  {/* Map Container */}
+                  <div className={styles.mapContainer}>
+                    <MapContainer
+                        center={[
+                          activity.coordinates.lat || 51.505,
+                          activity.coordinates.lng || -0.09,
+                        ]}
                     zoom={13}
                     style={{ height: "100%", width: "100%" }}
                   >
@@ -229,9 +252,6 @@ const UpcomingActivities = () => {
                   </MapContainer>
                 </div>
 
-                <p style={{ color: activity.bookingOpen ? "green" : "red" }}>
-                  {activity.bookingOpen ? "Booking Open" : "Booking Closed"}
-                </p>
               </div>
             ))
           )}

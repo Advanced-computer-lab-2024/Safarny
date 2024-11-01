@@ -56,7 +56,7 @@ import CreateComplaints from "./Components/Complaints/CreateComplaints";
 import ViewComplaints from "./Components/Complaints/ViewComplaints";
 import AdminViewComplaints from "./Components/Complaints/AminViewComplaints";
 import AdminEditComplaints from "./Components/Complaints/AdminEditComplaints";
-
+import UpcomingActivitesDetails from "./Components/UpcomingEvents/UpcomingActivitiesDetails";
 function App() {
   return (
     <Router>
@@ -109,6 +109,7 @@ function App() {
         />
         <Route path="/historical-places" element={<ReadHistoricalPlace />} />
         <Route path="/historical-place/:id" element={<ReadHistoricalPlaceDetails />} />
+        <Route path="/UpcomingActivities/:id" element={<UpcomingActivitesDetails/>} />
         <Route
           path="/update-historical-place/:id"
           element={<UpdateHistoricalPlace />}
