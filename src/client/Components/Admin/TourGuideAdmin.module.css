@@ -1,0 +1,44 @@
+:root {
+    --sidebar-width: 15rem;
+    --content-padding: 1.25rem;
+    --button-spacing: 0.625rem;
+    --button-margin-top: 0.625rem;
+    --delete-button-color: #d32f2f;
+    --update-button-color: #388e3c;
+    --button-text-color: #fff;
+  }
+  
+  .container {
+    display: flex;
+  }
+  
+  .sidebar {
+    width: var(--sidebar-width);
+  }
+  
+  .content {
+    margin-left: var(--sidebar-width);
+    padding: var(--content-padding);
+  }
+  
+  .tableContainer {
+    height: 31.25rem; /* 500px converted to rem */
+    width: 100%;
+  }
+  
+  .buttonsContainer {
+    display: flex;
+    gap: var(--button-spacing);
+    margin-top: var(--button-margin-top);
+  }
+  
+  .deleteButton {
+    background-color: var(--delete-button-color);
+    color: var(--button-text-color);
+  }
+  
+  .updateButton {
+    background-color: var(--update-button-color);
+    color: var(--button-text-color);
+  }
+  
