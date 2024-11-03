@@ -12,6 +12,7 @@ const createItinerary = async (req, res) => {
       duration,
       language,
       price,
+      currency,
       availableDates,
       availableTimes,
       accessibility,
@@ -47,6 +48,7 @@ const createItinerary = async (req, res) => {
       duration,
       language,
       price,
+      currency,
       availableDates,
       availableTimes,
       accessibility,
@@ -94,6 +96,7 @@ const updateItineraryById = async (req, res) => {
     itinerary.duration = req.body.duration || itinerary.duration;
     itinerary.language = req.body.language || itinerary.language;
     itinerary.price = req.body.price || itinerary.price;
+    itinerary.currency = req.body.currency || itinerary.currency;
     itinerary.availableDates =
       req.body.availableDates || itinerary.availableDates;
     itinerary.availableTimes =
@@ -187,7 +190,7 @@ const getItinerariesSorted = async (req, res) => {
   }
 };
 const getItinerariesFiltered = async (req, res) => {
-  const { price, date, tags, language } = req.query;
+  const { price, currency, date, tags, language } = req.query;
 
   const maxPrice = price ? Number(price) : Infinity;
   try {
@@ -201,7 +204,9 @@ const getItinerariesFiltered = async (req, res) => {
       if (maxPrice > 0 && itinerary.price <= maxPrice) {
         match = true;
       }
-
+      if (currency && itinerary.currency === currency) {
+        match = true;
+      }
       // Check if date matches
       if (date && itinerary.availableDates.includes(date)) {
         match = true;

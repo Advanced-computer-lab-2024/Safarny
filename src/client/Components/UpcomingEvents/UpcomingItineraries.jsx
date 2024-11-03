@@ -165,7 +165,7 @@ const UpcomingItineraries = () => {
                       <h3>{itinerary.name}</h3>
                       <p>Duration: {itinerary.duration} hours</p>
                       <p>Language: {itinerary.language}</p>
-                      <p>Price: {itinerary.price}$</p>
+                      <p>Price: {itinerary.price} {itinerary.currency}</p>
                       <p>Available Dates: {itinerary.availableDates.join(", ")}</p>
                       <p>Available Times: {itinerary.availableTimes.join(", ")}</p>
                       <p>Accessibility: {itinerary.accessibility ? "Yes" : "No"}</p>

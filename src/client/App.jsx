@@ -66,7 +66,7 @@ function App() {
         <Route path="/products" element={<ProductList />} />
         <Route path="/profile" element={<Profile />} />
         {/* <Route path="/landmarks" element={<Landmarks />} /> */}
-        {/* <Route path="/TourGuide" element={<TourGuide />} /> */}
+        <Route path="/TourGuide" element={<TourGuide />} />
         {/* <Route path="/Advertiser" element={<Advertiser />} /> */}
         <Route path="/Seller" element={<Seller />} />
         <Route path="/Admin" element={<Admin />} />

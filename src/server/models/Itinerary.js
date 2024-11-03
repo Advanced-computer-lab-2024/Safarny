@@ -56,6 +56,10 @@ const itinerarySchema = new Schema(
       type: Number, // Price of the tour
       required: true,
     },
+    currency: {
+      type: String, // Currency of the price
+      required: true,
+    },
     availableDates: {
       type: [String], // Array of dates when the tour is available
       required: true,
