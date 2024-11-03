@@ -1,31 +1,31 @@
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import './SideBar.css'; // Custom CSS for styling
+import styles from './SideBar.module.css';
 
 const SideBar = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="sidebar">
-      <Button onClick={() => navigate('/admin')}>
+    <div className={styles.sidebar}>
+      <Button className={styles.button} onClick={() => navigate('/admin')}>
         HomePage
       </Button>
-      <Button onClick={() => navigate('/tourguidesadmin')}>
+      <Button className={styles.button} onClick={() => navigate('/tourguidesadmin')}>
         Tour Guides
       </Button>
-      <Button onClick={() => navigate('/touristsadmin')}>
+      <Button className={styles.button} onClick={() => navigate('/touristsadmin')}>
         Tourists
       </Button>
-      <Button onClick={() => navigate('/sellersadmin')}>
+      <Button className={styles.button} onClick={() => navigate('/sellersadmin')}>
         Sellers
       </Button>
-      <Button onClick={() => navigate('/advertisersadmin')}>
+      <Button className={styles.button} onClick={() => navigate('/advertisersadmin')}>
         Advertisers
       </Button>
-      <Button onClick={() => navigate('/adminlist')}>
+      <Button className={styles.button} onClick={() => navigate('/adminlist')}>
         Admins
       </Button>
-      <Button onClick={() => navigate('/tourismgoverneradmin')}>
+      <Button className={styles.button} onClick={() => navigate('/tourismgoverneradmin')}>
         Tourism Governor
       </Button>
     </div>

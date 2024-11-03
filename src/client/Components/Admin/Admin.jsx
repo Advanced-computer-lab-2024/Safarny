@@ -4,9 +4,11 @@ import { Button, Modal, TextField, Typography, Card, CardContent, CardActions, A
 import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from '../../../server/config/Firebase';
-import Tags from './tagAdmin'; // Import the Tags component
+import Tags from './tagAdmin';
 import { Link } from 'react-router-dom';
 import ActivityCategory from './ActivityCategory';
+import styles from './Admin.module.css'; // Import the CSS module
+
 
 const Admin = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -15,13 +17,13 @@ const Admin = () => {
   const [editingPostId, setEditingPostId] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedSection, setSelectedSection] = useState('posts'); // State to manage selected section
+  const [selectedSection, setSelectedSection] = useState('posts');
 
-  // Search, Filter and Sort states
+  // Search, Filter, and Sort states
   const [searchTerm, setSearchTerm] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
-  const [sortBy, setSortBy] = useState(''); // Can be 'rating'` or any other criteria
+  const [sortBy, setSortBy] = useState('');
 
   useEffect(() => {
     if (selectedSection === 'posts') {
@@ -61,10 +63,8 @@ const Admin = () => {
 
   const uploadImage = async (file) => {
     if (!file) return null;
-
     const storageRef = ref(storage, `images/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
-
     return new Promise((resolve, reject) => {
       uploadTask.on(
         "state_changed",
@@ -121,7 +121,6 @@ const Admin = () => {
     }
   };
 
-  // Search, Filter, and Sort functionality
   const filteredPosts = posts.filter((post) => {
     const matchesSearch = post.details.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesPrice =
@@ -132,31 +131,46 @@ const Admin = () => {
 
   const sortedPosts = [...filteredPosts].sort((a, b) => {
     if (sortBy === 'rating') {
-      return b.rating - a.rating; // Adjust according to your rating property
+      return b.rating - a.rating;
     }
-    return 0; // No sorting by default
+    return 0;
   });
 
   return (
-    <div style={{ display: 'flex' }}>
-      <SideBar />
-      <div style={{ marginLeft: '250px', padding: '20px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-          <Button variant="contained" color="primary" onClick={handleOpenModal} style={{ marginRight: '10px' }}>
+    <div className={styles.container}>
+      <SideBar className={styles.sidebar} />
+      <div className={styles.content}>
+        <div className={styles.buttonsContainer}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleOpenModal}
+            className={styles.button}
+          >
             Add Post
           </Button>
-          <Button variant="contained" color="secondary" onClick={() => setSelectedSection('tags')} style={{ marginRight: '10px' }}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => setSelectedSection('tags')}
+            className={styles.button}
+          >
             Manage Tags
           </Button>
-          <Button variant="contained" color="secondary" onClick={() => setSelectedSection('ActivityCategory')} style={{ marginRight: '10px' }}>
-            Manage categories
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => setSelectedSection('ActivityCategory')}
+            className={styles.button}
+          >
+            Manage Categories
           </Button>
           <Button
             variant="contained"
             color="primary"
             component={Link}
             to="/adminaddgovernor"
-            style={{ marginLeft: '20px' }}
+            className={styles.button}
           >
             Add Governor
           </Button>
@@ -165,7 +179,7 @@ const Admin = () => {
             color="primary"
             component={Link}
             to="/"
-            style={{ marginLeft: '20px' }}
+            className={styles.button}
           >
             Home
           </Button>
@@ -174,15 +188,14 @@ const Admin = () => {
             color="primary"
             component={Link}
             to="/adminviewcomplaints"
-            style={{ marginLeft: '20px' }}
+            className={styles.button}
           >
             View Complaints
           </Button>
         </div>
 
-        {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+        {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
 
-        {/* Search Bar */}
         <TextField
           label="Search by Name"
           variant="outlined"
@@ -190,17 +203,17 @@ const Admin = () => {
           margin="normal"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          className={styles.searchField}
         />
 
-        {/* Price Filter */}
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+        <div className={styles.priceFilterContainer}>
           <TextField
             label="Min Price"
             variant="outlined"
             type="number"
             value={minPrice}
             onChange={(e) => setMinPrice(e.target.value)}
-            style={{ marginRight: '10px' }}
+            className={styles.priceFilterField}
           />
           <TextField
             label="Max Price"
@@ -208,10 +221,10 @@ const Admin = () => {
             type="number"
             value={maxPrice}
             onChange={(e) => setMaxPrice(e.target.value)}
+            className={styles.priceFilterField}
           />
         </div>
 
-        {/* Sort By */}
         <TextField
           label="Sort By Rating"
           select
@@ -221,23 +234,25 @@ const Admin = () => {
             native: true,
           }}
           variant="outlined"
-          style={{ marginBottom: '1rem' }}
+          className={styles.sortField}
         >
           <option value="">None</option>
           <option value="rating">Rating</option>
         </TextField>
 
         {selectedSection === 'posts' && (
-          <div style={{ marginTop: '20px' }}>
+          <div className={styles.cardList}>
             {sortedPosts.map((post) => (
-              <Card key={post._id} sx={{ maxWidth: 345, margin: '10px', backgroundColor: 'white' }}>
-                <CardContent>
+              <Card key={post._id} className={styles.card}>
+                <CardContent className={styles.cardContent}>
                   <Typography gutterBottom variant="h5" component="div">
                     {post.details}
                   </Typography>
                   <div>Price: {post.price}</div>
                   <div>Quantity: {post.quantity}</div>
-                  <img src={post.imageurl} alt="Post" style={{ width: '100%', height: 'auto' }} />
+                  <div className={styles.cardImage}>
+                    <img src={post.imageurl} alt="Post" />
+                  </div>
                 </CardContent>
                 <CardActions>
                   <Button size="small" color="primary" onClick={() => handleEditPost(post)}>
@@ -252,12 +267,12 @@ const Admin = () => {
           </div>
         )}
 
-        {selectedSection === 'tags' && <Tags />} {/* Render Tags component */}
-        {selectedSection === 'ActivityCategory' && <ActivityCategory />} {/* Render ActivityCategory component */}
+        {selectedSection === 'tags' && <Tags />}
+        {selectedSection === 'ActivityCategory' && <ActivityCategory />}
       </div>
 
       <Modal open={openModal} onClose={handleCloseModal}>
-        <div style={{ padding: '20px', backgroundColor: 'white', margin: '100px auto', width: '400px' }}>
+        <div className={styles.modal}>
           <Typography variant="h6">{editingPostId ? 'Edit Post' : 'Add New Post'}</Typography>
           <TextField
             fullWidth
@@ -285,20 +300,11 @@ const Admin = () => {
             onChange={handleInputChange}
             margin="normal"
           />
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            style={{ margin: '10px 0' }}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSubmitPost}
-            style={{ marginTop: '20px' }}
-          >
+          <input type="file" onChange={handleImageChange} className={styles.imageInput} />
+          <Button variant="contained" color="primary" onClick={handleSubmitPost}>
             {editingPostId ? 'Update Post' : 'Add Post'}
           </Button>
+          {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
         </div>
       </Modal>
     </div>
