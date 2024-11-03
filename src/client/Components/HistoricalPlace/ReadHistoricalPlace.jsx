@@ -200,7 +200,7 @@ const ReadHistoricalPlace = () => {
                 </h2>
                 <p>Opening Hours: {place.openingHours}</p>
                 <p>Description: {place.description}</p>
-                <p>Ticket Price: {place.ticketPrices}</p>
+                <p>Ticket Price: {place.ticketPrices} {place.currency}</p>
                 {place.tags && place.tags.length > 0 ? (
                   <p>Tags: {place.tags.map(tag => tag.name).join(', ')}</p> // Map to get tag names
                 ) : (

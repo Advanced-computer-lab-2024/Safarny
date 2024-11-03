@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Button, Modal, TextField, Typography, Alert } from '@mui/material';
+import { Button, Modal, TextField, Typography, Alert, InputLabel, MenuItem, FormControl, Select } from '@mui/material';
 import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../../server/config/Firebase';
@@ -11,9 +11,9 @@ import L from 'leaflet';
 // Fixing marker icon issue
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-    iconRetinaUrl: 'https://unpkg.com/leaflet/dist/images/marker-icon-2x.png',
-    iconUrl: 'https://unpkg.com/leaflet/dist/images/marker-icon.png',
-    shadowUrl: 'https://unpkg.com/leaflet/dist/images/marker-shadow.png',
+  iconRetinaUrl: 'https://unpkg.com/leaflet/dist/images/marker-icon-2x.png',
+  iconUrl: 'https://unpkg.com/leaflet/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet/dist/images/marker-shadow.png',
 });
 
 const CreateHistoricalPlace = () => {
@@ -26,6 +26,7 @@ const CreateHistoricalPlace = () => {
     coordinates: { lat: null, lng: null },
     openingHours: '',
     ticketPrices: '',
+    currency: '',
     tagNames: '',
     pictures: '',
     createdby: createdBy || '', // Ensure createdBy is set correctly
@@ -70,18 +71,18 @@ const CreateHistoricalPlace = () => {
 
     return new Promise((resolve, reject) => {
       uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log(`Upload is ${progress}% done`);
-        },
-        (error) => reject(error),
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log('File available at', downloadURL);
-            resolve(downloadURL);
-          });
-        }
+          'state_changed',
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log(`Upload is ${progress}% done`);
+          },
+          (error) => reject(error),
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              console.log('File available at', downloadURL);
+              resolve(downloadURL);
+            });
+          }
       );
     });
   };
@@ -100,7 +101,7 @@ const CreateHistoricalPlace = () => {
     const placeData = { ...historicalPlace, pictures: imageUrl, tagNames: tagsArray };
 
     // Validate required fields
-    if (!placeData.description || !placeData.coordinates.lat || !placeData.coordinates.lng || !placeData.openingHours || !placeData.ticketPrices || !placeData.tagNames.length || !placeData.createdby) {
+    if (!placeData.description || !placeData.coordinates.lat || !placeData.coordinates.lng || !placeData.openingHours || !placeData.ticketPrices || !placeData.currency || !placeData.tagNames.length || !placeData.createdby) {
       setErrorMessage('All fields are required');
       return;
     }
@@ -136,81 +137,103 @@ const CreateHistoricalPlace = () => {
   };
 
   return (
-    <Modal open={openModal} onClose={handleCloseModal}>
-      <div style={{ padding: '20px', backgroundColor: 'white', margin: '100px auto', width: '600px' }}>
-        <Typography variant="h6">Create Historical Place</Typography>
-        {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+      <Modal open={openModal} onClose={handleCloseModal}>
+        <div style={{
+          padding: '20px',
+          backgroundColor: 'white',
+          margin: '100px auto',
+          width: '80%',
+          maxWidth: '600px',
+          height: '80%',
+          overflowY: 'auto'
+        }}>
+          <Typography variant="h6" style={{ color: 'black' }}>Create Historical Place</Typography>
+          {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 
-        <TextField
-          fullWidth
-          label="Description"
-          name="description"
-          value={historicalPlace.description}
-          onChange={handleInputChange}
-          margin="normal"
-        />
-        <TextField
-          fullWidth
-          label="Opening Hours"
-          name="openingHours"
-          value={historicalPlace.openingHours}
-          onChange={handleInputChange}
-          margin="normal"
-        />
-        <TextField
-          fullWidth
-          label="Ticket Prices"
-          name="ticketPrices"
-          value={historicalPlace.ticketPrices}
-          onChange={handleInputChange}
-          margin="normal"
-        />
-        {tags.length > 0 && (
-          <div>
-            <Typography variant="h6">Available Tags:</Typography>
-            <ul>
-              {tags.map((tag) => (
-                <li key={tag._id}>{tag.name}</li>
-              ))}
-            </ul>
+          <TextField
+              fullWidth
+              label="Description"
+              name="description"
+              value={historicalPlace.description}
+              onChange={handleInputChange}
+              margin="normal"
+          />
+          <TextField
+              fullWidth
+              label="Opening Hours"
+              name="openingHours"
+              value={historicalPlace.openingHours}
+              onChange={handleInputChange}
+              margin="normal"
+          />
+          <TextField
+              fullWidth
+              label="Ticket Prices"
+              name="ticketPrices"
+              value={historicalPlace.ticketPrices}
+              onChange={handleInputChange}
+              margin="normal"
+          />
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Currency</InputLabel>
+            <Select
+                name="currency"
+                value={historicalPlace.currency}
+                onChange={handleInputChange}
+            >
+              <MenuItem value="EGP">EGP</MenuItem>
+              <MenuItem value="SAR">SAR</MenuItem>
+              <MenuItem value="USD">USD</MenuItem>
+              <MenuItem value="EUR">EUR</MenuItem>
+              <MenuItem value="GBP">GBP</MenuItem>
+            </Select>
+          </FormControl>
+          {tags.length > 0 && (
+              <div>
+                <Typography variant="h6" style={{ color: 'black' }}>Available Tags:</Typography>
+                <ul style={{ color: 'black' }}>
+                  {tags.map((tag) => (
+                      <li key={tag._id}>{tag.name}</li>
+                  ))}
+                </ul>
+              </div>
+          )}
+          <TextField
+              fullWidth
+              label="Tag Names (comma separated)"
+              name="tagNames"
+              value={historicalPlace.tagNames}
+              onChange={handleInputChange}
+              margin="normal"
+          />
+          <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              style={{ margin: '10px 0' }}
+          />
+
+          {/* Map Section */}
+          <div style={{ height: '300px', marginTop: '20px' }}>
+            <MapContainer center={[51.505, -0.09]} zoom={13} style={{ height: '100%', width: '100%' }}>
+              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+              <LocationMap />
+              {historicalPlace.coordinates.lat && historicalPlace.coordinates.lng && (
+                  <Marker position={[historicalPlace.coordinates.lat, historicalPlace.coordinates.lng]} />
+              )}
+            </MapContainer>
           </div>
-        )}
-        <TextField
-          fullWidth
-          label="Tag Names (comma separated)"
-          name="tagNames"
-          value={historicalPlace.tagNames}
-          onChange={handleInputChange}
-          margin="normal"
-        />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          style={{ margin: '10px 0' }}
-        />
 
-        {/* Map Section */}
-        <div style={{ height: '300px', marginTop: '20px' }}>
-          <MapContainer center={[51.505, -0.09]} zoom={13} style={{ height: '100%', width: '100%' }}>
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <LocationMap />
-            {historicalPlace.coordinates.lat && historicalPlace.coordinates.lng && (
-              <Marker position={[historicalPlace.coordinates.lat, historicalPlace.coordinates.lng]} />
-            )}
-          </MapContainer>
+          <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSubmitPlace}
+              style={{ marginTop: '20px' }}
+          >
+            Add Historical Place
+          </Button>
         </div>
-
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleSubmitPlace}
-          style={{ marginTop: '20px' }}
-        >
-          Add Historical Place
-        </Button>
-      </div>
-    </Modal>
+      </Modal>
   );
 };
 
