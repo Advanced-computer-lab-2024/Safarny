@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import SideBar from '../SideBar';
-import { Button, Modal, TextField, Typography, Card, CardContent, CardActions, Alert } from '@mui/material';
+import {
+  Button,
+  Modal,
+  TextField,
+  Typography,
+  Card,
+  CardContent,
+  CardActions,
+  Alert,
+  FormControl,
+  InputLabel, Select, MenuItem
+} from '@mui/material';
 import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from '../../../server/config/Firebase';
@@ -13,7 +24,7 @@ import styles from './Admin.module.css'; // Import the CSS module
 const Admin = () => {
   const [openModal, setOpenModal] = useState(false);
   const [posts, setPosts] = useState([]);
-  const [currentPost, setCurrentPost] = useState({ details: '', price: '', quantity: '', imageurl: '' });
+  const [currentPost, setCurrentPost] = useState({ details: '', price: '', currency: '', quantity: '', imageurl: '' });
   const [editingPostId, setEditingPostId] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
@@ -41,7 +52,7 @@ const Admin = () => {
   };
 
   const handleOpenModal = () => {
-    setCurrentPost({ details: '', price: '', quantity: '', imageurl: '' });
+    setCurrentPost({ details: '', price: '', currency: '', quantity: '', imageurl: '' });
     setEditingPostId(null);
     setOpenModal(true);
   };
@@ -248,14 +259,14 @@ const Admin = () => {
                   <Typography gutterBottom variant="h5" component="div">
                     {post.details}
                   </Typography>
-                  <div>Price: {post.price}</div>
+                  <div>Price: {post.price} {post.currency}</div>
                   <div>Quantity: {post.quantity}</div>
                   <div className={styles.cardImage}>
-                    <img src={post.imageurl} alt="Post" />
+                    <img src={post.imageurl} alt="Image"/>
                   </div>
                 </CardContent>
                 <CardActions>
-                  <Button size="small" color="primary" onClick={() => handleEditPost(post)}>
+                <Button size="small" color="primary" onClick={() => handleEditPost(post)}>
                     Edit
                   </Button>
                   <Button size="small" color="secondary" onClick={() => handleDeletePost(post._id)}>
@@ -291,6 +302,20 @@ const Admin = () => {
             onChange={handleInputChange}
             margin="normal"
           />
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Currency</InputLabel>
+            <Select
+                name="currency"
+                value={currentPost.currency}
+                onChange={handleInputChange}
+            >
+              <MenuItem value="EGP">EGP</MenuItem>
+              <MenuItem value="SAR">SAR</MenuItem>
+              <MenuItem value="USD">USD</MenuItem>
+              <MenuItem value="EUR">EUR</MenuItem>
+              <MenuItem value="GBP">GBP</MenuItem>
+            </Select>
+          </FormControl>
           <TextField
             fullWidth
             label="Quantity"

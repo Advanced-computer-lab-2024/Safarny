@@ -4,6 +4,7 @@ const Posts = new mongoose.Schema(
   {
     details: String,
     price: Number,
+    currency: String,
     quantity: Number,
     imageurl: String,
     createdby:{

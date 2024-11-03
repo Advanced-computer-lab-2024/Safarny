@@ -2,11 +2,12 @@ const Post = require("../models/Posts.js");
 
 const createPost = async (req, res) => {
   try {
-    const { details, price, quantity, imageurl, createdby } = req.body;
+    const { details, price, currency, quantity, imageurl, createdby } = req.body;
 
     const newPost = new Post({
       details,
       price,
+      currency,
       quantity,
       imageurl,
       createdby,
@@ -48,11 +49,11 @@ const getAllPostsBySellerId = async (req, res) => {
 const updatePostById = async (req, res) => {
   try {
     const postId = req.params.id;
-    const { details, price, quantity, imageurl } = req.body;
+    const { details, price, currency, quantity, imageurl } = req.body;
 
     const updatedPost = await Post.findByIdAndUpdate(
       postId,
-      { details, price, quantity, imageurl },
+      { details, price, currency, quantity, imageurl },
       { new: true, runValidators: true }
     );
 
