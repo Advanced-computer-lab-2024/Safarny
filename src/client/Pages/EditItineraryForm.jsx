@@ -158,7 +158,7 @@ export default function EditItineraryForm({
           <TextField
             fullWidth
             id="price"
-            label="Price ($)"
+            label="Price"
             variant="outlined"
             type="number"
             value={itinerary?.price || 0}
@@ -170,7 +170,25 @@ export default function EditItineraryForm({
             }
             margin="normal"
           />
-
+            <FormControl fullWidth margin="normal">
+                <InputLabel>Currency</InputLabel>
+                <Select
+                    name="currency"
+                    value={itinerary.currency}
+                    onChange={(e) =>
+                        setItinerary({
+                            ...itinerary,
+                            currency: e.target.value,
+                        })
+                    }
+                >
+                    <MenuItem value="EGP">EGP</MenuItem>
+                    <MenuItem value="SAR">SAR</MenuItem>
+                    <MenuItem value="USD">USD</MenuItem>
+                    <MenuItem value="EUR">EUR</MenuItem>
+                    <MenuItem value="GBP">GBP</MenuItem>
+                </Select>
+            </FormControl>
           {/* Available Dates */}
           <TextField
             fullWidth

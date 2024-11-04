@@ -302,14 +302,10 @@ const SignUpExtra = () => {
               I agree to the following terms and conditions:
             </label>
             <div className={styles.termsText}>
-              <p>
-                By signing up, you agree to the following terms and conditions:
-              </p>
               <ul>
-                <li>You must be at least 18 years old to register.</li>
-                <li>Your personal information will be used in accordance with our privacy policy.</li>
-                <li>Your account can be suspended for any violation of the community guidelines.</li>
-                <li>We reserve the right to modify or terminate the service at any time without prior notice.</li>
+                <li>
+                   <Link to="/terms">Click here for the terms and conditions.</Link>
+                </li>
               </ul>
             </div>
           </div> 

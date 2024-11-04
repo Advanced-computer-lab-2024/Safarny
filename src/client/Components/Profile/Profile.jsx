@@ -43,9 +43,7 @@ const Profile = () => {
   const handleProductViewClick = () => {
     localStorage.setItem("userId", userId);
     window.location.href = "/products";
-    
-    
-  };
+      };
 
   const handleSellerHomeClick = () => {
     navigate("/seller", { state: { userId } });
@@ -99,6 +97,12 @@ const Profile = () => {
   const handleViewComplaints = () => {
     navigate("/viewcomplaints", { state: { userId } });
   };
+
+  const handelWishList = () => {
+    navigate("/wishlist", { state: { userId } });
+  }
+
+  
 
   /*const handleViewPurchasedProducts = () => {
     navigate("/PurchasedProducts", { state: { userId } });
@@ -179,7 +183,7 @@ const Profile = () => {
 
       {userInfo.role === "Advertiser" && (
         <button onClick={handleAddActivity} className={styles.postButton}>
-          Activity
+          Activities
         </button>
       )}
 
@@ -190,14 +194,17 @@ const Profile = () => {
       )}
 
       {userInfo.role === "Tourist" && (
-        <div>
-          <button onClick={handleCreateComplaint} className={styles.postButton}>
-            Create Complaint
-          </button>
-          <button onClick={handleViewComplaints} className={styles.postButton}>
-            View Complaints
-          </button>
-        </div>
+          <div>
+            <button onClick={handleCreateComplaint} className={styles.postButton}>
+              Create Complaint
+            </button>
+            <button onClick={handleViewComplaints} className={styles.postButton}>
+              View Complaints
+            </button>
+            <button onClick={handelWishList} className={styles.postButton}>
+              View Wish List
+            </button>
+          </div>
       )}
 
       <button onClick={handleViewButtonClick} className={styles.mainButton}>

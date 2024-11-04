@@ -18,7 +18,7 @@ import { storage } from '../../../server/config/Firebase';
 import Tags from './tagAdmin';
 import { Link } from 'react-router-dom';
 import ActivityCategory from './ActivityCategory';
-import styles from './Admin.module.css'; // Import the CSS module
+import styles from './Admin.module.css';
 
 
 const Admin = () => {

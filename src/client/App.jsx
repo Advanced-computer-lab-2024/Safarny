@@ -58,6 +58,8 @@ import ViewComplaints from "./Components/Complaints/ViewComplaints";
 import AdminViewComplaints from "./Components/Complaints/AminViewComplaints";
 import AdminEditComplaints from "./Components/Complaints/AdminEditComplaints";
 import UpcomingActivitesDetails from "./Components/UpcomingEvents/UpcomingActivitiesDetails";
+import WishList from "./Components/WishList/WishList";
+import terms from "./Components/terms/terms";
 import PurchasedProducts from "./Components/PurchasedProducts/PurchasedProducts";
 //import { PurchasedProductsProvider } from "./Components/PurchasedProducts/PurchasedProductsContext";
 function App() {
@@ -108,6 +110,7 @@ function App() {
         <Route path="/iternaries" element={<ItineraryManager />} />
         <Route path="/create-post" element={<CreatePost />} />
         <Route path="/UpcomingActivites" element={<UpcomingActivites />} />
+        <Route path={"/terms"} element={<terms />} />
         <Route path="/UpcomingItineraries" element={<UpcomingItineraries />} />
         <Route
           path="/create-historical-place"
@@ -126,6 +129,7 @@ function App() {
         <Route path="/viewcomplaints" element={<ViewComplaints />} />
         <Route path="/adminviewcomplaints" element={<AdminViewComplaints />} />
         <Route path="/admineditcomplaints" element={<AdminEditComplaints />} />
+        <Route path="/wishlist" element={<WishList />} />
         <Route path="/PurchasedProducts" element={<PurchasedProducts />} /> 
       </Routes>
     </Router>

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Footer from '/src/client/components/Footer/Footer';
-import Logo from '/src/client/Assets/Img/logo.png';
+import Header from '/src/client/components/Header/Header';
+// import Logo from '/src/client/Assets/Img/logo.png';
 import styles from './UpdateProfile.module.css';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -176,13 +177,7 @@ const UpdateProfile = () => {
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <img src={Logo} alt="Safarny Logo" className={styles.logo} />
-        <h1>Safarny</h1>
-        <nav className={styles.nav}>
-          <Link to="/" className={styles.button}>Back to Home</Link>
-        </nav>
-      </header>
+      <Header />
 
       <main className={styles.main}>
         <h2>Update Your Profile</h2>

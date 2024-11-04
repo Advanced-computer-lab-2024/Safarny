@@ -1,29 +1,55 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Logo from '/src/client/Assets/Img/logo.png';
+// import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
+import Header from '/src/client/components/Header/Header';
 import styles from './ProductList.module.css';
+import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 
 const ProductList = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { userId } = location.state || {};
+
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [priceFilter, setPriceFilter] = useState('');
+  const [selectedCurrency, setSelectedCurrency] = useState('EGP'); // Define selectedCurrency state
   const [sortByRating, setSortByRating] = useState(false);
-  //const [showPurchasedOnly, setShowPurchasedOnly] = useState(false); // New state for showing only purchased products
-  const navigate = useNavigate();
-  // Assuming you have the tourist ID stored in localStorage or context
-  const touristId = localStorage.getItem('userId');// Change this to how you store the ID
-  console.log("Id", touristId);
+   //const [showPurchasedOnly, setShowPurchasedOnly] = useState(false); // New state for showing only purchased products
+   
+   // Assuming you have the tourist ID stored in localStorage or context
+   const touristId = localStorage.getItem('userId');// Change this to how you store the ID
+   console.log("Id", touristId);
+   const [userRole, setUserRole] = useState('');
 
+   const conversionRates = {
+     USD: 1 / 48.72,
+     SAR: 1 / 12.97,
+     GBP: 1 / 63.02,
+     EUR: 1 / 53.02,
+     EGP: 1, // EGP to EGP is 1:1
+   };
+ 
+   const convertPrice = (price, fromCurrency, toCurrency) => {
+     const rateFrom = conversionRates[fromCurrency];
+     const rateTo = conversionRates[toCurrency];
+     return ((price / rateFrom) * rateTo).toFixed(2); // Convert and format to 2 decimal places
+   };
 
   useEffect(() => {
+    if (!userId) {
+      console.error('User ID is undefined');
+      return;
+    }
+
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('/admin/products'); 
-        
+        const response = await axios.get('/admin/products');
+
         if (Array.isArray(response.data)) {
           setProducts(response.data);
         } else {
@@ -39,9 +65,35 @@ const ProductList = () => {
       }
     };
 
-    fetchProducts();  
-  }, []);
+    const fetchUserRole = async () => {
+  try {
+    const response = await axios.get(`/tourist/${userId}`);
+    const user = response.data;
+    setUserRole(user.role);
+    console.log('User role:', user.role);
+  } catch (err) {
+    console.error('Error fetching user role:', err);
+  }
+};
 
+    fetchProducts(); 
+    fetchUserRole(); 
+  }, [userId]);
+  const handleAddToWishlist = async (postId) => {
+    try {
+      console.log('Adding post to wishlist:', postId); // Log the postId
+      const response = await axios.post('/wishlist/add', { userId, postId });
+      //setWishList(response.data.items); // Update the state with the response data
+      alert('Post added to wishlist');
+    } catch (err) {
+      console.error('Error adding post to wishlist:', err);
+      alert('Failed to add post to wishlist');
+    }
+  };
+
+  const handleNavigate = (path) => {
+    navigate(path, { state: { userId } });
+  };
   const handleBuyButtonClick = async (product) => {
     try {
         // Fetch the current user's profile to get the existing posts
@@ -64,17 +116,16 @@ const ProductList = () => {
     }
 };
 
+
   // Handle filtering products based on search term
-  const filteredProducts = products.filter(product => 
-    product.details.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (priceFilter ? product.price <= priceFilter : true) 
+  const filteredProducts = products.filter(product => {
+    const convertedPrice = convertPrice(product.price, product.currency, selectedCurrency);
+    return product.details.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        (priceFilter ? parseFloat(convertedPrice) <= parseFloat(priceFilter) : true);
+  });
 
-  );
-
-
-  // Handle sorting products by ratings if needed
   const sortedProducts = sortByRating
-    ? [...filteredProducts].sort((a, b) => b.rating - a.rating) // Assuming 'rating' is a field in your product data
+    ? [...filteredProducts].sort((a, b) => b.rating - a.rating)
     : filteredProducts;
 
   if (loading) {
@@ -89,13 +140,8 @@ const ProductList = () => {
   };
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <img src={Logo} alt="Safarny Logo" className={styles.logo} />
-        <h1>Safarny</h1>
-        <nav className={styles.nav}>
-          <Link to="/" className={styles.button}>Back to Home</Link>
-        </nav>
-      </header>
+        <Header/>
+        
        {/* View Purchased Products Button */}
        <button 
         className={styles.viewPurchasedButton} 
@@ -114,54 +160,77 @@ const ProductList = () => {
         className={styles.searchInput}
       />
 
-      {/* Price Filter */}
-      <div className={styles.priceFilter}>
-        <label>Max Price:</label>
-        <input 
-          type="number" 
-          value={priceFilter} 
-          onChange={(e) => setPriceFilter(e.target.value)} 
-          className={styles.priceInput}
-        />
-      </div>
-
-      {/* Sort by Ratings */}
-      <div className={styles.sortOptions}>
-        <label>
-          <input 
-            type="checkbox" 
-            checked={sortByRating} 
-            onChange={() => setSortByRating(!sortByRating)} 
+        <div className={styles.priceFilter}>
+          <label>Max Price:</label>
+          <input
+              type="number"
+              value={priceFilter}
+              onChange={(e) => setPriceFilter(e.target.value)}
+              className={styles.priceInput}
           />
-          Sort by Ratings
-        </label>
-      </div>
+        </div>
+        <div className={styles.currencySelector}>
+          <FormControl fullWidth margin="normal">
+            <InputLabel><h4>Currency</h4></InputLabel>
+            <br></br>
+            <Select
+                value={selectedCurrency}
+                onChange={(e) => setSelectedCurrency(e.target.value)}
+            >
+              <MenuItem value="EGP">EGP</MenuItem>
+              <MenuItem value="SAR">SAR</MenuItem>
+              <MenuItem value="USD">USD</MenuItem>
+              <MenuItem value="EUR">EUR</MenuItem>
+              <MenuItem value="GBP">GBP</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+        <div className={styles.sortOptions}>
+          <label>
+            Sort by Ratings
+            <input
+                type="checkbox"
+                checked={sortByRating}
+                onChange={() => setSortByRating(!sortByRating)}
+            />
+          </label>
+        </div>
 
-      {sortedProducts.length > 0 ? (
-        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-          {sortedProducts.map(product => (
-            <div className={styles.productCard} key={product._id}>
-              <h2 className={styles.productDetails}>{product.details}</h2>
-              <p>Price: ${product.price}</p>
-              <p>Quantity: {product.quantity}</p>
-              <p>Rating: {product.rating}</p>
-               {/* Buy Button */}
+        {sortedProducts.length > 0 ? (
+            <div style={{display: 'flex', flexWrap: 'wrap'}}>
+              {sortedProducts.map(product => {
+                const convertedPrice = convertPrice(product.price, product.currency, selectedCurrency);
+                return (
+                    <div className={styles.productCard} key={product._id}>
+                      <h2 className={styles.productDetails}>{product.details}</h2>
+                      <p>Price: {convertedPrice} {selectedCurrency}</p>
+                      <p>Quantity: {product.quantity}</p>
+                      <p>Rating: {product.rating}</p>
+                       {/* Buy Button */}
                <button 
                 className={styles.buyButton} 
                 onClick={() => handleBuyButtonClick(product)}
               >
                 Purchase
               </button>
-
-              <img className={styles.productImage} src={product.imageurl} alt={product.details} />
+                      <img className={styles.productImage} src={product.imageurl} alt={product.details}/>
+                      {userRole === 'Tourist' && (
+                          <button
+                              onClick={() => handleAddToWishlist(product._id)}
+                              className={styles.wishlistButton}
+                          >
+                            Add to Wishlist
+                          </button>
+                      )}
+                    </div>
+                );
+              })}
             </div>
-          ))}
-        </div>
-      ) : (
-        <p>No products available</p>
-      )}
-      <Footer />
-    </div>
+        ) : (
+            <p>No products available</p>
+        )}
+        <Footer/>
+      </div>
   );
 };
 
