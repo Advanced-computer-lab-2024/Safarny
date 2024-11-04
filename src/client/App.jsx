@@ -59,7 +59,7 @@ import AdminViewComplaints from "./Components/Complaints/AminViewComplaints";
 import AdminEditComplaints from "./Components/Complaints/AdminEditComplaints";
 import UpcomingActivitesDetails from "./Components/UpcomingEvents/UpcomingActivitiesDetails";
 import WishList from "./Components/WishList/WishList";
-import terms from "./Components/terms/terms";
+import Terms from "./Components/terms/terms";
 import PurchasedProducts from "./Components/PurchasedProducts/PurchasedProducts";
 //import { PurchasedProductsProvider } from "./Components/PurchasedProducts/PurchasedProductsContext";
 function App() {
@@ -110,7 +110,7 @@ function App() {
         <Route path="/iternaries" element={<ItineraryManager />} />
         <Route path="/create-post" element={<CreatePost />} />
         <Route path="/UpcomingActivites" element={<UpcomingActivites />} />
-        <Route path={"/terms"} element={<terms />} />
+        <Route path={"/terms"} element={<Terms />} />
         <Route path="/UpcomingItineraries" element={<UpcomingItineraries />} />
         <Route
           path="/create-historical-place"
