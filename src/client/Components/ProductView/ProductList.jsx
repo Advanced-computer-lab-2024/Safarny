@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Logo from '/src/client/Assets/Img/logo.png';
+// import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
+import Header from '/src/client/components/Header/Header';
 import styles from './ProductList.module.css';
 
 const ProductList = () => {
@@ -93,13 +94,7 @@ fetchUserRole();
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <img src={Logo} alt="Safarny Logo" className={styles.logo} />
-        <h1>Safarny</h1>
-        <nav className={styles.nav}>
-          <Link to="/" className={styles.button}>Back to Home</Link>
-        </nav>
-      </header>
+      <Header />
       <h1>Product List</h1>
 
       <input

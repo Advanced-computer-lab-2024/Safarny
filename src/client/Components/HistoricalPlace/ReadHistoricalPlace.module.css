@@ -24,32 +24,6 @@
     height: 100%;
 }
 
-.header {
-    position: sticky;
-    top: 0;
-    background-color: var(--primary-color);
-    padding: 1rem 2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 1000;
-    height: var(--header-height);
-    border-radius: var(--border-radius);
-    width: 90%;
-    transition: background-color 0.3s;
-}
-
-.logo {
-    height: 8rem;
-    margin-right: 1rem;
-}
-
-.nav {
-    display: flex;
-    gap: 1rem;
-}
-
 .button {
     text-decoration: none;
     padding: 0.5rem 1rem;

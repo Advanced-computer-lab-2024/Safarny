@@ -38,7 +38,8 @@
     position: relative;
     z-index: 1;
     cursor: pointer;
-    width: calc(30% - 2rem);
+    width: calc(30% - 1rem);
+    min-width: 100%;
 }
 
 .productCard:hover {

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styles from "./UpcomingActivities.module.css";
-import Logo from "/src/client/Assets/Img/logo.png";
+// import Logo from "/src/client/Assets/Img/logo.png";
 import Footer from "/src/client/components/Footer/Footer";
+import Header from "/src/client/components/Header/Header";
 import {Link, useNavigate} from "react-router-dom";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
@@ -98,15 +99,7 @@ const UpcomingActivities = () => {
   }
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <img src={Logo} alt="Safarny Logo" className={styles.logo} />
-        <h1>Safarny</h1>
-        <nav className={styles.nav}>
-          <Link to="/" className={styles.button}>
-            Back to Home
-          </Link>
-        </nav>
-      </header>
+      <Header />
       <main className={styles.main}>
         <h2>Upcoming Activities</h2>
 

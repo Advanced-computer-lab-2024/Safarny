@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import Logo from '/src/client/Assets/Img/logo.png';
+// import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
+import Header from '/src/client/components/Header/Header';
 import styles from './ReadHistoricalPlace.module.css';
 import styles1 from '/src/client/components/Home/Homepage.module.css';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
@@ -145,13 +146,7 @@ const ReadHistoricalPlace = () => {
 
   return (
       <div className={styles1.container}>
-        <header className={styles1.header}>
-          <img src={Logo} alt="Safarny Logo" className={styles1.logo} />
-          <h1>Safarny</h1>
-          <nav className={styles.nav}>
-            <Link to="/" className={styles.button}>Back to Home</Link>
-          </nav>
-        </header>
+        <Header />
         <h1>Historical Places</h1>
 
         {/* Search Input */}
