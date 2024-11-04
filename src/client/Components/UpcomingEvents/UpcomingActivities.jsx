@@ -96,11 +96,14 @@ const UpcomingActivities = () => {
 
         {/* Sorting options */}
         <div className={styles.sortOptions}>
-          <button onClick={() => setSortCriteria("date")}>Sort by Date</button>
-          <button onClick={() => setSortCriteria("price")}>
+          <button onClick={() => setSortCriteria("date")}  className={styles.viewButton}
+                  style={{ margin: '2px' }}>Sort by Date</button>
+          <button onClick={() => setSortCriteria("price")}
+                  style={{ margin: '2px' }}>
             Sort by Price
           </button>
-          <button onClick={() => setSortCriteria("rating")}>
+          <button onClick={() => setSortCriteria("rating")}
+                  style={{ margin: '2px' }}>
             Sort by Rating
           </button>
         </div>
@@ -214,17 +217,22 @@ const UpcomingActivities = () => {
                     <button
                         onClick={() => navigator.clipboard.writeText(`${window.location.origin}/UpcomingActivities/${activity._id}`)}
                         className={styles.copyButton}
+                        style={{ margin: '2px' }}
                     >
                       Copy link
                     </button>
-                    <button onClick={() => handleUpcomingActivitiesDetails(activity._id)} className={styles.viewButton}>
+                    <button onClick={() => handleUpcomingActivitiesDetails(activity._id)}
+                            className={styles.viewButton}
+                            style={{ margin: '2px' }}
+                    >
                       View Details
                     </button>
                     <button
                         onClick={() => window.location.href = `mailto:?subject=Check out this historical place&body=${window.location.origin}/UpcomingActivities/${activity._id}`}
                         className={styles.emailButton}
+                        style={{ margin: '2px' }}
                     >
-                      Send by Email
+                      Email
                     </button>
                   </p>
                   )
