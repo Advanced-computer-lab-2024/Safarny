@@ -3,6 +3,7 @@ import axios from 'axios';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 
 // Fixing marker icon issue
 delete L.Icon.Default.prototype._getIconUrl;
@@ -23,6 +24,7 @@ const CreateActivity = () => {
         location: '',
         coordinates: { lat: null, lng: null },
         price: '',
+        currency: '',
         category: '',
         tags: [],
         specialDiscount: '',
@@ -95,13 +97,13 @@ const CreateActivity = () => {
                 <div>
                     <label>
                         Date:
-                        <input name="date" type="date" value={activityDetails.date} onChange={handleChange} required />
+                        <input name="date" type="date" value={activityDetails.date} onChange={handleChange} required/>
                     </label>
                 </div>
                 <div>
                     <label>
                         Time:
-                        <input name="time" type="time" value={activityDetails.time} onChange={handleChange} required />
+                        <input name="time" type="time" value={activityDetails.time} onChange={handleChange} required/>
                     </label>
                 </div>
                 <div>
@@ -119,10 +121,28 @@ const CreateActivity = () => {
                 <div>
                     <label>
                         Price:
-                        <input name="price" type="number" value={activityDetails.price} onChange={handleChange} required />
+                        <input name="price" type="number" value={activityDetails.price} onChange={handleChange}
+                               required/>
                     </label>
                 </div>
-                
+                {/* Currency Section */}
+                <div style={{backgroundColor: 'black', border: '1px solid white', width: '90px', height: '73px', marginTop: '20px', marginBottom: '20px'}}>
+                    <FormControl fullWidth margin="normal">
+                        <InputLabel style={{color: 'white'}}>Currency:</InputLabel>
+                        <Select
+                            name="currency"
+                            value={activityDetails.currency}
+                            onChange={handleChange}
+                            style={{color: 'white'}}
+                        >
+                            <MenuItem value="EGP">EGP</MenuItem>
+                            <MenuItem value="SAR">SAR</MenuItem>
+                            <MenuItem value="USD">USD</MenuItem>
+                            <MenuItem value="EUR">EUR</MenuItem>
+                            <MenuItem value="GBP">GBP</MenuItem>
+                        </Select>
+                    </FormControl>
+                </div>
                 {/* Category Section */}
                 <div>
                     <label>
@@ -158,7 +178,7 @@ const CreateActivity = () => {
                             onChange={(e) =>
                                 setActivityDetails({
                                     ...activityDetails,
-                                    tags: [...e.target.selectedOptions].map(o => o.value), 
+                                    tags: [...e.target.selectedOptions].map(o => o.value),
                                 })
                             }
                         >
@@ -192,26 +212,28 @@ const CreateActivity = () => {
                         <input
                             type="checkbox"
                             checked={activityDetails.bookingOpen}
-                            onChange={(e) => setActivityDetails({ ...activityDetails, bookingOpen: e.target.checked })}
+                            onChange={(e) => setActivityDetails({...activityDetails, bookingOpen: e.target.checked})}
                         />
                     </label>
                 </div>
 
                 {/* Map Container for selecting coordinates */}
-                <div style={{ height: '400px', width: '100%', marginTop: '20px' }}>
-                    <MapContainer center={[activityDetails.coordinates.lat || 51.505, activityDetails.coordinates.lng || -0.09]} zoom={13} style={{ height: '100%', width: '100%' }}>
-                        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                        <LocationMap />
+                <div style={{height: '400px', width: '100%', marginTop: '20px'}}>
+                    <MapContainer
+                        center={[activityDetails.coordinates.lat || 51.505, activityDetails.coordinates.lng || -0.09]}
+                        zoom={13} style={{height: '100%', width: '100%'}}>
+                        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
+                        <LocationMap/>
                         {activityDetails.coordinates.lat && activityDetails.coordinates.lng && (
-                            <Marker position={[activityDetails.coordinates.lat, activityDetails.coordinates.lng]} />
+                            <Marker position={[activityDetails.coordinates.lat, activityDetails.coordinates.lng]}/>
                         )}
                     </MapContainer>
                 </div>
 
-                <button type="submit" style={{ marginTop: '10px' }}>
+                <button type="submit" style={{marginTop: '10px'}}>
                     Create Activity
                 </button>
-                {message && <p style={{ color: 'red' }}>{message}</p>}
+                {message && <p style={{color: 'red'}}>{message}</p>}
             </form>
         </div>
     );
