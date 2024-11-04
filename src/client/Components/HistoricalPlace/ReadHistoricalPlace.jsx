@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
-import styles from './ReadHistoricalPlace.module.css'; // Import the CSS module
+import styles from './ReadHistoricalPlace.module.css';
 import styles1 from '/src/client/components/Home/Homepage.module.css';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
