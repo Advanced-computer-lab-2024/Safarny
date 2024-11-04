@@ -6,18 +6,28 @@ import Footer from '/src/client/components/Footer/Footer';
 import styles from './ProductList.module.css';
 
 const ProductList = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { userId } = location.state || {};
+
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [priceFilter, setPriceFilter] = useState('');
   const [sortByRating, setSortByRating] = useState(false);
+  const [userRole, setUserRole] = useState('');
 
   useEffect(() => {
+    if (!userId) {
+      console.error('User ID is undefined');
+      return;
+    }
+
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('/admin/products'); 
-        
+        const response = await axios.get('/admin/products');
+
         if (Array.isArray(response.data)) {
           setProducts(response.data);
         } else {
@@ -33,18 +43,44 @@ const ProductList = () => {
       }
     };
 
-    fetchProducts();  
-  }, []);
+    const fetchUserRole = async () => {
+  try {
+    const response = await axios.get(`/tourist/${userId}`);
+    const user = response.data;
+    setUserRole(user.role);
+    console.log('User role:', user.role);
+  } catch (err) {
+    console.error('Error fetching user role:', err);
+  }
+};
 
-  // Handle filtering products based on search term
-  const filteredProducts = products.filter(product => 
+fetchProducts();
+fetchUserRole();
+}, [userId]);
+
+  const handleAddToWishlist = async (postId) => {
+    try {
+      console.log('Adding post to wishlist:', postId); // Log the postId
+      const response = await axios.post('/wishlist/add', { userId, postId });
+      //setWishList(response.data.items); // Update the state with the response data
+      alert('Post added to wishlist');
+    } catch (err) {
+      console.error('Error adding post to wishlist:', err);
+      alert('Failed to add post to wishlist');
+    }
+  };
+
+  const handleNavigate = (path) => {
+    navigate(path, { state: { userId } });
+  };
+
+  const filteredProducts = products.filter(product =>
     product.details.toLowerCase().includes(searchTerm.toLowerCase()) &&
     (priceFilter ? product.price <= priceFilter : true)
   );
 
-  // Handle sorting products by ratings if needed
   const sortedProducts = sortByRating
-    ? [...filteredProducts].sort((a, b) => b.rating - a.rating) // Assuming 'rating' is a field in your product data
+    ? [...filteredProducts].sort((a, b) => b.rating - a.rating)
     : filteredProducts;
 
   if (loading) {
@@ -65,34 +101,31 @@ const ProductList = () => {
         </nav>
       </header>
       <h1>Product List</h1>
-      
-      {/* Search Input */}
-      <input 
-        type="text" 
-        placeholder="Search by name..." 
-        value={searchTerm} 
-        onChange={(e) => setSearchTerm(e.target.value)} 
+
+      <input
+        type="text"
+        placeholder="Search by name..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
         className={styles.searchInput}
       />
 
-      {/* Price Filter */}
       <div className={styles.priceFilter}>
         <label>Max Price:</label>
-        <input 
-          type="number" 
-          value={priceFilter} 
-          onChange={(e) => setPriceFilter(e.target.value)} 
+        <input
+          type="number"
+          value={priceFilter}
+          onChange={(e) => setPriceFilter(e.target.value)}
           className={styles.priceInput}
         />
       </div>
 
-      {/* Sort by Ratings */}
       <div className={styles.sortOptions}>
         <label>
-          <input 
-            type="checkbox" 
-            checked={sortByRating} 
-            onChange={() => setSortByRating(!sortByRating)} 
+          <input
+            type="checkbox"
+            checked={sortByRating}
+            onChange={() => setSortByRating(!sortByRating)}
           />
           Sort by Ratings
         </label>
@@ -107,6 +140,14 @@ const ProductList = () => {
               <p>Quantity: {product.quantity}</p>
               <p>Rating: {product.rating}</p>
               <img className={styles.productImage} src={product.imageurl} alt={product.details} />
+              {userRole === 'Tourist' && (
+                <button
+                  onClick={() => handleAddToWishlist(product._id)}
+                  className={styles.wishlistButton}
+                >
+                  Add to Wishlist
+                </button>
+              )}
             </div>
           ))}
         </div>
