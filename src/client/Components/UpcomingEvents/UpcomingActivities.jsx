@@ -189,8 +189,8 @@ const UpcomingActivities = () => {
                   <p>Date: {new Date(activity.date).toLocaleDateString()}</p>
                   <p>Time: {activity.time}</p>
                   <p>Location: {activity.location}</p>
-                  <p>Price: {activity.price}$</p>
-                  <p>Rating: {activity.rating}$</p>
+                  <p>Price: {activity.price}</p>
+                  <p>Rating: {activity.rating}&#9733;</p>
 
                   {activity.specialDiscount && (
                       <p>Discount: {activity.specialDiscount}</p>
