@@ -94,32 +94,37 @@ const ProductList = () => {
   };
   const handleBuyButtonClick = async (product) => {
     try {
-        // Fetch the current user's profile to get the existing posts
-        const profileResponse = await axios.get(`http://localhost:3000/tourist/${touristId}`);
-        const currentPosts = profileResponse.data.posts || []; // Get current posts or initialize as an empty array
+      // Decrement the product quantity on the server
+      const updatedProduct = { ...product, quantity: product.quantity - 1 };
+      await axios.put(`/admin/products/${product._id}`, updatedProduct);
 
-        // Create a new array with the new product added at the end
-        const updatedPosts = [...currentPosts, product._id]; // Append the new product ID to the current posts array
+      // Fetch the current user's profile to get the existing posts
+      const profileResponse = await axios.get(`http://localhost:3000/tourist/${touristId}`);
+      const currentPosts = profileResponse.data.posts || []; // Get current posts or initialize as an empty array
 
-        // Now update the user profile with the updated posts array
-        const updateResponse = await axios.put(`http://localhost:3000/tourist/${touristId}`, {
-            id: touristId,
-            posts: updatedPosts // Send the updated posts array to the server
-        });
+      // Create a new array with the new product added at the end
+      const updatedPosts = [...currentPosts, product._id]; // Append the new product ID to the current posts array
 
-        console.log(`Response from server:`, updateResponse.data);
+      // Now update the user profile with the updated posts array
+      await axios.put(`http://localhost:3000/tourist/${touristId}`, {
+        id: touristId,
+        posts: updatedPosts // Send the updated posts array to the server
+      });
 
+      // Update the local state to reflect the new quantity
+      setProducts(products.map(p => p._id === product._id ? updatedProduct : p));
     } catch (err) {
-        console.error('Error updating product status:', err);
+      console.error('Error updating product status:', err);
     }
-};
+  };
 
 
   // Handle filtering products based on search term
   const filteredProducts = products.filter(product => {
     const convertedPrice = convertPrice(product.price, product.currency, selectedCurrency);
     return product.details.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        (priceFilter ? parseFloat(convertedPrice) <= parseFloat(priceFilter) : true);
+        (priceFilter ? parseFloat(convertedPrice) <= parseFloat(priceFilter) : true) &&
+        product.quantity > 0; // Exclude products with quantity 0
   });
 
   const sortedProducts = sortByRating
