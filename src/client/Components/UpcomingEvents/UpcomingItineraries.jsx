@@ -4,6 +4,7 @@ import Logo from "/src/client/Assets/Img/logo.png";
 import Footer from "/src/client/components/Footer/Footer";
 import { Link } from "react-router-dom";
 import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
+import Header from "/src/client/Components/Header/Header";
 
 const UpcomingItineraries = () => {
   const [itineraries, setItineraries] = useState([]);
@@ -80,16 +81,7 @@ const UpcomingItineraries = () => {
 
   return (
       <div className={styles.container}>
-        <header className={styles.header}>
-          <img src={Logo} alt="Safarny Logo" className={styles.logo} />
-          <h1>Safarny</h1>
-          <nav className={styles.nav}>
-            <Link to="/" className={styles.button}>
-              Back to Home
-            </Link>
-          </nav>
-        </header>
-
+        <Header />
         <main className={styles.main}>
           <h2>Upcoming Itineraries</h2>
 
