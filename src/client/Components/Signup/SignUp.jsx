@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Footer from '/src/client/Components/Footer/Footer';
 import Header from '../Header/Header';
 import styles from './SignUp.module.css';
@@ -189,24 +189,16 @@ const SignUp = () => {
               I agree to the following terms and conditions:
             </label>
             <div className={styles.termsText}>
-              <p>
-                By signing up, you agree to the following terms and conditions:
-              </p>
               <ul>
-                <li>You must be at least 18 years old to register.</li>
-                <li>Your personal information will be used in accordance with our privacy policy.</li>
-                <li>Your account can be suspended for any violation of the community guidelines.</li>
-                <li>We reserve the right to modify or terminate the service at any time without prior notice.</li>
+              <p>
+              <Link to="/terms">Click here for the terms and conditions.</Link>
+              </p>
               </ul>
             </div>
           </div>
-
-          <button type="submit" className={styles.button}>
-            Sign Up
-          </button>
+          <button type="submit" className={styles.submitButton}>Sign Up</button>
         </form>
       </div>
-
       <Footer />
     </div>
   );
