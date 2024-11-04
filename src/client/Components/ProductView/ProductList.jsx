@@ -19,9 +19,7 @@ const ProductList = () => {
   const [priceFilter, setPriceFilter] = useState('');
   const [selectedCurrency, setSelectedCurrency] = useState('EGP'); // Define selectedCurrency state
   const [sortByRating, setSortByRating] = useState(false);
-   //const [showPurchasedOnly, setShowPurchasedOnly] = useState(false); // New state for showing only purchased products
    
-   // Assuming you have the tourist ID stored in localStorage or context
    const touristId = localStorage.getItem('userId');// Change this to how you store the ID
    console.log("Id", touristId);
    const [userRole, setUserRole] = useState('');
@@ -135,9 +133,7 @@ const ProductList = () => {
   if (error) {
     return <p>{error}</p>;
   }
-  const handleViewPurchasedProducts = () => {
-    navigate("/PurchasedProducts", { state: { userId } });
-  };
+  
   return (
     <div className={styles.container}>
         <Header/>
