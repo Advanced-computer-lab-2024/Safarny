@@ -181,11 +181,11 @@ const ReadHistoricalPlace = () => {
               className={styles.tagInput}
           />
         </div>
-
         {/* Currency Selector */}
         <div className={styles.currencySelector}>
           <FormControl fullWidth margin="normal">
-            <InputLabel>Select currency</InputLabel>
+            <InputLabel><h4>Currency</h4></InputLabel>
+            <br></br>
             <Select
                 value={selectedCurrency}
                 onChange={(e) => setSelectedCurrency(e.target.value)}
@@ -215,20 +215,23 @@ const ReadHistoricalPlace = () => {
                     <div className={styles.placeCard} key={place._id}>
                       <h2 className={styles.placeName}>{place.description}
                         <br/>
-                        <button onClick={() => handleReadHistoricalPlaceDetails(place._id)} className={styles.viewButton}>
+                        <button onClick={() => handleReadHistoricalPlaceDetails(place._id)}
+                                className={styles.viewButton} style={{margin: '5px'}}>
                           View Details
                         </button>
                         <button
                             onClick={() => navigator.clipboard.writeText(`${window.location.origin}/historical-place/${place._id}`)}
                             className={styles.copyButton}
+                            style={{margin: '5px'}}
                         >
                           Copy link
                         </button>
                         <button
                             onClick={() => window.location.href = `mailto:?subject=Check out this historical place&body=${window.location.origin}/historical-place/${place._id}`}
                             className={styles.emailButton}
+                            style={{margin: '5px'}}
                         >
-                          Send by Email
+                          Email
                         </button>
                       </h2>
                       <p>Opening Hours: {place.openingHours}</p>
