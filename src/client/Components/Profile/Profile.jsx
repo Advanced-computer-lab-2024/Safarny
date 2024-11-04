@@ -41,9 +41,10 @@ const Profile = () => {
   };
 
   const handleProductViewClick = () => {
-    localStorage.setItem("userId", userId);
-    window.location.href = "/products";
-      };
+    /*localStorage.setItem("userId", userId);
+    window.location.href = "/products";*/
+    navigate("/products", { state: { userId } });
+  };
 
   const handleSellerHomeClick = () => {
     navigate("/seller", { state: { userId } });

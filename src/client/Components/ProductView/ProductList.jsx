@@ -209,7 +209,6 @@ const ProductList = () => {
               >
                 Purchase
               </button>
-                      <img className={styles.productImage} src={product.imageurl} alt={product.details}/>
                       {userRole === 'Tourist' && (
                           <button
                               onClick={() => handleAddToWishlist(product._id)}
@@ -218,6 +217,7 @@ const ProductList = () => {
                             Add to Wishlist
                           </button>
                       )}
+                      <img className={styles.productImage} src={product.imageurl} alt={product.details}/>
                     </div>
                 );
               })}
