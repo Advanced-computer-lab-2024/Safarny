@@ -58,6 +58,7 @@ import ViewComplaints from "./Components/Complaints/ViewComplaints";
 import AdminViewComplaints from "./Components/Complaints/AminViewComplaints";
 import AdminEditComplaints from "./Components/Complaints/AdminEditComplaints";
 import UpcomingActivitesDetails from "./Components/UpcomingEvents/UpcomingActivitiesDetails";
+import WishList from "./Components/WishList/WishList";
 function App() {
   return (
     <Router>
@@ -123,6 +124,7 @@ function App() {
         <Route path="/viewcomplaints" element={<ViewComplaints />} />
         <Route path="/adminviewcomplaints" element={<AdminViewComplaints />} />
         <Route path="/admineditcomplaints" element={<AdminEditComplaints />} />
+        <Route path="/wishlist" element={<WishList />} />
       </Routes>
     </Router>
   );
