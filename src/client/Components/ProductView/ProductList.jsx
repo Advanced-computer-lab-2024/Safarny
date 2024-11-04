@@ -39,7 +39,7 @@ const ProductList = () => {
    };
 
   useEffect(() => {
-    if (!userId) {
+    if (!touristId) {
       console.error('User ID is undefined');
       return;
     }
