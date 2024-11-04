@@ -7,6 +7,7 @@ import styles from './ReadHistoricalPlace.module.css'; // Import the CSS module
 import styles1 from '/src/client/components/Home/Homepage.module.css';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import './loadingContainer.css';
 
 const ReadHistoricalPlace = () => {
   const [places, setPlaces] = useState([]);
@@ -131,7 +132,11 @@ const ReadHistoricalPlace = () => {
   };
 
   if (loading) {
-    return <p>Loading historical places...</p>;
+    return (
+        <div className="loadingContainer">
+          <p className="loadingText">Loading historical places...</p>
+        </div>
+    )
   }
 
   if (error) {
