@@ -12,6 +12,12 @@ const ProductList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [priceFilter, setPriceFilter] = useState('');
   const [sortByRating, setSortByRating] = useState(false);
+  //const [showPurchasedOnly, setShowPurchasedOnly] = useState(false); // New state for showing only purchased products
+  const navigate = useNavigate();
+  // Assuming you have the tourist ID stored in localStorage or context
+  const touristId = localStorage.getItem('userId');// Change this to how you store the ID
+  console.log("Id", touristId);
+
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -36,11 +42,35 @@ const ProductList = () => {
     fetchProducts();  
   }, []);
 
+  const handleBuyButtonClick = async (product) => {
+    try {
+        // Fetch the current user's profile to get the existing posts
+        const profileResponse = await axios.get(`http://localhost:3000/tourist/${touristId}`);
+        const currentPosts = profileResponse.data.posts || []; // Get current posts or initialize as an empty array
+
+        // Create a new array with the new product added at the end
+        const updatedPosts = [...currentPosts, product._id]; // Append the new product ID to the current posts array
+
+        // Now update the user profile with the updated posts array
+        const updateResponse = await axios.put(`http://localhost:3000/tourist/${touristId}`, {
+            id: touristId,
+            posts: updatedPosts // Send the updated posts array to the server
+        });
+
+        console.log(`Response from server:`, updateResponse.data);
+
+    } catch (err) {
+        console.error('Error updating product status:', err);
+    }
+};
+
   // Handle filtering products based on search term
   const filteredProducts = products.filter(product => 
     product.details.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (priceFilter ? product.price <= priceFilter : true)
+    (priceFilter ? product.price <= priceFilter : true) 
+
   );
+
 
   // Handle sorting products by ratings if needed
   const sortedProducts = sortByRating
@@ -54,7 +84,9 @@ const ProductList = () => {
   if (error) {
     return <p>{error}</p>;
   }
-
+  const handleViewPurchasedProducts = () => {
+    navigate("/PurchasedProducts", { state: { userId } });
+  };
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -64,6 +96,13 @@ const ProductList = () => {
           <Link to="/" className={styles.button}>Back to Home</Link>
         </nav>
       </header>
+       {/* View Purchased Products Button */}
+       <button 
+        className={styles.viewPurchasedButton} 
+        onClick={() => navigate(`/PurchasedProducts?userId=${touristId}`)}
+      >
+        View Purchased Products
+      </button>
       <h1>Product List</h1>
       
       {/* Search Input */}
@@ -106,6 +145,14 @@ const ProductList = () => {
               <p>Price: ${product.price}</p>
               <p>Quantity: {product.quantity}</p>
               <p>Rating: {product.rating}</p>
+               {/* Buy Button */}
+               <button 
+                className={styles.buyButton} 
+                onClick={() => handleBuyButtonClick(product)}
+              >
+                Purchase
+              </button>
+
               <img className={styles.productImage} src={product.imageurl} alt={product.details} />
             </div>
           ))}

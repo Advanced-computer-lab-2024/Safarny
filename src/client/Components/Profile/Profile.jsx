@@ -18,6 +18,7 @@ const Profile = () => {
   const [showButtons, setShowButtons] = useState(false);
 
   useEffect(() => {
+    console.log("profile id",userId);
     const fetchUserData = async () => {
       try {
         const response = await fetch(`/tourist/profile?id=${userId}`);
@@ -40,7 +41,10 @@ const Profile = () => {
   };
 
   const handleProductViewClick = () => {
-    navigate("/products");
+    localStorage.setItem("userId", userId);
+    window.location.href = "/products";
+    
+    
   };
 
   const handleSellerHomeClick = () => {
@@ -96,6 +100,14 @@ const Profile = () => {
     navigate("/viewcomplaints", { state: { userId } });
   };
 
+  /*const handleViewPurchasedProducts = () => {
+    navigate("/PurchasedProducts", { state: { userId } });
+  };
+  <button onClick={handleViewPurchasedProducts} className={styles.searchButton}>
+          View Purchased Products
+        </button>
+         */
+
   return (
     <div className={styles.container}>
       <Header />
@@ -134,6 +146,7 @@ const Profile = () => {
         <button onClick={handleUpdateClick} className={styles.searchButton}>
           Update Profile
         </button>
+        
       </div>
 
       {userInfo.role === "TourismGovernor" && (

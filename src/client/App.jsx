@@ -58,8 +58,11 @@ import ViewComplaints from "./Components/Complaints/ViewComplaints";
 import AdminViewComplaints from "./Components/Complaints/AminViewComplaints";
 import AdminEditComplaints from "./Components/Complaints/AdminEditComplaints";
 import UpcomingActivitesDetails from "./Components/UpcomingEvents/UpcomingActivitiesDetails";
+import PurchasedProducts from "./Components/PurchasedProducts/PurchasedProducts";
+//import { PurchasedProductsProvider } from "./Components/PurchasedProducts/PurchasedProductsContext";
 function App() {
   return (
+    //<PurchasedProductsProvider>
     <Router>
       <Routes>
         <Route path="/" element={<Homepage />} />
@@ -123,8 +126,11 @@ function App() {
         <Route path="/viewcomplaints" element={<ViewComplaints />} />
         <Route path="/adminviewcomplaints" element={<AdminViewComplaints />} />
         <Route path="/admineditcomplaints" element={<AdminEditComplaints />} />
+        <Route path="/PurchasedProducts" element={<PurchasedProducts />} /> 
       </Routes>
     </Router>
+    //</PurchasedProductsProvider>       
+
   );
 }
 

@@ -150,3 +150,18 @@
   margin-bottom: 1rem;
   color: var(--text-color);
 }
+.viewPurchasedButton {
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  background-color: var(--secondary-color);
+  color: var(--header-color);
+  border-radius: 0.5rem;
+  transition: background-color 0.3s;
+  margin-top: 1.5rem; /* Adjusts the spacing below the header */
+  margin-left: auto;   /* Keeps the button aligned to the right */
+  margin-right: 4rem;  /* Moves the button slightly to the left */
+}
+
+.viewPurchasedButton:hover {
+  background-color: var(--card-hover);
+}
