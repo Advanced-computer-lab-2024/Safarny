@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import {Link, useLocation} from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Footer from '/src/client/components/Footer/Footer';
 import styles from './WishList.module.css';
-import Header from "/src/client/components/Header/Header";
+import Header from '/src/client/components/Header/Header';
 
 const WishList = () => {
   const location = useLocation();
   const { userId } = location.state;
   const [wishList, setWishList] = useState([]);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -25,7 +26,27 @@ const WishList = () => {
       }
     };
 
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('/admin/products');
+
+        if (Array.isArray(response.data)) {
+          setProducts(response.data);
+        } else {
+          console.error("Expected an array, but got:", typeof response.data);
+          setError('Invalid data format received');
+        }
+
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching products:', err);
+        setError('Failed to fetch products');
+        setLoading(false);
+      }
+    };
+
     fetchWishList();
+    fetchProducts();
   }, [userId]);
 
   const handleRemove = async (postId) => {
@@ -36,6 +57,10 @@ const WishList = () => {
       setError('Failed to remove item from wishlist');
     }
   };
+
+  const filteredProducts = products.filter(product =>
+    wishList.some(wishItem => wishItem._id === product._id)
+  );
 
   if (loading) {
     return <p>Loading...</p>;
@@ -55,10 +80,9 @@ const WishList = () => {
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
           {wishList.map(item => (
             <div className={styles.productCard} key={item._id}>
-              <h2 className={styles.productDetails}>{item.title}</h2>
-              <p>Content: {item.content}</p>
+              <h2 className={styles.productDetails}>{item.details}</h2>
               <p>Price: {item.price}</p>
-              <p>Currency: {item.currency}</p>
+              <p>Rating: {item.rating}</p>
               <p>Quantity: {item.quantity}</p>
               <img className={styles.productImage} src={item.imageurl} alt={item.title} />
               <button
