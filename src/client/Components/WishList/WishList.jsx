@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {Link, useLocation} from 'react-router-dom';
 import axios from 'axios';
-import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
 import styles from './WishList.module.css';
+import Header from "/src/client/components/Header/Header";
 
 const WishList = () => {
   const location = useLocation();
@@ -47,13 +47,7 @@ const WishList = () => {
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <img src={Logo} alt="Safarny Logo" className={styles.logo} />
-        <h1>Safarny</h1>
-        <nav className={styles.nav}>
-          <Link to="/" className={styles.button}>Back to Home</Link>
-        </nav>
-      </header>
+      <Header />
       <h1>My Wishlist</h1>
       {wishList.length === 0 ? (
         <p>Your wishlist is empty.</p>
