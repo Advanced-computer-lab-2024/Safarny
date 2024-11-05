@@ -176,6 +176,36 @@ const Admin = () => {
       setErrorMessage('Failed to delete post');
     }
   };
+  const handleArchiveChange = async (postId) => {
+    try {
+      await axios.put(`/admin/products/${postId}`, { archived: true });
+      fetchPosts();
+    } catch (error) {
+      setErrorMessage('Failed to update archive status');
+    }
+  };
+  const handleArchiveToggle = async (postId, isArchived) => {
+    try {
+      // Update the local state first
+      setPosts(posts.map(post => 
+        post._id === postId ? { ...post, archived: isArchived } : post
+      ));
+      console.log("Local state updated");
+  
+      // Make a request to the server to update the archived status
+      await axios.put(`/admin/products/${postId}`, { archived: isArchived });
+      console.log("Archived status updated successfully");
+  
+    } catch (error) {
+      console.error("Error updating archived status:", error);
+      // Optionally, revert the local state if the API call fails
+      setPosts(posts.map(post => 
+        post._id === postId ? { ...post, archived: !isArchived } : post
+      ));
+    }
+  };
+  
+
 
   const filteredPosts = posts.filter((post) => {
     const matchesSearch = post.details.toLowerCase().includes(searchTerm.toLowerCase());
@@ -271,6 +301,19 @@ const Admin = () => {
                         <div className={styles.cardImage}>
                           <img src={post.imageurl} alt="Image" />
                         </div>
+                         {/* Archive Checkbox */}
+              <div className={styles.archiveOption}>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={post.archived}
+                    onChange={(e) => handleArchiveToggle(post._id, e.target.checked)}
+                  />
+                  Archive
+                </label>
+              </div>
+                        
+                        
                       </CardContent>
                       <CardActions>
                         <Button size="small" color="primary" onClick={() => handleEditPost(post)}>

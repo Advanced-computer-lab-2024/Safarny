@@ -119,9 +119,11 @@ const ProductList = () => {
   const filteredProducts = products.filter(product => {
     const convertedPrice = convertPrice(product.price, product.currency, selectedCurrency);
     return product.details.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        (priceFilter ? parseFloat(convertedPrice) <= parseFloat(priceFilter) : true) &&
-        product.quantity > 0;
+      (priceFilter ? parseFloat(convertedPrice) <= parseFloat(priceFilter) : true) &&
+      product.quantity > 0 &&
+      !product.archived; // Show only products where archived is false
   });
+  
 
   const sortedProducts = sortByRating
       ? [...filteredProducts].sort((a, b) => b.rating - a.rating)

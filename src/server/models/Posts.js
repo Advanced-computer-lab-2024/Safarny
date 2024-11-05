@@ -15,6 +15,10 @@ const Posts = new mongoose.Schema(
       type: Boolean,
       default: false, // Set initial value to false
     },
+    archived: {
+      type: Boolean,
+      default: false, // Set initial value to false
+    },
     rating: {
       type: Number,
       min: 1, // Minimum rating value

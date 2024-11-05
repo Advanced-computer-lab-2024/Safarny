@@ -198,4 +198,15 @@
   h6 {
     margin-bottom: 0.5rem;
   }
+  .archiveOption label {
+    color: black; 
+  }
+  .archiveOption {
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    
+  }
   
