@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
@@ -7,7 +7,6 @@ import Footer from '/src/client/Components/Footer/Footer';
 import Header from '../Header/Header';
 import styles from './SignUp.module.css';
 
-// List of countries
 const countries = [
   "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
   "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia",
@@ -30,7 +29,6 @@ const countries = [
 ];
 
 const SignUp = () => {
-  // Form state management
   const [username, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -40,8 +38,38 @@ const SignUp = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [DOB, setDob] = useState(null);
-  const [termsAccepted, setTermsAccepted] = useState(false); // New state for terms and conditions
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const age = DOB ? calculateAge(DOB) : null;
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const savedData = JSON.parse(localStorage.getItem('signUpFormData'));
+    if (savedData) {
+      setUserName(savedData.username || '');
+      setEmail(savedData.email || '');
+      setPassword(savedData.password || '');
+      setMobile(savedData.mobile || '');
+      setNationality(savedData.nationality || '');
+      setEmployed(savedData.employed || '');
+      setDob(savedData.DOB ? new Date(savedData.DOB) : null);
+      setTermsAccepted(savedData.termsAccepted || false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const formData = {
+      username,
+      email,
+      password,
+      mobile,
+      nationality,
+      employed,
+      DOB,
+      termsAccepted
+    };
+    localStorage.setItem('signUpFormData', JSON.stringify(formData));
+  }, [username, email, password, mobile, nationality, employed, DOB, termsAccepted]);
 
   function calculateAge(dob) {
     const dobDate = new Date(dob);
@@ -54,9 +82,6 @@ const SignUp = () => {
     return age;
   }
 
-  const navigate = useNavigate();
-
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -81,7 +106,8 @@ const SignUp = () => {
       if (response.status === 201) {
         setSuccess(true);
         setError('');
-        navigate('/signin');  // Redirect to SignIn after successful signup
+        localStorage.removeItem('signUpFormData');
+        navigate('/signin');
       }
     } catch (err) {
       setError('Registration failed. Please try again.');
@@ -89,15 +115,27 @@ const SignUp = () => {
     }
   };
 
+  const handleNavigate = (path) => {
+    const formData = {
+      username,
+      email,
+      password,
+      mobile,
+      nationality,
+      employed,
+      DOB,
+      termsAccepted
+    };
+    localStorage.setItem('signUpFormData', JSON.stringify(formData));
+    navigate(path);
+  };
   return (
     <div className={styles.container}>
       <Header />
-
       <div className={styles.formContainer}>
         <h2>Sign Up</h2>
         {success && <p className={styles.successMessage}>Sign up successful!</p>}
         {error && <p className={styles.errorMessage}>{error}</p>}
-
         <form onSubmit={handleSubmit} className={styles.form}>
           <label>
             Name:
@@ -175,8 +213,6 @@ const SignUp = () => {
               <option value="No">No</option>
             </select>
           </label>
-
-          {/* Terms and Conditions */}
           <div className={styles.terms}>
             <input
               type="checkbox"
@@ -190,9 +226,11 @@ const SignUp = () => {
             </label>
             <div className={styles.termsText}>
               <ul>
-              <p>
-              <Link to="/terms">Click here for the terms and conditions.</Link>
-              </p>
+                <p>
+                  <span onClick={() => handleNavigate('/terms')} style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}>
+                    Click here for the terms and conditions.
+                  </span>
+                </p>
               </ul>
             </div>
           </div>

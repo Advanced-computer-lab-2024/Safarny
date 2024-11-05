@@ -11,6 +11,7 @@ const createPost = async (req, res) => {
       quantity,
       imageurl,
       createdby,
+      rating: 1, // Add default rating
     });
 
     const savedPost = await newPost.save();
@@ -20,6 +21,7 @@ const createPost = async (req, res) => {
       post: savedPost,
     });
   } catch (err) {
+    //console.log(err);
     res.status(500).json({ error: err.message });
   }
 };
