@@ -34,6 +34,7 @@ const CreateHistoricalPlace = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [tags, setTags] = useState([]);
+  const [currencyCodes, setCurrencyCodes] = useState([]);
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -46,6 +47,19 @@ const CreateHistoricalPlace = () => {
     };
 
     fetchTags();
+  }, []);
+
+  useEffect(() => {
+    const fetchExchangeRates = async () => {
+      try {
+        const response = await axios.get('https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP');
+        setCurrencyCodes(Object.keys(response.data.conversion_rates));
+      } catch (error) {
+        console.error('Error fetching exchange rates:', error);
+      }
+    };
+
+    fetchExchangeRates();
   }, []);
 
   const handleCloseModal = () => {
@@ -181,11 +195,9 @@ const CreateHistoricalPlace = () => {
                 value={historicalPlace.currency}
                 onChange={handleInputChange}
             >
-              <MenuItem value="EGP">EGP</MenuItem>
-              <MenuItem value="SAR">SAR</MenuItem>
-              <MenuItem value="USD">USD</MenuItem>
-              <MenuItem value="EUR">EUR</MenuItem>
-              <MenuItem value="GBP">GBP</MenuItem>
+              {currencyCodes.map(code => (
+                  <MenuItem key={code} value={code}>{code}</MenuItem>
+              ))}
             </Select>
           </FormControl>
           {tags.length > 0 && (

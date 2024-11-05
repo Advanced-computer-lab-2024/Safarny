@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-// import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
 import Header from '/src/client/components/Header/Header';
 import styles from './ReadHistoricalPlace.module.css';
@@ -16,27 +15,35 @@ const ReadHistoricalPlace = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [openingHoursFilter, setOpeningHoursFilter] = useState('');
-  const [tagFilter, setTagFilter] = useState(''); // Define tagFilter state
-  const [selectedCurrency, setSelectedCurrency] = useState('EGP'); // Define selectedCurrency state
-  const [userInfo, setUserInfo] = useState({ role: '', userId: '' }); // Define userInfo state with userId
-  const [filterByGovernor, setFilterByGovernor] = useState(false); // Define filterByGovernor state
+  const [tagFilter, setTagFilter] = useState('');
+  const [selectedCurrency, setSelectedCurrency] = useState('EGP');
+  const [userInfo, setUserInfo] = useState({ role: '', userId: '' });
+  const [filterByGovernor, setFilterByGovernor] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { userId } = location.state || {};
+  const [exchangeRates, setExchangeRates] = useState({});
+  const [currencyCodes, setCurrencyCodes] = useState([]);
 
-  const conversionRates = {
-    USD: 1 / 48.72,
-    SAR: 1 / 12.97,
-    GBP: 1 / 63.02,
-    EUR: 1 / 53.02,
-    EGP: 1, // EGP to EGP is 1:1
+  const fetchExchangeRates = async () => {
+    try {
+      const response = await axios.get('https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP');
+      setExchangeRates(response.data.conversion_rates);
+      setCurrencyCodes(Object.keys(response.data.conversion_rates));
+    } catch (err) {
+      console.error('Error fetching exchange rates:', err);
+    }
   };
 
   const convertPrice = (price, fromCurrency, toCurrency) => {
-    const rateFrom = conversionRates[fromCurrency];
-    const rateTo = conversionRates[toCurrency];
-    return ((price / rateFrom) * rateTo).toFixed(2); // Convert and format to 2 decimal places
+    const rateFrom = exchangeRates[fromCurrency];
+    const rateTo = exchangeRates[toCurrency];
+    return ((price / rateFrom) * rateTo).toFixed(2);
   };
+
+  useEffect(() => {
+    fetchExchangeRates();
+  }, []);
 
   const fetchHistoricalPlaces = async () => {
     try {
@@ -108,11 +115,12 @@ const ReadHistoricalPlace = () => {
     }
   }, [filterByGovernor]);
 
-  const filteredPlaces = places.filter(place =>
-      place.description && place.description.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (openingHoursFilter ? place.openingHours.toLowerCase().includes(openingHoursFilter.toLowerCase()) : true) &&
-      (tagFilter ? place.tags.some(tag => tag.name.toLowerCase().includes(tagFilter.toLowerCase())) : true)
-  );
+  const filteredPlaces = places.filter(place => {
+    const convertedPrice = convertPrice(place.ticketPrices, place.currency, selectedCurrency);
+    return place.description.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        (openingHoursFilter ? place.openingHours.toLowerCase().includes(openingHoursFilter.toLowerCase()) : true) &&
+        (tagFilter ? place.tags.some(tag => tag.name.toLowerCase().includes(tagFilter.toLowerCase())) : true);
+  });
 
   const handleUpdateHistoricalPlace = (placeId) => {
     navigate(`/update-historical-place/${placeId}`);
@@ -190,11 +198,9 @@ const ReadHistoricalPlace = () => {
                 value={selectedCurrency}
                 onChange={(e) => setSelectedCurrency(e.target.value)}
             >
-              <MenuItem value="EGP">EGP</MenuItem>
-              <MenuItem value="SAR">SAR</MenuItem>
-              <MenuItem value="USD">USD</MenuItem>
-              <MenuItem value="EUR">EUR</MenuItem>
-              <MenuItem value="GBP">GBP</MenuItem>
+              {currencyCodes.map(code => (
+                  <MenuItem key={code} value={code}>{code}</MenuItem>
+              ))}
             </Select>
           </FormControl>
         </div>
