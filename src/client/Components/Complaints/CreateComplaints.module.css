@@ -7,16 +7,16 @@
     --button-text-color: #fff;
     --button-hover-bg-color: #0056b3;
     --text-color: #000; /* Black text */
-    --container-bg-color: #f9f9f9;
+    --container-bg-color: #dcdbdb;
   }
   
   .container {
-    max-width: 40rem;
     margin: 2rem auto;
     padding: var(--container-spacing);
     background-color: var(--container-bg-color);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 95vw;
     font-family: Arial, sans-serif;
     color: var(--text-color); /* Apply black text color */
   }
