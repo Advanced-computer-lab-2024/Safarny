@@ -49,11 +49,11 @@ const getAllPostsBySellerId = async (req, res) => {
 const updatePostById = async (req, res) => {
   try {
     const postId = req.params.id;
-    const { details, price, currency, quantity, imageurl } = req.body;
+    const { details, price, currency, quantity, imageurl, purchased ,review, rating } = req.body;
 
     const updatedPost = await Post.findByIdAndUpdate(
       postId,
-      { details, price, currency, quantity, imageurl },
+      { details, price, currency, quantity, imageurl,purchased ,review, rating},
       { new: true, runValidators: true }
     );
 
@@ -85,11 +85,25 @@ const deletePostById = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+const getPostById = async (req, res) => {
+  try {
+    const postId = req.params.id; // Extract the post ID from the request parameters
+    const post = await Post.findById(postId); // Find the post by ID
 
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" }); // Handle case where post is not found
+    }
+
+    res.status(200).json(post); // Return the found post
+  } catch (err) {
+    res.status(500).json({ error: err.message }); // Handle any errors that occur
+  }
+};
 module.exports = {
   createPost,
   getAllPosts,
   updatePostById,
   deletePostById,
   getAllPostsBySellerId,
+  getPostById, // Export the new function
 };

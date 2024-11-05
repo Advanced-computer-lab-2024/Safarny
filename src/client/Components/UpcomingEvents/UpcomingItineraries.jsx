@@ -3,6 +3,8 @@ import styles from "./UpcomingItinerary.module.css";
 import Logo from "/src/client/Assets/Img/logo.png";
 import Footer from "/src/client/components/Footer/Footer";
 import { Link } from "react-router-dom";
+import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
+import Header from "/src/client/Components/Header/Header";
 
 const UpcomingItineraries = () => {
   const [itineraries, setItineraries] = useState([]);
@@ -12,7 +14,21 @@ const UpcomingItineraries = () => {
   const [preferences, setPreferences] = useState([]);
   const [language, setLanguage] = useState("");
   const [availableTags, setAvailableTags] = useState([]);
+  const [selectedCurrency, setSelectedCurrency] = useState('EGP'); // Define selectedCurrency state
 
+  const conversionRates = {
+    USD: 1 / 48.72,
+    SAR: 1 / 12.97,
+    GBP: 1 / 63.02,
+    EUR: 1 / 53.02,
+    EGP: 1, // EGP to EGP is 1:1
+  };
+
+  const convertPrice = (price, fromCurrency, toCurrency) => {
+    const rateFrom = conversionRates[fromCurrency];
+    const rateTo = conversionRates[toCurrency];
+    return ((price / rateFrom) * rateTo).toFixed(2); // Convert and format to 2 decimal places
+  };
   useEffect(() => {
     fetchFilteredItineraries(true);
     fetchTags();
@@ -65,16 +81,7 @@ const UpcomingItineraries = () => {
 
   return (
       <div className={styles.container}>
-        <header className={styles.header}>
-          <img src={Logo} alt="Safarny Logo" className={styles.logo} />
-          <h1>Safarny</h1>
-          <nav className={styles.nav}>
-            <Link to="/" className={styles.button}>
-              Back to Home
-            </Link>
-          </nav>
-        </header>
-
+        <Header />
         <main className={styles.main}>
           <h2>Upcoming Itineraries</h2>
 
@@ -150,7 +157,22 @@ const UpcomingItineraries = () => {
                   placeholder="Language"
               />
             </div>
-
+            <div className={styles.currencySelector}>
+              <FormControl fullWidth margin="normal">
+                <InputLabel><h3>Currency</h3></InputLabel>
+                <br></br>
+                <Select
+                    value={selectedCurrency}
+                    onChange={(e) => setSelectedCurrency(e.target.value)}
+                >
+                  <MenuItem value="EGP">EGP</MenuItem>
+                  <MenuItem value="SAR">SAR</MenuItem>
+                  <MenuItem value="USD">USD</MenuItem>
+                  <MenuItem value="EUR">EUR</MenuItem>
+                  <MenuItem value="GBP">GBP</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
             {/* Apply Filters Button */}
             <button onClick={handleFilterClick}>Apply Filters</button>
           </div>
@@ -160,59 +182,62 @@ const UpcomingItineraries = () => {
             {itineraries.length === 0 ? (
                 <p>No upcoming itineraries found.</p>
             ) : (
-                itineraries.map((itinerary) => (
-                    <div key={itinerary._id} className={styles.itineraryItem}>
-                      <h3>{itinerary.name}</h3>
-                      <p>Duration: {itinerary.duration} hours</p>
-                      <p>Language: {itinerary.language}</p>
-                      <p>Price: {itinerary.price} {itinerary.currency}</p>
-                      <p>Available Dates: {itinerary.availableDates.join(", ")}</p>
-                      <p>Available Times: {itinerary.availableTimes.join(", ")}</p>
-                      <p>Accessibility: {itinerary.accessibility ? "Yes" : "No"}</p>
-                      <p>Pickup Location: {itinerary.pickupLocation}</p>
-                      <p>Dropoff Location: {itinerary.dropoffLocation}</p>
+                itineraries.map((itinerary) => {
+                  const convertedPrice = convertPrice(itinerary.price, itinerary.currency, selectedCurrency);
+                  return (
+                      <div key={itinerary._id} className={styles.itineraryItem}>
+                        <h3>{itinerary.name}</h3>
+                        <p>Duration: {itinerary.duration} hours</p>
+                        <p>Language: {itinerary.language}</p>
+                        <p>Price: {convertedPrice} {selectedCurrency}</p>
+                        <p>Available Dates: {itinerary.availableDates.join(", ")}</p>
+                        <p>Available Times: {itinerary.availableTimes.join(", ")}</p>
+                        <p>Accessibility: {itinerary.accessibility ? "Yes" : "No"}</p>
+                        <p>Pickup Location: {itinerary.pickupLocation}</p>
+                        <p>Dropoff Location: {itinerary.dropoffLocation}</p>
 
-                      {/* Display Rating */}
-                      <p>
-                        Rating:{" "}
-                        {itinerary.rating !== undefined
-                            ? itinerary.rating
-                            : "No rating available"}
-                      </p>
+                        {/* Display Rating */}
+                        <p>
+                          Rating:{" "}
+                          {itinerary.rating !== undefined
+                              ? itinerary.rating
+                              : "No rating available"}
+                        </p>
 
-                      {/* Display Tags */}
-                      {itinerary.tags && itinerary.tags.length > 0 && (
-                          <p>
-                            Tags: {itinerary.tags.map((tag) => tag.name).join(", ")}
-                          </p>
-                      )}
+                        {/* Display Tags */}
+                        {itinerary.tags && itinerary.tags.length > 0 && (
+                            <p>
+                              Tags: {itinerary.tags.map((tag) => tag.name).join(", ")}
+                            </p>
+                        )}
 
-                      {/* Display Activities */}
-                      {itinerary.activities && itinerary.activities.length > 0 && (
-                          <div>
-                            <p>Activities:</p>
-                            <ul>
-                              {itinerary.activities.map((activity) => (
-                                  <li key={activity._id}>
-                                    {activity.location} - {activity.date} at{" "}
-                                    {activity.time}
-                                    {activity.specialDiscount && (
-                                        <span> - Discount: {activity.specialDiscount}</span>
-                                    )}
-                                    {activity.price && (
-                                        <span> - Price: {activity.price}$</span>
-                                    )}
-                                  </li>
-                              ))}
-                            </ul>
-                          </div>
-                      )}
-                    </div>
-                ))
+                        {/* Display Activities */}
+                        {itinerary.activities && itinerary.activities.length > 0 && (
+                            <div>
+                              <p>Activities:</p>
+                              <ul>
+                                {itinerary.activities.map((activity) => (
+                                    <li key={activity._id}>
+                                      {activity.location} - {activity.date} at{" "}
+                                      {activity.time}
+                                      {activity.specialDiscount && (
+                                          <span> - Discount: {activity.specialDiscount}</span>
+                                      )}
+                                      {activity.price && (
+                                          <span> - Price: {activity.price}$</span>
+                                      )}
+                                    </li>
+                                ))}
+                              </ul>
+                            </div>
+                        )}
+                      </div>
+                  );
+                })
             )}
           </section>
         </main>
-        <Footer />
+        <Footer/>
       </div>
   );
 };

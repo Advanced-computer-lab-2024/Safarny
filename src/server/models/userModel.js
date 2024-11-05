@@ -28,7 +28,8 @@ const userModel = new mongoose.Schema(
     DOB: Date,
     age: Number,
     mobile: String,
-
+     
+     
     //TourGuide
     YearOfExp: Number,
     PrevWork: String,

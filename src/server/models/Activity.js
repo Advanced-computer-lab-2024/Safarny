@@ -16,6 +16,10 @@ const activitySchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  currency: {
+    type: String,
+    required: true,
+  },
   specialDiscount: { type: String },
   bookingOpen: { type: Boolean, default: true },
   date: { type: String, required: true },
