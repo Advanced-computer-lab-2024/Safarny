@@ -207,7 +207,7 @@ const ReadHistoricalPlace = () => {
         )}
 
         {filteredPlaces.length > 0 ? (
-            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <div className={styles.cardsContainer}>
               {filteredPlaces.map(place => {
                 const hasCoordinates = place.coordinates && place.coordinates.lat !== undefined && place.coordinates.lng !== undefined;
                 const convertedPrice = convertPrice(place.ticketPrices, place.currency, selectedCurrency);
