@@ -192,7 +192,7 @@ const ProductList = () => {
         </div>
 
         {sortedProducts.length > 0 ? (
-            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <div className={styles.productsAll}>
               {sortedProducts.map(product => {
                 const convertedPrice = convertPrice(product.price, product.currency, selectedCurrency);
                 return (
