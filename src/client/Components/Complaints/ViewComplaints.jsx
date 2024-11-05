@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
+import styles from './ViewComplaint.module.css';
+import Footer from '/src/client/Components/Footer/Footer';
+import Header from '../Header/Header';
 
 const ViewComplaints = () => {
     const location = useLocation();
@@ -12,14 +15,14 @@ const ViewComplaints = () => {
         const fetchComplaints = async () => {
             try {
                 const userId = location.state.userId;
-                console.log('User ID:', userId); // Debugging line
+                console.log('User ID:', userId);
 
                 const complaintsResponse = await axios.get(`/tourist/complaints/${userId}`);
-                console.log('Complaints Response:', complaintsResponse.data); // Debugging line
+                console.log('Complaints Response:', complaintsResponse.data);
 
                 setComplaints(complaintsResponse.data);
             } catch (err) {
-                console.error('Error:', err); // Detailed error logging
+                console.error('Error:', err);
                 if (err.response && err.response.status === 404) {
                     setError('No complaints found for this submitter.');
                 } else {
@@ -34,30 +37,46 @@ const ViewComplaints = () => {
     }, [location.state]);
 
     if (loading) {
-        return <p>Loading...</p>;
+        return (
+            <div className={styles.full-screen}>
+                <Header />
+                <p className={styles.loading}>Loading...</p>
+                <Footer />
+            </div>
+        );
     }
 
     if (error) {
-        return <p>{error}</p>;
+        return (
+            <div className={styles.full-screen}>
+                <Header />
+                <p className={styles.error}>{error}</p>
+                <Footer />
+            </div>
+        );
     }
 
     return (
-        <div>
-            <h2>My Complaints</h2>
-            {complaints.length === 0 ? (
-                <p>No complaints found. You have not made any complaints yet.</p>
-            ) : (
-                <ul>
-                    {complaints.map((complaint) => (
-                        <li key={complaint._id}>
-                            <h3>{complaint.title}</h3>
-                            <p>{complaint.body}</p>
-                            <p>Status: {complaint.status}</p>
-                            <p>Date: {new Date(complaint.date).toLocaleString()}</p>
-                        </li>
-                    ))}
-                </ul>
-            )}
+        <div className={styles.full-screen}>
+            <Header />
+            <div className={styles.container}>
+                <h2 className={styles.heading}>My Complaints</h2>
+                {complaints.length === 0 ? (
+                    <p>No complaints found. You have not made any complaints yet.</p>
+                ) : (
+                    <ul className={styles.list}>
+                        {complaints.map((complaint) => (
+                            <li key={complaint._id} className={styles.item}>
+                                <h3 className={styles.title}>{complaint.title}</h3>
+                                <p className={styles.body}>{complaint.body}</p>
+                                <p className={styles.status}>Status: {complaint.status}</p>
+                                <p className={styles.date}>Date: {new Date(complaint.date).toLocaleString()}</p>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+            <Footer />
         </div>
     );
 };

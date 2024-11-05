@@ -72,32 +72,34 @@ const WishList = () => {
 
   return (
     <div className={styles.container}>
-      <Header />
-      <h1>My Wishlist</h1>
-      {wishList.length === 0 ? (
-        <p>Your wishlist is empty.</p>
-      ) : (
-        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-          {wishList.map(item => (
-            <div className={styles.productCard} key={item._id}>
-              <h2 className={styles.productDetails}>{item.details}</h2>
-              <p>Price: {item.price}</p>
-              <p>Rating: {item.rating}</p>
-              <p>Quantity: {item.quantity}</p>
-              <img className={styles.productImage} src={item.imageurl} alt={item.title} />
-              <button
-                onClick={() => handleRemove(item._id)}
-                className={styles.wishlistButton}
-              >
-                Remove
-              </button>
+        <Header />
+        <h1>My Wishlist</h1>
+        {wishList.length === 0 ? (
+            <p>Your wishlist is empty.</p>
+        ) : (
+            <div className={styles.productContainer}> {/* Use new class for flex container */}
+                {wishList.map(item => (
+                    <div className={styles.productCard} key={item._id}>
+                        <h2 className={styles.productDetails}>{item.details}</h2>
+                        <p>Price: {item.price}</p>
+                        <p>Rating: {item.rating}</p>
+                        <p>Quantity: {item.quantity}</p>
+                        <div className={styles.productImage}>
+                            <img src={item.imageurl} alt={item.title} />
+                        </div>
+                        <button
+                            onClick={() => handleRemove(item._id)}
+                            className={styles.wishlistButton}
+                        >
+                            Remove
+                        </button>
+                    </div>
+                ))}
             </div>
-          ))}
-        </div>
-      )}
-      <Footer />
+        )}
+        <Footer />
     </div>
-  );
+);
 };
 
 export default WishList;

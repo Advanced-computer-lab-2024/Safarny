@@ -203,7 +203,7 @@ const Profile = () => {
               View Complaints
             </button>
             <button onClick={handelWishList} className={styles.postButton}>
-              View Wish List
+              View Wishlist
             </button>
           </div>
       )}
