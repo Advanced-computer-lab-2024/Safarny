@@ -20,6 +20,8 @@ const ProductList = () => {
   const [sortByRating, setSortByRating] = useState(false);
   const [currencyCodes, setCurrencyCodes] = useState([]);
   const [exchangeRates, setExchangeRates] = useState({});
+  const [wallet, setWallet] = useState(0);
+  const [walletCurrency, setWalletCurrency] = useState('EGP');
 
   const touristId = localStorage.getItem('userId');
   const [userRole, setUserRole] = useState('');
@@ -70,6 +72,8 @@ const ProductList = () => {
         const response = await axios.get(`/tourist/${userId}`);
         const user = response.data;
         setUserRole(user.role);
+        setWallet(user.wallet);
+        setWalletCurrency(user.walletcurrency);
         console.log('User role:', user.role);
       } catch (err) {
         console.error('Error fetching user role:', err);
@@ -97,6 +101,12 @@ const ProductList = () => {
   };
 
   const handleBuyButtonClick = async (product) => {
+    const convertedPrice = convertPrice(product.price, product.currency, walletCurrency);
+    if (wallet < convertedPrice) {
+      alert('You do not have enough funds to purchase this product.');
+      return;
+    }
+
     try {
       const updatedProduct = { ...product, quantity: product.quantity - 1 };
       await axios.put(`/admin/products/${product._id}`, updatedProduct);
@@ -107,10 +117,12 @@ const ProductList = () => {
 
       await axios.put(`http://localhost:3000/tourist/${touristId}`, {
         id: touristId,
-        posts: updatedPosts
+        posts: updatedPosts,
+        wallet: wallet - convertedPrice // Deduct the price from the wallet
       });
 
       setProducts(products.map(p => p._id === product._id ? updatedProduct : p));
+      setWallet(wallet - convertedPrice); // Update the wallet state
     } catch (err) {
       console.error('Error updating product status:', err);
     }
