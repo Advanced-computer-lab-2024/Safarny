@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import SideBar from '../SideBar';
+import SideBar from '../SideBar/SideBar';
 import {
   Button,
   Modal,
@@ -16,9 +16,11 @@ import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from '../../../server/config/Firebase';
 import Tags from './tagAdmin';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ActivityCategory from './ActivityCategory';
 import styles from './Admin.module.css';
+import Logo from '/src/client/Assets/Img/logo.png';
+import Footer from '/src/client/Components/Footer/Footer';
 
 
 const Admin = () => {
@@ -36,11 +38,38 @@ const Admin = () => {
   const [maxPrice, setMaxPrice] = useState('');
   const [sortBy, setSortBy] = useState('');
 
+  //header items
+  const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const handleBackClick = () => {
+    navigate(-1);
+  };
+
   useEffect(() => {
     if (selectedSection === 'posts') {
       fetchPosts();
     }
   }, [selectedSection]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const header = document.querySelector(`.${styles.header}`);
+      if (window.scrollY > 50) {
+        header.classList.add(styles.translucent);
+      } else {
+        header.classList.remove(styles.translucent);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const fetchPosts = async () => {
     try {
@@ -149,62 +178,24 @@ const Admin = () => {
 
   return (
     <div className={styles.container}>
+      <header className={styles.header}>
+        <img src={Logo} alt="Safarny Logo" className={styles.logo} />
+        <h1>Safarny</h1>
+        <button className={styles.burger} onClick={toggleMenu}>
+          <span className={styles.burgerIcon}>&#9776;</span>
+        </button>
+        <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
+          <button onClick={handleBackClick} className={styles.button}>Back</button>
+          <Link to="/" className={styles.button}>Homepage</Link>
+          <button onClick={handleOpenModal} className={styles.button}>Add Post</button>
+          <button onClick={() => setSelectedSection('tags')} className={styles.button}>Manage Tags</button>
+          <button onClick={() => setSelectedSection('ActivityCategory')} className={styles.button}>Manage Categories</button>
+          <Link to="/adminaddgovernor"  className={styles.button}>Add Governor</Link>
+          <Link to="/adminviewcomplaints" className={styles.button}>View Complaints</Link>
+        </nav>
+      </header>
       <SideBar className={styles.sidebar} />
       <div className={styles.content}>
-        <div className={styles.buttonsContainer}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleOpenModal}
-            className={styles.button}
-          >
-            Add Post
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => setSelectedSection('tags')}
-            className={styles.button}
-          >
-            Manage Tags
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => setSelectedSection('ActivityCategory')}
-            className={styles.button}
-          >
-            Manage Categories
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            component={Link}
-            to="/adminaddgovernor"
-            className={styles.button}
-          >
-            Add Governor
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            component={Link}
-            to="/"
-            className={styles.button}
-          >
-            Home
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            component={Link}
-            to="/adminviewcomplaints"
-            className={styles.button}
-          >
-            View Complaints
-          </Button>
-        </div>
-
         {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
 
         <TextField
@@ -262,11 +253,11 @@ const Admin = () => {
                   <div>Price: {post.price} {post.currency}</div>
                   <div>Quantity: {post.quantity}</div>
                   <div className={styles.cardImage}>
-                    <img src={post.imageurl} alt="Image"/>
+                    <img src={post.imageurl} alt="Image" />
                   </div>
                 </CardContent>
                 <CardActions>
-                <Button size="small" color="primary" onClick={() => handleEditPost(post)}>
+                  <Button size="small" color="primary" onClick={() => handleEditPost(post)}>
                     Edit
                   </Button>
                   <Button size="small" color="secondary" onClick={() => handleDeletePost(post._id)}>
@@ -305,9 +296,9 @@ const Admin = () => {
           <FormControl fullWidth margin="normal">
             <InputLabel>Currency</InputLabel>
             <Select
-                name="currency"
-                value={currentPost.currency}
-                onChange={handleInputChange}
+              name="currency"
+              value={currentPost.currency}
+              onChange={handleInputChange}
             >
               <MenuItem value="EGP">EGP</MenuItem>
               <MenuItem value="SAR">SAR</MenuItem>
@@ -332,6 +323,7 @@ const Admin = () => {
           {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
         </div>
       </Modal>
+      <Footer />
     </div>
   );
 };

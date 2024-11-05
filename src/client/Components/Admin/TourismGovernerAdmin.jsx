@@ -1,5 +1,5 @@
 import React from 'react'
-import SideBar from '../SideBar'
+import SideBar from '../SideBar/SideBar'
 import DataTable5 from '../Grids/TourismGovernerGrid'
 
 const TourismGovernerAdmin = () => {

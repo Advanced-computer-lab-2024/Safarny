@@ -15,12 +15,82 @@
   /* Main Container */
   .container {
     display: flex;
+    flex-direction: column;
     min-height: 100vh;
     background-color: var(--background-color);
     padding: var(--gap-size);
     gap: var(--gap-size);
   }
+
+  .header {
+    position: sticky;
+    top: 0;
+    background-color: var(--primary-color);
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    height: var(--header-height);
+    border-radius: var(--border-radius);
+    width: 90%;
+    transition: background-color 0.3s;
+  }
   
+  .header.translucent {
+    background-color: rgba(26, 26, 26, 0.8);
+  }
+  
+  .header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--header-color);
+    display: flex;
+    align-items: center;
+  }
+  
+  h1 {
+    color: white;
+  }
+  
+  .logo {
+    height: 8rem;
+    margin-right: 1rem;
+    position: absolute;
+    left: 4rem;
+  }
+  
+  /* Burger menu */
+  .burger {
+    background: none;
+    border: none;
+    color: var(--header-color);
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 1050;
+  }
+  
+  .burgerIcon {
+    font-size: 2rem;
+    color: white;
+  }
+  
+  .nav {
+    display: none;
+    flex-direction: column;
+    gap: 1rem;
+    position: absolute;
+    top: var(--header-height);
+    right: 0;
+    background-color: var(--primary-color);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+  }
+  
+  .navOpen {
+    display: flex;
+  }
   
   /* Content Area */
   .content {

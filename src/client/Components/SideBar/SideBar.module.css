@@ -9,14 +9,14 @@
 }
 
 .sidebar {
-  height: calc(100vh - 4rem); /* Adjust to fill viewport height minus header */
+  height: calc(100vh - 20rem); /* Adjust to fill viewport height minus header */
   width: var(--sidebar-width);
   background-color: var(--sidebar-bg-color);
   padding: var(--sidebar-padding);
   display: flex;
   flex-direction: column;
   position: fixed; /* Keeps sidebar fixed on the left side */
-  top: 4rem; /* Adjust to match header height */
+  top: 10rem; /* Adjust to match header height */
   left: 0;
   border-radius: var(--sidebar-border-radius);
   box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.1);

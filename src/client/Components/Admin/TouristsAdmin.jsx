@@ -1,5 +1,5 @@
 import React from 'react'
-import SideBar from '../SideBar'
+import SideBar from '../SideBar/SideBar'
 import DataTable from '../Grids/GridCol'
 
 const TouristsAdmin = () => {
