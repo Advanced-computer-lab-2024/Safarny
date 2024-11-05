@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
-import Logo from '/src/client/Assets/Img/logo.png';
+// import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
+import Header from '/src/client/components/Header/Header';
 import styles from './PurchasedProducts.module.css';
 
 
@@ -103,14 +104,7 @@ const PurchasedProducts = () => {
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <img src={Logo} alt="Safarny Logo" className={styles.logo} />
-        <h1>Safarny</h1>
-        <nav className={styles.nav}>
-          <Link to="/" className={styles.button}>Back to Home</Link>
-          <Link to="/products" className={styles.button}>All Products</Link>
-        </nav>
-      </header>
+      <Header />
       <h1>Purchased Products</h1>
 
       {products.length > 0 ? (

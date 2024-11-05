@@ -110,12 +110,25 @@
     padding-bottom: var(--gap-size);
   }
   
-  .button {
-    border-radius: 0.5rem;
-    padding: 0.625rem 1rem;
-    font-weight: bold;
-    text-transform: none;
-  }
+/* Shared button and link style */
+.headerLink, .button {
+  border-radius: 0.5rem;
+  padding: 0.625rem 1rem;
+  font-weight: bold;
+  text-transform: none;
+  color: white;
+  background-color: var(--secondary-color);
+  border: none;
+  cursor: pointer;
+  text-decoration: none; /* Removes underline from links */
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.headerLink:hover, .button:hover {
+  background-color: #555; /* Slightly darker shade for hover effect */
+}
+
   
   /* Alerts */
   .errorAlert {

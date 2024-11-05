@@ -23,6 +23,14 @@
     position: absolute;
     top: 0;
     width: 100%;
+    height: 100%;
+}
+
+.productAll{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: 100%;
 }
 
 .productCard {

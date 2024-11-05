@@ -73,6 +73,7 @@ const WishList = () => {
   return (
     <div className={styles.container}>
         <Header />
+        <div classname={styles.productAll}>
         <h1>My Wishlist</h1>
         {wishList.length === 0 ? (
             <p>Your wishlist is empty.</p>
@@ -96,7 +97,9 @@ const WishList = () => {
                     </div>
                 ))}
             </div>
+            
         )}
+        </div>
         <Footer />
     </div>
 );

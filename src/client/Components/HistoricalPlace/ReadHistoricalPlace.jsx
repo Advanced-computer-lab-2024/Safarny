@@ -155,6 +155,7 @@ const ReadHistoricalPlace = () => {
   return (
       <div className={styles1.container}>
         <Header />
+        <div className={styles.contentContainer}>
         <h1>Historical Places</h1>
 
         {/* Search Input */}
@@ -284,6 +285,7 @@ const ReadHistoricalPlace = () => {
         ) : (
             <p>No historical places available</p>
         )}
+        </div>
         <Footer />
       </div>
   );
