@@ -10,7 +10,7 @@ const bookingSchema = new Schema(
     },
     tourist: {
       type: Schema.Types.ObjectId,
-      ref: "Tourist", // Assuming we have a Tourist model
+      ref: "User",
       required: true,
     },
     bookingDate: {
