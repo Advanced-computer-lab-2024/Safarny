@@ -1,14 +1,13 @@
 :root {
-  --container-spacing: 1.5rem;
+  --container-spacing: 2rem;
   --heading-font-size: 2rem;
-  --list-spacing: 1.25rem;
-  --item-spacing: 0.5rem;
-  --item-padding: 1rem;
-  --error-color: #d9534f;
-  --loading-font-size: 1.2rem;
-  --status-color: #6c757d;
-  --date-color: #555;
-  --container-bg-color: #f8f9fa;
+  --label-font-size: 1rem;
+  --input-padding: 0.75rem;
+  --button-bg-color: #007bff;
+  --button-text-color: #fff;
+  --button-hover-bg-color: #0056b3;
+  --text-color: #000; /* Black text */
+  --container-bg-color: #dcdbdb;
 }
 
 .full-screen {
@@ -18,44 +17,44 @@
 }
 
 .container {
-  max-width: 40rem;
-  margin: auto;
+  margin: 2rem auto;
   padding: var(--container-spacing);
   background-color: var(--container-bg-color);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-grow: 1; /* This allows the container to grow and occupy available space */
+  width: 95vw;
+  font-family: Arial, sans-serif;
+  color: var(--text-color); /* Apply black text color */
 }
 
 .heading {
   font-size: var(--heading-font-size);
   margin-bottom: var(--container-spacing);
+  text-align: center;
+  color: var(--text-color);
 }
 
 .list {
-  list-style-type: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Creates 3 columns */
+  gap: 1.5rem; /* Adds space between the items */
   padding: 0;
   margin: 0;
-  width: 100%;
 }
 
 .item {
-  padding: var(--item-padding);
+  padding: 1rem;
   border: 1px solid #ddd;
   border-radius: 4px;
-  margin-bottom: var(--list-spacing);
   background-color: #ffffff;
   text-align: left;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .title {
   font-size: 1.25rem;
   font-weight: bold;
-  color: black; /* Setting title color to black */
+  color: black;
 }
 
 .body, .status, .date {
@@ -64,7 +63,7 @@
 }
 
 .loading, .error {
-  font-size: var(--loading-font-size);
+  font-size: 1.2rem;
   text-align: center;
   margin-top: auto;
   margin-bottom: auto;

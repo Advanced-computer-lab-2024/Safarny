@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Footer from '/src/client/Components/Footer/Footer';
 import Header from '../Header/Header';
 import styles from './SignUp.module.css';
@@ -50,87 +50,66 @@ const countryToCurrency = {
 };
 
 const SignUp = () => {
-  const [username, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [mobile, setMobile] = useState('');
-  const [nationality, setNationality] = useState('');
-  const [employed, setEmployed] = useState('');
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    mobile: '',
+    nationality: '',
+    employed: '',
+    DOB: null,
+    termsAccepted: false,
+    walletCurrency: ''
+  });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const [DOB, setDob] = useState(null);
-  const [termsAccepted, setTermsAccepted] = useState(false);
-  const [walletCurrency, setWalletCurrency] = useState('');
-  const age = DOB ? calculateAge(DOB) : null;
-
   const navigate = useNavigate();
 
+  // Load form data from local storage on initial load
   useEffect(() => {
     const savedData = JSON.parse(localStorage.getItem('signUpFormData'));
-    if (savedData) {
-      setUserName(savedData.username || '');
-      setEmail(savedData.email || '');
-      setPassword(savedData.password || '');
-      setMobile(savedData.mobile || '');
-      setNationality(savedData.nationality || '');
-      setEmployed(savedData.employed || '');
-      setDob(savedData.DOB ? new Date(savedData.DOB) : null);
-      setTermsAccepted(savedData.termsAccepted || false);
-      setWalletCurrency(savedData.walletCurrency || '');
-    }
+    if (savedData) setFormData(savedData);
   }, []);
 
+  // Save form data to local storage whenever it changes
   useEffect(() => {
-    const formData = {
-      username,
-      email,
-      password,
-      mobile,
-      nationality,
-      employed,
-      DOB,
-      termsAccepted,
-      walletCurrency
-    };
     localStorage.setItem('signUpFormData', JSON.stringify(formData));
-  }, [username, email, password, mobile, nationality, employed, DOB, termsAccepted, walletCurrency]);
+  }, [formData]);
 
-  function calculateAge(dob) {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+      walletCurrency: name === 'nationality' ? countryToCurrency[value] || '' : prevData.walletCurrency
+    }));
+  };
+
+  const handleDateChange = (date) => {
+    setFormData((prevData) => ({ ...prevData, DOB: date }));
+  };
+
+  const calculateAge = (dob) => {
+    if (!dob) return null;
     const dobDate = new Date(dob);
     const today = new Date();
     let age = today.getFullYear() - dobDate.getFullYear();
-    const monthDiff = today.getMonth() - dobDate.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dobDate.getDate())) {
+    if (today.getMonth() < dobDate.getMonth() || 
+       (today.getMonth() === dobDate.getMonth() && today.getDate() < dobDate.getDate())) {
       age--;
     }
     return age;
-  }
-
-  const handleCountryChange = (e) => {
-    const selectedCountry = e.target.value;
-    setNationality(selectedCountry);
-    setWalletCurrency(countryToCurrency[selectedCountry] || '');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!termsAccepted) {
+    if (!formData.termsAccepted) {
       setError('You must accept the terms and conditions to sign up.');
       return;
     }
 
-    const userData = {
-      username,
-      email,
-      password,
-      mobile,
-      nationality,
-      employed,
-      DOB,
-      age,
-      walletCurrency
-    };
+    const userData = { ...formData, age: calculateAge(formData.DOB) };
 
     try {
       const response = await axios.post('http://localhost:3000/guest/tourist-signup', userData);
@@ -146,131 +125,101 @@ const SignUp = () => {
     }
   };
 
-  const handleNavigate = (path) => {
-    const formData = {
-      username,
-      email,
-      password,
-      mobile,
-      nationality,
-      employed,
-      DOB,
-      termsAccepted,
-      walletCurrency
-    };
-    navigate(path);
-  };
-
   return (
-      <div className={styles.container}>
-        <Header />
-        <div className={styles.formContainer}>
-          <h2>Sign Up</h2>
-          {success && <p className={styles.successMessage}>Sign up successful!</p>}
-          {error && <p className={styles.errorMessage}>{error}</p>}
-          <form onSubmit={handleSubmit} className={styles.form}>
-            <label>
-              Name:
-              <input
-                  type="text"
-                  name="username"
-                  value={username}
-                  onChange={(e) => setUserName(e.target.value)}
-                  required
-              />
-            </label>
-            <label>
-              Email:
-              <input
-                  type="email"
-                  name="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-              />
-            </label>
-            <label>
-              Password:
-              <input
-                  type="password"
-                  name="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-              />
-            </label>
-            <label>
-              Date of Birth:
-              <DatePicker
-                  selected={DOB}
-                  onChange={(date) => setDob(date)}
-                  dateFormat="MM/dd/yyyy"
-                  className="form-control"
-                  placeholderText="Select your date of birth"
-                  required
-              />
-            </label>
-            <label>
-              Mobile:
-              <input
-                  type="text"
-                  name="mobile"
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
-                  required
-              />
-            </label>
-            <label>
-              Nationality:
-              <select
-                  value={nationality}
-                  onChange={handleCountryChange}
-                  required
-              >
-                <option value="">Select Country of Origin</option>
-                {countries.map((country) => (
-                    <option key={country} value={country}>{country}</option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Employment Status:
-              <select
-                  value={employed}
-                  onChange={(e) => setEmployed(e.target.value)}
-                  required
-              >
-                <option value="">Select employment status</option>
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-              </select>
-            </label>
-            <div className={styles.terms}>
-              <input
-                  type="checkbox"
-                  id="terms"
-                  checked={termsAccepted}
-                  onChange={(e) => setTermsAccepted(e.target.checked)}
-                  required
-              />
-              <label htmlFor="terms">
-                I agree to the following terms and conditions:
-              </label>
-              <div className={styles.termsText}>
-                <ul>
-                  <p>
-                  <span onClick={() => handleNavigate('/terms')} style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}>
-                    Click here for the terms and conditions.
-                  </span>
-                  </p>
-                </ul>
-              </div>
-            </div>
-            <button type="submit" className={styles.submitButton}>Sign Up</button>
-          </form>
-        </div>
-        <Footer />
+    <div className={styles.container}>
+      <Header />
+      <div className={styles.formContainer}>
+        <h2>Sign Up</h2>
+        {success && <p className={styles.successMessage}>Sign up successful!</p>}
+        {error && <p className={styles.errorMessage}>{error}</p>}
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <label>
+            Name:
+            <input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleInputChange}
+              required
+            />
+          </label>
+          <label>
+            Email:
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+            />
+          </label>
+          <label>
+            Password:
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              required
+            />
+          </label>
+          <label>
+            Date of Birth:
+            <DatePicker
+              selected={formData.DOB}
+              onChange={handleDateChange}
+              dateFormat="MM/dd/yyyy"
+              placeholderText="Select your date of birth"
+              required
+            />
+          </label>
+          <label>
+            Mobile:
+            <input
+              type="text"
+              name="mobile"
+              value={formData.mobile}
+              onChange={handleInputChange}
+              required
+            />
+          </label>
+          <label>
+            Nationality:
+            <select
+              name="nationality"
+              value={formData.nationality}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">Select Country...</option>
+              {countries.map((country) => (
+                <option key={country} value={country}>{country}</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Employed:
+            <input
+              type="text"
+              name="employed"
+              value={formData.employed}
+              onChange={handleInputChange}
+            />
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              name="termsAccepted"
+              checked={formData.termsAccepted}
+              onChange={() => setFormData((prev) => ({ ...prev, termsAccepted: !prev.termsAccepted }))}
+            />
+            I accept the <a href="/terms">terms and conditions</a>
+          </label>
+          <button type="submit">Sign Up</button>
+        </form>
       </div>
+      <Footer />
+    </div>
   );
 };
 
