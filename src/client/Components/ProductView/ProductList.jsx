@@ -237,12 +237,26 @@ const ProductList = () => {
             <div className={styles.productsAll}>
               {sortedProducts.map(product => {
                 const convertedPrice = convertPrice(product.price, product.currency, selectedCurrency);
+                console.log("Product Reviews:", product.reviews); // Check the structure of reviews
                 return (
                     <div className={styles.productCard} key={product._id}>
                       <h2 className={styles.productDetails}>{product.details}</h2>
                       <p>Price: {convertedPrice} {selectedCurrency}</p>
                       <p>Quantity: {product.quantity}</p>
                       <p>Rating: {product.rating}</p>
+                      {/* Display Reviews */}
+              <div className={styles.reviewsSection}>
+                <h3>Reviews:</h3>
+                {product.reviews && product.reviews.length > 0 ? (
+                  <ul>
+                    {product.reviews.map((review, index) => (
+                      <li key={index}>{review}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No reviews available</p>
+                )}
+              </div>
                       <button
                           className={styles.buyButton}
                           onClick={() => handleBuyButtonClick(product)}

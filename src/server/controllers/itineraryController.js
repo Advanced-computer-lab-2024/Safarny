@@ -108,6 +108,12 @@ const updateItineraryById = async (req, res) => {
       req.body.dropoffLocation || itinerary.dropoffLocation;
     itinerary.createdby = req.body.createdby || itinerary.createdby;
 
+    // Optionally update archived value
+    if (typeof req.body.archived !== 'undefined') {
+      itinerary.archived = req.body.archived;
+    }
+
+
     if (req.body.tagNames) {
       let tagsId = [];
       for (let tagName of req.body.tagNames) {
