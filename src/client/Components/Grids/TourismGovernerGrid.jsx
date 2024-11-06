@@ -9,6 +9,8 @@ const columns = [
     { field: 'id', headerName: 'ID', width: 350 },
     { field: 'username', headerName: 'Username', width: 200 },
     { field: 'type', headerName: 'Type', width: 250 },
+    { field: 'email', headerName: 'Email', width: 250 },
+    { field: 'password', headerName: 'Password', width: 250 },
 ];
 
 export default function DataTable5() {
@@ -22,6 +24,7 @@ export default function DataTable5() {
                 const formattedRows = response.data.map((user) => ({
                     id: user._id,
                     username: user.username,
+                    password: user.password,
                     email: user.email,
                     PrevWork: user.PrevWork,
                     YearOfExp: user.YearOfExp,

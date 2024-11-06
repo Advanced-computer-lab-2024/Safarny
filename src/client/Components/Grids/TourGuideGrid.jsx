@@ -3,7 +3,28 @@ import { DataGrid } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import axios from 'axios';
+import { storage } from '../../../server/config/Firebase';
+import { ref, getDownloadURL } from "firebase/storage";
 
+const handleView1 = async (email) => {
+  try {
+    const pdfRef = ref(storage, `TourGuide/ID_${email}`); // Adjust the path if necessary
+    const pdfUrl = await getDownloadURL(pdfRef);
+    window.open(pdfUrl, '_blank'); // Opens the PDF in a new tab
+  } catch (error) {
+    console.error('Error fetching PDF:', error);
+  }
+};
+
+const handleView2 = async (email) => {
+  try {
+    const pdfRef = ref(storage, `TourGuide/Certificate_${email}`); // Adjust the path if necessary
+    const pdfUrl = await getDownloadURL(pdfRef);
+    window.open(pdfUrl, '_blank'); // Opens the PDF in a new tab
+  } catch (error) {
+    console.error('Error fetching PDF:', error);
+  }
+};
 // Define the columns without TypeScript typing
 const columns = [
   { field: 'id', headerName: 'ID', width: 250 },
@@ -13,11 +34,34 @@ const columns = [
   { field: 'YearOfExp', headerName: 'Year Of Exp', width: 130 },
   { field: 'type', headerName: 'Type', width: 90 },
   { field: 'Status', headerName: 'Status', width: 110 },
+  {
+    field: 'idFile',
+    headerName: 'ID File',
+    width: 130,
+    renderCell: (params) => (
+      <Button variant="outlined" color="primary" onClick={() => handleView1(params.row.email)}>
+        View ID
+      </Button>
+    ),
+  },
+  {
+    field: 'certificateFile',
+    headerName: 'Certificate File',
+    width: 130,
+    renderCell: (params) => (
+      <Button variant="outlined" color="primary" onClick={() => handleView2(params.row.email)}>
+        View Certificate
+      </Button>
+    ),
+  },
+  
 ];
 
 export default function DataTable2() {
   const [rows, setRows] = useState([]);  // Remove typing annotations
   const [selectedRows, setSelectedRows] = useState([]);  // Remove typing annotations
+  const [modalOpen, setModalOpen] = useState(false);  // Remove typing annotations
+  const [selectedFileUrl, setSelectedFileUrl] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +76,7 @@ export default function DataTable2() {
           type: user.role,
           Status: user.Status,
         }));
+        
         setRows(formattedRows);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -41,6 +86,7 @@ export default function DataTable2() {
     fetchData();
   }, []);
 
+  
   const handleDelete = async () => {
     try {
       await Promise.all(
@@ -86,23 +132,23 @@ export default function DataTable2() {
       />
       {selectedRows.length > 0 && (
         <div>
-        <Button
-          variant="contained"
-          color="error"
-          onClick={handleDelete}
-          sx={{ marginTop: 2 }}
-        >
-          Delete Selected
-        </Button>
-        <Button
-        variant="contained"
-        color="success"
-        onClick={handleUpdate}
-        sx={{ marginTop: 2 }}
-      >
-        Update Selected
-      </Button>
-      </div>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleDelete}
+            sx={{ marginTop: 2 }}
+          >
+            Delete Selected
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={handleUpdate}
+            sx={{ marginTop: 2 }}
+          >
+            Update Selected
+          </Button>
+        </div>
       )}
     </Paper>
   );

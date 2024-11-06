@@ -6,7 +6,7 @@ import Header from "/src/client/Components/Header/Header";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../server/config/Firebase"; // Adjust the path as necessary
 import styles from "/src/client/Components/Signup/SignUp.module.css"; // Import your signup styles
-
+import { uploadBytes } from 'firebase/storage';
 // List of countries for nationality dropdown
 const countries = [
   "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
@@ -51,15 +51,26 @@ const SignUpExtra = () => {
   const [previousWork, setPreviousWork] = useState("");
   const [nationality, setNationality] = useState(""); // New state for nationality
   const [textBoxes, setTextBoxes] = useState(new Array(3).fill(false));
+  const [idFile, setIdFile] = useState(null);
+  const [certificateFile, setCertificateFile] = useState(null);
+  const [taxCardFile, setTaxCardFile] = useState(null);
 
   // State for Terms and Conditions
   const [termsAccepted, setTermsAccepted] = useState(false);
 
   const navigate = useNavigate();
 
+  const handleFileChange = (setter) => (e) => setter(e.target.files[0]);
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     setImageFile(file);
+  };
+
+  const uploadFile = async (file, filePath) => {
+    const fileRef = ref(storage, filePath);
+    await uploadBytes(fileRef, file);
+    return getDownloadURL(fileRef);
   };
 
   const uploadImage = async (file) => {
@@ -92,12 +103,18 @@ const SignUpExtra = () => {
       return;
     }
 
-    try {
-      let imageUrl = null;
-      if (imageFile) {
-        imageUrl = await uploadImage(imageFile);
-      }
+    let imageUrl = null;
+    if (imageFile) {
+      imageUrl = await uploadImage(imageFile);
+    }
 
+    if (idFile)   await uploadFile(idFile, `${userType}/ID_${email}`);
+    console.log("about to fail")
+    if (certificateFile) await uploadFile(certificateFile, `${userType}/Certificate_${email}`);
+    if (taxCardFile) await uploadFile(taxCardFile, `${userType}/TaxCard_${email}`);
+    console.log('about to work');
+
+    try {
       const userData = {
         username,
         password,
@@ -203,6 +220,34 @@ const SignUpExtra = () => {
             <label>
               Upload Image:
               <input type="file" accept="image/*" onChange={handleImageUpload} required />
+            </label>
+          )}
+
+        {userType=="TourGuide" && (
+            <label>
+              Upload Id File:
+              <input type="file" accept="pdf" onChange={handleFileChange(setIdFile)} required />
+            </label>
+          )}
+
+        {userType=="TourGuide" && (
+            <label>
+              Upload Certificate:
+              <input type="file" accept="pdf" onChange={handleFileChange(setCertificateFile)} required />
+            </label>
+          )}
+
+        {(userType=="Advertiser" || userType=="Seller") && (
+            <label>
+              Upload Id File:
+              <input type="file" accept="pdf" onChange={handleFileChange(setIdFile)} required />
+            </label>
+          )}
+
+        {(userType=="Advertiser" || userType=="Seller") && (
+            <label>
+              Upload Tax Registration Card:
+              <input type="file" accept="pdf" onChange={handleFileChange(setTaxCardFile)} required />
             </label>
           )}
 

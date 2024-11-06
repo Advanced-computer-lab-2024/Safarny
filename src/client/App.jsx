@@ -56,12 +56,19 @@ import CreateComplaints from "./Components/Complaints/CreateComplaints";
 import ViewComplaints from "./Components/Complaints/ViewComplaints";
 import AdminViewComplaints from "./Components/Complaints/AminViewComplaints";
 import AdminEditComplaints from "./Components/Complaints/AdminEditComplaints";
+import BookFlight from "./Booking/BookFlight";
+import BookingHotel from "./Booking/BookingHotel";
+import MyBookedFlights from "./Booking/MyBookedFlights";
+import MyHotelBookings from "./Booking/MyHotelBookings";
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Homepage />} />
+        <Route path="/MyBookedHotel" element={<MyHotelBookings />} />
+        <Route path="/BookFlight" element={<BookFlight />} />
+        <Route path="/BookHotel" element={<BookingHotel />} />
         <Route path="/products" element={<ProductList />} />
         <Route path="/profile" element={<Profile />} />
         {/* <Route path="/landmarks" element={<Landmarks />} /> */}
@@ -107,6 +114,7 @@ function App() {
           path="/create-historical-place"
           element={<CreateHistoricalPlace />}
         />
+        <Route path="/MyBookedFlights" element={<MyBookedFlights />} />
         <Route path="/historical-places" element={<ReadHistoricalPlace />} />
         <Route path="/historical-place/:id" element={<ReadHistoricalPlaceDetails />} />
         <Route
