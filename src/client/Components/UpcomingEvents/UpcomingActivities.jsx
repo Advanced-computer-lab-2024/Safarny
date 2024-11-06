@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import styles from "./UpcomingActivities.module.css";
 import Footer from "/src/client/components/Footer/Footer";
 import Header from "/src/client/components/Header/Header";
-import { Link, useNavigate } from "react-router-dom";
+import axios from 'axios';
+import { Link, useNavigate , useLocation,} from "react-router-dom";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 const UpcomingActivities = () => {
+  const location = useLocation();
+  const { userId } = location.state || {};
   const [activities, setActivities] = useState([]);
   const [sortCriteria, setSortCriteria] = useState("date");
   const [filterCriteria, setFilterCriteria] = useState("");
@@ -19,6 +22,7 @@ const UpcomingActivities = () => {
   const [currencyCodes, setCurrencyCodes] = useState([]);
   const [rating, setRating] = useState(0);
   const navigate = useNavigate();
+  const [userRole, setUserRole] = useState(''); // State for storing user role
 
   const fetchExchangeRates = async () => {
     try {
@@ -26,10 +30,42 @@ const UpcomingActivities = () => {
       const data = await response.json();
       setExchangeRates(data.conversion_rates);
       setCurrencyCodes(Object.keys(data.conversion_rates));
+      console.log("id",userId);
     } catch (error) {
       console.error('Error fetching exchange rates:', error);
     }
   };
+  // Method to fetch user role
+  const fetchUserRole = async () => {
+    try {
+        // Replace `userId` with the actual user ID if available
+        const response = await axios.get(`http://localhost:3000/tourist/${userId}`);
+        setUserRole(response.data.role); // Store user role in state
+        console.log('User role:', response.data.role); // Log user role for debugging
+    } catch (err) {
+        console.error('Error fetching user role:', err);
+    }
+};
+const handleArchiveToggle = async (ActivityId, isArchived) => {
+  try {
+    // Update the local state first
+    setActivities(activities.map(activity => 
+      activity._id === ActivityId ? { ...activity, archived: isArchived } : activity
+    ));
+    console.log("Local state updated");
+
+    // Make a request to the server to update the archived status
+    await axios.put(`/activities/${ActivityId}`, { archived: isArchived });
+    console.log("Archived status updated successfully");
+
+  } catch (error) {
+    console.error("Error updating archived status:", error);
+    // Optionally, revert the local state if the API call fails
+    setActivities(activities.map(activity => 
+      activity._id === activity ? { ...activity, archived: !isArchived } : activity
+    ));
+  }
+};
 
   const convertPrice = (price, fromCurrency, toCurrency) => {
     const rateFrom = exchangeRates[fromCurrency];
@@ -39,6 +75,7 @@ const UpcomingActivities = () => {
 
   useEffect(() => {
     fetchExchangeRates();
+    fetchUserRole(); // Call to fetch user role
   }, []);
 
   useEffect(() => {
@@ -61,7 +98,15 @@ const UpcomingActivities = () => {
           throw new Error("Failed to fetch activities");
         }
         const data = await response.json();
-        setActivities(data);
+        // Check if the user is a tourist
+if (userInfo.role === 'tourist') {
+  // Filter activities to only include those that are not archived
+  const filteredActivities = data.filter(activity => !activity.archived);
+  setActivities(filteredActivities);
+} else {
+  // If the user is not a tourist, set all activities without filtering
+  setActivities(data);
+}
       } catch (error) {
         console.error("Error fetching activities:", error);
       }
@@ -218,6 +263,20 @@ const UpcomingActivities = () => {
                             )}
                           </MapContainer>
                         </div>
+
+                        {/* Admin-only Checkbox */}
+                        {userRole === "Admin" && (
+                            <div className={styles.adminCheckbox}>
+                            <label>
+                             <input
+                              type="checkbox"
+                            checked={activity.archived}
+                         onChange={(e) => handleArchiveToggle(activity._id, e.target.checked)}
+                           />
+                             Flag
+                          </label>
+                            </div>
+                        )}
                       </div>
                   );
                 })

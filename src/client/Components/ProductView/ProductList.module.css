@@ -114,3 +114,14 @@
 .viewPurchasedButton:hover {
   background-color: var(--card-hover);
 }
+.archiveOption label {
+  color: black; 
+}
+.archiveOption {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: var(--text-color);
+  
+}

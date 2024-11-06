@@ -7,8 +7,9 @@ import styles from './ProductList.module.css';
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 const ProductList = () => {
-  const location = useLocation();
   const navigate = useNavigate();
+
+  const location = useLocation();
   const { userId } = location.state || {};
 
   const [products, setProducts] = useState([]);
@@ -115,13 +116,42 @@ const ProductList = () => {
       console.error('Error updating product status:', err);
     }
   };
+  const handleArchiveToggle = async (productId, isArchived) => {
+    try {
+      // Update the local state first
+      setProducts(products.map(product => 
+        product._id === productId ? { ...product, archived: isArchived } : product
+      ));
+      console.log("Local state updated");
+  
+      // Make a request to the server to update the archived status
+      await axios.put(`/admin/products/${productId}`, { archived: isArchived });
+      console.log("Archived status updated successfully");
+  
+    } catch (error) {
+      console.error("Error updating archived status:", error);
+      // Optionally, revert the local state if the API call fails
+      setProducts(products.map(product => 
+        product._id === productId ? { ...product, archived: !isArchived } : product
+      ));
+    }
+  };
 
   const filteredProducts = products.filter(product => {
     const convertedPrice = convertPrice(product.price, product.currency, selectedCurrency);
+    
+    // If the user role is "Tourist", filter out archived products
+    if (userRole === 'Tourist') {
+      return product.details.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        (priceFilter ? parseFloat(convertedPrice) <= parseFloat(priceFilter) : true) &&
+        product.quantity > 0 &&
+        !product.archived; // Show only products where archived is false
+    }
+  
+    // If the user role is not "Tourist" (i.e., "Seller"), don't filter by archived status
     return product.details.toLowerCase().includes(searchTerm.toLowerCase()) &&
       (priceFilter ? parseFloat(convertedPrice) <= parseFloat(priceFilter) : true) &&
-      product.quantity > 0 &&
-      !product.archived; // Show only products where archived is false
+      product.quantity > 0;
   });
   
 
@@ -215,6 +245,19 @@ const ProductList = () => {
                             Add to Wishlist
                           </button>
                       )}
+                      {userRole === 'Seller' && (
+                      <div className={styles.archiveOption}>
+                     <label>
+                      <input
+                       type="checkbox"
+                     checked={product.archived}
+                  onChange={(e) => handleArchiveToggle(product._id, e.target.checked)}
+                    />
+                      Archive
+                   </label>
+                     </div>
+                )}
+
                       <img className={styles.productImage} src={product.imageurl} alt={product.details} />
                     </div>
                 );

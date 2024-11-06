@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import styles from "./UpcomingItinerary.module.css";
 import Logo from "/src/client/Assets/Img/logo.png";
 import Footer from "/src/client/components/Footer/Footer";
-import { Link } from "react-router-dom";
+import { Link ,useLocation, useNavigate} from "react-router-dom";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+
 import Header from "/src/client/Components/Header/Header";
+import axios from 'axios';
+
 
 const UpcomingItineraries = () => {
   const [itineraries, setItineraries] = useState([]);
@@ -17,6 +20,16 @@ const UpcomingItineraries = () => {
   const [selectedCurrency, setSelectedCurrency] = useState('EGP');
   const [exchangeRates, setExchangeRates] = useState({});
   const [currencyCodes, setCurrencyCodes] = useState([]);
+  const location = useLocation();
+  const touristId = localStorage.getItem('userId');
+
+  const { userId } = location.state || {};
+  //const userId = localStorage.getItem('userId');
+
+  const [userRole, setUserRole] = useState(""); // State for storing user role
+
+  
+
 
   const fetchExchangeRates = async () => {
     try {
@@ -28,22 +41,54 @@ const UpcomingItineraries = () => {
       console.error('Error fetching exchange rates:', error);
     }
   };
-
   const convertPrice = (price, fromCurrency, toCurrency) => {
     const rateFrom = exchangeRates[fromCurrency];
     const rateTo = exchangeRates[toCurrency];
     return ((price / rateFrom) * rateTo).toFixed(2);
   };
-
+  const handleArchiveToggle = async (ItineraryId, isArchived) => {
+    try {
+      // Update the local state first
+      setItineraries(itineraries.map(itinerary => 
+        itinerary._id === ItineraryId ? { ...itinerary, archived: isArchived } : itinerary
+      ));
+      console.log("Local state updated");
+  
+      // Make a request to the server to update the archived status
+      await axios.put(`/activities/${ItineraryId}`, { archived: isArchived });
+      console.log("Archived status updated successfully");
+  
+    } catch (error) {
+      console.error("Error updating archived status:", error);
+      // Optionally, revert the local state if the API call fails
+      setItineraries(itineraries.map(itinerary => 
+        itinerary._id === itinerary ? { ...itinerary, archived: !isArchived } : itinerary
+      ));
+    }
+  };
+  
+// Fetch user role
+const fetchUserRole = async () => {
+  try {
+    const response = await axios.get(`/tourist/${userId}`);
+    setUserRole(response.data.role); // Adjust based on your backend response
+    console.log(response.data.role);
+  } catch (error) {
+    console.error("Error fetching user role:", error);
+  }
+};
   useEffect(() => {
     fetchExchangeRates();
+    fetchUserRole();
   }, []);
 
   useEffect(() => {
+    
     fetchFilteredItineraries(true);
     fetchTags();
   }, [sortCriteria]);
 
+  
   const fetchTags = async () => {
     try {
       const response = await fetch("http://localhost:3000/tourguide/get-tags");
@@ -68,6 +113,9 @@ const UpcomingItineraries = () => {
         tags: preferences.join(","),
         language: language,
       }).toString();
+      if (userInfo.role === 'tourist') {
+        queryParams.append("archived", "false");
+      }
       let response;
       if (whichResponse) {
         response = await fetch(
@@ -234,6 +282,19 @@ const UpcomingItineraries = () => {
                                     </li>
                                 ))}
                               </ul>
+                            </div>
+                        )}
+                        {/* Admin-only Checkbox */}
+                        {userRole === "Admin" && (
+                            <div className={styles.adminCheckbox}>
+                            <label>
+                             <input
+                              type="checkbox"
+                            checked={itinerary.archived}
+                         onChange={(e) => handleArchiveToggle(itinerary._id, e.target.checked)}
+                           />
+                             Flag
+                          </label>
                             </div>
                         )}
                       </div>

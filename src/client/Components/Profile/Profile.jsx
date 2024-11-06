@@ -72,11 +72,11 @@ const Profile = () => {
   };
 
   const handleUpcomingActivitiesClick = () => {
-    navigate("/UpcomingActivites");
+    navigate("/UpcomingActivites",{ state: { userId } });
   };
 
   const handleUpcomingItinerariesClick = () => {
-    navigate("/UpcomingItineraries");
+    navigate("/UpcomingItineraries" ,{ state: { userId } });
   };
 
   const handleViewHistoricalPlacesClick = () => {

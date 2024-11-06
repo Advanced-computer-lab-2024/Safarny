@@ -28,6 +28,10 @@ const activitySchema = new mongoose.Schema({
     lat: { type: Number, required: true },
     lng: { type: Number, required: true },
   },
+  archived: {
+    type: Boolean,
+    default: false, // Set initial value to false
+  },
   tags: [
     {
       type: Schema.Types.ObjectId,
@@ -46,6 +50,7 @@ const activitySchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+
   rating: {
     type: Number,
   },

@@ -16,13 +16,23 @@ import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from '../../../server/config/Firebase';
 import Tags from './tagAdmin';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate , useLocation} from 'react-router-dom';
 import ActivityCategory from './ActivityCategory';
 import styles from './Admin.module.css';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/Components/Footer/Footer';
 
 const Admin = () => {
+  const location = useLocation();
+  const { userId } = location.state || {};
+  const [userInfo, setUserInfo] = useState({
+    username: "",
+    email: "",
+    role: "",
+    image: "", // Added image field
+  });
+  const [userRole, setUserRole] = useState('');
+
   const [openModal, setOpenModal] = useState(false);
   const [posts, setPosts] = useState([]);
   const [currentPost, setCurrentPost] = useState({ details: '', price: '', currency: '', quantity: '', imageurl: '' });
@@ -57,6 +67,7 @@ const Admin = () => {
   }, [selectedSection]);
 
   useEffect(() => {
+
     const handleScroll = () => {
       const header = document.querySelector(`.${styles.header}`);
       if (window.scrollY > 50) {
@@ -71,7 +82,19 @@ const Admin = () => {
     };
   }, []);
 
+  const fetchUserRole = async () => {
+    try {
+      const response = await axios.get(`/tourist/${userId}`);
+      const user = response.data;
+      setUserRole(user.role);
+      console.log('User role:', user.role);
+    } catch (err) {
+      console.error('Error fetching user role:', err);
+    }
+  };
   useEffect(() => {
+    console.log("id2",userId);
+    //console.log(userInfo.role);
     const fetchExchangeRates = async () => {
       try {
         const response = await axios.get('https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP');
@@ -82,6 +105,8 @@ const Admin = () => {
     };
 
     fetchExchangeRates();
+    fetchUserRole();
+
   }, []);
 
   const fetchPosts = async () => {
@@ -214,6 +239,14 @@ const Admin = () => {
         (maxPrice === '' || post.price <= maxPrice);
     return matchesSearch && matchesPrice;
   });
+  const handleUpcomingItinerariesClick = () => {
+    navigate("/UpcomingItineraries", { state: { userId } });
+  };
+  const handleUpcomingActivitiesClick = () => {
+    navigate("/UpcomingActivites", { state: { userId } });
+  };
+  
+
 
   const sortedPosts = [...filteredPosts].sort((a, b) => {
     if (sortBy === 'rating') {
@@ -238,6 +271,13 @@ const Admin = () => {
             <button onClick={() => setSelectedSection('ActivityCategory')} className={styles.button}>Manage Categories</button>
             <Link to="/adminaddgovernor"  className={styles.button}>Add Governor</Link>
             <Link to="/adminviewcomplaints" className={styles.button}>View Complaints</Link>
+            
+        <button onClick={handleUpcomingItinerariesClick} className={styles.button}>
+          View Itineraries
+        </button>
+        <button onClick={handleUpcomingActivitiesClick} className={styles.button}>
+          View Activities
+        </button>
           </nav>
         </header>
         <SideBar className={styles.sidebar} />

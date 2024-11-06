@@ -60,6 +60,10 @@ const itinerarySchema = new Schema(
       type: String, // Currency of the price
       required: true,
     },
+    archived: {
+      type: Boolean,
+      default: false, // Set initial value to false
+    },
     availableDates: {
       type: [String], // Array of dates when the tour is available
       required: true,

@@ -37,6 +37,8 @@ router.get("/search", searchController.search);
 // Route for getting a profile by ID
 router.get("/:id", usersController.getProfileById);
 
+
+
 // Route for updating a profile by ID
 router.put("/:id", usersController.updateProfileById);
 

@@ -61,6 +61,7 @@ import UpcomingActivitesDetails from "./Components/UpcomingEvents/UpcomingActivi
 import WishList from "./Components/WishList/WishList";
 import Terms from "./Components/terms/terms";
 import PurchasedProducts from "./Components/PurchasedProducts/PurchasedProducts";
+//import AdminViewActivities from "./Components/UpcomingEvents/AdminViewActivities";
 //import { PurchasedProductsProvider } from "./Components/PurchasedProducts/PurchasedProductsContext";
 function App() {
   return (
@@ -131,7 +132,7 @@ function App() {
         <Route path="/admineditcomplaints" element={<AdminEditComplaints />} />
         <Route path="/wishlist" element={<WishList />} />
         <Route path="/PurchasedProducts" element={<PurchasedProducts />} /> 
-      </Routes>
+              </Routes>
     </Router>
     //</PurchasedProductsProvider>       
 
