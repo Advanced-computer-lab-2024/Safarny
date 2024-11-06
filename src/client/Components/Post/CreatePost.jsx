@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Modal, TextField, Typography, Alert, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import axios from 'axios';
@@ -11,6 +11,20 @@ const CreatePost = () => {
   const [currentPost, setCurrentPost] = useState({ details: '', price: '', currency: '', quantity: '', imageurl: '' });
   const [selectedImage, setSelectedImage] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [currencyCodes, setCurrencyCodes] = useState([]);
+
+  useEffect(() => {
+    const fetchExchangeRates = async () => {
+      try {
+        const response = await axios.get('https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP');
+        setCurrencyCodes(Object.keys(response.data.conversion_rates));
+      } catch (error) {
+        console.error('Error fetching exchange rates:', error);
+      }
+    };
+
+    fetchExchangeRates();
+  }, []);
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -98,11 +112,9 @@ const CreatePost = () => {
                 value={currentPost.currency}
                 onChange={handleInputChange}
             >
-              <MenuItem value="EGP">EGP</MenuItem>
-              <MenuItem value="SAR">SAR</MenuItem>
-              <MenuItem value="USD">USD</MenuItem>
-              <MenuItem value="EUR">EUR</MenuItem>
-              <MenuItem value="GBP">GBP</MenuItem>
+              {currencyCodes.map(code => (
+                  <MenuItem key={code} value={code}>{code}</MenuItem>
+              ))}
             </Select>
           </FormControl>
           <TextField

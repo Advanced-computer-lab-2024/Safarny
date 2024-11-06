@@ -1,25 +1,49 @@
 :root {
   --sidebar-bg-color: #f8f9fa;
   --sidebar-width: 12rem;
+  --sidebar-collapsed-width: 2.5rem; /* Width when collapsed */
   --sidebar-padding: 1.25rem;
   --sidebar-border-radius: 0.5rem;
-  --sidebar-button-bg: #e0e0e0;
+  --sidebar-button-bg: #6c6c6c;
   --sidebar-button-hover-bg: #c8c8c8;
   --button-text-color: #333;
 }
 
 .sidebar {
-  height: calc(100vh - 4rem); /* Adjust to fill viewport height minus header */
-  width: var(--sidebar-width);
+  height: calc(100vh - 15rem);
   background-color: var(--sidebar-bg-color);
   padding: var(--sidebar-padding);
   display: flex;
   flex-direction: column;
-  position: fixed; /* Keeps sidebar fixed on the left side */
-  top: 4rem; /* Adjust to match header height */
+  position: fixed;
+  top: 10rem;
   left: 0;
   border-radius: var(--sidebar-border-radius);
   box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.1);
+  transition: width 0.3s ease;
+  overflow: hidden;
+  width: var(--sidebar-collapsed-width); /* Collapsed width */
+  align-items: center;
+}
+
+.sidebar.open {
+  width: var(--sidebar-width); /* Expanded width */
+}
+
+.toggleButton {
+  background-color: var(--sidebar-button-bg);
+  color: #fff;
+  font-size: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  padding: 0.25rem;
+  margin-bottom: 1rem;
+  border-radius: 0.25rem;
+  transition: transform 0.2s ease;
+}
+
+.toggleButton:hover {
+  transform: scale(1.1);
 }
 
 .sidebar button {
@@ -32,6 +56,7 @@
   border-radius: 0.5rem;
   text-transform: none;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 100%; /* Full width of the sidebar */
 }
 
 .sidebar button:hover {

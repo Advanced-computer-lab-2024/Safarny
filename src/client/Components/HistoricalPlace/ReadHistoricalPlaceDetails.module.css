@@ -20,6 +20,7 @@
     align-items: center;
     width: 175%;
     min-height: 100vh;
+    min-width: 95vw;
     box-sizing: border-box;
 }
 

@@ -25,6 +25,14 @@
   width: 100%;
 }
 
+.productsAll{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  width: 90%;
+}
+
 .productCard {
   background-color: var(--card-background);
   border-radius: var(--border-radius);
@@ -39,6 +47,7 @@
   z-index: 1;
   cursor: pointer;
   width: calc(30% - 2rem);
+  /* min-width: ; */
 }
 
 .productCard:hover {

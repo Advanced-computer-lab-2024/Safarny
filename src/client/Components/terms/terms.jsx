@@ -6,6 +6,7 @@ import Header from '../Header/Header';
 const Terms = () => {
     return (
         <div className={styles.container}>
+            <Header />
             <h2>Terms and Conditions</h2>
             <p>Please read the following terms and conditions carefully:</p>
             <ul>
@@ -15,6 +16,7 @@ const Terms = () => {
                 <li>We reserve the right to modify these terms at any time without notice.</li>
             </ul>
             <p>Thank you for using our platform responsibly.</p>
+            <Footer />
         </div>
     );
 };

@@ -11,6 +11,7 @@ const createPost = async (req, res) => {
       quantity,
       imageurl,
       createdby,
+      rating: 1, // Add default rating
     });
 
     const savedPost = await newPost.save();
@@ -20,6 +21,7 @@ const createPost = async (req, res) => {
       post: savedPost,
     });
   } catch (err) {
+    //console.log(err);
     res.status(500).json({ error: err.message });
   }
 };
@@ -49,11 +51,11 @@ const getAllPostsBySellerId = async (req, res) => {
 const updatePostById = async (req, res) => {
   try {
     const postId = req.params.id;
-    const { details, price, currency, quantity, imageurl, purchased ,review, rating } = req.body;
+    const { details, price, currency, quantity, imageurl, purchased ,review, rating,archived } = req.body;
 
     const updatedPost = await Post.findByIdAndUpdate(
       postId,
-      { details, price, currency, quantity, imageurl,purchased ,review, rating},
+      { details, price, currency, quantity, imageurl,purchased ,review, rating,archived},
       { new: true, runValidators: true }
     );
 

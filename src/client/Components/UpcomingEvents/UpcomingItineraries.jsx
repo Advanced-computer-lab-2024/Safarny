@@ -3,7 +3,7 @@ import styles from "./UpcomingItinerary.module.css";
 import Logo from "/src/client/Assets/Img/logo.png";
 import Footer from "/src/client/components/Footer/Footer";
 import { Link } from "react-router-dom";
-import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import Header from "/src/client/Components/Header/Header";
 
 const UpcomingItineraries = () => {
@@ -14,21 +14,31 @@ const UpcomingItineraries = () => {
   const [preferences, setPreferences] = useState([]);
   const [language, setLanguage] = useState("");
   const [availableTags, setAvailableTags] = useState([]);
-  const [selectedCurrency, setSelectedCurrency] = useState('EGP'); // Define selectedCurrency state
+  const [selectedCurrency, setSelectedCurrency] = useState('EGP');
+  const [exchangeRates, setExchangeRates] = useState({});
+  const [currencyCodes, setCurrencyCodes] = useState([]);
 
-  const conversionRates = {
-    USD: 1 / 48.72,
-    SAR: 1 / 12.97,
-    GBP: 1 / 63.02,
-    EUR: 1 / 53.02,
-    EGP: 1, // EGP to EGP is 1:1
+  const fetchExchangeRates = async () => {
+    try {
+      const response = await fetch('https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP');
+      const data = await response.json();
+      setExchangeRates(data.conversion_rates);
+      setCurrencyCodes(Object.keys(data.conversion_rates));
+    } catch (error) {
+      console.error('Error fetching exchange rates:', error);
+    }
   };
 
   const convertPrice = (price, fromCurrency, toCurrency) => {
-    const rateFrom = conversionRates[fromCurrency];
-    const rateTo = conversionRates[toCurrency];
-    return ((price / rateFrom) * rateTo).toFixed(2); // Convert and format to 2 decimal places
+    const rateFrom = exchangeRates[fromCurrency];
+    const rateTo = exchangeRates[toCurrency];
+    return ((price / rateFrom) * rateTo).toFixed(2);
   };
+
+  useEffect(() => {
+    fetchExchangeRates();
+  }, []);
+
   useEffect(() => {
     fetchFilteredItineraries(true);
     fetchTags();
@@ -88,15 +98,9 @@ const UpcomingItineraries = () => {
           {/* Sorting options */}
           <div className={styles.sortOptions}>
             <button onClick={() => setSortCriteria("date")}>Sort by Date</button>
-            <button onClick={() => setSortCriteria("price")}>
-              Sort by Price
-            </button>
-            <button onClick={() => setSortCriteria("duration")}>
-              Sort by Duration
-            </button>
-            <button onClick={() => setSortCriteria("rating")}>
-              Sort by Rating
-            </button>
+            <button onClick={() => setSortCriteria("price")}>Sort by Price</button>
+            <button onClick={() => setSortCriteria("duration")}>Sort by Duration</button>
+            <button onClick={() => setSortCriteria("rating")}>Sort by Rating</button>
           </div>
 
           {/* Filter options */}
@@ -157,6 +161,8 @@ const UpcomingItineraries = () => {
                   placeholder="Language"
               />
             </div>
+
+            {/* Currency Selector */}
             <div className={styles.currencySelector}>
               <FormControl fullWidth margin="normal">
                 <InputLabel><h3>Currency</h3></InputLabel>
@@ -165,14 +171,13 @@ const UpcomingItineraries = () => {
                     value={selectedCurrency}
                     onChange={(e) => setSelectedCurrency(e.target.value)}
                 >
-                  <MenuItem value="EGP">EGP</MenuItem>
-                  <MenuItem value="SAR">SAR</MenuItem>
-                  <MenuItem value="USD">USD</MenuItem>
-                  <MenuItem value="EUR">EUR</MenuItem>
-                  <MenuItem value="GBP">GBP</MenuItem>
+                  {currencyCodes.map(code => (
+                      <MenuItem key={code} value={code}>{code}</MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </div>
+
             {/* Apply Filters Button */}
             <button onClick={handleFilterClick}>Apply Filters</button>
           </div>
@@ -237,7 +242,7 @@ const UpcomingItineraries = () => {
             )}
           </section>
         </main>
-        <Footer/>
+        <Footer />
       </div>
   );
 };
