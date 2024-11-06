@@ -169,13 +169,13 @@ const handleArchiveToggle = async (ActivityId, isArchived) => {
           <h2>Upcoming Activities</h2>
 
           <div className={styles.sortOptions}>
-            <button onClick={() => setSortCriteria("date")} className={styles.viewButton} style={{ margin: '2px' }}>
+            <button onClick={() => setSortCriteria("date")} className={styles.cardButton}>
               Sort by Date
             </button>
-            <button onClick={() => setSortCriteria("price")} style={{ margin: '2px' }}>
+            <button onClick={() => setSortCriteria("price")} className={styles.cardButton}>
               Sort by Price
             </button>
-            <button onClick={() => setSortCriteria("rating")} style={{ margin: '2px' }}>
+            <button onClick={() => setSortCriteria("rating")} className={styles.cardButton}>
               Sort by Rating
             </button>
           </div>
@@ -268,16 +268,16 @@ const handleArchiveToggle = async (ActivityId, isArchived) => {
                         <p>
                           <button
                               onClick={() => navigator.clipboard.writeText(`${window.location.origin}/UpcomingActivities/${activity._id}`)}
-                              className={styles.copyButton} style={{margin: '2px'}}>
+                              className={styles.cardButton} >
                             Copy link
                           </button>
                           <button onClick={() => handleUpcomingActivitiesDetails(activity._id)}
-                                  className={styles.viewButton} style={{margin: '2px'}}>
+                                  className={styles.cardButton} >
                             View Details
                           </button>
                           <button
                               onClick={() => window.location.href = `mailto:?subject=Check out this historical place&body=${window.location.origin}/UpcomingActivities/${activity._id}`}
-                              className={styles.emailButton} style={{margin: '2px'}}>
+                              className={styles.cardButton} >
                             Email
                           </button>
                         </p>

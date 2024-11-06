@@ -111,3 +111,20 @@ body{
   .activityItem p {
     margin: 5px 0;
   }
+
+  .cardButton{
+    background-color: rgb(57, 57, 57);
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+    border-radius: var(--border-radius);
+    color: white;
+    padding: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.cardButton:hover {
+    background-color: var(--card-hover);
+}
