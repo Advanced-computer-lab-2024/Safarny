@@ -101,12 +101,11 @@
     margin-bottom: 1rem;
   }
   
-  .searchField,
-  .priceFilterContainer,
-  .sortField {
-    margin-bottom: 1rem;
-    margin-right: 1rem;
-  }
+.priceFilterContainer{
+  gap: 1rem;
+  margin-right: 1rem;
+  display: flex;
+}
   
   .cardList {
     display: grid;
@@ -204,3 +203,11 @@
     }
   }
   
+  .allFilters{
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding: 1;
+  }
