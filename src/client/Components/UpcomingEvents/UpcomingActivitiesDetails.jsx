@@ -19,7 +19,14 @@ const UpcomingActivitiesDetails = () => {
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    
+    const renderStars = (rating) => {
+        if (rating == null) return null;
+        const stars = [];
+        for (let i = 0; i < rating; i++) {
+            stars.push(<span key={i}>&#9733;</span>); // Shaded star
+        }
+        return stars;
+    };
 
     useEffect(() => {
         const fetchPlaceById = async () => {
@@ -63,18 +70,17 @@ const UpcomingActivitiesDetails = () => {
             <p>The following activity commences
                 on {new Date(activity.date).toLocaleDateString()} at {activity.time}.</p>
             <p>Price: {activity.price}</p>
-            <p>Rating: {activity.rating} stars</p>
-            <p> {activity.specialDiscount && (
-                <p>Discount: {activity.specialDiscount}</p>
-            )}</p>
+            <p>Rating: {renderStars(activity.rating)}</p>            <p> {activity.specialDiscount && (
+            <p>Discount: {activity.specialDiscount}</p>
+        )}</p>
             {/* Display Tags */}
             {activity.tags && activity.tags.length > 0 && (
                 <p>Tags: {activity.tags.map((tag) => tag.name).join(", ")}</p>
             )}
             {/* Display Categories */}
-                <p>
+            {/*<p>
                     Category: {activity.category.map((cat) => cat.type).join(", ")}
-                </p>
+                </p>*/}
             <p>Location: {activity.location}</p>
             <p style={{color: activity.bookingOpen ? "green" : "red"}}>
                 {activity.bookingOpen ? "Booking: Open" : "Booking: Closed"}

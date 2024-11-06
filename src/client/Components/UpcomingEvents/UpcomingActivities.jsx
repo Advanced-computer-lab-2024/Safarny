@@ -128,7 +128,14 @@ if (userInfo.role === 'tourist') {
 
     fetchCategories();
   }, []);
-
+  const renderStars = (rating) => {
+    if (rating == null) return null;
+    const stars = [];
+    for (let i = 0; i < rating; i++) {
+      stars.push(<span key={i}>&#9733;</span>); // Shaded star
+    }
+    return stars;
+  };
   const handleCategoryChange = (category) => {
     setSelectedCategories((prev) =>
         prev.includes(category) ? prev.filter((cat) => cat !== category) : [...prev, category]
@@ -227,8 +234,7 @@ if (userInfo.role === 'tourist') {
                         <p>Time: {activity.time}</p>
                         <p>Location: {activity.location}</p>
                         <p>Price: {convertedPrice} {selectedCurrency}</p>
-                        <p>Rating: {activity.rating}&#9733;</p>
-
+                        <p>Rating: {renderStars(activity.rating)}</p>
                         {activity.specialDiscount && (
                             <p>Discount: {activity.specialDiscount}</p>
                         )}
@@ -240,26 +246,32 @@ if (userInfo.role === 'tourist') {
                         {activity.category && activity.category.length > 0 && (
                             <p>Category: {activity.category.map((cat) => cat.type).join(", ")}</p>
                         )}
-                        <p style={{ color: activity.bookingOpen ? "green" : "red" }}>
+                        <p style={{color: activity.bookingOpen ? "green" : "red"}}>
                           {activity.bookingOpen ? "Booking: Open" : "Booking: Closed"}
                         </p>
                         <p>
-                          <button onClick={() => navigator.clipboard.writeText(`${window.location.origin}/UpcomingActivities/${activity._id}`)} className={styles.copyButton} style={{ margin: '2px' }}>
+                          <button
+                              onClick={() => navigator.clipboard.writeText(`${window.location.origin}/UpcomingActivities/${activity._id}`)}
+                              className={styles.copyButton} style={{margin: '2px'}}>
                             Copy link
                           </button>
-                          <button onClick={() => handleUpcomingActivitiesDetails(activity._id)} className={styles.viewButton} style={{ margin: '2px' }}>
+                          <button onClick={() => handleUpcomingActivitiesDetails(activity._id)}
+                                  className={styles.viewButton} style={{margin: '2px'}}>
                             View Details
                           </button>
-                          <button onClick={() => window.location.href = `mailto:?subject=Check out this historical place&body=${window.location.origin}/UpcomingActivities/${activity._id}`} className={styles.emailButton} style={{ margin: '2px' }}>
+                          <button
+                              onClick={() => window.location.href = `mailto:?subject=Check out this historical place&body=${window.location.origin}/UpcomingActivities/${activity._id}`}
+                              className={styles.emailButton} style={{margin: '2px'}}>
                             Email
                           </button>
                         </p>
 
                         <div className={styles.mapContainer}>
-                          <MapContainer center={[activity.coordinates.lat || 51.505, activity.coordinates.lng || -0.09]} zoom={13} style={{ height: "100%", width: "100%" }}>
-                            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                          <MapContainer center={[activity.coordinates.lat || 51.505, activity.coordinates.lng || -0.09]}
+                                        zoom={13} style={{height: "100%", width: "100%"}}>
+                            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
                             {activity.coordinates.lat && activity.coordinates.lng && (
-                                <Marker position={[activity.coordinates.lat, activity.coordinates.lng]} />
+                                <Marker position={[activity.coordinates.lat, activity.coordinates.lng]}/>
                             )}
                           </MapContainer>
                         </div>
