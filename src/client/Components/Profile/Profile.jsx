@@ -18,7 +18,6 @@ const Profile = () => {
   const [showButtons, setShowButtons] = useState(false);
 
   useEffect(() => {
-    console.log("profile id",userId);
     const fetchUserData = async () => {
       try {
         const response = await fetch(`/tourist/profile?id=${userId}`);
@@ -41,9 +40,7 @@ const Profile = () => {
   };
 
   const handleProductViewClick = () => {
-    /*localStorage.setItem("userId", userId);
-    window.location.href = "/products";*/
-    navigate("/products", { state: { userId } });
+    navigate("/products");
   };
 
   const handleSellerHomeClick = () => {
@@ -99,20 +96,6 @@ const Profile = () => {
     navigate("/viewcomplaints", { state: { userId } });
   };
 
-  const handelWishList = () => {
-    navigate("/wishlist", { state: { userId } });
-  }
-
-  
-
-  /*const handleViewPurchasedProducts = () => {
-    navigate("/PurchasedProducts", { state: { userId } });
-  };
-  <button onClick={handleViewPurchasedProducts} className={styles.searchButton}>
-          View Purchased Products
-        </button>
-         */
-
   return (
     <div className={styles.container}>
       <Header />
@@ -128,7 +111,7 @@ const Profile = () => {
                 {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
               </p>
             ))}
-          {userInfo.image && ( // Display the profile image if available
+          {userInfo.image && (
             <img
               src={userInfo.image}
               alt="Profile"
@@ -151,7 +134,6 @@ const Profile = () => {
         <button onClick={handleUpdateClick} className={styles.searchButton}>
           Update Profile
         </button>
-        
       </div>
 
       {userInfo.role === "TourismGovernor" && (
@@ -184,7 +166,7 @@ const Profile = () => {
 
       {userInfo.role === "Advertiser" && (
         <button onClick={handleAddActivity} className={styles.postButton}>
-          Activities
+          Activity
         </button>
       )}
 
@@ -195,17 +177,14 @@ const Profile = () => {
       )}
 
       {userInfo.role === "Tourist" && (
-          <div>
-            <button onClick={handleCreateComplaint} className={styles.postButton}>
-              Create Complaint
-            </button>
-            <button onClick={handleViewComplaints} className={styles.postButton}>
-              View Complaints
-            </button>
-            <button onClick={handelWishList} className={styles.postButton}>
-              View Wishlist
-            </button>
-          </div>
+        <div>
+          <button onClick={handleCreateComplaint} className={styles.postButton}>
+            Create Complaint
+          </button>
+          <button onClick={handleViewComplaints} className={styles.postButton}>
+            View Complaints
+          </button>
+        </div>
       )}
 
       <button onClick={handleViewButtonClick} className={styles.mainButton}>
