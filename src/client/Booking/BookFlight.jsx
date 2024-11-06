@@ -103,14 +103,13 @@ const BookingForm = () => {
 
   const handleConfirmBooking = async () => {
     // Implement booking logic here, e.g., sending a booking request to your backend
-    
+
     const params = {
       touristid:bookedBy,
       flightid: selectedOffer.id,
       aircraft:selectedOffer?.itineraries[0].segments[0].aircraft.code,
       originLocationCode: selectedOffer?.itineraries[0].segments[0].departure.iataCode,
       destinationLocationCode: selectedOffer?.itineraries[0].segments[0].arrival.iataCode,
-      destinationLocationCode2: selectedOffer?.itineraries[0].segments[1].arrival.iataCode,
       DepartureDate: selectedOffer?.itineraries[0].segments[0].departure.at,
       ArrivalDate: selectedOffer.itineraries[0].segments.slice(-1)[0].arrival.at,
       returnDate: formData.returnDate || undefined,
@@ -121,6 +120,10 @@ const BookingForm = () => {
       nonStop: formData.nonStop,
       Price: selectedOffer.price.total ,
     };
+    // Conditionally add destinationLocationCode2 if it exists
+    if (selectedOffer?.itineraries[0].segments[1]?.arrival.iataCode) {
+      params.destinationLocationCode2 = selectedOffer.itineraries[0].segments[1].arrival.iataCode;
+    }
     console.log(params)
     const response = await axios.post("/tourist/BookedFlights", params);
     if (response.status === 201) {
