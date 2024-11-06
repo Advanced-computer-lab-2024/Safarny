@@ -28,8 +28,13 @@ const userModel = new mongoose.Schema(
     DOB: Date,
     age: Number,
     mobile: String,
-     
-     
+    loyaltyPoints: { type: Number, default: 0 },
+    loyaltyLevel: {
+      type: String,
+      enum: ["none", "level 1", "level 2", "level 3"],
+      default: "none",
+    },
+
     //TourGuide
     YearOfExp: Number,
     PrevWork: String,
@@ -56,6 +61,7 @@ const userModel = new mongoose.Schema(
     CompanyName: String,
     CompanyLink: String,
     CompanyHotline: Number,
+    //Tourist/Advertiser
     acttivities: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -96,6 +102,24 @@ const userModel = new mongoose.Schema(
     collection: "User",
   }
 );
+
+userModel.methods.updateLoyaltyLevel = function () {
+  if (this.loyaltyPoints > 500000) {
+    this.loyaltyLevel = "level 3";
+  } else if (this.loyaltyPoints > 100000) {
+    this.loyaltyLevel = "level 2";
+  } else if (this.loyaltyPoints > 0) {
+    this.loyaltyLevel = "level 1";
+  } else {
+    this.loyaltyLevel = "none";
+  }
+  return this.loyaltyLevel;
+};
+
+userModel.pre("save", function (next) {
+  this.updateLoyaltyLevel();
+  next();
+});
 
 const User = mongoose.model("User", userModel);
 module.exports = User;

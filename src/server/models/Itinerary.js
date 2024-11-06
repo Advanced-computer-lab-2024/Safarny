@@ -81,7 +81,12 @@ const itinerarySchema = new Schema(
       required: true,
     },
     rating: {
-      type: Number, 
+      type: Number,
+    },
+    bookingOpen: {
+      type: String,
+      enum: ["active", "in-active"], // Whether the booking is open
+      default: "active",
     },
   },
   { timestamps: true }

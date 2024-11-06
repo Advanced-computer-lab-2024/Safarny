@@ -3,13 +3,19 @@ const usersController = require("../controllers/usersController.js");
 const searchController = require("../controllers/searchController.js");
 
 const {
-    getAllComplaints,
-    updateComplaintById,
-    getComplaintsBySubmitterId,
-    createComplaint
-} = require('../controllers/userComplaintsController.js');
+  getAllComplaints,
+  updateComplaintById,
+  getComplaintsBySubmitterId,
+  createComplaint,
+} = require("../controllers/userComplaintsController.js");
 
-
+const {
+  createBooking,
+  getBookings,
+  updateBooking,
+  deleteBooking,
+  cancelBooking,
+} = require("../controllers/bookingController.js");
 
 const router = Router();
 /*
@@ -44,5 +50,11 @@ router.get("/complaints", getAllComplaints);
 router.put("/complaints/:id", updateComplaintById);
 router.get("/complaints/:submitterId", getComplaintsBySubmitterId);
 router.post("/complaints", createComplaint);
+
+router.post("/bookings", createBooking);
+router.get("/bookings/:touristId", getBookings);
+router.put("/bookings/:id", updateBooking);
+router.delete("/bookings/:id", deleteBooking);
+router.put("/bookings/:id/cancel", cancelBooking);
 
 module.exports = router;
