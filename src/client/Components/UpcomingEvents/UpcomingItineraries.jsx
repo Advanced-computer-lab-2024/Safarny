@@ -62,8 +62,10 @@ const UpcomingItineraries = () => {
       console.log("Local state updated");
   
       // Make a request to the server to update the archived status
-      await axios.put(`/activities/${ItineraryId}`, { archived: isArchived });
+      await axios.put(`/tourguide/edit-itineraries/${ItineraryId}`, { archived: isArchived });
+      
       console.log("Archived status updated successfully");
+      
   
     } catch (error) {
       console.error("Error updating archived status:", error);
@@ -89,12 +91,7 @@ const fetchUserRole = async () => {
     fetchUserRole();
   }, []);
 
-  useEffect(() => {
-    
-    fetchFilteredItineraries(true);
-    fetchTags();
-  }, [sortCriteria]);
-
+  
   
   const fetchTags = async () => {
     try {
@@ -111,38 +108,53 @@ const fetchUserRole = async () => {
 
   const handleFilterClick = async () => await fetchFilteredItineraries(false);
 
-  const fetchFilteredItineraries = async (whichResponse) => {
-    try {
-      const queryParams = new URLSearchParams({
-        sortBy: `${sortCriteria}:asc`,
-        price: budget,
-        date: date,
-        tags: preferences.join(","),
-        language: language,
-      }).toString();
-      if (userInfo.role === 'tourist') {
-        queryParams.append("archived", "false");
-      }
-      let response;
-      if (whichResponse) {
-        response = await fetch(
+  
+  useEffect(() => {
+    const fetchFilteredItineraries = async (whichResponse) => {
+      try {
+        const queryParams = new URLSearchParams({
+          sortBy: `${sortCriteria}:asc`,
+          price: budget,
+          date: date,
+          tags: preferences.join(","),
+          language: language,
+        }).toString();
+    
+        let response;
+        if (whichResponse) {
+          response = await fetch(
             `http://localhost:3000/guest/get-itineraries-sorted?${queryParams}`
-        );
-      } else {
-        response = await fetch(
+          );
+        } else {
+          response = await fetch(
             `http://localhost:3000/guest/filter-itineraries?${queryParams}`
-        );
+          );
+        }
+    
+        if (!response.ok) {
+          throw new Error("Failed to fetch itineraries");
+        }
+        const data = await response.json();
+    
+        // Check if userRole is Tourist and filter accordingly
+        if (userRole !== 'TourGuide' && userRole !== 'Admin') {
+          const filteredItineraries = data.filter(itinerary => !itinerary.archived);
+          setItineraries(filteredItineraries);
+        } else {
+          setItineraries(data);
+        }
+      } catch (error) {
+        console.error("Error fetching itineraries:", error);
       }
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch itineraries");
-      }
-      const data = await response.json();
-      setItineraries(data);
-    } catch (error) {
-      console.error("Error fetching itineraries:", error);
-    }
-  };
+    };
+  
+    // Call fetch with true or false depending on requirement
+    fetchFilteredItineraries(true);
+    fetchTags();
+    
+    // Ensure dependencies include userRole and any variables affecting filtering
+  }, [sortCriteria, budget, date, preferences, language, userRole]);
+  
 
   return (
       <div className={styles.container}>
@@ -300,7 +312,7 @@ const fetchUserRole = async () => {
                             checked={itinerary.archived}
                          onChange={(e) => handleArchiveToggle(itinerary._id, e.target.checked)}
                            />
-                             Flag
+                             Flag (inappropriate)
                           </label>
                             </div>
                         )}
