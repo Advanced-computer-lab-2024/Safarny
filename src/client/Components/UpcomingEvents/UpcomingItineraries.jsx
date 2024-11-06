@@ -22,6 +22,13 @@ const UpcomingItineraries = () => {
   const [currencyCodes, setCurrencyCodes] = useState([]);
   const location = useLocation();
   const touristId = localStorage.getItem('userId');
+  const [userInfo, setUserInfo] = useState({
+    username: "",
+    email: "",
+    role: "",
+    image: "", // Added image field
+  });
+
 
   const { userId } = location.state || {};
   //const userId = localStorage.getItem('userId');

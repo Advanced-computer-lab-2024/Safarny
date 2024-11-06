@@ -23,6 +23,13 @@ const UpcomingActivities = () => {
   const [rating, setRating] = useState(0);
   const navigate = useNavigate();
   const [userRole, setUserRole] = useState(''); // State for storing user role
+  const [userInfo, setUserInfo] = useState({
+    username: "",
+    email: "",
+    role: "",
+    image: "", // Added image field
+  });
+
 
   const fetchExchangeRates = async () => {
     try {
