@@ -113,7 +113,7 @@ const handleArchiveToggle = async (ActivityId, isArchived) => {
         const data = await response.json();
   
         // Check if the user is a tourist
-        if (userRole === 'Tourist') {
+        if (userRole !== 'Advertiser' && userRole !== 'Admin') {
           // Filter activities to only include those that are not archived
           const filteredActivities = data.filter(activity => !activity.archived);
           setActivities(filteredActivities);
