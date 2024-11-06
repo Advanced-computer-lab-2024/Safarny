@@ -30,6 +30,18 @@ const UpcomingActivities = () => {
     image: "", // Added image field
   });
 
+  // Method to fetch user role
+  const fetchUserRole = async () => {
+    try {
+        // Replace `userId` with the actual user ID if available
+        const response = await axios.get(`http://localhost:3000/tourist/${userId}`);
+        setUserRole(response.data.role); // Store user role in state
+        console.log('User role:', response.data.role); // Log user role for debugging
+    } catch (err) {
+        console.error('Error fetching user role:', err);
+    }
+};
+
 
   const fetchExchangeRates = async () => {
     try {
@@ -42,17 +54,14 @@ const UpcomingActivities = () => {
       console.error('Error fetching exchange rates:', error);
     }
   };
-  // Method to fetch user role
-  const fetchUserRole = async () => {
-    try {
-        // Replace `userId` with the actual user ID if available
-        const response = await axios.get(`http://localhost:3000/tourist/${userId}`);
-        setUserRole(response.data.role); // Store user role in state
-        console.log('User role:', response.data.role); // Log user role for debugging
-    } catch (err) {
-        console.error('Error fetching user role:', err);
-    }
-};
+  useEffect(() => {
+    fetchUserRole(); // Call to fetch user role
+    fetchExchangeRates();
+  }, []);
+
+  
+  
+  
 const handleArchiveToggle = async (ActivityId, isArchived) => {
   try {
     // Update the local state first
@@ -80,16 +89,13 @@ const handleArchiveToggle = async (ActivityId, isArchived) => {
     return ((price / rateFrom) * rateTo).toFixed(2);
   };
 
-  useEffect(() => {
-    fetchExchangeRates();
-    fetchUserRole(); // Call to fetch user role
-  }, []);
+  
 
   useEffect(() => {
     const fetchActivities = async () => {
       try {
         let url = `http://localhost:3000/guest/get-activities-sorted?sortBy=${sortCriteria}:asc`;
-
+  
         if (filterCriteria === "budget") {
           url = `http://localhost:3000/guest/filter-activities?minBudget=${budget[0]}&maxBudget=${budget[1]}`;
         } else if (filterCriteria === "date") {
@@ -99,28 +105,31 @@ const handleArchiveToggle = async (ActivityId, isArchived) => {
         } else if (filterCriteria === "rating") {
           url = `http://localhost:3000/guest/filter-activities?&rating=${rating}`;
         }
-
+  
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Failed to fetch activities");
         }
         const data = await response.json();
+  
         // Check if the user is a tourist
-if (userInfo.role === 'tourist') {
-  // Filter activities to only include those that are not archived
-  const filteredActivities = data.filter(activity => !activity.archived);
-  setActivities(filteredActivities);
-} else {
-  // If the user is not a tourist, set all activities without filtering
-  setActivities(data);
-}
+        if (userRole !== 'Advertiser' && userRole !== 'Admin') {
+          // Filter activities to only include those that are not archived
+          const filteredActivities = data.filter(activity => !activity.archived);
+          setActivities(filteredActivities);
+        } else {
+          // If the user is not a tourist, set all activities without filtering
+          setActivities(data);
+        }
       } catch (error) {
         console.error("Error fetching activities:", error);
       }
     };
-
+  
     fetchActivities();
-  }, [sortCriteria, filterCriteria, budget, dateRange, selectedCategories, rating]);
+  }, [sortCriteria, filterCriteria, budget, dateRange, selectedCategories, rating, userRole]);
+  
+
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -292,7 +301,7 @@ if (userInfo.role === 'tourist') {
                             checked={activity.archived}
                          onChange={(e) => handleArchiveToggle(activity._id, e.target.checked)}
                            />
-                             Flag
+                             Flag (inappropriate)
                           </label>
                             </div>
                         )}
