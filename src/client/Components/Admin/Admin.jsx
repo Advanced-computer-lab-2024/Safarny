@@ -1,33 +1,115 @@
 import React, { useState, useEffect } from 'react';
-import SideBar from '../SideBar';
-import { Button, Modal, TextField, Typography, Card, CardContent, CardActions, Alert } from '@mui/material';
+import SideBar from '../SideBar/SideBar';
+import {
+  Button,
+  Modal,
+  TextField,
+  Typography,
+  Card,
+  CardContent,
+  CardActions,
+  Alert,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@mui/material';
 import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from '../../../server/config/Firebase';
-import Tags from './tagAdmin'; // Import the Tags component
-import { Link } from 'react-router-dom';
+import Tags from './tagAdmin';
+import { Link, useNavigate , useLocation} from 'react-router-dom';
 import ActivityCategory from './ActivityCategory';
+import styles from './Admin.module.css';
+import Logo from '/src/client/Assets/Img/logo.png';
+import Footer from '/src/client/Components/Footer/Footer';
 
 const Admin = () => {
+  const location = useLocation();
+  const { userId } = location.state || {};
+  const [userInfo, setUserInfo] = useState({
+    username: "",
+    email: "",
+    role: "",
+    image: "", // Added image field
+  });
+  const [userRole, setUserRole] = useState('');
+
   const [openModal, setOpenModal] = useState(false);
   const [posts, setPosts] = useState([]);
-  const [currentPost, setCurrentPost] = useState({ details: '', price: '', quantity: '', imageurl: '' });
+  const [currentPost, setCurrentPost] = useState({ details: '', price: '', currency: '', quantity: '', imageurl: '' });
   const [editingPostId, setEditingPostId] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedSection, setSelectedSection] = useState('posts'); // State to manage selected section
+  const [selectedSection, setSelectedSection] = useState('posts');
+  const [currencyCodes, setCurrencyCodes] = useState([]);
 
-  // Search, Filter and Sort states
+  // Search, Filter, and Sort states
   const [searchTerm, setSearchTerm] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
-  const [sortBy, setSortBy] = useState(''); // Can be 'rating'` or any other criteria
+  const [sortBy, setSortBy] = useState('');
+
+  //header items
+  const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const handleBackClick = () => {
+    navigate(-1);
+  };
 
   useEffect(() => {
     if (selectedSection === 'posts') {
       fetchPosts();
     }
   }, [selectedSection]);
+
+  useEffect(() => {
+
+    const handleScroll = () => {
+      const header = document.querySelector(`.${styles.header}`);
+      if (window.scrollY > 50) {
+        header.classList.add(styles.translucent);
+      } else {
+        header.classList.remove(styles.translucent);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const fetchUserRole = async () => {
+    try {
+      const response = await axios.get(`/tourist/${userId}`);
+      const user = response.data;
+      setUserRole(user.role);
+      console.log('User role:', user.role);
+    } catch (err) {
+      console.error('Error fetching user role:', err);
+    }
+  };
+  useEffect(() => {
+    console.log("id2",userId);
+    //console.log(userInfo.role);
+    const fetchExchangeRates = async () => {
+      try {
+        const response = await axios.get('https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP');
+        setCurrencyCodes(Object.keys(response.data.conversion_rates));
+      } catch (error) {
+        console.error('Error fetching exchange rates:', error);
+      }
+    };
+
+    fetchExchangeRates();
+    fetchUserRole();
+
+  }, []);
 
   const fetchPosts = async () => {
     try {
@@ -39,7 +121,7 @@ const Admin = () => {
   };
 
   const handleOpenModal = () => {
-    setCurrentPost({ details: '', price: '', quantity: '', imageurl: '' });
+    setCurrentPost({ details: '', price: '', currency: '', quantity: '', imageurl: '' });
     setEditingPostId(null);
     setOpenModal(true);
   };
@@ -61,10 +143,8 @@ const Admin = () => {
 
   const uploadImage = async (file) => {
     if (!file) return null;
-
     const storageRef = ref(storage, `images/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
-
     return new Promise((resolve, reject) => {
       uploadTask.on(
         "state_changed",
@@ -93,6 +173,8 @@ const Admin = () => {
 
     const postData = { ...currentPost, imageurl: imageUrl };
 
+    console.log('Submitting post data:', postData); // Log the postData
+
     try {
       if (editingPostId) {
         await axios.put(`/admin/products/${editingPostId}`, postData);
@@ -102,6 +184,7 @@ const Admin = () => {
       fetchPosts();
       handleCloseModal();
     } catch (error) {
+      console.error('Error submitting post:', error); // Log the error
       setErrorMessage(`Failed to ${editingPostId ? 'update' : 'add'} post`);
     }
   };
@@ -120,8 +203,37 @@ const Admin = () => {
       setErrorMessage('Failed to delete post');
     }
   };
+  const handleArchiveChange = async (postId) => {
+    try {
+      await axios.put(`/admin/products/${postId}`, { archived: true });
+      fetchPosts();
+    } catch (error) {
+      setErrorMessage('Failed to update archive status');
+    }
+  };
+  const handleArchiveToggle = async (postId, isArchived) => {
+    try {
+      // Update the local state first
+      setPosts(posts.map(post =>
+        post._id === postId ? { ...post, archived: isArchived } : post
+      ));
+      console.log("Local state updated");
 
-  // Search, Filter, and Sort functionality
+      // Make a request to the server to update the archived status
+      await axios.put(`/admin/products/${postId}`, { archived: isArchived });
+      console.log("Archived status updated successfully");
+
+    } catch (error) {
+      console.error("Error updating archived status:", error);
+      // Optionally, revert the local state if the API call fails
+      setPosts(posts.map(post =>
+        post._id === postId ? { ...post, archived: !isArchived } : post
+      ));
+    }
+  };
+
+
+
   const filteredPosts = posts.filter((post) => {
     const matchesSearch = post.details.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesPrice =
@@ -129,60 +241,50 @@ const Admin = () => {
       (maxPrice === '' || post.price <= maxPrice);
     return matchesSearch && matchesPrice;
   });
+  const handleUpcomingItinerariesClick = () => {
+    navigate("/UpcomingItineraries", { state: { userId } });
+  };
+  const handleUpcomingActivitiesClick = () => {
+    navigate("/UpcomingActivites", { state: { userId } });
+  };
+  
+
 
   const sortedPosts = [...filteredPosts].sort((a, b) => {
     if (sortBy === 'rating') {
-      return b.rating - a.rating; // Adjust according to your rating property
+      return b.rating - a.rating;
     }
-    return 0; // No sorting by default
+    return 0;
   });
 
   return (
-    <div style={{ display: 'flex' }}>
-      <SideBar />
-      <div style={{ marginLeft: '250px', padding: '20px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-          <Button variant="contained" color="primary" onClick={handleOpenModal} style={{ marginRight: '10px' }}>
-            Add Post
-          </Button>
-          <Button variant="contained" color="secondary" onClick={() => setSelectedSection('tags')} style={{ marginRight: '10px' }}>
-            Manage Tags
-          </Button>
-          <Button variant="contained" color="secondary" onClick={() => setSelectedSection('ActivityCategory')} style={{ marginRight: '10px' }}>
-            Manage categories
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            component={Link}
-            to="/adminaddgovernor"
-            style={{ marginLeft: '20px' }}
-          >
-            Add Governor
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            component={Link}
-            to="/"
-            style={{ marginLeft: '20px' }}
-          >
-            Home
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            component={Link}
-            to="/adminviewcomplaints"
-            style={{ marginLeft: '20px' }}
-          >
-            View Complaints
-          </Button>
-        </div>
+      <div className={styles.container}>
+        <header className={styles.header}>
+          <img src={Logo} alt="Safarny Logo" className={styles.logo} />
+          <h1>Safarny</h1>
+          <button className={styles.burger} onClick={toggleMenu}>
+            <span className={styles.burgerIcon}>&#9776;</span>
+          </button>
+          <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
+            <button onClick={handleBackClick} className={styles.button}>Back</button>
+            <Link to="/" className={styles.button}>Homepage</Link>
+            <button onClick={handleOpenModal} className={styles.button}>Add Post</button>
+            <button onClick={() => setSelectedSection('tags')} className={styles.button}>Manage Tags</button>
+            <button onClick={() => setSelectedSection('ActivityCategory')} className={styles.button}>Manage Categories</button>
+            <Link to="/adminaddgovernor"  className={styles.button}>Add Governor</Link>
+            <Link to="/adminviewcomplaints" className={styles.button}>View Complaints</Link>
+            <button onClick={handleUpcomingItinerariesClick} className={styles.button}>
+          View Itineraries
+        </button>
+        <button onClick={handleUpcomingActivitiesClick} className={styles.button}>
+          View Activities
+        </button>
+          </nav>
+        </header>
+        <SideBar className={styles.sidebar} />
+        <div className={styles.content}>
+          {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
 
-        {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-
-        {/* Search Bar */}
         <TextField
           label="Search by Name"
           variant="outlined"
@@ -190,17 +292,17 @@ const Admin = () => {
           margin="normal"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          className={styles.searchField}
         />
 
-        {/* Price Filter */}
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+        <div className={styles.priceFilterContainer}>
           <TextField
             label="Min Price"
             variant="outlined"
             type="number"
             value={minPrice}
             onChange={(e) => setMinPrice(e.target.value)}
-            style={{ marginRight: '10px' }}
+            className={styles.priceFilterField}
           />
           <TextField
             label="Max Price"
@@ -208,10 +310,10 @@ const Admin = () => {
             type="number"
             value={maxPrice}
             onChange={(e) => setMaxPrice(e.target.value)}
+            className={styles.priceFilterField}
           />
         </div>
 
-        {/* Sort By */}
         <TextField
           label="Sort By Rating"
           select
@@ -221,23 +323,35 @@ const Admin = () => {
             native: true,
           }}
           variant="outlined"
-          style={{ marginBottom: '1rem' }}
+          className={styles.sortField}
         >
           <option value="">None</option>
           <option value="rating">Rating</option>
         </TextField>
 
         {selectedSection === 'posts' && (
-          <div style={{ marginTop: '20px' }}>
+          <div className={styles.cardList}>
             {sortedPosts.map((post) => (
-              <Card key={post._id} sx={{ maxWidth: 345, margin: '10px', backgroundColor: 'white' }}>
-                <CardContent>
+              <Card key={post._id} className={styles.card}>
+                <CardContent className={styles.cardContent}>
                   <Typography gutterBottom variant="h5" component="div">
                     {post.details}
                   </Typography>
-                  <div>Price: {post.price}</div>
+                  <div>Price: {post.price} {post.currency}</div>
                   <div>Quantity: {post.quantity}</div>
-                  <img src={post.imageurl} alt="Post" style={{ width: '100%', height: 'auto' }} />
+                  <div className={styles.cardImage}>
+                    <img src={post.imageurl} alt="Image" />
+                  </div>
+                  <div className={styles.archiveOption}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={post.archived}
+                        onChange={(e) => handleArchiveToggle(post._id, e.target.checked)}
+                      />
+                      Archive
+                    </label>
+                  </div>
                 </CardContent>
                 <CardActions>
                   <Button size="small" color="primary" onClick={() => handleEditPost(post)}>
@@ -252,55 +366,64 @@ const Admin = () => {
           </div>
         )}
 
-        {selectedSection === 'tags' && <Tags />} {/* Render Tags component */}
-        {selectedSection === 'ActivityCategory' && <ActivityCategory />} {/* Render ActivityCategory component */}
+        {selectedSection === 'tags' && <Tags />}
+        {selectedSection === 'ActivityCategory' && <ActivityCategory />}
       </div>
 
       <Modal open={openModal} onClose={handleCloseModal}>
-        <div style={{ padding: '20px', backgroundColor: 'white', margin: '100px auto', width: '400px' }}>
-          <Typography variant="h6">{editingPostId ? 'Edit Post' : 'Add New Post'}</Typography>
-          <TextField
-            fullWidth
-            label="Details"
-            name="details"
-            value={currentPost.details}
-            onChange={handleInputChange}
-            margin="normal"
-          />
-          <TextField
-            fullWidth
-            label="Price"
-            name="price"
-            type="number"
-            value={currentPost.price}
-            onChange={handleInputChange}
-            margin="normal"
-          />
-          <TextField
-            fullWidth
-            label="Quantity"
-            name="quantity"
-            type="number"
-            value={currentPost.quantity}
-            onChange={handleInputChange}
-            margin="normal"
-          />
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            style={{ margin: '10px 0' }}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSubmitPost}
-            style={{ marginTop: '20px' }}
-          >
-            {editingPostId ? 'Update Post' : 'Add Post'}
-          </Button>
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <Typography variant="h6">{editingPostId ? 'Edit Post' : 'Add New Post'}</Typography>
+            <TextField
+              fullWidth
+              label="Details"
+              name="details"
+              value={currentPost.details}
+              onChange={handleInputChange}
+              margin="normal"
+            />
+            <TextField
+              fullWidth
+              label="Price"
+              name="price"
+              type="number"
+              value={currentPost.price}
+              onChange={handleInputChange}
+              margin="normal"
+            />
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Currency</InputLabel>
+              <Select
+                name="currency"
+                value={currentPost.currency}
+                onChange={handleInputChange}
+              >
+                {currencyCodes.map((code) => (
+                  <MenuItem key={code} value={code}>{code}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
+              fullWidth
+              label="Quantity"
+              name="quantity"
+              type="number"
+              value={currentPost.quantity}
+              onChange={handleInputChange}
+              margin="normal"
+            />
+            <input type="file" onChange={handleImageChange} className={styles.imageInput} />
+            <Button variant="contained" color="primary" onClick={handleSubmitPost}>
+              {editingPostId ? 'Update Post' : 'Add Post'}
+            </Button>
+            {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
+          </div>
         </div>
       </Modal>
+
+
+
+      <Footer />
     </div>
   );
 };

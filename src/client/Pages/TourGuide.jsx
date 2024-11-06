@@ -41,6 +41,7 @@ export default function TourGuide() {
     duration: 0,
     language: "",
     price: 0,
+    currency: '',
     availableDates: [],
     availableTimes: [],
     accessibility: false,
@@ -184,7 +185,8 @@ export default function TourGuide() {
                 <Typography variant="h6">
                   Duration: {itinerary.duration} minutes
                 </Typography>
-                <Typography variant="h6">Price: ${itinerary.price}</Typography>
+                <Typography variant="h6">Price: {itinerary.price}</Typography>
+                <Typography variant="h6">Currency: {itinerary.currency}</Typography>
                 <Typography variant="h6">
                   Accessibility: {itinerary.accessibility ? "Yes" : "No"}
                 </Typography>
@@ -412,7 +414,25 @@ export default function TourGuide() {
                     }
                   />
                 </Tooltip>
-
+                <FormControl fullWidth margin="normal">
+                  <InputLabel>Currency</InputLabel>
+                  <Select
+                      name="currency"
+                      value={newItinerary.currency}
+                      onChange={(e) =>
+                          setNewItinerary({
+                            ...newItinerary,
+                            currency: e.target.value,
+                          })
+                      }
+                  >
+                    <MenuItem value="EGP">EGP</MenuItem>
+                    <MenuItem value="SAR">SAR</MenuItem>
+                    <MenuItem value="USD">USD</MenuItem>
+                    <MenuItem value="EUR">EUR</MenuItem>
+                    <MenuItem value="GBP">GBP</MenuItem>
+                  </Select>
+                </FormControl>
                 {/* Available Dates (Array of Dates) */}
                 <Tooltip
                   title="Enter the available dates for the tour. You can select multiple dates."

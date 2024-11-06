@@ -20,5 +20,5 @@ router
   .delete(deleteActivity);
 
 router.route("/addCategory").post(addCategoryToActivity);
-
+router.get("/:id", getActivityById);
 module.exports = router;

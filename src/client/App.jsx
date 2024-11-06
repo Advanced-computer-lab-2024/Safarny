@@ -44,6 +44,7 @@ import Getcategory from "./Components/ActivityCategories/getcategory";
 import CreateCategory from "./Components/ActivityCategories/createcategory";
 import Editcategory from "./Components/ActivityCategories/editcategory";
 import Deletecategory from "./Components/ActivityCategories/deletecategory";
+//import {getActivityCategoryById} from "/src/server/controllers/activitycategoryController";
 import ActivityCategory from "./Components/ActivityCategories/category";
 import UpcomingActivites from "./Components/UpcomingEvents/UpcomingActivities";
 import TourismGovernerAdmin from "./Components/Admin/TourismGovernerAdmin";
@@ -60,9 +61,15 @@ import BookFlight from "./Booking/BookFlight";
 import BookingHotel from "./Booking/BookingHotel";
 import MyBookedFlights from "./Booking/MyBookedFlights";
 import MyHotelBookings from "./Booking/MyHotelBookings";
-
+import UpcomingActivitesDetails from "./Components/UpcomingEvents/UpcomingActivitiesDetails";
+import WishList from "./Components/WishList/WishList";
+import Terms from "./Components/terms/terms";
+import PurchasedProducts from "./Components/PurchasedProducts/PurchasedProducts";
+//import AdminViewActivities from "./Components/UpcomingEvents/AdminViewActivities";
+//import { PurchasedProductsProvider } from "./Components/PurchasedProducts/PurchasedProductsContext";
 function App() {
   return (
+    //<PurchasedProductsProvider>
     <Router>
       <Routes>
         <Route path="/" element={<Homepage />} />
@@ -72,7 +79,7 @@ function App() {
         <Route path="/products" element={<ProductList />} />
         <Route path="/profile" element={<Profile />} />
         {/* <Route path="/landmarks" element={<Landmarks />} /> */}
-        {/* <Route path="/TourGuide" element={<TourGuide />} /> */}
+        <Route path="/TourGuide" element={<TourGuide />} />
         {/* <Route path="/Advertiser" element={<Advertiser />} /> */}
         <Route path="/Seller" element={<Seller />} />
         <Route path="/Admin" element={<Admin />} />
@@ -102,13 +109,16 @@ function App() {
         <Route path="/deletetags" element={<DeleteTags />} />
         <Route path="/tags" element={<Tags />} />
         <Route path="/getcategory" element={<Getcategory />} />
+        <Route path={"/getcategory/:id"} element={<getActivityCategoryById />} />
         <Route path="/createcategory" element={<CreateCategory />} />
         <Route path="/editcategory/:id" element={<Editcategory />} />
         <Route path="/deletecategory" element={<Deletecategory />} />
+        <Route path={"/category/:id"} element={<ActivityCategory />} />
         <Route path="/category" element={<ActivityCategory />} />
         <Route path="/iternaries" element={<ItineraryManager />} />
         <Route path="/create-post" element={<CreatePost />} />
         <Route path="/UpcomingActivites" element={<UpcomingActivites />} />
+        <Route path={"/terms"} element={<Terms />} />
         <Route path="/UpcomingItineraries" element={<UpcomingItineraries />} />
         <Route
           path="/create-historical-place"
@@ -117,6 +127,7 @@ function App() {
         <Route path="/MyBookedFlights" element={<MyBookedFlights />} />
         <Route path="/historical-places" element={<ReadHistoricalPlace />} />
         <Route path="/historical-place/:id" element={<ReadHistoricalPlaceDetails />} />
+        <Route path="/UpcomingActivities/:id" element={<UpcomingActivitesDetails/>} />
         <Route
           path="/update-historical-place/:id"
           element={<UpdateHistoricalPlace />}
@@ -127,8 +138,12 @@ function App() {
         <Route path="/viewcomplaints" element={<ViewComplaints />} />
         <Route path="/adminviewcomplaints" element={<AdminViewComplaints />} />
         <Route path="/admineditcomplaints" element={<AdminEditComplaints />} />
-      </Routes>
+        <Route path="/wishlist" element={<WishList />} />
+        <Route path="/PurchasedProducts" element={<PurchasedProducts />} /> 
+              </Routes>
     </Router>
+    //</PurchasedProductsProvider>       
+
   );
 }
 

@@ -56,6 +56,14 @@ const itinerarySchema = new Schema(
       type: Number, // Price of the tour
       required: true,
     },
+    currency: {
+      type: String, // Currency of the price
+      required: true,
+    },
+    archived: {
+      type: Boolean,
+      default: false, // Set initial value to false
+    },
     availableDates: {
       type: [String], // Array of dates when the tour is available
       required: true,
@@ -77,7 +85,12 @@ const itinerarySchema = new Schema(
       required: true,
     },
     rating: {
-      type: Number, 
+      type: Number,
+    },
+    bookingOpen: {
+      type: String,
+      enum: ["active", "in-active"], // Whether the booking is open
+      default: "active",
     },
   },
   { timestamps: true }

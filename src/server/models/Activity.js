@@ -16,6 +16,10 @@ const activitySchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  currency: {
+    type: String,
+    required: true,
+  },
   specialDiscount: { type: String },
   bookingOpen: { type: Boolean, default: true },
   date: { type: String, required: true },
@@ -23,6 +27,10 @@ const activitySchema = new mongoose.Schema({
   coordinates: {
     lat: { type: Number, required: true },
     lng: { type: Number, required: true },
+  },
+  archived: {
+    type: Boolean,
+    default: false, // Set initial value to false
   },
   tags: [
     {
@@ -42,6 +50,7 @@ const activitySchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+
   rating: {
     type: Number,
   },

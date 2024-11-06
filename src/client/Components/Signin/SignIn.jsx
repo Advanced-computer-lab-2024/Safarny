@@ -24,15 +24,18 @@ const SignIn = () => {
   
       // Assuming 'type', 'status', and 'id' are part of the response data
       const { type, Status, id } = response.data;
-  
-      // If the user is 'admin', sign in without checking status
-      if (type === 'admin' || type === 'Admin') {
-        setSuccess(true);
-        setError('');
-        navigate('/admin');
-        return; // Stop further execution for admin
-      }
       const userId = id;
+
+
+   // If the user is 'admin', sign in without checking status
+   if (type === 'admin' || type === 'Admin') {
+    setSuccess(true);
+    setError('');
+    console.log("id1",userId);
+    navigate('/admin', { state: { userId } }); // Pass userId to Admin page
+    return; // Stop further execution for admin
+  }
+
       if (type === 'Tourist') {
         setSuccess(true);
         setError('');

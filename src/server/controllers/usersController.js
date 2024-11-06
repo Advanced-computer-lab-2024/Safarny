@@ -102,6 +102,8 @@ const createProfile = async (req, res) => {
       role,
       YearOfExp,
       PrevWork,
+      walletcurrency, // Ensure this is included
+      DOB
     } = req.body;
 
     // Create a new Profile
@@ -115,6 +117,8 @@ const createProfile = async (req, res) => {
       role,
       YearOfExp,
       PrevWork,
+      walletcurrency, // Ensure this is included
+      DOB
     });
 
     // Save the new profile to the database
@@ -163,6 +167,7 @@ const updateProfileById = AsyncHandler(async (req, res) => {
       nationality: req.body.nationality,
       employed: req.body.employed,
       wallet: req.body.wallet,
+      walletcurrency: req.body.walletcurrency,
       DOB: req.body.DOB,
       age: req.body.age,
       YearOfExp: req.body.YearOfExp,

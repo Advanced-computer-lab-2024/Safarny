@@ -5,13 +5,19 @@ const flightController=require("../controllers/FlightController.js");
 const HotelController=require("../controllers/HotelController.js");
 
 const {
-    getAllComplaints,
-    updateComplaintById,
-    getComplaintsBySubmitterId,
-    createComplaint
-} = require('../controllers/userComplaintsController.js');
+  getAllComplaints,
+  updateComplaintById,
+  getComplaintsBySubmitterId,
+  createComplaint,
+} = require("../controllers/userComplaintsController.js");
 
-
+const {
+  createBooking,
+  getBookings,
+  updateBooking,
+  deleteBooking,
+  cancelBooking,
+} = require("../controllers/bookingController.js");
 
 const router = Router();
 /*
@@ -44,6 +50,8 @@ router.get("/search", searchController.search);
 // Route for getting a profile by ID
 router.get("/:id", usersController.getProfileById);
 
+
+
 // Route for updating a profile by ID
 router.put("/:id", usersController.updateProfileById);
 
@@ -51,5 +59,11 @@ router.get("/complaints", getAllComplaints);
 router.put("/complaints/:id", updateComplaintById);
 router.get("/complaints/:submitterId", getComplaintsBySubmitterId);
 router.post("/complaints", createComplaint);
+
+router.post("/bookings", createBooking);
+router.get("/bookings/:touristId", getBookings);
+router.put("/bookings/:id", updateBooking);
+router.delete("/bookings/:id", deleteBooking);
+router.put("/bookings/:id/cancel", cancelBooking);
 
 module.exports = router;

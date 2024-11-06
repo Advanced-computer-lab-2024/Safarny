@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import styles from "./UpcomingItinerary.module.css";
 import Logo from "/src/client/Assets/Img/logo.png";
 import Footer from "/src/client/components/Footer/Footer";
-import { Link } from "react-router-dom";
+import { Link ,useLocation, useNavigate} from "react-router-dom";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+
+import Header from "/src/client/Components/Header/Header";
+import axios from 'axios';
+
 
 const UpcomingItineraries = () => {
   const [itineraries, setItineraries] = useState([]);
@@ -12,12 +17,85 @@ const UpcomingItineraries = () => {
   const [preferences, setPreferences] = useState([]);
   const [language, setLanguage] = useState("");
   const [availableTags, setAvailableTags] = useState([]);
+  const [selectedCurrency, setSelectedCurrency] = useState('EGP');
+  const [exchangeRates, setExchangeRates] = useState({});
+  const [currencyCodes, setCurrencyCodes] = useState([]);
+  const location = useLocation();
+  const touristId = localStorage.getItem('userId');
+  const [userInfo, setUserInfo] = useState({
+    username: "",
+    email: "",
+    role: "",
+    image: "", // Added image field
+  });
+
+
+  const { userId } = location.state || {};
+  //const userId = localStorage.getItem('userId');
+
+  const [userRole, setUserRole] = useState(""); // State for storing user role
+
+  
+
+
+  const fetchExchangeRates = async () => {
+    try {
+      const response = await fetch('https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP');
+      const data = await response.json();
+      setExchangeRates(data.conversion_rates);
+      setCurrencyCodes(Object.keys(data.conversion_rates));
+    } catch (error) {
+      console.error('Error fetching exchange rates:', error);
+    }
+  };
+  const convertPrice = (price, fromCurrency, toCurrency) => {
+    const rateFrom = exchangeRates[fromCurrency];
+    const rateTo = exchangeRates[toCurrency];
+    return ((price / rateFrom) * rateTo).toFixed(2);
+  };
+  const handleArchiveToggle = async (ItineraryId, isArchived) => {
+    try {
+      // Update the local state first
+      setItineraries(itineraries.map(itinerary => 
+        itinerary._id === ItineraryId ? { ...itinerary, archived: isArchived } : itinerary
+      ));
+      console.log("Local state updated");
+  
+      // Make a request to the server to update the archived status
+      await axios.put(`/activities/${ItineraryId}`, { archived: isArchived });
+      console.log("Archived status updated successfully");
+  
+    } catch (error) {
+      console.error("Error updating archived status:", error);
+      // Optionally, revert the local state if the API call fails
+      setItineraries(itineraries.map(itinerary => 
+        itinerary._id === itinerary ? { ...itinerary, archived: !isArchived } : itinerary
+      ));
+    }
+  };
+  
+// Fetch user role
+const fetchUserRole = async () => {
+  try {
+    const response = await axios.get(`/tourist/${userId}`);
+    setUserRole(response.data.role); // Adjust based on your backend response
+    console.log(response.data.role);
+  } catch (error) {
+    console.error("Error fetching user role:", error);
+  }
+};
+  useEffect(() => {
+    fetchExchangeRates();
+    fetchUserRole();
+  }, []);
 
   useEffect(() => {
+    
     fetchFilteredItineraries(true);
     fetchTags();
   }, [sortCriteria]);
 
+  
   const fetchTags = async () => {
     try {
       const response = await fetch("http://localhost:3000/tourguide/get-tags");
@@ -42,6 +120,9 @@ const UpcomingItineraries = () => {
         tags: preferences.join(","),
         language: language,
       }).toString();
+      if (userInfo.role === 'tourist') {
+        queryParams.append("archived", "false");
+      }
       let response;
       if (whichResponse) {
         response = await fetch(
@@ -65,31 +146,16 @@ const UpcomingItineraries = () => {
 
   return (
       <div className={styles.container}>
-        <header className={styles.header}>
-          <img src={Logo} alt="Safarny Logo" className={styles.logo} />
-          <h1>Safarny</h1>
-          <nav className={styles.nav}>
-            <Link to="/" className={styles.button}>
-              Back to Home
-            </Link>
-          </nav>
-        </header>
-
+        <Header />
         <main className={styles.main}>
           <h2>Upcoming Itineraries</h2>
 
           {/* Sorting options */}
           <div className={styles.sortOptions}>
             <button onClick={() => setSortCriteria("date")}>Sort by Date</button>
-            <button onClick={() => setSortCriteria("price")}>
-              Sort by Price
-            </button>
-            <button onClick={() => setSortCriteria("duration")}>
-              Sort by Duration
-            </button>
-            <button onClick={() => setSortCriteria("rating")}>
-              Sort by Rating
-            </button>
+            <button onClick={() => setSortCriteria("price")}>Sort by Price</button>
+            <button onClick={() => setSortCriteria("duration")}>Sort by Duration</button>
+            <button onClick={() => setSortCriteria("rating")}>Sort by Rating</button>
           </div>
 
           {/* Filter options */}
@@ -151,6 +217,22 @@ const UpcomingItineraries = () => {
               />
             </div>
 
+            {/* Currency Selector */}
+            <div className={styles.currencySelector}>
+              <FormControl fullWidth margin="normal">
+                <InputLabel><h3>Currency</h3></InputLabel>
+                <br></br>
+                <Select
+                    value={selectedCurrency}
+                    onChange={(e) => setSelectedCurrency(e.target.value)}
+                >
+                  {currencyCodes.map(code => (
+                      <MenuItem key={code} value={code}>{code}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
+
             {/* Apply Filters Button */}
             <button onClick={handleFilterClick}>Apply Filters</button>
           </div>
@@ -160,55 +242,71 @@ const UpcomingItineraries = () => {
             {itineraries.length === 0 ? (
                 <p>No upcoming itineraries found.</p>
             ) : (
-                itineraries.map((itinerary) => (
-                    <div key={itinerary._id} className={styles.itineraryItem}>
-                      <h3>{itinerary.name}</h3>
-                      <p>Duration: {itinerary.duration} hours</p>
-                      <p>Language: {itinerary.language}</p>
-                      <p>Price: {itinerary.price}$</p>
-                      <p>Available Dates: {itinerary.availableDates.join(", ")}</p>
-                      <p>Available Times: {itinerary.availableTimes.join(", ")}</p>
-                      <p>Accessibility: {itinerary.accessibility ? "Yes" : "No"}</p>
-                      <p>Pickup Location: {itinerary.pickupLocation}</p>
-                      <p>Dropoff Location: {itinerary.dropoffLocation}</p>
+                itineraries.map((itinerary) => {
+                  const convertedPrice = convertPrice(itinerary.price, itinerary.currency, selectedCurrency);
+                  return (
+                      <div key={itinerary._id} className={styles.itineraryItem}>
+                        <h3>{itinerary.name}</h3>
+                        <p>Duration: {itinerary.duration} hours</p>
+                        <p>Language: {itinerary.language}</p>
+                        <p>Price: {convertedPrice} {selectedCurrency}</p>
+                        <p>Available Dates: {itinerary.availableDates.join(", ")}</p>
+                        <p>Available Times: {itinerary.availableTimes.join(", ")}</p>
+                        <p>Accessibility: {itinerary.accessibility ? "Yes" : "No"}</p>
+                        <p>Pickup Location: {itinerary.pickupLocation}</p>
+                        <p>Dropoff Location: {itinerary.dropoffLocation}</p>
 
-                      {/* Display Rating */}
-                      <p>
-                        Rating:{" "}
-                        {itinerary.rating !== undefined
-                            ? itinerary.rating
-                            : "No rating available"}
-                      </p>
+                        {/* Display Rating */}
+                        <p>
+                          Rating:{" "}
+                          {itinerary.rating !== undefined
+                              ? itinerary.rating
+                              : "No rating available"}
+                        </p>
 
-                      {/* Display Tags */}
-                      {itinerary.tags && itinerary.tags.length > 0 && (
-                          <p>
-                            Tags: {itinerary.tags.map((tag) => tag.name).join(", ")}
-                          </p>
-                      )}
+                        {/* Display Tags */}
+                        {itinerary.tags && itinerary.tags.length > 0 && (
+                            <p>
+                              Tags: {itinerary.tags.map((tag) => tag.name).join(", ")}
+                            </p>
+                        )}
 
-                      {/* Display Activities */}
-                      {itinerary.activities && itinerary.activities.length > 0 && (
-                          <div>
-                            <p>Activities:</p>
-                            <ul>
-                              {itinerary.activities.map((activity) => (
-                                  <li key={activity._id}>
-                                    {activity.location} - {activity.date} at{" "}
-                                    {activity.time}
-                                    {activity.specialDiscount && (
-                                        <span> - Discount: {activity.specialDiscount}</span>
-                                    )}
-                                    {activity.price && (
-                                        <span> - Price: {activity.price}$</span>
-                                    )}
-                                  </li>
-                              ))}
-                            </ul>
-                          </div>
-                      )}
-                    </div>
-                ))
+                        {/* Display Activities */}
+                        {itinerary.activities && itinerary.activities.length > 0 && (
+                            <div>
+                              <p>Activities:</p>
+                              <ul>
+                                {itinerary.activities.map((activity) => (
+                                    <li key={activity._id}>
+                                      {activity.location} - {activity.date} at{" "}
+                                      {activity.time}
+                                      {activity.specialDiscount && (
+                                          <span> - Discount: {activity.specialDiscount}</span>
+                                      )}
+                                      {activity.price && (
+                                          <span> - Price: {activity.price}$</span>
+                                      )}
+                                    </li>
+                                ))}
+                              </ul>
+                            </div>
+                        )}
+                        {/* Admin-only Checkbox */}
+                        {userRole === "Admin" && (
+                            <div className={styles.adminCheckbox}>
+                            <label>
+                             <input
+                              type="checkbox"
+                            checked={itinerary.archived}
+                         onChange={(e) => handleArchiveToggle(itinerary._id, e.target.checked)}
+                           />
+                             Flag
+                          </label>
+                            </div>
+                        )}
+                      </div>
+                  );
+                })
             )}
           </section>
         </main>

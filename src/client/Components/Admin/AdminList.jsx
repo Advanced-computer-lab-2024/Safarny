@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SideBar from '../SideBar';
+import SideBar from '../SideBar/SideBar';
 import DataTable2 from '../Grids/AdminGrid';
 import { Button, Modal, TextField, Typography, Card, CardContent, CardActions, Alert } from '@mui/material';
 import axios from 'axios';

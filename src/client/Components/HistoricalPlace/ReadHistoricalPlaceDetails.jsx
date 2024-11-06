@@ -3,10 +3,11 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
-import styles from './UpdateHistoricalPlace.module.css'; // Import the CSS module
+import styles from './ReadHistoricalPlaceDetails.module.css';
+import Header from '/src/client/components/Header/Header';
 
 const ReadHistoricalPlaceDetails = () => {
-    const { id } = useParams(); // Get place ID from URL
+    const { id } = useParams();
     const [place, setPlace] = useState(null);
     const [formData, setFormData] = useState({
         description: '',
@@ -50,21 +51,17 @@ const ReadHistoricalPlaceDetails = () => {
 
     return (
         <div className={styles.container}>
-            <header className={styles.header}>
-                <img src={Logo} alt="Safarny Logo" className={styles.logo} />
-                <h1>            {place.description}
-                </h1>
-                <nav className={styles.nav}>
-                    <Link to="/" className={styles.button}>Back to Home</Link>
-                </nav>
-            </header>
+            <Header />
             <p>
                 Description: {place.description}
             </p>
             <p>Location: {place.location}</p>
             <p>Opening Hours: {place.openingHours}</p>
             <p>Ticket Prices: {place.ticketPrices}</p>
-            <p>Pictures: {place.pictures}</p>
+            <p>Pictures: </p>
+            {place.pictures && place.pictures.length > 0 && (
+                <img className={styles.placeImage} src={place.pictures[0]} alt={place.description} />
+            )}
             <Footer />
         </div>
     );

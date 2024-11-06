@@ -21,7 +21,7 @@ const MainPage = () => {
             <Link to={`/create/${userId}`}>Create Activity</Link>
         </li>
         <li>
-            <Link to={`/read/${userId}`}>Read Activities</Link>
+            <Link to={`/read/${userId}`}>My Activities</Link>
         </li>
         <li>
             <Link to={`/update/${userId}`}>Update Activity</Link>

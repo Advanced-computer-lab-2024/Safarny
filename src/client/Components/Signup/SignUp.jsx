@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Footer from '/src/client/Components/Footer/Footer';
 import Header from '../Header/Header';
 import styles from './SignUp.module.css';
 
-// List of countries
 const countries = [
   "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
   "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia",
@@ -29,8 +28,28 @@ const countries = [
   "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
 ];
 
+const countryToCurrency = {
+  "Afghanistan": "AFN", "Albania": "ALL", "Algeria": "DZD", "Andorra": "EUR", "Angola": "AOA", "Antigua and Barbuda": "XCD", "Argentina": "ARS", "Armenia": "AMD", "Australia": "AUD", "Austria": "EUR",
+  "Azerbaijan": "AZN", "Bahamas": "BSD", "Bahrain": "BHD", "Bangladesh": "BDT", "Barbados": "BBD", "Belarus": "BYN", "Belgium": "EUR", "Belize": "BZD", "Benin": "XOF", "Bhutan": "BTN", "Bolivia": "BOB",
+  "Bosnia and Herzegovina": "BAM", "Botswana": "BWP", "Brazil": "BRL", "Brunei": "BND", "Bulgaria": "BGN", "Burkina Faso": "XOF", "Burundi": "BIF", "Cape Verde": "CVE", "Cambodia": "KHR",
+  "Cameroon": "XAF", "Canada": "CAD", "Central African Republic": "XAF", "Chad": "XAF", "Chile": "CLP", "China": "CNY", "Colombia": "COP", "Comoros": "KMF", "Congo, Democratic Republic of the Congo": "CDF", "Costa Rica": "CRC", "Croatia": "HRK", "Cuba": "CUP", "Cyprus": "EUR", "Czech Republic": "CZK", "Denmark": "DKK", "Djibouti": "DJF", "Dominica": "XCD",
+  "Dominican Republic": "DOP", "Ecuador": "USD", "Egypt": "EGP", "El Salvador": "USD", "Equatorial Guinea": "XAF", "Eritrea": "ERN", "Estonia": "EUR", "Eswatini": "SZL", "Ethiopia": "ETB",
+  "Fiji": "FJD", "Finland": "EUR", "France": "EUR", "Gabon": "XAF", "Gambia": "GMD", "Georgia": "GEL", "Germany": "EUR", "Ghana": "GHS", "Greece": "EUR", "Grenada": "XCD", "Guatemala": "GTQ", "Guinea": "GNF",
+  "Guinea-Bissau": "XOF", "Guyana": "GYD", "Haiti": "HTG", "Honduras": "HNL", "Hungary": "HUF", "Iceland": "ISK", "India": "INR", "Indonesia": "IDR", "Iran": "IRR", "Iraq": "IQD", "Ireland": "EUR", "Occupied Palestine": "ILS",
+  "Italy": "EUR", "Jamaica": "JMD", "Japan": "JPY", "Jordan": "JOD", "Kazakhstan": "KZT", "Kenya": "KES", "Kiribati": "AUD", "Korea, North": "KPW", "Korea, South": "KRW", "Kosovo": "EUR", "Kuwait": "KWD",
+  "Kyrgyzstan": "KGS", "Laos": "LAK", "Latvia": "EUR", "Lebanon": "LBP", "Lesotho": "LSL", "Liberia": "LRD", "Libya": "LYD", "Liechtenstein": "CHF", "Lithuania": "EUR", "Luxembourg": "EUR", "Madagascar": "MGA",
+  "Malawi": "MWK", "Malaysia": "MYR", "Maldives": "MVR", "Mali": "XOF", "Malta": "EUR", "Marshall Islands": "USD", "Mauritania": "MRU", "Mauritius": "MUR", "Mexico": "MXN", "Micronesia": "USD", "Moldova": "MDL",
+  "Monaco": "EUR", "Mongolia": "MNT", "Montenegro": "EUR", "Morocco": "MAD", "Mozambique": "MZN", "Myanmar": "MMK", "Namibia": "NAD", "Nauru": "AUD", "Nepal": "NPR", "Netherlands": "EUR", "New Zealand": "NZD",
+  "Nicaragua": "NIO", "Niger": "XOF", "Nigeria": "NGN", "North Macedonia": "MKD", "Norway": "NOK", "Oman": "OMR", "Pakistan": "PKR", "Palau": "USD", "Palestine": "ILS", "Panama": "PAB", "Papua New Guinea": "PGK",
+  "Paraguay": "PYG", "Peru": "PEN", "Philippines": "PHP", "Poland": "PLN", "Portugal": "EUR", "Qatar": "QAR", "Romania": "RON", "Russia": "RUB", "Rwanda": "RWF", "Saint Kitts and Nevis": "XCD", "Saint Lucia": "XCD",
+  "Saint Vincent and the Grenadines": "XCD", "Samoa": "WST", "San Marino": "EUR", "Sao Tome and Principe": "STN", "Saudi Arabia": "SAR", "Senegal": "XOF", "Serbia": "RSD", "Seychelles": "SCR",
+  "Sierra Leone": "SLL", "Singapore": "SGD", "Slovakia": "EUR", "Slovenia": "EUR", "Solomon Islands": "SBD", "Somalia": "SOS", "South Africa": "ZAR", "South Sudan": "SSP", "Spain": "EUR", "Sri Lanka": "LKR",
+  "Sudan": "SDG", "Suriname": "SRD", "Sweden": "SEK", "Switzerland": "CHF", "Syria": "SYP", "Taiwan": "TWD", "Tajikistan": "TJS", "Tanzania": "TZS", "Thailand": "THB", "Timor-Leste": "USD", "Togo": "XOF", "Tonga": "TOP",
+  "Trinidad and Tobago": "TTD", "Tunisia": "TND", "Turkey": "TRY", "Turkmenistan": "TMT", "Tuvalu": "AUD", "Uganda": "UGX", "Ukraine": "UAH", "United Arab Emirates": "AED", "United Kingdom": "GBP",
+  "United States": "USD", "Uruguay": "UYU", "Uzbekistan": "UZS", "Vanuatu": "VUV", "Vatican City": "EUR", "Venezuela": "VES", "Vietnam": "VND", "Yemen": "YER", "Zambia": "ZMW", "Zimbabwe": "ZWL"
+};
+
 const SignUp = () => {
-  // Form state management
   const [username, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -40,8 +59,41 @@ const SignUp = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [DOB, setDob] = useState(null);
-  const [termsAccepted, setTermsAccepted] = useState(false); // New state for terms and conditions
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [walletCurrency, setWalletCurrency] = useState('');
   const age = DOB ? calculateAge(DOB) : null;
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const savedData = JSON.parse(localStorage.getItem('signUpFormData'));
+    if (savedData) {
+      setUserName(savedData.username || '');
+      setEmail(savedData.email || '');
+      setPassword(savedData.password || '');
+      setMobile(savedData.mobile || '');
+      setNationality(savedData.nationality || '');
+      setEmployed(savedData.employed || '');
+      setDob(savedData.DOB ? new Date(savedData.DOB) : null);
+      setTermsAccepted(savedData.termsAccepted || false);
+      setWalletCurrency(savedData.walletCurrency || '');
+    }
+  }, []);
+
+  useEffect(() => {
+    const formData = {
+      username,
+      email,
+      password,
+      mobile,
+      nationality,
+      employed,
+      DOB,
+      termsAccepted,
+      walletCurrency
+    };
+    localStorage.setItem('signUpFormData', JSON.stringify(formData));
+  }, [username, email, password, mobile, nationality, employed, DOB, termsAccepted, walletCurrency]);
 
   function calculateAge(dob) {
     const dobDate = new Date(dob);
@@ -54,9 +106,12 @@ const SignUp = () => {
     return age;
   }
 
-  const navigate = useNavigate();
+  const handleCountryChange = (e) => {
+    const selectedCountry = e.target.value;
+    setNationality(selectedCountry);
+    setWalletCurrency(countryToCurrency[selectedCountry] || '');
+  };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -73,7 +128,8 @@ const SignUp = () => {
       nationality,
       employed,
       DOB,
-      age
+      age,
+      walletCurrency
     };
 
     try {
@@ -81,7 +137,8 @@ const SignUp = () => {
       if (response.status === 201) {
         setSuccess(true);
         setError('');
-        navigate('/signin');  // Redirect to SignIn after successful signup
+        localStorage.removeItem('signUpFormData');
+        navigate('/signin');
       }
     } catch (err) {
       setError('Registration failed. Please try again.');
@@ -89,126 +146,131 @@ const SignUp = () => {
     }
   };
 
+  const handleNavigate = (path) => {
+    const formData = {
+      username,
+      email,
+      password,
+      mobile,
+      nationality,
+      employed,
+      DOB,
+      termsAccepted,
+      walletCurrency
+    };
+    navigate(path);
+  };
+
   return (
-    <div className={styles.container}>
-      <Header />
-
-      <div className={styles.formContainer}>
-        <h2>Sign Up</h2>
-        {success && <p className={styles.successMessage}>Sign up successful!</p>}
-        {error && <p className={styles.errorMessage}>{error}</p>}
-
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <label>
-            Name:
-            <input
-              type="text"
-              name="username"
-              value={username}
-              onChange={(e) => setUserName(e.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Email:
-            <input
-              type="email"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Password:
-            <input
-              type="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Date of Birth:
-            <DatePicker
-              selected={DOB}
-              onChange={(date) => setDob(date)}
-              dateFormat="MM/dd/yyyy"
-              className="form-control"
-              placeholderText="Select your date of birth"
-              required
-            />
-          </label>
-          <label>
-            Mobile:
-            <input
-              type="text"
-              name="mobile"
-              value={mobile}
-              onChange={(e) => setMobile(e.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Nationality:
-            <select
-              value={nationality}
-              onChange={(e) => setNationality(e.target.value)}
-              required
-            >
-              <option value="">Select Country of Origin</option>
-              {countries.map((country) => (
-                <option key={country} value={country}>{country}</option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Employment Status:
-            <select
-              value={employed}
-              onChange={(e) => setEmployed(e.target.value)}
-              required
-            >
-              <option value="">Select employment status</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-            </select>
-          </label>
-
-          {/* Terms and Conditions */}
-          <div className={styles.terms}>
-            <input
-              type="checkbox"
-              id="terms"
-              checked={termsAccepted}
-              onChange={(e) => setTermsAccepted(e.target.checked)}
-              required
-            />
-            <label htmlFor="terms">
-              I agree to the following terms and conditions:
+      <div className={styles.container}>
+        <Header />
+        <div className={styles.formContainer}>
+          <h2>Sign Up</h2>
+          {success && <p className={styles.successMessage}>Sign up successful!</p>}
+          {error && <p className={styles.errorMessage}>{error}</p>}
+          <form onSubmit={handleSubmit} className={styles.form}>
+            <label>
+              Name:
+              <input
+                  type="text"
+                  name="username"
+                  value={username}
+                  onChange={(e) => setUserName(e.target.value)}
+                  required
+              />
             </label>
-            <div className={styles.termsText}>
-              <p>
-                By signing up, you agree to the following terms and conditions:
-              </p>
-              <ul>
-                <li>You must be at least 18 years old to register.</li>
-                <li>Your personal information will be used in accordance with our privacy policy.</li>
-                <li>Your account can be suspended for any violation of the community guidelines.</li>
-                <li>We reserve the right to modify or terminate the service at any time without prior notice.</li>
-              </ul>
+            <label>
+              Email:
+              <input
+                  type="email"
+                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+              />
+            </label>
+            <label>
+              Password:
+              <input
+                  type="password"
+                  name="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+              />
+            </label>
+            <label>
+              Date of Birth:
+              <DatePicker
+                  selected={DOB}
+                  onChange={(date) => setDob(date)}
+                  dateFormat="MM/dd/yyyy"
+                  className="form-control"
+                  placeholderText="Select your date of birth"
+                  required
+              />
+            </label>
+            <label>
+              Mobile:
+              <input
+                  type="text"
+                  name="mobile"
+                  value={mobile}
+                  onChange={(e) => setMobile(e.target.value)}
+                  required
+              />
+            </label>
+            <label>
+              Nationality:
+              <select
+                  value={nationality}
+                  onChange={handleCountryChange}
+                  required
+              >
+                <option value="">Select Country of Origin</option>
+                {countries.map((country) => (
+                    <option key={country} value={country}>{country}</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Employment Status:
+              <select
+                  value={employed}
+                  onChange={(e) => setEmployed(e.target.value)}
+                  required
+              >
+                <option value="">Select employment status</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </label>
+            <div className={styles.terms}>
+              <input
+                  type="checkbox"
+                  id="terms"
+                  checked={termsAccepted}
+                  onChange={(e) => setTermsAccepted(e.target.checked)}
+                  required
+              />
+              <label htmlFor="terms">
+                I agree to the following terms and conditions:
+              </label>
+              <div className={styles.termsText}>
+                <ul>
+                  <p>
+                  <span onClick={() => handleNavigate('/terms')} style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}>
+                    Click here for the terms and conditions.
+                  </span>
+                  </p>
+                </ul>
+              </div>
             </div>
-          </div>
-
-          <button type="submit" className={styles.button}>
-            Sign Up
-          </button>
-        </form>
+            <button type="submit" className={styles.submitButton}>Sign Up</button>
+          </form>
+        </div>
+        <Footer />
       </div>
-
-      <Footer />
-    </div>
   );
 };
 

@@ -12,6 +12,7 @@ const {
     createPost,
     getAllPosts,
     updatePostById,
+    getPostById,
     deletePostById,
 } = require("../controllers/postsController.js");
 
@@ -73,6 +74,9 @@ router.post("/createProduct", createPost);
 
 // Route for getting all posts (products)
 router.get("/products", getAllPosts);
+// Route for getting a single post (product) by ID
+router.get("/products/:id", getPostById); // Add this line for getting post by ID
+
 
 // Route for updating a post (product) by ID
 router.put("/products/:id", updatePostById);

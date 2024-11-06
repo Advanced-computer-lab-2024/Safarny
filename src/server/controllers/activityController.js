@@ -11,6 +11,7 @@ const createActivity = AsyncHandler(async (req, res) => {
     location,
     coordinates,
     price,
+    currency,
     category,
     tags,
     specialDiscount,
@@ -24,6 +25,7 @@ const createActivity = AsyncHandler(async (req, res) => {
     !location ||
     !coordinates ||
     !price ||
+    !currency ||
     !category ||
     !req.body.createdby
   ) {
@@ -49,6 +51,7 @@ const createActivity = AsyncHandler(async (req, res) => {
       location,
       coordinates,
       price,
+      currency,
       category,
       tags: tagIds,
       specialDiscount,
@@ -104,10 +107,12 @@ const updateActivity = async (req, res) => {
       date,
       location,
       price,
+      currency,
       time,
       category, // Change to singular if your model has a single category
       tags,
       specialDiscount,
+      archived,
       bookingOpen,
       coordinates, // Add coordinates field
     } = req.body; // Adjust according to your model
@@ -120,6 +125,8 @@ const updateActivity = async (req, res) => {
           date,
           location,
           price,
+          archived,
+          currency,
           time,
           category, // Ensure you update the singular field correctly
           tags,

@@ -11,10 +11,11 @@ const createHistoricalPlace = async (req, res) => {
       coordinates,
       openingHours,
       ticketPrices,
+      currency,
       tagNames,
     } = req.body;
 
-    if (!description || !coordinates || !openingHours || !ticketPrices || !tagNames) {
+    if (!description || !coordinates || !openingHours || !ticketPrices || !currency || !tagNames) {
       return res.status(400).send({ error: 'All fields are required' });
     }
 
@@ -33,6 +34,7 @@ const createHistoricalPlace = async (req, res) => {
       coordinates,
       openingHours,
       ticketPrices,
+      currency,
       tags: tagsId,
     });
 
@@ -51,6 +53,7 @@ const createHistoricalPlaceByGovernorId = async (req, res) => {
       coordinates,
       openingHours,
       ticketPrices,
+      currency,
       tagNames,
       createdby, // Add createdById to the request body
     } = req.body;
@@ -71,6 +74,7 @@ const createHistoricalPlaceByGovernorId = async (req, res) => {
       coordinates,
       openingHours,
       ticketPrices,
+      currency,
       tags: tagsId,
       createdby, // Set the createdById field
     });
@@ -127,12 +131,12 @@ const getHistoricalPlaceById = async (req, res) => {
 const updateHistoricalPlaceById = async (req, res) => {
   try {
     const placeId = req.params.id;
-    const { description, pictures, coordinates, openingHours, ticketPrices } =
+    const { description, pictures, coordinates, openingHours, ticketPrices, currency } =
       req.body;
 
     const updatedPlace = await HistoricalPlace.findByIdAndUpdate(
       placeId,
-      { description, pictures, coordinates, openingHours, ticketPrices },
+      { description, pictures, coordinates, openingHours, ticketPrices, currency },
       { new: true, runValidators: true }
     );
 
