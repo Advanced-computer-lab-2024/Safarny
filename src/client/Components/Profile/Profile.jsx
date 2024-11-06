@@ -40,7 +40,7 @@ const Profile = () => {
   };
 
   const handleProductViewClick = () => {
-    navigate("/products");
+    navigate("/products", { state: { userId } });
   };
 
   const handleSellerHomeClick = () => {
@@ -95,6 +95,9 @@ const Profile = () => {
   const handleViewComplaints = () => {
     navigate("/viewcomplaints", { state: { userId } });
   };
+  const handelWishList = () => {
+    navigate("/wishlist", { state: { userId } });
+  }
 
   return (
     <div className={styles.container}>
@@ -177,14 +180,17 @@ const Profile = () => {
       )}
 
       {userInfo.role === "Tourist" && (
-        <div>
-          <button onClick={handleCreateComplaint} className={styles.postButton}>
-            Create Complaint
-          </button>
-          <button onClick={handleViewComplaints} className={styles.postButton}>
-            View Complaints
-          </button>
-        </div>
+          <div>
+            <button onClick={handleCreateComplaint} className={styles.postButton}>
+              Create Complaint
+            </button>
+            <button onClick={handleViewComplaints} className={styles.postButton}>
+              View Complaints
+            </button>
+            <button onClick={handelWishList} className={styles.postButton}>
+              View Wishlist
+            </button>
+          </div>
       )}
 
       <button onClick={handleViewButtonClick} className={styles.mainButton}>

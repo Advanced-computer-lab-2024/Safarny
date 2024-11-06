@@ -17,7 +17,7 @@ const WishList = () => {
     const fetchWishList = async () => {
       try {
         const response = await axios.get(`/wishlist/${userId}`);
-        setWishList(response.data.items);
+        setWishList(response.data.items || []);
       } catch (error) {
         setError('Failed to fetch wishlist');
         console.log('Error fetching wishlist:', error);
@@ -73,7 +73,7 @@ const WishList = () => {
   return (
     <div className={styles.container}>
         <Header />
-        <div classname={styles.productAll}>
+        <div className={styles.productAll}>
         <h1>My Wishlist</h1>
         {wishList.length === 0 ? (
             <p>Your wishlist is empty.</p>
@@ -97,7 +97,7 @@ const WishList = () => {
                     </div>
                 ))}
             </div>
-            
+
         )}
         </div>
         <Footer />
