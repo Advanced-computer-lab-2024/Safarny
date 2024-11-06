@@ -223,20 +223,20 @@ const ReadHistoricalPlace = () => {
                       <h2 className={styles.placeName}>{place.description}
                         <br/>
                         <button onClick={() => handleReadHistoricalPlaceDetails(place._id)}
-                                className={styles.viewButton} style={{margin: '5px'}}>
+                                className={styles.cardButton} >
                           View Details
                         </button>
                         <button
                             onClick={() => navigator.clipboard.writeText(`${window.location.origin}/historical-place/${place._id}`)}
-                            className={styles.copyButton}
-                            style={{margin: '5px'}}
+                            className={styles.cardButton}
+                            
                         >
                           Copy link
                         </button>
                         <button
                             onClick={() => window.location.href = `mailto:?subject=Check out this historical place&body=${window.location.origin}/historical-place/${place._id}`}
-                            className={styles.emailButton}
-                            style={{margin: '5px'}}
+                            className={styles.cardButton}
+                            
                         >
                           Email
                         </button>
