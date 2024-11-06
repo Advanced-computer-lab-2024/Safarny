@@ -1,6 +1,7 @@
 :root {
     --primary-color: #1a1a1a;
     --secondary-color: #333;
+    --button-bg: rgb(84, 83, 83);
     --background-color: #f5f5f5;
     --text-color: #121212;
     --border-radius: 1rem;
@@ -13,213 +14,189 @@
   }
   
   /* Main Container */
+
   .container {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    min-width: 90vw;
+    min-width: 100vw;
     background-color: var(--background-color);
-    padding: var(--gap-size);
-    gap: var(--gap-size);
+    color: var(--primary-color);
   }
-
+  
   .header {
+    display: flex;
+    align-items: center;
+    /* padding: 1rem; */
+    background-color: var(--secondary-color);
+    height: 5rem;
+    transition: background-color 0.3s ease;
     position: sticky;
     top: 0;
-    background-color: var(--primary-color);
-    padding: 1rem 2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 1000;
-    height: var(--header-height);
-    border-radius: var(--border-radius);
-    width: 90%;
-    transition: background-color 0.3s;
+    z-index: 100;
   }
   
   .header.translucent {
-    background-color: rgba(26, 26, 26, 0.8);
-  }
-  
-  .header h1 {
-    margin: 0;
-    font-size: 1.5rem;
-    color: var(--header-color);
-    display: flex;
-    align-items: center;
-  }
-  
-  h1 {
-    color: white;
+    background-color: rgba(0, 0, 0, 0.8);
   }
   
   .logo {
-    height: 8rem;
+    height: 7.5rem;
     margin-right: 1rem;
-    position: absolute;
-    left: 4rem;
   }
   
-  /* Burger menu */
   .burger {
-    background: none;
-    border: none;
-    color: var(--header-color);
-    font-size: 2rem;
-    cursor: pointer;
-    z-index: 1050;
-  }
-  
-  .burgerIcon {
-    font-size: 2rem;
-    color: white;
+    display: none;
   }
   
   .nav {
-    display: none;
-    flex-direction: column;
-    gap: 1rem;
-    position: absolute;
-    top: var(--header-height);
-    right: 0;
-    background-color: var(--primary-color);
-    padding: 1rem;
-    border-radius: var(--border-radius);
-  }
-  
-  .navOpen {
     display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: 10rem;
   }
   
-  /* Content Area */
+  .button {
+    padding: 0.5rem 1rem;
+    background-color: var(--button-bg);
+    color: var(--text-on-primary);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: var(--primary-hover-color);
+  }
+  
+  .burgerIcon {
+    font-size: 1.5rem;
+  }
+  
+  .sidebar {
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    background-color: var(--sidebar-background-color);
+    color: var(--sidebar-text-color);
+    overflow-y: auto;
+    z-index: 10;
+  }
+  
   .content {
+    margin-left: 250px;
+    padding: 2rem;
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: var(--gap-size);
-    margin-left: 15rem;
   }
   
-  /* Buttons Container */
-  .buttonsContainer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    padding-bottom: var(--gap-size);
-  }
-  
-/* Shared button and link style */
-.headerLink, .button {
-  border-radius: 0.5rem;
-  padding: 0.625rem 1rem;
-  font-weight: bold;
-  text-transform: none;
-  color: white;
-  background-color: var(--secondary-color);
-  border: none;
-  cursor: pointer;
-  text-decoration: none; /* Removes underline from links */
-  display: inline-block;
-  transition: background-color 0.3s ease;
-}
-
-.headerLink:hover, .button:hover {
-  background-color: #555; /* Slightly darker shade for hover effect */
-}
-
-  
-  /* Alerts */
   .errorAlert {
-    margin-top: 0.625rem;
-    border-radius: 0.5rem;
-    background-color: #ffebee;
-    color: #d32f2f;
+    margin-bottom: 1rem;
   }
   
-  /* Search Field */
-  .searchField {
-    margin-bottom: var(--gap-size);
+  .searchField,
+  .priceFilterContainer,
+  .sortField {
+    margin-bottom: 1rem;
   }
   
-  /* Price Filter Container */
-  .priceFilterContainer {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: var(--gap-size);
-  }
-  
-  .priceFilterField, .sortField {
-    flex: 1;
-  }
-  
-  /* Card List */
   .cardList {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-    gap: var(--gap-size);
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
   }
   
   .card {
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    overflow: hidden;
-    background-color: #ffffff;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .card:hover {
-    transform: scale(1.02);
-    box-shadow: var(--card-hover-shadow);
+    background-color: var(--card-background-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
   .cardContent {
     padding: 1rem;
-    text-align: center;
   }
   
   .cardImage img {
     width: 100%;
     height: auto;
-    border-radius: 0.5rem;
-    margin-bottom: 0.625rem;
+    border-radius: 4px;
   }
   
-  /* Modal */
+  .archiveOption {
+    margin-top: 1rem;
+  }
+  
   .modal {
-    display: flex;
-    flex-direction: column;
-    width: var(--modal-width);
-    max-width: 90%;
-    margin: auto;
-    margin-top: 3rem;
-    background-color: #ffffff;
-    padding: var(--modal-padding);
-    border-radius: var(--border-radius);
-    box-shadow: var(--card-hover-shadow);
-    gap: var(--gap-size);
-    margin-left: 15rem;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff; /* Modal background color */
+    padding: 20px;
+    width: 90%; /* Adjust width for responsiveness */
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1001; /* Ensure it's above other elements */
+    overflow-y: auto;
+    max-height: 80vh; /* Prevents overflow on small screens */
+  }
+  
+  .modal h6 {
+    margin-bottom: 20px;
+  }
+  
+  .imageInput {
+    margin-top: 10px;
+    display: block;
+  }
+  
+  .errorAlert {
+    margin-top: 10px;
+    color: red;
+  }
+  
+  /* Overlay background */
+  .modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent dark overlay */
+    z-index: 1000; /* Just below the modal itself */
   }
   
   .imageInput {
     margin-top: 1rem;
-    margin-bottom: 1rem;
+    display: block;
   }
   
-  /* Typography */
-  h6 {
-    margin-bottom: 0.5rem;
-  }
-  .archiveOption label {
-    color: black; 
-  }
-  .archiveOption {
-    margin-top: 0.5rem;
-    display: flex;
-    align-items: center;
-    font-size: 0.9rem;
-    color: var(--text-color);
-    
+  @media (max-width: 768px) {
+    .burger {
+      display: block;
+    }
+    .nav {
+      display: none;
+    }
+    .navOpen {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 70px;
+      right: 0;
+      background-color: var(--secondary-color);
+      width: 100%;
+      padding: 1rem 0;
+      z-index: 10;
+    }
+    .content {
+      margin-left: 0;
+      padding: 1rem;
+    }
   }
   

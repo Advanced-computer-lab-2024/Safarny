@@ -10,60 +10,65 @@
 }
 
 .sidebar {
-  height: calc(100vh - 15rem);
-  background-color: var(--sidebar-bg-color);
-  padding: var(--sidebar-padding);
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 250px; /* Adjust width as needed */
+  background-color: var(--sidebar-bg-color, #333); /* Dark background color */
+  color: #fff;
   display: flex;
   flex-direction: column;
-  position: fixed;
-  top: 10rem;
-  left: 0;
-  border-radius: var(--sidebar-border-radius);
-  box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.1);
-  transition: width 0.3s ease;
-  overflow: hidden;
-  width: var(--sidebar-collapsed-width); /* Collapsed width */
   align-items: center;
+  transition: transform 0.3s ease;
+  z-index: 1000;
 }
 
 .sidebar.open {
-  width: var(--sidebar-width); /* Expanded width */
+  transform: translateX(0);
+}
+
+.sidebar:not(.open) {
+  transform: translateX(-100%); /* Hide the sidebar off-screen */
 }
 
 .toggleButton {
-  background-color: var(--sidebar-button-bg);
+  position: absolute;
+  top: 10px;
+  right: -40px;
+  width: 30px;
+  height: 30px;
+  background-color: var(--toggle-bg-color, #555); /* Darker background for button */
   color: #fff;
-  font-size: 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.buttonsContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.button {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  background-color: var(--button-bg-color, #444);
+  color: #fff;
   text-align: center;
   cursor: pointer;
-  padding: 0.25rem;
-  margin-bottom: 1rem;
-  border-radius: 0.25rem;
-  transition: transform 0.2s ease;
-}
-
-.toggleButton:hover {
-  transform: scale(1.1);
-}
-
-.sidebar button {
-  background-color: var(--sidebar-button-bg);
-  color: var(--button-text-color);
-  text-align: left;
-  padding: 0.75rem 1rem;
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
-  border-radius: 0.5rem;
-  text-transform: none;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  width: 100%; /* Full width of the sidebar */
-}
-
-.sidebar button:hover {
-  background-color: var(--sidebar-button-hover-bg);
-  transform: translateX(0.25rem); /* Subtle move effect on hover */
-}
-
-.sidebar button:focus {
+  border: none;
   outline: none;
+  transition: background-color 0.2s ease;
+}
+
+.button:hover {
+  background-color: var(--button-hover-color, #555);
 }

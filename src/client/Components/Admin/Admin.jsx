@@ -10,7 +10,9 @@ import {
   CardActions,
   Alert,
   FormControl,
-  InputLabel, Select, MenuItem
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -120,18 +122,18 @@ const Admin = () => {
     const uploadTask = uploadBytesResumable(storageRef, file);
     return new Promise((resolve, reject) => {
       uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log(`Upload is ${progress}% done`);
-          },
-          (error) => reject(error),
-          () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              console.log("File available at", downloadURL);
-              resolve(downloadURL);
-            });
-          }
+        "state_changed",
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log(`Upload is ${progress}% done`);
+        },
+        (error) => reject(error),
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log("File available at", downloadURL);
+            resolve(downloadURL);
+          });
+        }
       );
     });
   };
@@ -187,31 +189,31 @@ const Admin = () => {
   const handleArchiveToggle = async (postId, isArchived) => {
     try {
       // Update the local state first
-      setPosts(posts.map(post => 
+      setPosts(posts.map(post =>
         post._id === postId ? { ...post, archived: isArchived } : post
       ));
       console.log("Local state updated");
-  
+
       // Make a request to the server to update the archived status
       await axios.put(`/admin/products/${postId}`, { archived: isArchived });
       console.log("Archived status updated successfully");
-  
+
     } catch (error) {
       console.error("Error updating archived status:", error);
       // Optionally, revert the local state if the API call fails
-      setPosts(posts.map(post => 
+      setPosts(posts.map(post =>
         post._id === postId ? { ...post, archived: !isArchived } : post
       ));
     }
   };
-  
+
 
 
   const filteredPosts = posts.filter((post) => {
     const matchesSearch = post.details.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesPrice =
-        (minPrice === '' || post.price >= minPrice) &&
-        (maxPrice === '' || post.price <= maxPrice);
+      (minPrice === '' || post.price >= minPrice) &&
+      (maxPrice === '' || post.price <= maxPrice);
     return matchesSearch && matchesPrice;
   });
 
@@ -223,155 +225,155 @@ const Admin = () => {
   });
 
   return (
-      <div className={styles.container}>
-        <header className={styles.header}>
-          <img src={Logo} alt="Safarny Logo" className={styles.logo} />
-          <h1>Safarny</h1>
-          <button className={styles.burger} onClick={toggleMenu}>
-            <span className={styles.burgerIcon}>&#9776;</span>
-          </button>
-          <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
-            <button onClick={handleBackClick} className={styles.button}>Back</button>
-            <Link to="/" className={styles.button}>Homepage</Link>
-            <button onClick={handleOpenModal} className={styles.button}>Add Post</button>
-            <button onClick={() => setSelectedSection('tags')} className={styles.button}>Manage Tags</button>
-            <button onClick={() => setSelectedSection('ActivityCategory')} className={styles.button}>Manage Categories</button>
-            <Link to="/adminaddgovernor"  className={styles.button}>Add Governor</Link>
-            <Link to="/adminviewcomplaints" className={styles.button}>View Complaints</Link>
-          </nav>
-        </header>
-        <SideBar className={styles.sidebar} />
-        <div className={styles.content}>
-          {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
+    <div className={styles.container}>
+      <header className={`${styles.header} ${menuOpen ? styles.navOpen : ''}`}>
+        <img src={Logo} alt="Safarny Logo" className={styles.logo} />
+        <h1>Safarny</h1>
+        <button className={styles.burger} onClick={toggleMenu}>
+          <span className={styles.burgerIcon}>&#9776;</span>
+        </button>
+        <nav className={styles.nav}>
+          <button onClick={handleBackClick} className={styles.button}>Back</button>
+          <Link to="/" className={styles.button}>Homepage</Link>
+          <button onClick={handleOpenModal} className={styles.button}>Add Post</button>
+          <button onClick={() => setSelectedSection('tags')} className={styles.button}>Manage Tags</button>
+          <button onClick={() => setSelectedSection('ActivityCategory')} className={styles.button}>Manage Categories</button>
+          <Link to="/adminaddgovernor" className={styles.button}>Add Governor</Link>
+          <Link to="/adminviewcomplaints" className={styles.button}>View Complaints</Link>
+        </nav>
+      </header>
 
+      <SideBar className={styles.sidebar} />
+
+      <div className={styles.content}>
+        {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
+
+        <TextField
+          label="Search by Name"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className={styles.searchField}
+        />
+
+        <div className={styles.priceFilterContainer}>
           <TextField
-              label="Search by Name"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className={styles.searchField}
+            label="Min Price"
+            variant="outlined"
+            type="number"
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
+            className={styles.priceFilterField}
           />
-
-          <div className={styles.priceFilterContainer}>
-            <TextField
-                label="Min Price"
-                variant="outlined"
-                type="number"
-                value={minPrice}
-                onChange={(e) => setMinPrice(e.target.value)}
-                className={styles.priceFilterField}
-            />
-            <TextField
-                label="Max Price"
-                variant="outlined"
-                type="number"
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(e.target.value)}
-                className={styles.priceFilterField}
-            />
-          </div>
-
           <TextField
-              label="Sort By Rating"
-              select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              SelectProps={{
-                native: true,
-              }}
-              variant="outlined"
-              className={styles.sortField}
-          >
-            <option value="">None</option>
-            <option value="rating">Rating</option>
-          </TextField>
-
-          {selectedSection === 'posts' && (
-              <div className={styles.cardList}>
-                {sortedPosts.map((post) => (
-                    <Card key={post._id} className={styles.card}>
-                      <CardContent className={styles.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div">
-                          {post.details}
-                        </Typography>
-                        <div>Price: {post.price} {post.currency}</div>
-                        <div>Quantity: {post.quantity}</div>
-                        <div className={styles.cardImage}>
-                          <img src={post.imageurl} alt="Image" />
-                        </div>
-                         {/* Archive Checkbox */}
-              <div className={styles.archiveOption}>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={post.archived}
-                    onChange={(e) => handleArchiveToggle(post._id, e.target.checked)}
-                  />
-                  Archive
-                </label>
-              </div>
-                        
-                        
-                      </CardContent>
-                      <CardActions>
-                        <Button size="small" color="primary" onClick={() => handleEditPost(post)}>
-                          Edit
-                        </Button>
-                        <Button size="small" color="secondary" onClick={() => handleDeletePost(post._id)}>
-                          Delete
-                        </Button>
-                      </CardActions>
-                    </Card>
-                ))}
-              </div>
-          )}
-
-          {selectedSection === 'tags' && <Tags />}
-          {selectedSection === 'ActivityCategory' && <ActivityCategory />}
+            label="Max Price"
+            variant="outlined"
+            type="number"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
+            className={styles.priceFilterField}
+          />
         </div>
 
-        <Modal open={openModal} onClose={handleCloseModal}>
+        <TextField
+          label="Sort By Rating"
+          select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          SelectProps={{
+            native: true,
+          }}
+          variant="outlined"
+          className={styles.sortField}
+        >
+          <option value="">None</option>
+          <option value="rating">Rating</option>
+        </TextField>
+
+        {selectedSection === 'posts' && (
+          <div className={styles.cardList}>
+            {sortedPosts.map((post) => (
+              <Card key={post._id} className={styles.card}>
+                <CardContent className={styles.cardContent}>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {post.details}
+                  </Typography>
+                  <div>Price: {post.price} {post.currency}</div>
+                  <div>Quantity: {post.quantity}</div>
+                  <div className={styles.cardImage}>
+                    <img src={post.imageurl} alt="Image" />
+                  </div>
+                  <div className={styles.archiveOption}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={post.archived}
+                        onChange={(e) => handleArchiveToggle(post._id, e.target.checked)}
+                      />
+                      Archive
+                    </label>
+                  </div>
+                </CardContent>
+                <CardActions>
+                  <Button size="small" color="primary" onClick={() => handleEditPost(post)}>
+                    Edit
+                  </Button>
+                  <Button size="small" color="secondary" onClick={() => handleDeletePost(post._id)}>
+                    Delete
+                  </Button>
+                </CardActions>
+              </Card>
+            ))}
+          </div>
+        )}
+
+        {selectedSection === 'tags' && <Tags />}
+        {selectedSection === 'ActivityCategory' && <ActivityCategory />}
+      </div>
+
+      <Modal open={openModal} onClose={handleCloseModal}>
+        <div className={styles.modalOverlay}>
           <div className={styles.modal}>
             <Typography variant="h6">{editingPostId ? 'Edit Post' : 'Add New Post'}</Typography>
             <TextField
-                fullWidth
-                label="Details"
-                name="details"
-                value={currentPost.details}
-                onChange={handleInputChange}
-                margin="normal"
+              fullWidth
+              label="Details"
+              name="details"
+              value={currentPost.details}
+              onChange={handleInputChange}
+              margin="normal"
             />
             <TextField
-                fullWidth
-                label="Price"
-                name="price"
-                type="number"
-                value={currentPost.price}
-                onChange={handleInputChange}
-                margin="normal"
+              fullWidth
+              label="Price"
+              name="price"
+              type="number"
+              value={currentPost.price}
+              onChange={handleInputChange}
+              margin="normal"
             />
             <FormControl fullWidth margin="normal">
               <InputLabel>Currency</InputLabel>
               <Select
-                  name="currency"
-                  value={currentPost.currency}
-                  onChange={handleInputChange}
+                name="currency"
+                value={currentPost.currency}
+                onChange={handleInputChange}
               >
-                {currencyCodes.map(code => (
-                    <MenuItem key={code} value={code}>{code}</MenuItem>
+                {currencyCodes.map((code) => (
+                  <MenuItem key={code} value={code}>{code}</MenuItem>
                 ))}
               </Select>
             </FormControl>
             <TextField
-                fullWidth
-                label="Quantity"
-                name="quantity"
-                type="number"
-                value={currentPost.quantity}
-                onChange={handleInputChange}
-                margin="normal"
+              fullWidth
+              label="Quantity"
+              name="quantity"
+              type="number"
+              value={currentPost.quantity}
+              onChange={handleInputChange}
+              margin="normal"
             />
             <input type="file" onChange={handleImageChange} className={styles.imageInput} />
             <Button variant="contained" color="primary" onClick={handleSubmitPost}>
@@ -379,9 +381,13 @@ const Admin = () => {
             </Button>
             {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
           </div>
-        </Modal>
-        <Footer />
-      </div>
+        </div>
+      </Modal>
+
+
+
+      <Footer />
+    </div>
   );
 };
 
