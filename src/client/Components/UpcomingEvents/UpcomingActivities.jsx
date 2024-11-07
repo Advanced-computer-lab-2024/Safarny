@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styles from "./UpcomingActivities.module.css";
-import Footer from "/src/client/components/Footer/Footer";
-import Header from "/src/client/components/Header/Header";
 import axios from 'axios';
 import { Link, useNavigate , useLocation,} from "react-router-dom";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select, CircularProgress } from "@mui/material";
 
 const UpcomingActivities = () => {
   const location = useLocation();
@@ -29,19 +27,19 @@ const UpcomingActivities = () => {
     role: "",
     image: "", // Added image field
   });
+  const [loading, setLoading] = useState(true); // Add loading state
 
   // Method to fetch user role
   const fetchUserRole = async () => {
     try {
-        // Replace `userId` with the actual user ID if available
-        const response = await axios.get(`http://localhost:3000/tourist/${userId}`);
-        setUserRole(response.data.role); // Store user role in state
-        console.log('User role:', response.data.role); // Log user role for debugging
+      // Replace `userId` with the actual user ID if available
+      const response = await axios.get(`http://localhost:3000/tourist/${userId}`);
+      setUserRole(response.data.role); // Store user role in state
+      console.log('User role:', response.data.role); // Log user role for debugging
     } catch (err) {
-        console.error('Error fetching user role:', err);
+      console.error('Error fetching user role:', err);
     }
-};
-
+  };
 
   const fetchExchangeRates = async () => {
     try {
@@ -67,46 +65,42 @@ const UpcomingActivities = () => {
     fetchExchangeRates();
   }, []);
 
-  
-  
-  
-const handleArchiveToggle = async (ActivityId, isArchived) => {
-  try {
-    // Update the local state first
-    setActivities(activities.map(activity => 
-      activity._id === ActivityId ? { ...activity, archived: isArchived } : activity
-    ));
-    console.log("Local state updated");
+  const handleArchiveToggle = async (ActivityId, isArchived) => {
+    try {
+      // Update the local state first
+      setActivities(activities.map(activity =>
+          activity._id === ActivityId ? { ...activity, archived: isArchived } : activity
+      ));
+      console.log("Local state updated");
 
-    // Make a request to the server to update the archived status
-    await axios.put(`/activities/${ActivityId}`, { archived: isArchived });
-    console.log("Archived status updated successfully");
+      // Make a request to the server to update the archived status
+      await axios.put(`/activities/${ActivityId}`, { archived: isArchived });
+      console.log("Archived status updated successfully");
 
-  } catch (error) {
-    console.error("Error updating archived status:", error);
-    // Optionally, revert the local state if the API call fails
-    setActivities(activities.map(activity => 
-      activity._id === activity ? { ...activity, archived: !isArchived } : activity
-    ));
-  }
-};
+    } catch (error) {
+      console.error("Error updating archived status:", error);
+      // Optionally, revert the local state if the API call fails
+      setActivities(activities.map(activity =>
+          activity._id === activity ? { ...activity, archived: !isArchived } : activity
+      ));
+    }
+  };
 
   const convertPrice = (price, fromCurrency, toCurrency) => {
-  if (price == null) {
-    return 'N/A'; // Return 'N/A' or any default value if price is null
-  }
-  const rateFrom = exchangeRates[fromCurrency];
-  const rateTo = exchangeRates[toCurrency];
-  return ((price / rateFrom) * rateTo).toFixed(2);
-};
-
-
+    if (price == null) {
+      return 'N/A'; // Return 'N/A' or any default value if price is null
+    }
+    const rateFrom = exchangeRates[fromCurrency];
+    const rateTo = exchangeRates[toCurrency];
+    return ((price / rateFrom) * rateTo).toFixed(2);
+  };
 
   useEffect(() => {
     const fetchActivities = async () => {
+      setLoading(true);
       try {
         let url = `http://localhost:3000/guest/get-activities-sorted?sortBy=${sortCriteria}:asc`;
-  
+
         if (filterCriteria === "budget") {
           url = `http://localhost:3000/guest/filter-activities?minBudget=${budget[0]}&maxBudget=${budget[1]}`;
         } else if (filterCriteria === "date") {
@@ -116,13 +110,13 @@ const handleArchiveToggle = async (ActivityId, isArchived) => {
         } else if (filterCriteria === "rating") {
           url = `http://localhost:3000/guest/filter-activities?&rating=${rating}`;
         }
-  
+
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Failed to fetch activities");
         }
         const data = await response.json();
-  
+
         // Check if the user is a tourist
         if (userRole !== 'Advertiser' && userRole !== 'Admin') {
           // Filter activities to only include those that are not archived
@@ -134,13 +128,13 @@ const handleArchiveToggle = async (ActivityId, isArchived) => {
         }
       } catch (error) {
         console.error("Error fetching activities:", error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching
       }
     };
-  
+
     fetchActivities();
   }, [sortCriteria, filterCriteria, budget, dateRange, selectedCategories, rating, userRole]);
-  
-
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -172,10 +166,24 @@ const handleArchiveToggle = async (ActivityId, isArchived) => {
   const handleUpcomingActivitiesDetails = (activityId) => {
     navigate(`/UpcomingActivities/${activityId}`);
   };
+  if (loading) {
+    return (
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%',
+          marginLeft: '740px'
+        }}>
+          <span style={{marginRight: '10px'}}>Loading Activities...</span>
+          <CircularProgress/>
+        </div>
+    );
+  }
 
   return (
       <div className={styles.container}>
-        <Header />
+      {loading && <p>Loading...</p>}
         <main className={styles.main}>
           <h2>Upcoming Activities</h2>
 
@@ -306,14 +314,14 @@ const handleArchiveToggle = async (ActivityId, isArchived) => {
                         {/* Admin-only Checkbox */}
                         {userRole === "Admin" && (
                             <div className={styles.adminCheckbox}>
-                            <label>
-                             <input
-                              type="checkbox"
-                            checked={activity.archived}
-                         onChange={(e) => handleArchiveToggle(activity._id, e.target.checked)}
-                           />
-                             Flag (inappropriate)
-                          </label>
+                              <label>
+                                <input
+                                    type="checkbox"
+                                    checked={activity.archived}
+                                    onChange={(e) => handleArchiveToggle(activity._id, e.target.checked)}
+                                />
+                                Flag (inappropriate)
+                              </label>
                             </div>
                         )}
                       </div>
@@ -322,7 +330,6 @@ const handleArchiveToggle = async (ActivityId, isArchived) => {
             )}
           </section>
         </main>
-        <Footer />
       </div>
   );
 };
