@@ -7,15 +7,17 @@ const MyBookedFlights = () => {
   const [bookings, setBookings] = useState([]);
   const bookedBy = location.state?.bookedBy;
 
-  const getMyBookings = async (bookedBy) => {
+  const getMyBookings = async (touristId) => {
     try {
-      const response = await fetch(`/tourist/getBookFlight/${bookedBy}`);
+      const response = await fetch(`/tourist/getBookFlight/${touristId}`); // Make sure the URL is correct
+      console.log(touristId);
       const data = await response.json();
       setBookings(data);
     } catch (error) {
       console.error('Error fetching bookings:', error);
     }
   };
+  
 
   useEffect(() => {
     if (bookedBy) {
