@@ -10,12 +10,19 @@ const bookingSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Activity",
   },
+  historicalPlace: {
+    type: Schema.Types.ObjectId,
+    ref: "HistoricalPlace",
+  },
   tourist: {
     type: Schema.Types.ObjectId,
     ref: "User",
   },
   bookingDate: {
     type: String,
+  },
+  bookingHour:{
+    type: String,    
   },
   // active    = booking request sent (before the 2 days threshold)
   // confirmed = booking confirmed by tourist (after/during the 2 days threshold)
