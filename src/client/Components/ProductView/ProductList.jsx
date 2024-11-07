@@ -74,17 +74,34 @@ const ProductList = () => {
         const user = response.data;
         setUserRole(user.role);
         setWallet(user.wallet);
-        setWalletCurrency(user.walletcurrency);
+        setSelectedCurrency(user.walletcurrency || 'EGP');
         console.log('User role:', user.role);
       } catch (err) {
         console.error('Error fetching user role:', err);
       }
     };
 
+    const fetchExchangeRates = async () => {
+      try {
+        const response = await axios.get('https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP');
+        const rates = response.data.conversion_rates;
+        setExchangeRates(rates);
+        const codes = Object.keys(rates);
+        setCurrencyCodes(codes);
+
+        // Ensure selectedCurrency is valid
+        if (!codes.includes(selectedCurrency)) {
+          setSelectedCurrency(codes[0] || 'EGP');
+        }
+      } catch (error) {
+        console.error('Error fetching exchange rates:', error);
+      }
+    };
+
     fetchProducts();
     fetchUserRole();
     fetchExchangeRates();
-  }, [userId]);
+  }, [userId, selectedCurrency]);
 
   const handleAddToWishlist = async (postId) => {
     try {
@@ -119,33 +136,12 @@ const ProductList = () => {
       await axios.put(`http://localhost:3000/tourist/${touristId}`, {
         id: touristId,
         posts: updatedPosts,
-        wallet: wallet - convertedPrice // Deduct the price from the wallet
       });
 
       setProducts(products.map(p => p._id === product._id ? updatedProduct : p));
       setWallet(wallet - convertedPrice); // Update the wallet state
     } catch (err) {
       console.error('Error updating product status:', err);
-    }
-  };
-  const handleArchiveToggle = async (productId, isArchived) => {
-    try {
-      // Update the local state first
-      setProducts(products.map(product => 
-        product._id === productId ? { ...product, archived: isArchived } : product
-      ));
-      console.log("Local state updated");
-  
-      // Make a request to the server to update the archived status
-      await axios.put(`/admin/products/${productId}`, { archived: isArchived });
-      console.log("Archived status updated successfully");
-  
-    } catch (error) {
-      console.error("Error updating archived status:", error);
-      // Optionally, revert the local state if the API call fails
-      setProducts(products.map(product => 
-        product._id === productId ? { ...product, archived: !isArchived } : product
-      ));
     }
   };
 

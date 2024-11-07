@@ -102,7 +102,6 @@ const createProfile = async (req, res) => {
       role,
       YearOfExp,
       PrevWork,
-      walletcurrency, // Ensure this is included
       DOB
     } = req.body;
 
@@ -117,7 +116,6 @@ const createProfile = async (req, res) => {
       role,
       YearOfExp,
       PrevWork,
-      walletcurrency, // Ensure this is included
       DOB
     });
 

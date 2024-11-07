@@ -348,24 +348,35 @@ const Admin = () => {
                   <div>Price: {post.price} {post.currency}</div>
                   <div>Quantity: {post.quantity}</div>
                   <div className={styles.cardImage}>
-                    <img src={post.imageurl} alt="Image" />
+                    <img src={post.imageurl} alt="Image"/>
                   </div>
-                  <div className={styles.archiveOption}>
-                    <label>
+                  <label style={{color: 'black'}}>Archive:</label>
+                  <div style={{marginTop: '1px'}}>
+                    <label style={{color: 'black'}}>
                       <input
-                        type="checkbox"
-                        checked={post.archived}
-                        onChange={(e) => handleArchiveToggle(post._id, e.target.checked)}
+                          type="checkbox"
+                          checked={post.archived}
+                          onChange={(e) => handleArchiveToggle(post._id, e.target.checked)}
                       />
-                      Archive
                     </label>
                   </div>
                 </CardContent>
                 <CardActions>
-                  <Button size="small" color="primary" onClick={() => handleEditPost(post)}>
+                  <Button
+                      size="small"
+                      color="primary"
+                      variant="contained"
+                      style={{ marginRight: '8px' }}
+                      onClick={() => handleEditPost(post)}
+                  >
                     Edit
                   </Button>
-                  <Button size="small" color="secondary" onClick={() => handleDeletePost(post._id)}>
+                  <Button
+                      size="small"
+                      color="error"
+                      variant="contained"
+                      onClick={() => handleDeletePost(post._id)}
+                  >
                     Delete
                   </Button>
                 </CardActions>
