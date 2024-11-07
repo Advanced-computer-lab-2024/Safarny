@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
 
-const CreateTransport = ({ advertiserId }) => {
+const CreateTransport = () => {
+  const location = useLocation();
+  const { userId } = location.state;
+  const advertiserId = userId;
+
   const [transportData, setTransportData] = useState({
-    departureDate: '',
-    departureTime: '',
-    arrivalDate: '',
-    arrivalTime: '',
-    typeOfTransportation: 'Bus',
-    location: '',
+    departureDate: "",
+    departureTime: "",
+    arrivalDate: "",
+    arrivalTime: "",  
+    typeOfTransportation: "Bus",
+    location: "",
   });
 
   const handleInputChange = (e) => {
@@ -21,15 +26,19 @@ const CreateTransport = ({ advertiserId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("advertiserId:", advertiserId);
     try {
-      const response = await axios.post('http://localhost:3000/transport/transports', {
-        ...transportData,
-        advertiserId,
-      });
-      alert('Transport created successfully');
+      const response = await axios.post(
+        "http://localhost:3000/transport/transports",
+        {
+          ...transportData,
+          advertiserId,
+        }
+      );
+      alert("Transport created successfully");
     } catch (error) {
-      console.error('Error creating transport:', error);
-      alert('Failed to create transport');
+      console.error("Error creating transport:", error);
+      alert("Failed to create transport");
     }
   };
 
@@ -89,7 +98,7 @@ const CreateTransport = ({ advertiserId }) => {
         >
           <option value="Bus">Bus</option>
           <option value="Train">Train</option>
-          <option value="Flight">Flight</option>
+          <option value="Car">Car</option>
           <option value="Boat">Boat</option>
         </select>
       </label>
