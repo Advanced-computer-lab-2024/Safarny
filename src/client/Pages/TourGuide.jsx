@@ -33,6 +33,12 @@ export default function TourGuide() {
     YearOfExp: 0,
   });
   const [tabValue, setTabValue] = useState(0);
+  const handleHourIncrease = () => setHours(prev => (prev === 12 ? 1 : prev + 1));
+  const handleHourDecrease = () => setHours(prev => (prev === 1 ? 12 : prev - 1));
+  const handleMinuteIncrease = () => setMinutes(prev => (prev === 59 ? 0 : prev + 1));
+  const handleMinuteDecrease = () => setMinutes(prev => (prev === 0 ? 59 : prev - 1));
+
+const handlePeriodChange = (event) => setPeriod(event.target.value);
   const [newItinerary, setNewItinerary] = useState({
     name: "",
     activities: [],
@@ -339,46 +345,62 @@ export default function TourGuide() {
                   />
                 </Tooltip>
 
-                {/* Timeline (Array of Strings) */}
-                <Tooltip
-                  title="Enter the timeline of activities. You can separate multiple timelines with commas."
-                  arrow
-                >
-                  <TextField
-                    fullWidth
-                    id="timeline"
-                    label="Timeline"
-                    variant="outlined"
-                    value={newItinerary.timeline}
-                    onChange={(e) =>
-                      setNewItinerary({
-                        ...newItinerary,
-                        timeline: e.target.value,
-                      })
-                    }
-                  />
-                </Tooltip>
+                {/* Timeline (Hours, Minutes, AM/PM) */}
+<Tooltip title="Enter the timeline of activities in hours, minutes, and AM/PM" arrow>
+  <Box display="flex" gap={2} alignItems="center">
+    {/* Hours Input */}
+    <TextField
+      id="timeline-hours"
+      label="Hours"
+      variant="outlined"
+      type="number"
+      inputProps={{ min: 1, max: 12 }} // restrict between 1-12 for hours
+      value={newItinerary.timelineHours}
+      onChange={(e) =>
+        setNewItinerary({
+          ...newItinerary,
+          timelineHours: e.target.value,
+        })
+      }
+    />
 
-                {/* Duration (Number) */}
-                <Tooltip
-                  title="Enter the duration in minutes for each activity"
-                  arrow
-                >
-                  <TextField
-                    fullWidth
-                    id="duration"
-                    label="Duration (minutes)"
-                    variant="outlined"
-                    type="number"
-                    value={newItinerary.duration}
-                    onChange={(e) =>
-                      setNewItinerary({
-                        ...newItinerary,
-                        duration: e.target.value,
-                      })
-                    }
-                  />
-                </Tooltip>
+    {/* Minutes Input */}
+    <TextField
+      id="timeline-minutes"
+      label="Minutes"
+      variant="outlined"
+      type="number"
+      inputProps={{ min: 0, max: 59 }} // restrict between 0-59 for minutes
+      value={newItinerary.timelineMinutes}
+      onChange={(e) =>
+        setNewItinerary({
+          ...newItinerary,
+          timelineMinutes: e.target.value,
+        })
+      }
+    />
+
+    {/* AM/PM Selection */}
+    <FormControl variant="outlined">
+      <InputLabel id="timeline-am-pm-label">AM/PM</InputLabel>
+      <Select
+        labelId="timeline-am-pm-label"
+        id="timeline-am-pm"
+        value={newItinerary.timelineAmPm}
+        onChange={(e) =>
+          setNewItinerary({
+            ...newItinerary,
+            timelineAmPm: e.target.value,
+          })
+        }
+        label="AM/PM"
+      >
+        <MenuItem value="AM">AM</MenuItem>
+        <MenuItem value="PM">PM</MenuItem>
+      </Select>
+    </FormControl>
+  </Box>
+</Tooltip>
 
                 {/* Language (String) */}
                 <Tooltip title="Enter the language for the tour" arrow>
