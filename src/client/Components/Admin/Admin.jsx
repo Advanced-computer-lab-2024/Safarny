@@ -13,6 +13,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  CircularProgress,
 } from '@mui/material';
 import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -43,6 +44,7 @@ const Admin = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedSection, setSelectedSection] = useState('posts');
   const [currencyCodes, setCurrencyCodes] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   // Search, Filter, and Sort states
   const [searchTerm, setSearchTerm] = useState('');
@@ -112,11 +114,14 @@ const Admin = () => {
   }, []);
 
   const fetchPosts = async () => {
+    setLoading(true); // Set loading to true before fetching posts
     try {
       const response = await axios.get('/admin/products');
       setPosts(response.data);
     } catch (error) {
       setErrorMessage('Failed to fetch posts');
+    } finally {
+      setLoading(false); // Set loading to false after posts are fetched
     }
   };
 
@@ -147,18 +152,18 @@ const Admin = () => {
     const uploadTask = uploadBytesResumable(storageRef, file);
     return new Promise((resolve, reject) => {
       uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log(`Upload is ${progress}% done`);
-        },
-        (error) => reject(error),
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log("File available at", downloadURL);
-            resolve(downloadURL);
-          });
-        }
+          "state_changed",
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log(`Upload is ${progress}% done`);
+          },
+          (error) => reject(error),
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              console.log("File available at", downloadURL);
+              resolve(downloadURL);
+            });
+          }
       );
     });
   };
@@ -215,7 +220,7 @@ const Admin = () => {
     try {
       // Update the local state first
       setPosts(posts.map(post =>
-        post._id === postId ? { ...post, archived: isArchived } : post
+          post._id === postId ? { ...post, archived: isArchived } : post
       ));
       console.log("Local state updated");
 
@@ -227,7 +232,7 @@ const Admin = () => {
       console.error("Error updating archived status:", error);
       // Optionally, revert the local state if the API call fails
       setPosts(posts.map(post =>
-        post._id === postId ? { ...post, archived: !isArchived } : post
+          post._id === postId ? { ...post, archived: !isArchived } : post
       ));
     }
   };
@@ -237,8 +242,8 @@ const Admin = () => {
   const filteredPosts = posts.filter((post) => {
     const matchesSearch = post.details.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesPrice =
-      (minPrice === '' || post.price >= minPrice) &&
-      (maxPrice === '' || post.price <= maxPrice);
+        (minPrice === '' || post.price >= minPrice) &&
+        (maxPrice === '' || post.price <= maxPrice);
     return matchesSearch && matchesPrice;
   });
   const handleUpcomingItinerariesClick = () => {
@@ -247,7 +252,7 @@ const Admin = () => {
   const handleUpcomingActivitiesClick = () => {
     navigate("/UpcomingActivites", { state: { userId } });
   };
-  
+
 
 
   const sortedPosts = [...filteredPosts].sort((a, b) => {
@@ -274,176 +279,180 @@ const Admin = () => {
             <Link to="/adminaddgovernor"  className={styles.button}>Add Governor</Link>
             <Link to="/adminviewcomplaints" className={styles.button}>View Complaints</Link>
             <button onClick={handleUpcomingItinerariesClick} className={styles.button}>
-          View Itineraries
-        </button>
-        <button onClick={handleUpcomingActivitiesClick} className={styles.button}>
-          View Activities
-        </button>
+              View Itineraries
+            </button>
+            <button onClick={handleUpcomingActivitiesClick} className={styles.button}>
+              View Activities
+            </button>
           </nav>
         </header>
         <SideBar className={styles.sidebar} />
         <div className={styles.content}>
           <div className={styles.allFilters}>
-          {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
-
-        
-        <TextField
-          label="Search by Name"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className={styles.searchField}
-        />
-
-        <div className={styles.priceFilterContainer}>
-          <div className={styles.minPrice}>
-          <TextField
-            label="Min Price"
-            variant="outlined"
-            type="number"
-            value={minPrice}
-            onChange={(e) => setMinPrice(e.target.value)}
-            className={styles.priceFilterField}
-          />
-          </div>
-          <div className={styles.maxPrice}>
-          <TextField
-            label="Max Price"
-            variant="outlined"
-            type="number"
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(e.target.value)}
-            className={styles.priceFilterField}
-          />
-          </div>
-        </div>
-
-        <TextField
-          label="Sort By Rating"
-          select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-          SelectProps={{
-            native: true,
-          }}
-          variant="outlined"
-          className={styles.sortField}
-        >
-          <option value="">None</option>
-          <option value="rating">Rating</option>
-        </TextField>
-
-        </div>
-
-        {selectedSection === 'posts' && (
-          <div className={styles.cardList}>
-            {sortedPosts.map((post) => (
-              <Card key={post._id} className={styles.card}>
-                <CardContent className={styles.cardContent}>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {post.details}
-                  </Typography>
-                  <div>Price: {post.price} {post.currency}</div>
-                  <div>Quantity: {post.quantity}</div>
-                  <div className={styles.cardImage}>
-                    <img src={post.imageurl} alt="Image"/>
-                  </div>
-                  <label style={{color: 'black'}}>Archive:</label>
-                  <div style={{marginTop: '1px'}}>
-                    <label style={{color: 'black'}}>
-                      <input
-                          type="checkbox"
-                          checked={post.archived}
-                          onChange={(e) => handleArchiveToggle(post._id, e.target.checked)}
-                      />
-                    </label>
-                  </div>
-                </CardContent>
-                <CardActions>
-                  <Button
-                      size="small"
-                      color="primary"
-                      variant="contained"
-                      style={{ marginRight: '8px' }}
-                      onClick={() => handleEditPost(post)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                      size="small"
-                      color="error"
-                      variant="contained"
-                      onClick={() => handleDeletePost(post._id)}
-                  >
-                    Delete
-                  </Button>
-                </CardActions>
-              </Card>
-            ))}
-          </div>
-        )}
-
-        {selectedSection === 'tags' && <Tags />}
-        {selectedSection === 'ActivityCategory' && <ActivityCategory />}
-      </div>
-
-      <Modal open={openModal} onClose={handleCloseModal}>
-        <div className={styles.modalOverlay}>
-          <div className={styles.modal}>
-            <Typography variant="h6">{editingPostId ? 'Edit Post' : 'Add New Post'}</Typography>
-            <TextField
-              fullWidth
-              label="Details"
-              name="details"
-              value={currentPost.details}
-              onChange={handleInputChange}
-              margin="normal"
-            />
-            <TextField
-              fullWidth
-              label="Price"
-              name="price"
-              type="number"
-              value={currentPost.price}
-              onChange={handleInputChange}
-              margin="normal"
-            />
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Currency</InputLabel>
-              <Select
-                name="currency"
-                value={currentPost.currency}
-                onChange={handleInputChange}
-              >
-                {currencyCodes.map((code) => (
-                  <MenuItem key={code} value={code}>{code}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <TextField
-              fullWidth
-              label="Quantity"
-              name="quantity"
-              type="number"
-              value={currentPost.quantity}
-              onChange={handleInputChange}
-              margin="normal"
-            />
-            <input type="file" onChange={handleImageChange} className={styles.imageInput} />
-            <Button variant="contained" color="primary" onClick={handleSubmitPost}>
-              {editingPostId ? 'Update Post' : 'Add Post'}
-            </Button>
             {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
+
+
+            <TextField
+                label="Search by Name"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={styles.searchField}
+            />
+
+            <div className={styles.priceFilterContainer}>
+              <div className={styles.minPrice}>
+                <TextField
+                    label="Min Price"
+                    variant="outlined"
+                    type="number"
+                    value={minPrice}
+                    onChange={(e) => setMinPrice(e.target.value)}
+                    className={styles.priceFilterField}
+                />
+              </div>
+              <div className={styles.maxPrice}>
+                <TextField
+                    label="Max Price"
+                    variant="outlined"
+                    type="number"
+                    value={maxPrice}
+                    onChange={(e) => setMaxPrice(e.target.value)}
+                    className={styles.priceFilterField}
+                />
+              </div>
+            </div>
+
+            <TextField
+                label="Sort By Rating"
+                select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                SelectProps={{
+                  native: true,
+                }}
+                variant="outlined"
+                className={styles.sortField}
+            >
+              <option value="">None</option>
+              <option value="rating">Rating</option>
+            </TextField>
+
           </div>
+
+          {loading ? (
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                <CircularProgress />
+              </div>
+          ) : (
+              selectedSection === 'posts' && (
+                  <div className={styles.cardList}>
+                    {sortedPosts.map((post) => (
+                        <Card key={post._id} className={styles.card}>
+                          <CardContent className={styles.cardContent}>
+                            <Typography gutterBottom variant="h5" component="div">
+                              {post.details}
+                            </Typography>
+                            <div>Price: {post.price} {post.currency}</div>
+                            <div>Quantity: {post.quantity}</div>
+                            <div className={styles.cardImage}>
+                              <img src={post.imageurl} alt="Image"/>
+                            </div>
+                            <label style={{color: 'black'}}>Archive:</label>
+                            <div style={{marginTop: '1px'}}>
+                              <label style={{color: 'black'}}>
+                                <input
+                                    type="checkbox"
+                                    checked={post.archived}
+                                    onChange={(e) => handleArchiveToggle(post._id, e.target.checked)}
+                                />
+                              </label>
+                            </div>
+                          </CardContent>
+                          <CardActions>
+                            <Button
+                                size="small"
+                                color="primary"
+                                variant="contained"
+                                style={{ marginRight: '8px' }}
+                                onClick={() => handleEditPost(post)}
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                                size="small"
+                                color="error"
+                                variant="contained"
+                                onClick={() => handleDeletePost(post._id)}
+                            >
+                              Delete
+                            </Button>
+                          </CardActions>
+                        </Card>
+                    ))}
+                  </div>
+              )
+          )}
+
+          {selectedSection === 'tags' && <Tags />}
+          {selectedSection === 'ActivityCategory' && <ActivityCategory />}
         </div>
-      </Modal>
 
+        <Modal open={openModal} onClose={handleCloseModal}>
+          <div className={styles.modalOverlay}>
+            <div className={styles.modal}>
+              <Typography variant="h6">{editingPostId ? 'Edit Post' : 'Add New Post'}</Typography>
+              <TextField
+                  fullWidth
+                  label="Details"
+                  name="details"
+                  value={currentPost.details}
+                  onChange={handleInputChange}
+                  margin="normal"
+              />
+              <TextField
+                  fullWidth
+                  label="Price"
+                  name="price"
+                  type="number"
+                  value={currentPost.price}
+                  onChange={handleInputChange}
+                  margin="normal"
+              />
+              <FormControl fullWidth margin="normal">
+                <InputLabel>Currency</InputLabel>
+                <Select
+                    name="currency"
+                    value={currentPost.currency}
+                    onChange={handleInputChange}
+                >
+                  {currencyCodes.map((code) => (
+                      <MenuItem key={code} value={code}>{code}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <TextField
+                  fullWidth
+                  label="Quantity"
+                  name="quantity"
+                  type="number"
+                  value={currentPost.quantity}
+                  onChange={handleInputChange}
+                  margin="normal"
+              />
+              <input type="file" onChange={handleImageChange} className={styles.imageInput} />
+              <Button variant="contained" color="primary" onClick={handleSubmitPost}>
+                {editingPostId ? 'Update Post' : 'Add Post'}
+              </Button>
+              {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
+            </div>
+          </div>
+        </Modal>
 
-
-      <Footer />
-    </div>
+        <Footer />
+      </div>
   );
 };
 

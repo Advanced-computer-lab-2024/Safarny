@@ -46,12 +46,20 @@ const UpcomingActivities = () => {
   const fetchExchangeRates = async () => {
     try {
       const response = await fetch('https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
+      if (!data.conversion_rates) {
+        throw new Error('Invalid data format');
+      }
       setExchangeRates(data.conversion_rates);
       setCurrencyCodes(Object.keys(data.conversion_rates));
-      console.log("id",userId);
+      console.log("id", userId);
     } catch (error) {
       console.error('Error fetching exchange rates:', error);
+      setExchangeRates({ EGP: 1 }); // Set default exchange rate
+      setCurrencyCodes(['EGP']); // Set default currency code
     }
   };
   useEffect(() => {
@@ -84,12 +92,15 @@ const handleArchiveToggle = async (ActivityId, isArchived) => {
 };
 
   const convertPrice = (price, fromCurrency, toCurrency) => {
-    const rateFrom = exchangeRates[fromCurrency];
-    const rateTo = exchangeRates[toCurrency];
-    return ((price / rateFrom) * rateTo).toFixed(2);
-  };
+  if (price == null) {
+    return 'N/A'; // Return 'N/A' or any default value if price is null
+  }
+  const rateFrom = exchangeRates[fromCurrency];
+  const rateTo = exchangeRates[toCurrency];
+  return ((price / rateFrom) * rateTo).toFixed(2);
+};
 
-  
+
 
   useEffect(() => {
     const fetchActivities = async () => {
