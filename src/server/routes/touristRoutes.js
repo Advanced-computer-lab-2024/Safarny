@@ -1,8 +1,8 @@
 const { Router } = require("express");
 const usersController = require("../controllers/usersController.js");
 const searchController = require("../controllers/searchController.js");
-const flightController=require("../controllers/FlightController.js");
-const HotelController=require("../controllers/HotelController.js");
+const flightController = require("../controllers/FlightController.js");
+const HotelController = require("../controllers/HotelController.js");
 
 const {
   getAllComplaints,
@@ -13,9 +13,9 @@ const {
 
 const {
   createBooking,
+  bookHistoricalPlace,
   getBookings,
-  updateBooking,
-  deleteBooking,
+  cancelBookingHistoricalPlace,
   cancelBooking,
 } = require("../controllers/bookingController.js");
 
@@ -34,7 +34,6 @@ const router = Router();
     11-get all products sorted by rating
 */
 
-
 router.post("/BookedFlights", flightController.createBooking);
 router.get("/getBookFlight/:touristId", flightController.getAllBookingsByid);
 router.post("/BookHotel", HotelController.createHotelBooking);
@@ -50,8 +49,6 @@ router.get("/search", searchController.search);
 // Route for getting a profile by ID
 router.get("/:id", usersController.getProfileById);
 
-
-
 // Route for updating a profile by ID
 router.put("/:id", usersController.updateProfileById);
 
@@ -61,9 +58,11 @@ router.get("/complaints/:submitterId", getComplaintsBySubmitterId);
 router.post("/complaints", createComplaint);
 
 router.post("/bookings", createBooking);
+router.post("/bookings/historicalPlace", bookHistoricalPlace);
 router.get("/bookings/:touristId", getBookings);
-router.put("/bookings/:id", updateBooking);
-router.delete("/bookings/:id", deleteBooking);
 router.put("/bookings/:id/cancel", cancelBooking);
-router.put("/updatewallet",usersController.updateWallet);
+router.put("/bookings/:id/cancel/historicalPlace", cancelBookingHistoricalPlace);
+
+router.put("/updatewallet", usersController.updateWallet);
+
 module.exports = router;
