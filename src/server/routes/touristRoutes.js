@@ -65,5 +65,5 @@ router.get("/bookings/:touristId", getBookings);
 router.put("/bookings/:id", updateBooking);
 router.delete("/bookings/:id", deleteBooking);
 router.put("/bookings/:id/cancel", cancelBooking);
-
+router.put("/updatewallet",usersController.updateWallet);
 module.exports = router;

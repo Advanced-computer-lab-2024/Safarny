@@ -89,6 +89,29 @@ const updateUser = AsyncHandler(async (req, res) => {
   }
 });
 
+
+const updateWallet = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ message: "Invalid ID" });
+        }
+        const { wallet } = req.body;
+        const updatedDocument = await userModel.findByIdAndUpdate(
+        id,
+        { wallet },
+        { new: true }
+        );
+        if (!updatedDocument) {
+        return res.status(404).json({ message: "Document not found" });
+        }
+        res.status(200).json(updatedDocument);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error updating wallet", error });
+    }
+}
+
 // Controller for creating a new profile
 const createProfile = async (req, res) => {
   try {
@@ -156,7 +179,7 @@ const updateProfileById = AsyncHandler(async (req, res) => {
     if (!id) {
       return res.status(400).json({ error: "User ID is required" });
     }
-
+    console.log("Wallet", req.body.wallet);
     const updateData = {
       username: req.body.username,
       email: req.body.email,
@@ -187,7 +210,7 @@ const updateProfileById = AsyncHandler(async (req, res) => {
     // Remove undefined fields from updateData
     Object.keys(updateData).forEach(key => updateData[key] === undefined && delete updateData[key]);
 
-    console.log("Update Data:", updateData); // Log the update data for debugging
+    //console.log("Update Data:", updateData); // Log the update data for debugging
 
     const user = await userModel.findOneAndUpdate(
         { _id: id },
@@ -243,5 +266,6 @@ module.exports = {
   getProfileById,
   updateProfileById,
   getAllUsers, // Export the new function
-  updateAcceptedStatus
+  updateAcceptedStatus,
+    updateWallet
 };
