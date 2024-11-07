@@ -110,11 +110,7 @@ const Profile = () => {
 
   // Advertiser-specific transport buttons
   const handleCreateTransportClick = () => {
-    if (userId) {
-      navigate("/transportss/create-transport", { state: { userId } });
-  } else {
-      console.error("userId is kofta");
-      }
+    navigate("/transportss/create-transport", { state: { userId } });
   };
 
   const handleEditTransportClick = () => {
