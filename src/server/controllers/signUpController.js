@@ -7,7 +7,7 @@ const AdvertiserController = require("./advertiserController.js");
 
 //Tourist SingUp
 const signUp = AsyncHandler(async (req, res) => {
-  const { email, username, password, nationality, mobile, DOB, employed } =
+  const { email, username, password, nationality, walletcurrency, mobile, DOB, employed } =
     req.body;
 
   try {
@@ -17,6 +17,7 @@ const signUp = AsyncHandler(async (req, res) => {
       username,
       password,
       nationality,
+      walletcurrency,
       mobile,
       DOB,
       employed,

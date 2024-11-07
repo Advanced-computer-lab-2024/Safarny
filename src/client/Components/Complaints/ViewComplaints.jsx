@@ -38,7 +38,7 @@ const ViewComplaints = () => {
 
     if (loading) {
         return (
-            <div className={styles.full-screen}>
+            <div className={styles.fullScreen}>
                 <Header />
                 <p className={styles.loading}>Loading...</p>
                 <Footer />
@@ -48,7 +48,7 @@ const ViewComplaints = () => {
 
     if (error) {
         return (
-            <div className={styles.full-screen}>
+            <div className={styles.fullScreen}>
                 <Header />
                 <p className={styles.error}>{error}</p>
                 <Footer />
@@ -57,7 +57,7 @@ const ViewComplaints = () => {
     }
 
     return (
-        <div className={styles.full-screen}>
+        <div className={styles.fullScreen}>
             <Header />
             <div className={styles.container}>
                 <h2 className={styles.heading}>My Complaints</h2>

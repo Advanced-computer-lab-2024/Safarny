@@ -45,7 +45,7 @@ const AdminList = () => {
         <div style={{ display: 'flex' }}>
           {error && <Alert severity="error">{error}</Alert>}
             <SideBar />
-            <div style={{ marginLeft: '250px', padding: '20px', flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ marginLeft: '390px', padding: '20px', flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <h2>Admin List</h2>
                 <div style={{ position: 'relative', width: '100%', maxWidth: '800px' }}>
                     <Button variant="contained" color="success" onClick={handleAddAdminClick}>
@@ -63,7 +63,7 @@ const AdminList = () => {
                     aria-describedby="add-admin-modal-description"
                 >
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                        <Card sx={{ maxWidth: 400 }}>
+                        <Card sx={{ width: '100%' }}> {/* Adjusted width to make the form wider */}
                             <CardContent>
                                 <Typography variant="h5" component="div" id="add-admin-modal-title">
                                     Add New Admin

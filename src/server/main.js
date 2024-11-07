@@ -26,6 +26,7 @@ const adminRoutes = require("./routes/adminRoutes.js");
 const ToursimGovernerRoutes = require("./routes/ToursimGovernerRoutes.js");
 const AdvertiserRoutes = require("./routes/advertiserRoutes.js");
 const WishListRoutes = require("./routes/WishListRoutes.js");
+const transportRoutes = require("./routes/transportRoutes.js");
 
 
 dotenv.config();
@@ -65,6 +66,8 @@ app.use("/seller", sellerRoutes);
 app.use("/toursimgovernor", ToursimGovernerRoutes);
 
 app.use('/activities', activityRoutes);
+
+app.use('/transport',transportRoutes);
 
 //app.use('/itineraries', ItineraryRoutes);
 

@@ -36,9 +36,9 @@ const router = Router();
 
 
 router.post("/BookedFlights", flightController.createBooking);
-router.get("/getBookFlight/:id", flightController.getAllBookingsByid);
+router.get("/getBookFlight/:touristId", flightController.getAllBookingsByid);
 router.post("/BookHotel", HotelController.createHotelBooking);
-router.get("/getBookHotel/:id", HotelController.getAllBookingsByid);
+router.get("/getBookHotel/:touristId", HotelController.getAllBookingsByid);
 router.get("/profile", usersController.getSingleUser);
 
 router.delete("/:id", usersController.deleteUser);
@@ -65,5 +65,5 @@ router.get("/bookings/:touristId", getBookings);
 router.put("/bookings/:id", updateBooking);
 router.delete("/bookings/:id", deleteBooking);
 router.put("/bookings/:id/cancel", cancelBooking);
-
+router.put("/updatewallet",usersController.updateWallet);
 module.exports = router;

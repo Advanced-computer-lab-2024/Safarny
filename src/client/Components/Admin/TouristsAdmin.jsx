@@ -6,7 +6,7 @@ const TouristsAdmin = () => {
   return (
     <div style={{ display: 'flex' }}>
     <SideBar />
-    <div style={{ marginLeft: '250px', padding: '20px' }}> {/* Adjust the margin */}
+    <div style={{ marginLeft: '215px', padding: '20px' }}> {/* Adjust the margin */}
     <DataTable/>
     </div>
   </div>

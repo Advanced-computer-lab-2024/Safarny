@@ -60,17 +60,19 @@ const createBooking = async (req, res) => {
 // controllers/bookingController.js
 
 const getAllBookingsByid = async (req, res) => {
-    try {
-      const touristId = req.params.touristId; // Retrieve touristId from URL parameter
-  
-      // Find all bookings for the specified touristId
-      const bookings = await BookedFlight.find({ touristId });
-  
-      res.status(200).json(bookings);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  };
+  try {
+    const touristId = req.params.touristId; // Retrieve touristId from URL parameter
+    console.log(touristId); // Log for debugging purposes
+
+    // Find all bookings that match the touristId
+    const bookings = await BookedFlight.find({ touristid: touristId });
+
+    res.status(200).json(bookings);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
   
 
   

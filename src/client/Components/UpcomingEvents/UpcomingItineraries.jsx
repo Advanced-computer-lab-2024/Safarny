@@ -3,7 +3,7 @@ import styles from "./UpcomingItinerary.module.css";
 import Logo from "/src/client/Assets/Img/logo.png";
 import Footer from "/src/client/components/Footer/Footer";
 import { Link ,useLocation, useNavigate} from "react-router-dom";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import {CircularProgress, FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 
 import Header from "/src/client/Components/Header/Header";
 import axios from 'axios';
@@ -16,6 +16,7 @@ const UpcomingItineraries = () => {
   const [date, setDate] = useState("");
   const [preferences, setPreferences] = useState([]);
   const [language, setLanguage] = useState("");
+  const [loading, setLoading] = useState(true);
   const [availableTags, setAvailableTags] = useState([]);
   const [selectedCurrency, setSelectedCurrency] = useState('EGP');
   const [exchangeRates, setExchangeRates] = useState({});
@@ -37,20 +38,38 @@ const UpcomingItineraries = () => {
 
   
 
-
+  const renderStars = (rating) => {
+    if (rating == null) return null;
+    const stars = [];
+    for (let i = 0; i < rating; i++) {
+      stars.push(<span key={i}>&#9733;</span>); // Shaded star
+    }
+    return stars;
+  };
   const fetchExchangeRates = async () => {
     try {
       const response = await fetch('https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
+      if (!data.conversion_rates) {
+        throw new Error('Invalid data format');
+      }
       setExchangeRates(data.conversion_rates);
       setCurrencyCodes(Object.keys(data.conversion_rates));
     } catch (error) {
       console.error('Error fetching exchange rates:', error);
+      setExchangeRates({ EGP: 1 }); // Set default exchange rate
+      setCurrencyCodes(['EGP']); // Set default currency code
     }
   };
   const convertPrice = (price, fromCurrency, toCurrency) => {
-    const rateFrom = exchangeRates[fromCurrency];
-    const rateTo = exchangeRates[toCurrency];
+    if (price == null) {
+      return 'N/A'; // Return 'N/A' or any default value if price is null
+    }
+    const rateFrom = exchangeRates[fromCurrency] || 1;
+    const rateTo = exchangeRates[toCurrency] || 1;
     return ((price / rateFrom) * rateTo).toFixed(2);
   };
   const handleArchiveToggle = async (ItineraryId, isArchived) => {
@@ -111,6 +130,7 @@ const fetchUserRole = async () => {
   
   useEffect(() => {
     const fetchFilteredItineraries = async (whichResponse) => {
+      setLoading(true);
       try {
         const queryParams = new URLSearchParams({
           sortBy: `${sortCriteria}:asc`,
@@ -145,6 +165,8 @@ const fetchUserRole = async () => {
         }
       } catch (error) {
         console.error("Error fetching itineraries:", error);
+      } finally {
+        setLoading(false);
       }
     };
   
@@ -154,8 +176,21 @@ const fetchUserRole = async () => {
     
     // Ensure dependencies include userRole and any variables affecting filtering
   }, [sortCriteria, budget, date, preferences, language, userRole]);
-  
 
+  if (loading) {
+    return (
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%',
+          marginLeft: '700px'
+        }}>
+          <span style={{marginRight: '10px'}}>Loading Itineraries...</span>
+          <CircularProgress/>
+        </div>
+    );
+  }
   return (
       <div className={styles.container}>
         <Header />
@@ -269,12 +304,7 @@ const fetchUserRole = async () => {
                         <p>Dropoff Location: {itinerary.dropoffLocation}</p>
 
                         {/* Display Rating */}
-                        <p>
-                          Rating:{" "}
-                          {itinerary.rating !== undefined
-                              ? itinerary.rating
-                              : "No rating available"}
-                        </p>
+                          <p>Rating: {renderStars(itinerary.rating)}</p>
 
                         {/* Display Tags */}
                         {itinerary.tags && itinerary.tags.length > 0 && (
