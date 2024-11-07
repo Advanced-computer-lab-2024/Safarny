@@ -76,33 +76,36 @@ const createBooking = async (req, res) => {
   }
 
   if (activity !== undefined && activity !== null) {
-    if (!foundActivity.date === bookingDate) {
+    if (foundActivity.date !== bookingDate) {
       return res.status(400).json({
         message: "This date is not available in the activity",
       });
     }
   }
 
-  //check if the bookingDate is not in the past
   const today = new Date();
   const bookingDateObj = new Date(bookingDate);
-  if (bookingDateObj < today) {
-    return res.status(400).json({ message: "Booking date is in the past" });
-  }
+
+  // //check if the bookingDate is not in the past
+  // if (bookingDateObj < today) {
+  //   return res.status(400).json({ message: "Booking date is in the past" });
+  // }
 
   //check if the bookingDate is not within the 2 days threshold
   const twoDays = new Date();
   twoDays.setDate(today.getDate() + 2);
   if (bookingDateObj < twoDays) {
-    return res
-      .status(400)
-      .json({ message: "Booking date is within the 2 days threshold" });
+    return res.status(400).json({
+      message:
+        "You can not Book for that date because its within the 2 days threshold",
+    });
   }
 
-  //check if the tourist already has a booking on that date
+  //check if the tourist already has a booking on that date that is not cancelled
   const existingBooking = await Booking.find({
     tourist: tourist,
     bookingDate: bookingDate,
+    status: { $ne: "cancelled" },
   });
   if (existingBooking.length > 0) {
     return res
@@ -127,27 +130,25 @@ const createBooking = async (req, res) => {
         .status(400)
         .json({ message: "Tourist has insufficient funds" });
     } else {
-      foundTourist.wallet -= foundItinerary.price;
+      foundTourist.wallet -= foundActivity.price;
     }
   }
 
-  await newBooking.save();
-
   // if it was an activity, add the activity to the tourist's activities and add the tourist to the activity's tourists
 
-  // if (activity !== undefined && activity !== null) {
-  //   foundTourist.acttivities.push(activity);
-  //   foundActivity.tourists.push(tourist);
-  //   await foundActivity.save();
-  // }
+  if (activity !== undefined && activity !== null) {
+    foundTourist.acttivities.push(activity);
+    foundActivity.boughtby.push(tourist);
+    await foundActivity.save();
+  }
 
-  // // if it was an itinerary, add the itinerary to the tourist's itineraries and add the tourist to the itinerary's tourists
+  // if it was an itinerary, add the itinerary to the tourist's itineraries and add the tourist to the itinerary's tourists
 
-  // if (itinerary !== undefined && itinerary !== null) {
-  //   foundTourist.itineraries.push(itinerary);
-  //   foundItinerary.tourists.push(tourist);
-  //   await foundItinerary.save();
-  // }
+  if (itinerary !== undefined && itinerary !== null) {
+    foundTourist.itineraries.push(itinerary);
+    foundItinerary.boughtby.push(tourist);
+    await foundItinerary.save();
+  }
 
   let pointsEarned = 0;
 
@@ -166,8 +167,8 @@ const createBooking = async (req, res) => {
 
   foundTourist.loyaltyPoints += pointsEarned;
 
-  // foundTourist.updateLoyaltyLevel();
   await foundTourist.save();
+  await newBooking.save();
 
   res.status(201).json(newBooking);
 };
@@ -213,6 +214,7 @@ const cancelBooking = async (req, res) => {
   const { id } = req.params;
 
   const booking = await Booking.findById(id);
+
   if (!booking) {
     return res.status(400).json({ message: "Booking not found" });
   }
@@ -226,7 +228,98 @@ const cancelBooking = async (req, res) => {
     return res.status(400).json({ message: "Booking already in-active" });
   }
   if (booking.status === "active") {
+    //check if the booking date is not within the 2 days threshold
+    const today = new Date();
+    const bookingDateObj = new Date(booking.bookingDate);
+    const twoDays = new Date();
+    twoDays.setDate(today.getDate() + 2);
+    if (bookingDateObj <= twoDays) {
+      return res.status(400).json({
+        message:
+          "You can not cancel the Booking because its within the 48 hours days threshold",
+      });
+    }
+
+    if (!booking.activity && booking.itinerary) {
+      const foundItinerary = await Itinerary.findById(booking.itinerary);
+      if (!foundItinerary) {
+        return res.status(400).json({ message: "Itinerary not found" });
+      }
+      const foundTourist = await User.findById(booking.tourist);
+      if (!foundTourist) {
+        return res.status(400).json({ message: "Tourist not found" });
+      }
+      //refund the tourist the money
+      foundTourist.wallet += foundItinerary.price;
+
+      //deduct back the loyalty points and update the tourist's loyalty level
+      let pointsDeducted = 0;
+      if (
+        foundTourist.loyaltyLevel === "level 1" ||
+        foundTourist.loyaltyLevel === "none"
+      ) {
+        pointsDeducted = foundItinerary.price * 0.5;
+      } else if (foundTourist.loyaltyLevel === "level 2") {
+        pointsDeducted = foundItinerary.price * 1;
+      } else if (foundTourist.loyaltyLevel === "level 3") {
+        pointsDeducted = foundItinerary.price * 1.5;
+      }
+      foundTourist.loyaltyPoints -= pointsDeducted;
+
+      //remove the itinerary from the tourist's itineraries and remove the tourist from the itinerary's tourists
+      foundTourist.itineraries = foundTourist.itineraries.filter(
+        (itinerary) =>
+          itinerary._id.toString() !== booking.itinerary._id.toString()
+      );
+      foundItinerary.boughtby = foundItinerary.boughtby.filter(
+        (tourist) => tourist.toString() !== booking.tourist.toString()
+      );
+      await foundItinerary.save();
+      await foundTourist.save();
+    } else if (!booking.itinerary && booking.activity) {
+      const foundActivity = await Activity.findById(booking.activity);
+      if (!foundActivity) {
+        return res.status(400).json({ message: "activity not found" });
+      }
+      const foundTourist = await User.findById(booking.tourist);
+      if (!foundTourist) {
+        return res.status(400).json({ message: "Tourist not found" });
+      }
+      //refund the tourist the money
+      foundTourist.wallet += foundActivity.price;
+
+      //deduct back the loyalty points and update the tourist's loyalty level
+      let pointsDeducted = 0;
+      if (
+        foundTourist.loyaltyLevel === "level 1" ||
+        foundTourist.loyaltyLevel === "none"
+      ) {
+        pointsDeducted = foundActivity.price * 0.5;
+      } else if (foundTourist.loyaltyLevel === "level 2") {
+        pointsDeducted = foundActivity.price * 1;
+      } else if (foundTourist.loyaltyLevel === "level 3") {
+        pointsDeducted = foundActivity.price * 1.5;
+      }
+      foundTourist.loyaltyPoints -= pointsDeducted;
+
+      //remove the activity from the tourist's acttivities and remove the tourist from the activity's tourists
+      foundTourist.acttivities = foundTourist.acttivities.filter(
+        (activity) =>
+          activity._id.toString() !== booking.activity._id.toString()
+      );
+      foundActivity.boughtby = foundActivity.boughtby.filter(
+        (tourist) => tourist._id.toString() !== booking.tourist._id.toString()
+      );
+      await foundActivity.save();
+      await foundTourist.save();
+    } else {
+      return res
+        .status(400)
+        .json({ message: "Booking itiberary or activity not found" });
+    }
+
     booking.status = "cancelled";
+
     await booking.save();
     return res.status(200).json(booking);
   }
