@@ -10,7 +10,7 @@ import SignUp from "/src/client/components/Signup/Signup";
 import SignUpExtra from "./Components/SignupExtra/SignUpExtra";
 import TourGuide from "./Pages/TourGuide";
 // import Advertiser from './pages/Advertiser';
-import Seller from "./Pages/Seller";
+import Seller from "/src/client/Components/Seller/Seller";
 import Admin from "/src/client/components/Admin/Admin";
 import TourGuideAmin from "./Components/Admin/TourGuideAmin";
 import TouristsAdmin from "./Components/Admin/TouristsAdmin";
