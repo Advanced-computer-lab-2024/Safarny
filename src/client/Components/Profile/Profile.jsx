@@ -117,8 +117,8 @@ const Profile = () => {
     navigate("/transportss/edit-transport", { state: { userId } });
   };
 
-  const handleDeleteTransportClick = () => {
-    navigate("/transportss/delete-transport", { state: { userId } });
+  const handlebookTransportClick = () => {
+    navigate("/transportss/book-transport", { state: { userId } });
   };
 
   return (
@@ -226,11 +226,9 @@ const Profile = () => {
             Create Transport
           </button>
           <button onClick={handleEditTransportClick} className={styles.postButton}>
-            Edit Transport
+            Edit & Delete Transport
           </button>
-          <button onClick={handleDeleteTransportClick} className={styles.postButton}>
-            Delete Transport
-          </button>
+          
         </>
       )}
 
@@ -250,6 +248,9 @@ const Profile = () => {
           </button>
           <button onClick={handelWishList} className={styles.postButton}>
             View Wishlist
+          </button>
+          <button onClick={handlebookTransportClick} className={styles.postButton}>
+            Book Transports
           </button>
         </div>
       )}
