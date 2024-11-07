@@ -19,7 +19,7 @@ const WishList = () => {
         const response = await axios.get(`/wishlist/${userId}`);
         setWishList(response.data.items || []);
       } catch (error) {
-        setError('Failed to fetch wishlist');
+        setError('Your wishlist is empty');
         console.log('Error fetching wishlist:', error);
       } finally {
         setLoading(false);

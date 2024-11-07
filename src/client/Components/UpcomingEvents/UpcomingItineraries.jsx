@@ -37,7 +37,14 @@ const UpcomingItineraries = () => {
 
   
 
-
+  const renderStars = (rating) => {
+    if (rating == null) return null;
+    const stars = [];
+    for (let i = 0; i < rating; i++) {
+      stars.push(<span key={i}>&#9733;</span>); // Shaded star
+    }
+    return stars;
+  };
   const fetchExchangeRates = async () => {
     try {
       const response = await fetch('https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP');
@@ -269,12 +276,7 @@ const fetchUserRole = async () => {
                         <p>Dropoff Location: {itinerary.dropoffLocation}</p>
 
                         {/* Display Rating */}
-                        <p>
-                          Rating:{" "}
-                          {itinerary.rating !== undefined
-                              ? itinerary.rating
-                              : "No rating available"}
-                        </p>
+                          <p>Rating: {renderStars(itinerary.rating)}</p>
 
                         {/* Display Tags */}
                         {itinerary.tags && itinerary.tags.length > 0 && (
