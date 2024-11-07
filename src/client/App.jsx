@@ -63,6 +63,9 @@ import Terms from "./Components/terms/terms";
 import PurchasedProducts from "./Components/PurchasedProducts/PurchasedProducts";
 //import AdminViewActivities from "./Components/UpcomingEvents/AdminViewActivities";
 //import { PurchasedProductsProvider } from "./Components/PurchasedProducts/PurchasedProductsContext";
+import CreateTransport from "./Components/Transport/CreateTransport";
+import EditTransport from "./Components/Transport/EditTransport";
+import DeleteTransport from "./Components/Transport/DeleteTransport";
 function App() {
   return (
     //<PurchasedProductsProvider>
@@ -131,7 +134,10 @@ function App() {
         <Route path="/adminviewcomplaints" element={<AdminViewComplaints />} />
         <Route path="/admineditcomplaints" element={<AdminEditComplaints />} />
         <Route path="/wishlist" element={<WishList />} />
-        <Route path="/PurchasedProducts" element={<PurchasedProducts />} /> 
+        <Route path="/PurchasedProducts" element={<PurchasedProducts />} />
+        <Route path="/transportss/create-transport" element={<CreateTransport />} />
+        <Route path="/transportss/edit-transport" element={<EditTransport />} />
+        <Route path="/transportss/delete-transport" element={<DeleteTransport />} /> 
               </Routes>
     </Router>
     //</PurchasedProductsProvider>       

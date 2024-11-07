@@ -7,12 +7,12 @@ import Header from "/src/client/components/Header/Header";
 const Profile = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { userId } = location.state;
+  const { userId } = location.state || {}; // Get userId from location state if it exists
   const [userInfo, setUserInfo] = useState({
     username: "",
     email: "",
     role: "",
-    image: "", // Added image field
+    image: "",
   });
 
   const [showButtons, setShowButtons] = useState(false);
@@ -26,7 +26,7 @@ const Profile = () => {
         }
         const { password, __v, _id, imageurl, ...userData } =
           await response.json();
-        setUserInfo({ ...userData, image: imageurl }); // Ensure image is set correctly
+        setUserInfo({ ...userData, image: imageurl });
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -69,11 +69,11 @@ const Profile = () => {
   };
 
   const handleUpcomingActivitiesClick = () => {
-    navigate("/UpcomingActivites",{ state: { userId } });
+    navigate("/UpcomingActivites", { state: { userId } });
   };
 
   const handleUpcomingItinerariesClick = () => {
-    navigate("/UpcomingItineraries" ,{ state: { userId } });
+    navigate("/UpcomingItineraries", { state: { userId } });
   };
 
   const handleViewHistoricalPlacesClick = () => {
@@ -95,9 +95,27 @@ const Profile = () => {
   const handleViewComplaints = () => {
     navigate("/viewcomplaints", { state: { userId } });
   };
+
   const handelWishList = () => {
     navigate("/wishlist", { state: { userId } });
-  }
+  };
+
+  // Advertiser-specific transport buttons
+  const handleCreateTransportClick = () => {
+    if (userId) {
+      navigate("/transportss/create-transport", { state: { userId } });
+  } else {
+      console.error("userId is kofta");
+      }
+  };
+
+  const handleEditTransportClick = () => {
+    navigate("/transportss/edit-transport", { state: { userId } });
+  };
+
+  const handleDeleteTransportClick = () => {
+    navigate("/transportss/delete-transport", { state: { userId } });
+  };
 
   return (
     <div className={styles.container}>
@@ -157,20 +175,31 @@ const Profile = () => {
       )}
 
       {userInfo.role === "Seller" && (
-        <button onClick={handlePostClick} className={styles.postButton}>
-          Post
-        </button>
-      )}
-      {userInfo.role === "Seller" && (
-        <button onClick={handleSellerHomeClick} className={styles.postButton}>
-          Seller Home
-        </button>
+        <>
+          <button onClick={handlePostClick} className={styles.postButton}>
+            Post
+          </button>
+          <button onClick={handleSellerHomeClick} className={styles.postButton}>
+            Seller Home
+          </button>
+        </>
       )}
 
       {userInfo.role === "Advertiser" && (
-        <button onClick={handleAddActivity} className={styles.postButton}>
-          Activity
-        </button>
+        <>
+          <button onClick={handleAddActivity} className={styles.postButton}>
+            Activity
+          </button>
+          <button onClick={handleCreateTransportClick} className={styles.postButton}>
+            Create Transport
+          </button>
+          <button onClick={handleEditTransportClick} className={styles.postButton}>
+            Edit Transport
+          </button>
+          <button onClick={handleDeleteTransportClick} className={styles.postButton}>
+            Delete Transport
+          </button>
+        </>
       )}
 
       {userInfo.role === "TourGuide" && (
@@ -180,17 +209,17 @@ const Profile = () => {
       )}
 
       {userInfo.role === "Tourist" && (
-          <div>
-            <button onClick={handleCreateComplaint} className={styles.postButton}>
-              Create Complaint
-            </button>
-            <button onClick={handleViewComplaints} className={styles.postButton}>
-              View Complaints
-            </button>
-            <button onClick={handelWishList} className={styles.postButton}>
-              View Wishlist
-            </button>
-          </div>
+        <div>
+          <button onClick={handleCreateComplaint} className={styles.postButton}>
+            Create Complaint
+          </button>
+          <button onClick={handleViewComplaints} className={styles.postButton}>
+            View Complaints
+          </button>
+          <button onClick={handelWishList} className={styles.postButton}>
+            View Wishlist
+          </button>
+        </div>
       )}
 
       <button onClick={handleViewButtonClick} className={styles.mainButton}>
