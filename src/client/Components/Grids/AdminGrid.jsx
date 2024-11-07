@@ -9,11 +9,11 @@ import TextField from '@mui/material/TextField';
 
 // Define the columns
 const columns = [
-  { field: 'id', headerName: 'ID', width: 250 },
+  { field: 'id', headerName: 'ID', width: 230 },
   { field: 'username', headerName: 'Username', width: 130 },
   { field: 'email', headerName: 'Email', width: 180 },
   { field: 'type', headerName: 'Type', width: 90 },
-  { field: 'password', headerName: 'Password', width: 130 },
+  { field: 'password', headerName: 'Password', width: 120 },
 ];
 
 export default function DataTable() {
