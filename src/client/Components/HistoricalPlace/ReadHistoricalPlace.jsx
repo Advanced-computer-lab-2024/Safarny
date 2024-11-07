@@ -6,7 +6,7 @@ import Header from '/src/client/components/Header/Header';
 import styles from './ReadHistoricalPlace.module.css';
 import styles1 from '/src/client/components/Home/Homepage.module.css';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
-import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { FormControl, InputLabel, Select, MenuItem, CircularProgress } from '@mui/material';
 import './loadingContainer.css';
 
 const ReadHistoricalPlace = () => {
@@ -142,10 +142,17 @@ const ReadHistoricalPlace = () => {
 
   if (loading) {
     return (
-        <div className="loadingContainer">
-          <p className="loadingText">Loading historical places...</p>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%',
+          marginLeft: '675px'
+        }}>
+          <span style={{marginRight: '10px'}}>Loading Historical places...</span>
+          <CircularProgress/>
         </div>
-    )
+    );
   }
 
   if (error) {
