@@ -42,9 +42,8 @@ const CreateComplaints = () => {
 
   return (
     <>
-
       <div className={styles.container}>
-      <Header />
+        <Header />
         <h2 className={styles.heading}>Create Complaint</h2>
         <form onSubmit={handleSubmit}>
           <div className={styles.formGroup}>

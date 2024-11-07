@@ -283,8 +283,10 @@ const Admin = () => {
         </header>
         <SideBar className={styles.sidebar} />
         <div className={styles.content}>
+          <div className={styles.allFilters}>
           {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
 
+        
         <TextField
           label="Search by Name"
           variant="outlined"
@@ -296,6 +298,7 @@ const Admin = () => {
         />
 
         <div className={styles.priceFilterContainer}>
+          <div className={styles.minPrice}>
           <TextField
             label="Min Price"
             variant="outlined"
@@ -304,6 +307,8 @@ const Admin = () => {
             onChange={(e) => setMinPrice(e.target.value)}
             className={styles.priceFilterField}
           />
+          </div>
+          <div className={styles.maxPrice}>
           <TextField
             label="Max Price"
             variant="outlined"
@@ -312,6 +317,7 @@ const Admin = () => {
             onChange={(e) => setMaxPrice(e.target.value)}
             className={styles.priceFilterField}
           />
+          </div>
         </div>
 
         <TextField
@@ -328,6 +334,8 @@ const Admin = () => {
           <option value="">None</option>
           <option value="rating">Rating</option>
         </TextField>
+
+        </div>
 
         {selectedSection === 'posts' && (
           <div className={styles.cardList}>

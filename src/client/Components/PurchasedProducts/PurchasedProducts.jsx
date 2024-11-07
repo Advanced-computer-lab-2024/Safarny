@@ -58,11 +58,30 @@ const PurchasedProducts = () => {
   }, [touristId]);
 
   const handleReviewChange = (productId, value) => {
-    setReviews(prevReviews => ({
-      ...prevReviews,
-      [productId]: value,
-    }));
+    setReviews(prevReviews => {
+      const currentReviews = prevReviews[productId] || []; // Get existing reviews for the product or initialize an empty array
+  
+      // Find the first empty spot in the array, if any
+      const emptyIndex = currentReviews.findIndex(review => !review);
+  
+      // Create a new array for updated reviews
+      const updatedReviews = [...currentReviews];
+  
+      if (emptyIndex !== -1) {
+        // Place the review in the first empty spot
+        updatedReviews[emptyIndex] = value;
+      } else {
+        // If no empty spot, add the new review at the end
+        updatedReviews.push(value);
+      }
+  
+      return {
+        ...prevReviews,
+        [productId]: updatedReviews,
+      };
+    });
   };
+  
 
   const handleRatingChange = (productId, value) => {
     setRatings(prevRatings => ({

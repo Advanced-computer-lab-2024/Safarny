@@ -60,6 +60,14 @@ const Profile = () => {
     navigate("/create-historical-place", { state: { userId } });
   };
 
+  const handleBookFlight = () => {
+    navigate("/BookFlight", { state: { userId } });
+  };
+
+  const handleBookHotel = () => {
+    navigate("/BookHotel", { state: { userId } });
+  };
+
   const handleUpdateClick2 = () => {
     navigate("/Search");
   };
@@ -121,17 +129,27 @@ const Profile = () => {
     <div className={styles.container}>
       <Header />
 
-      <main className={styles.main}>
+        <main className={styles.main}>
         <section className={styles.intro}>
           <h1>Welcome, {userInfo.username}!</h1>
           <h5>Your account details:</h5>
-          {Object.entries(userInfo)
-            .filter(([key]) => key !== "image") // Exclude the image key
-            .map(([key, value]) => (
-              <p key={key}>
-                {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
-              </p>
-            ))}
+          {userInfo.role === "TourismGovernor" ? (
+            // Render specific details for "TourismGovernor"
+            <>
+              <p>Username: {userInfo.username}</p>
+              <p>Email: {userInfo.email}</p>
+              <p>Role: {userInfo.role}</p>
+            </>
+          ) : (
+            // Render all other account details except the image
+            Object.entries(userInfo)
+              .filter(([key]) => key !== "image")
+              .map(([key, value]) => (
+                <p key={key}>
+                  {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
+                </p>
+              ))
+          )}
           {userInfo.image && (
             <img
               src={userInfo.image}
@@ -141,6 +159,7 @@ const Profile = () => {
           )}
         </section>
       </main>
+
 
       <div className={styles.buttonContainer}>
         <button
@@ -170,6 +189,23 @@ const Profile = () => {
             className={styles.createTagButton}
           >
             Create Historical Tag
+          </button>
+        </>
+      )}
+
+    {userInfo.role === "Tourist" && (
+        <>
+          <button
+            onClick={handleBookFlight}
+            className={styles.createPlaceButton}
+          >
+            Book A Flight
+          </button>
+          <button
+            onClick={handleBookHotel}
+            className={styles.createTagButton}
+          >
+            Book A Hotel
           </button>
         </>
       )}

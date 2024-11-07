@@ -67,6 +67,7 @@ router.get("/getUsers", getUsers);
 router.delete("/deleteUser/:id", deleteUser);
 router.put("/updateUser/:id", updateUser);   
 router.put("/updateUserStatus/:id", updateAcceptedStatus);       
+router.put("/UpdateProfileById", updateProfileById); 
 router.post("/addAdmin", addAdmin);  
 router.post("/createProduct", createPost);
 

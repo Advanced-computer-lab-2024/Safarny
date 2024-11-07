@@ -8,9 +8,10 @@ const Posts = new mongoose.Schema(
     quantity: Number,
     imageurl: String,
     review: {
-      type: String,
-      default: "no reviews", // Set initial value to "no reviews"
+      type: [String],
+      default: [], // Set initial value to an empty array
     },
+    
     purchased: {
       type: Boolean,
       default: false, // Set initial value to false

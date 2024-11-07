@@ -1,0 +1,66 @@
+.bookingFormContainer {
+  max-width: 100%;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.searchSection {
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.searchForm {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.searchForm input,
+.searchForm select,
+.searchForm button {
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.searchForm button {
+  grid-column: span 2;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.searchForm button:hover {
+  background-color: #0056b3;
+}
+
+.resultsSection {
+  margin-top: 20px;
+  color: black;
+}
+
+.flightOffer {
+  background-color: #f9f9f9;
+  color: black;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.flightOffer p {
+  margin: 5px 0;
+}
+
+.modalContent {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  margin: auto;
+  text-align: center;
+}

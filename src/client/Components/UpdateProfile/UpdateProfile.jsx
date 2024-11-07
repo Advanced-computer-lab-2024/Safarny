@@ -39,7 +39,14 @@ const UpdateProfile = () => {
       try {
         const response = await axios.get(`http://localhost:3000/tourist/${userId}`);
         console.log('Fetched user data:', response.data);
-        setUserInfo(response.data);
+        const { email, password, username, role } = response.data;
+
+        if (role === 'Tourism Governor') {
+          // Only set the fields relevant to Tourism Governor
+          setUserInfo({ email, password, username, role });
+        } else {
+          setUserInfo(response.data);
+        }
       } catch (error) {
         console.error('Error fetching user data:', error);
         setErrorMessage('Error fetching user data.');
@@ -121,6 +128,8 @@ const UpdateProfile = () => {
             </label>
           </>
         );
+        
+
       case 'Advertiser':
         return (
           <>
@@ -208,44 +217,48 @@ const UpdateProfile = () => {
                   required
                 />
               </label>
-              <label>
-                Nationality:
-                <select
-                  value={userInfo.nationality}
-                  onChange={(e) => setUserInfo({ ...userInfo, nationality: e.target.value })}
-                  required
-                >
-                  <option value="">Select Nationality</option>
-                  {getCountryOptions()}
-                </select>
-              </label>
-              <label>
-                Mobile:
-                <input
-                  type="tel"
-                  value={userInfo.mobile}
-                  onChange={(e) => setUserInfo({ ...userInfo, mobile: e.target.value })}
-                  required
-                />
-              </label>
-              <label>
-                Employed:
-                <input
-                  type="text"
-                  value={userInfo.employed}
-                  onChange={(e) => setUserInfo({ ...userInfo, employed: e.target.value })}
-                  required
-                />
-              </label>
-              <label>
-                Age:
-                <input
-                  type="number"
-                  value={userInfo.age}
-                  onChange={(e) => setUserInfo({ ...userInfo, age: e.target.value })}
-                  required
-                />
-              </label>
+              {userInfo.role !== 'TourismGovernor' && (
+                  <>
+                    <label>
+                      Nationality:
+                      <select
+                        value={userInfo.nationality}
+                        onChange={(e) => setUserInfo({ ...userInfo, nationality: e.target.value })}
+                        required
+                      >
+                        <option value="">Select Nationality</option>
+                        {getCountryOptions()}
+                      </select>
+                    </label>
+                    <label>
+                      Mobile:
+                      <input
+                        type="tel"
+                        value={userInfo.mobile}
+                        onChange={(e) => setUserInfo({ ...userInfo, mobile: e.target.value })}
+                        required
+                      />
+                    </label>
+                    <label>
+                      Employed:
+                      <input
+                        type="text"
+                        value={userInfo.employed}
+                        onChange={(e) => setUserInfo({ ...userInfo, employed: e.target.value })}
+                        required
+                      />
+                    </label>
+                    <label>
+                      Age:
+                      <input
+                        type="number"
+                        value={userInfo.age}
+                        onChange={(e) => setUserInfo({ ...userInfo, age: e.target.value })}
+                        required
+                      />
+                    </label>
+                  </>
+                )}
               <label>
                 Role:
                 <input
@@ -253,7 +266,17 @@ const UpdateProfile = () => {
                     value={userInfo.role}
                     onChange={(e) => setUserInfo({...userInfo, role: e.target.value})}
                     readOnly
-                    required
+                    
+                />
+              </label>
+              <label>
+                Username:
+                <input
+                    type="text"
+                    value={userInfo.username}
+                    
+                    readOnly
+                    
                 />
               </label>
 

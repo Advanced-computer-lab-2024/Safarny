@@ -1,6 +1,8 @@
 const { Router } = require("express");
 const usersController = require("../controllers/usersController.js");
 const searchController = require("../controllers/searchController.js");
+const flightController=require("../controllers/FlightController.js");
+const HotelController=require("../controllers/HotelController.js");
 
 const {
   getAllComplaints,
@@ -32,6 +34,11 @@ const router = Router();
     11-get all products sorted by rating
 */
 
+
+router.post("/BookedFlights", flightController.createBooking);
+router.get("/getBookFlight/:id", flightController.getAllBookingsByid);
+router.post("/BookHotel", HotelController.createHotelBooking);
+router.get("/getBookHotel/:id", HotelController.getAllBookingsByid);
 router.get("/profile", usersController.getSingleUser);
 
 router.delete("/:id", usersController.deleteUser);
