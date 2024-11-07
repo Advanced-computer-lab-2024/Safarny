@@ -10,9 +10,9 @@ const BookingForm = () => {
     destinationLocationCode: '',
     departureDate: '',
     returnDate: '',
-    adults: 1,
-    children: 0,
-    infants: 0,
+    adults: '',
+    children: '',
+    infants: '',
     travelClass: 'ECONOMY',
     nonStop: false,
     maxPrice: '',
@@ -58,14 +58,16 @@ const BookingForm = () => {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
 
     // Ensure date format is YYYY-MM-DD if input is a date field
-    if (name === "departureDate" || name === "returnDate") {
-        const formattedDate = new Date(value).toISOString().split('T')[0];
-        setFormData((prevData) => ({ ...prevData, [name]: formattedDate }));
+    if (type === "checkbox") {
+      setFormData((prevData) => ({ ...prevData, [name]: checked }));
+    } else if (name === "departureDate" || name === "returnDate") {
+      const formattedDate = new Date(value).toISOString().split('T')[0];
+      setFormData((prevData) => ({ ...prevData, [name]: formattedDate }));
     } else {
-        setFormData((prevData) => ({ ...prevData, [name]: value }));
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
     }
   };
 
@@ -144,24 +146,30 @@ const BookingForm = () => {
       <div className={styles.searchSection}>
         <h2>Find Your Flight</h2>
         <form onSubmit={handleSubmit} className={styles.searchForm}>
-          <input type="text" name="originLocationCode" placeholder="Origin" value={formData.originLocationCode} onChange={handleChange} required />
-          <input type="text" name="destinationLocationCode" placeholder="Destination" value={formData.destinationLocationCode} onChange={handleChange} required />
-          <input type="date" name="departureDate" value={formData.departureDate} onChange={handleChange} required />
-          <input type="date" name="returnDate" value={formData.returnDate} onChange={handleChange} />
-          <input type="number" name="adults" placeholder="Adults" value={formData.adults} onChange={handleChange} min="1" required />
-          <input type="number" name="children" placeholder="Children" value={formData.children} onChange={handleChange} min="0" />
-          <input type="number" name="infants" placeholder="Infants" value={formData.infants} onChange={handleChange} min="0" />
+          <input type="text" name="originLocationCode" placeholder="Origin" value={formData.originLocationCode}
+                 onChange={handleChange} required/>
+          <input type="text" name="destinationLocationCode" placeholder="Destination"
+                 value={formData.destinationLocationCode} onChange={handleChange} required/>
+          <input type="date" name="departureDate" value={formData.departureDate} onChange={handleChange} required/>
+          <input type="date" name="returnDate" value={formData.returnDate} onChange={handleChange}/>
+          <input type="number" name="adults" placeholder="Adults" value={formData.adults} onChange={handleChange}
+                 min="1" required/>
+          <input type="number" name="children" placeholder="Children" value={formData.children} onChange={handleChange}
+                 min="0"/>
+          <input type="number" name="infants" placeholder="Infants" value={formData.infants} onChange={handleChange}
+                 min="0"/>
           <select name="travelClass" value={formData.travelClass} onChange={handleChange}>
             <option value="ECONOMY">Economy</option>
             <option value="PREMIUM_ECONOMY">Premium Economy</option>
             <option value="BUSINESS">Business</option>
             <option value="FIRST">First</option>
           </select>
-          <label>
-            Non-Stop
-            <input type="checkbox" name="nonStop" checked={formData.nonStop} onChange={handleChange} />
+          <label style={{color: 'black'}}>
+            Non-Stop:
+            <input type="checkbox" name="nonStop" checked={formData.nonStop} onChange={handleChange}/>
           </label>
-          <input type="number" name="maxPrice" placeholder="Max Price" value={formData.maxPrice} onChange={handleChange} />
+          <input type="number" name="maxPrice" placeholder="Max Price" value={formData.maxPrice}
+                 onChange={handleChange}/>
           <button type="submit">Search Flights</button>
         </form>
       </div>
