@@ -69,7 +69,8 @@ import PurchasedProducts from "./Components/PurchasedProducts/PurchasedProducts"
 //import { PurchasedProductsProvider } from "./Components/PurchasedProducts/PurchasedProductsContext";
 import CreateTransport from "./Components/Transport/CreateTransport";
 import EditTransport from "./Components/Transport/EditTransport";
-import DeleteTransport from "./Components/Transport/DeleteTransport";
+import BookTransport from "./Components/Transport/BookTransport";
+
 function App() {
   return (
     //<PurchasedProductsProvider>
@@ -145,7 +146,8 @@ function App() {
         <Route path="/PurchasedProducts" element={<PurchasedProducts />} />
         <Route path="/transportss/create-transport" element={<CreateTransport />} />
         <Route path="/transportss/edit-transport" element={<EditTransport />} />
-        <Route path="/transportss/delete-transport" element={<DeleteTransport />} /> 
+        <Route path="/transportss/book-transport" element={<BookTransport />} />
+        
               </Routes>
     </Router>
     //</PurchasedProductsProvider>       

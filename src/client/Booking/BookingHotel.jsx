@@ -114,7 +114,7 @@ const BookingHotel = () => {
   };
   const handleBooking = async() => {
     const params={
-      touristId: bookedBy,
+      touristid: bookedBy,
       hotelid: selectedOffer.hotelId,
       hotelName:selectedOffer.name,
       checkInDate: offerDetails.offers[0].checkInDate,

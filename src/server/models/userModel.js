@@ -24,7 +24,7 @@ const userModel = new mongoose.Schema(
     //Tourist
     nationality: String,
     employed: String,
-    wallet: { type: Number, default: 0 },
+    wallet: { type: Number, default: 0},
     walletcurrency: { type: String, default: "USD" },
     DOB: Date,
     age: Number,

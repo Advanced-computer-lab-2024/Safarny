@@ -42,7 +42,7 @@ const getAllBookingsByid = async (req, res) => {
       const touristId = req.params.touristId; // Retrieve touristId from URL parameter
   
       // Find all bookings for the specified touristId
-      const bookings = await HotelReservation.find({ touristId });
+      const bookings = await HotelReservation.find({ touristid:touristId });
   
       res.status(200).json(bookings);
     } catch (err) {
