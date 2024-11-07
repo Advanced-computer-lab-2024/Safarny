@@ -209,10 +209,10 @@ const Profile = () => {
       {userInfo.role === "Seller" && (
         <>
           <button onClick={handlePostClick} className={styles.postButton}>
-            Post
+            Add Product
           </button>
           <button onClick={handleSellerHomeClick} className={styles.postButton}>
-            Seller Home
+            My Products
           </button>
         </>
       )}
