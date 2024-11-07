@@ -10,9 +10,9 @@ const columns = [
   { field: 'username', headerName: 'Username', width: 130 },
   { field: 'email', headerName: 'Email', width: 150 },
   { field: 'nationality', headerName: 'Nationality', width: 130 },
+  { field: 'walletcurrency', headerName: 'Wallet Currency', width: 130},
   { field: 'mobile', headerName: 'Mobile', width: 130 },
   { field: 'employed', headerName: 'Employed', width: 90 },
-  { field: 'type', headerName: 'Type', width: 90 },
 ];
 
 export default function DataTable() {
@@ -28,9 +28,9 @@ export default function DataTable() {
           username: user.username,
           email: user.email,
           nationality: user.nationality,
+          walletcurrency: user.walletcurrency,
           mobile: user.mobile,
           employed: user.employed,
-          type: user.role,
         }));
         setRows(formattedRows);
       } catch (error) {
@@ -72,7 +72,7 @@ export default function DataTable() {
   // };
 
   return (
-    <Paper sx={{ height: 500, width: '100%' }}>
+    <Paper sx={{ height: 580, width: '100%' }}>
       <DataGrid
         rows={rows}
         columns={columns}

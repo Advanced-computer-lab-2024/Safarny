@@ -30,8 +30,8 @@ const columns = [
   { field: 'id', headerName: 'ID', width: 250 },
   { field: 'username', headerName: 'Username', width: 130 },
   { field: 'email', headerName: 'Email', width: 150 },
-  { field: 'PrevWork', headerName: 'PrevWork', width: 130 },
-  { field: 'YearOfExp', headerName: 'Year Of Exp', width: 130 },
+  { field: 'PrevWork', headerName: 'PrevWork', width: 135 },
+  { field: 'YearOfExp', headerName: 'Years of Exp.', width: 120 },
   { field: 'type', headerName: 'Type', width: 90 },
   { field: 'Status', headerName: 'Status', width: 110 },
   {
@@ -47,7 +47,7 @@ const columns = [
   {
     field: 'certificateFile',
     headerName: 'Certificate File',
-    width: 130,
+    width: 190,
     renderCell: (params) => (
       <Button variant="outlined" color="primary" onClick={() => handleView2(params.row.email)}>
         View Certificate
@@ -118,7 +118,7 @@ export default function DataTable2() {
   };
 
   return (
-    <Paper sx={{ height: 500, width: '100%' }}>
+    <Paper sx={{ height: 575, width: '100%' }}>
       <DataGrid
         rows={rows}
         columns={columns}

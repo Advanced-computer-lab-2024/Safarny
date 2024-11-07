@@ -46,7 +46,7 @@ const columns = [
   {
     field: 'Tax Card File',
     headerName: 'Tax Card File',
-    width: 130,
+    width: 178,
     renderCell: (params) => (
       <Button variant="outlined" color="primary" onClick={() => handleView2(params.row.email)}>
         View Tax Card
@@ -112,7 +112,7 @@ export default function DataTable3() {
   };
 
   return (
-    <Paper sx={{ height: 500, width: '100%' }}>
+    <Paper sx={{ height: 575, width: '100%' }}>
       <DataGrid
         rows={rows}
         columns={columns}

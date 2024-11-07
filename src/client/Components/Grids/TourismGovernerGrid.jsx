@@ -6,9 +6,8 @@ import axios from 'axios';
 
 // Define the columns without TypeScript typing
 const columns = [
-    { field: 'id', headerName: 'ID', width: 350 },
-    { field: 'username', headerName: 'Username', width: 200 },
-    { field: 'type', headerName: 'Type', width: 250 },
+    { field: 'id', headerName: 'ID', width: 250 },
+    { field: 'username', headerName: 'Username', width: 150 },
     { field: 'email', headerName: 'Email', width: 250 },
     { field: 'password', headerName: 'Password', width: 250 },
 ];

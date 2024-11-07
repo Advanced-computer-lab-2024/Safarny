@@ -11,9 +11,9 @@ import TextField from '@mui/material/TextField';
 const columns = [
   { field: 'id', headerName: 'ID', width: 250 },
   { field: 'username', headerName: 'Username', width: 130 },
-  { field: 'email', headerName: 'Email', width: 150 },
+  { field: 'email', headerName: 'Email', width: 180 },
   { field: 'type', headerName: 'Type', width: 90 },
-  { field: 'password', headerName: 'Password', width: 90 },
+  { field: 'password', headerName: 'Password', width: 130 },
 ];
 
 export default function DataTable() {
@@ -82,7 +82,7 @@ export default function DataTable() {
   }
 
   return (
-    <Paper sx={{ height: 500, width: '100%' }}>
+    <Paper sx={{ height: 575, width: '100%' }}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -96,24 +96,23 @@ export default function DataTable() {
       />
       {selectedRows.length > 0 && (
           <div>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={handleDelete}
-              sx={{ marginTop: 2 }}
-            >
-              Delete Selected
-            </Button>
+              <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleDelete}
+                  sx={{ marginTop: 2, marginRight: 1 }}
+              >
+                  Delete Selected
+              </Button>
 
-            
-            <Button
-            variant="contained"
-            color="error"
-            onClick={handleOpen}
-            sx={{ marginTop: 2 }}
-          >
-            Update Selected
-          </Button>
+              <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleOpen}
+                  sx={{ marginTop: 2 }}
+              >
+                  Update Selected
+              </Button>
         </div>
       )}
 
