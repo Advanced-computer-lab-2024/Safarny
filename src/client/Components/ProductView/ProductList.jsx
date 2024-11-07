@@ -9,8 +9,9 @@ import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 const ProductList = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { userId } = location.state || {};
+  const { userId: initialUserId } = location.state || {};
 
+  const [userId, setUserId] = useState(initialUserId || localStorage.getItem('userId'));
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -22,8 +23,6 @@ const ProductList = () => {
   const [exchangeRates, setExchangeRates] = useState({});
   const [wallet, setWallet] = useState(0);
   const [walletCurrency, setWalletCurrency] = useState('EGP');
-
-  const touristId = userId || localStorage.getItem('userId');
   const [userRole, setUserRole] = useState('');
 
   const fetchExchangeRates = async () => {
@@ -43,7 +42,7 @@ const ProductList = () => {
   };
 
   useEffect(() => {
-    if (!touristId) {
+    if (!userId) {
       console.error('User ID is undefined');
       return;
     }
@@ -69,7 +68,7 @@ const ProductList = () => {
 
     const fetchUserRole = async () => {
       try {
-        const response = await axios.get(`/tourist/${touristId}`);
+        const response = await axios.get(`/tourist/${userId}`);
         const user = response.data;
         setUserRole(user.role);
         setWallet(user.wallet);
@@ -84,12 +83,12 @@ const ProductList = () => {
     fetchProducts();
     fetchUserRole();
     fetchExchangeRates();
-  }, [touristId]);
+  }, [userId]);
 
   const handleAddToWishlist = async (postId) => {
     try {
       console.log('Adding post to wishlist:', postId);
-      const response = await axios.post('/wishlist/add', { userId: touristId, postId });
+      const response = await axios.post('/wishlist/add', { userId, postId });
       alert('Post added to wishlist');
     } catch (err) {
       console.error('Error adding post to wishlist:', err);
@@ -98,7 +97,7 @@ const ProductList = () => {
   };
 
   const handleNavigate = (path) => {
-    navigate(path, { state: { userId: touristId } });
+    navigate(path, { state: { userId } });
   };
 
   const handleBuyButtonClick = async (product) => {
@@ -110,16 +109,15 @@ const ProductList = () => {
 
     try {
       console.log("userid: ", userId);
-      console.log("touristid: ", touristId);
       const updatedProduct = { ...product, quantity: product.quantity - 1 };
       await axios.put(`/admin/products/${product._id}`, updatedProduct);
 
-      const profileResponse = await axios.get(`http://localhost:3000/tourist/${touristId}`);
+      const profileResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
       const currentPosts = profileResponse.data.posts || [];
       const updatedPosts = [...currentPosts, product._id];
 
-      await axios.put(`http://localhost:3000/tourist/${touristId}`, {
-        id: touristId,
+      await axios.put(`http://localhost:3000/tourist/${userId}`, {
+        id: userId,
         posts: updatedPosts,
         wallet: wallet - convertedPrice, // Update the wallet amount in the database
       });
@@ -129,6 +127,11 @@ const ProductList = () => {
     } catch (err) {
       console.error('Error updating product status:', err);
     }
+  };
+
+  const handleClick = () => {
+    console.log(userId);
+    navigate("/PurchasedProducts", { state: { userId } });
   };
 
   const filteredProducts = products.filter(product => {
@@ -166,7 +169,7 @@ const ProductList = () => {
 
       <button
         className={styles.viewPurchasedButton}
-        onClick={() => navigate(`/PurchasedProducts?userId=${touristId}`)}
+        onClick={handleClick}
       >
         View Purchased Products
       </button>
