@@ -3,7 +3,7 @@ import styles from "./UpcomingItinerary.module.css";
 import Logo from "/src/client/Assets/Img/logo.png";
 import Footer from "/src/client/components/Footer/Footer";
 import { Link ,useLocation, useNavigate} from "react-router-dom";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import {CircularProgress, FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 
 import Header from "/src/client/Components/Header/Header";
 import axios from 'axios';
@@ -16,6 +16,7 @@ const UpcomingItineraries = () => {
   const [date, setDate] = useState("");
   const [preferences, setPreferences] = useState([]);
   const [language, setLanguage] = useState("");
+  const [loading, setLoading] = useState(true);
   const [availableTags, setAvailableTags] = useState([]);
   const [selectedCurrency, setSelectedCurrency] = useState('EGP');
   const [exchangeRates, setExchangeRates] = useState({});
@@ -129,6 +130,7 @@ const fetchUserRole = async () => {
   
   useEffect(() => {
     const fetchFilteredItineraries = async (whichResponse) => {
+      setLoading(true);
       try {
         const queryParams = new URLSearchParams({
           sortBy: `${sortCriteria}:asc`,
@@ -163,6 +165,8 @@ const fetchUserRole = async () => {
         }
       } catch (error) {
         console.error("Error fetching itineraries:", error);
+      } finally {
+        setLoading(false);
       }
     };
   
@@ -172,8 +176,21 @@ const fetchUserRole = async () => {
     
     // Ensure dependencies include userRole and any variables affecting filtering
   }, [sortCriteria, budget, date, preferences, language, userRole]);
-  
 
+  if (loading) {
+    return (
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%',
+          marginLeft: '700px'
+        }}>
+          <span style={{marginRight: '10px'}}>Loading Itineraries...</span>
+          <CircularProgress/>
+        </div>
+    );
+  }
   return (
       <div className={styles.container}>
         <Header />

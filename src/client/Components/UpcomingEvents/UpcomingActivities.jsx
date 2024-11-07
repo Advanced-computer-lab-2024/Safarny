@@ -173,7 +173,7 @@ const UpcomingActivities = () => {
           justifyContent: 'center',
           alignItems: 'center',
           height: '100%',
-          marginLeft: '740px'
+          marginLeft: '700px'
         }}>
           <span style={{marginRight: '10px'}}>Loading Activities...</span>
           <CircularProgress/>
