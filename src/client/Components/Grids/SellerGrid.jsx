@@ -3,6 +3,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import axios from 'axios';
+import { CircularProgress } from '@mui/material';
 
 const handleView1 = async (email) => {
   try {
@@ -38,9 +39,9 @@ const columns = [
     headerName: 'ID File',
     width: 130,
     renderCell: (params) => (
-      <Button variant="outlined" color="primary" onClick={() => handleView1(params.row.email)}>
-        View ID
-      </Button>
+        <Button variant="outlined" color="primary" onClick={() => handleView1(params.row.email)}>
+          View ID
+        </Button>
     ),
   },
   {
@@ -48,16 +49,17 @@ const columns = [
     headerName: 'Tax Card File',
     width: 178,
     renderCell: (params) => (
-      <Button variant="outlined" color="primary" onClick={() => handleView2(params.row.email)}>
-        View Tax Card
-      </Button>
+        <Button variant="outlined" color="primary" onClick={() => handleView2(params.row.email)}>
+          View Tax Card
+        </Button>
     ),
   },
 ];
 
 export default function DataTable3() {
-  const [rows, setRows] = useState([]);  // Remove typing annotations
-  const [selectedRows, setSelectedRows] = useState([]);  // Remove typing annotations
+  const [rows, setRows] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,6 +77,8 @@ export default function DataTable3() {
         setRows(formattedRows);
       } catch (error) {
         console.error('Error fetching users:', error);
+      } finally {
+        setLoading(false); // Set loading to false after data is fetched
       }
     };
 
@@ -84,9 +88,9 @@ export default function DataTable3() {
   const handleDelete = async () => {
     try {
       await Promise.all(
-        selectedRows.map(rowId =>
-          axios.delete(`http://localhost:3000/admin/deleteUser/${rowId}`)
-        )
+          selectedRows.map(rowId =>
+              axios.delete(`http://localhost:3000/admin/deleteUser/${rowId}`)
+          )
       );
       // Refetch data or update state to remove deleted rows
       setRows(rows.filter(row => !selectedRows.includes(row.id)));
@@ -99,9 +103,9 @@ export default function DataTable3() {
   const handleUpdate = async () => {
     try {
       await Promise.all(
-        selectedRows.map(rowId => 
-          axios.put(`http://localhost:3000/admin/updateUserStatus/${rowId}`, { Status: "Accepted" })
-        )
+          selectedRows.map(rowId =>
+              axios.put(`http://localhost:3000/admin/updateUserStatus/${rowId}`, { Status: "Accepted" })
+          )
       );
       // Optionally refetch data or update the state
       setRows(rows.map(row => selectedRows.includes(row.id) ? { ...row, Status: "Accepted" } : row));
@@ -112,38 +116,46 @@ export default function DataTable3() {
   };
 
   return (
-    <Paper sx={{ height: 575, width: '100%' }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        getRowId={(row) => row.id}
-        pageSizeOptions={[5, 10]}
-        checkboxSelection
-        onRowSelectionModelChange={(newSelection) => {
-          setSelectedRows(newSelection);
-        }}
-        sx={{ border: 0 }}
-      />
-      {selectedRows.length > 0 && (
-        <div>
-        <Button
-          variant="contained"
-          color="error"
-          onClick={handleDelete}
-          sx={{ marginTop: 2 }}
-        >
-          Delete Selected
-        </Button>
-        <Button
-        variant="contained"
-        color="success"
-        onClick={handleUpdate}
-        sx={{ marginTop: 2 }}
-        >
-        Accept into system
-      </Button>
-      </div>
-      )}
-    </Paper>
+      <Paper sx={{ height: 575, width: '100%' }}>
+        <DataGrid
+            rows={rows}
+            columns={columns}
+            getRowId={(row) => row.id}
+            pageSizeOptions={[5, 10]}
+            checkboxSelection
+            onRowSelectionModelChange={(newSelection) => {
+              setSelectedRows(newSelection);
+            }}
+            sx={{ border: 0 }}
+            loading={loading} // Use loading prop
+            components={{
+              NoRowsOverlay: () => (
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                    <CircularProgress />
+                  </div>
+              ),
+            }}
+        />
+        {selectedRows.length > 0 && (
+            <div>
+              <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleDelete}
+                  sx={{ marginTop: 2 }}
+              >
+                Delete Selected
+              </Button>
+              <Button
+                  variant="contained"
+                  color="success"
+                  onClick={handleUpdate}
+                  sx={{ marginTop: 2 }}
+              >
+                Accept into system
+              </Button>
+            </div>
+        )}
+      </Paper>
   );
 }

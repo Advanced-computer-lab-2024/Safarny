@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import axios from 'axios';
 import { storage } from '../../../server/config/Firebase';
 import { ref, getDownloadURL } from "firebase/storage";
+import { CircularProgress } from '@mui/material';
 
 const handleView1 = async (email) => {
     try {
@@ -59,8 +60,9 @@ const columns = [
 ];
 
 export default function DataTable4() {
-    const [rows, setRows] = useState([]);  // Remove typing annotations
-    const [selectedRows, setSelectedRows] = useState([]);  // Remove typing annotations
+    const [rows, setRows] = useState([]);
+    const [selectedRows, setSelectedRows] = useState([]);
+    const [loading, setLoading] = useState(true); // Add loading state
 
     useEffect(() => {
         const fetchData = async () => {
@@ -79,6 +81,8 @@ export default function DataTable4() {
                 setRows(formattedRows);
             } catch (error) {
                 console.error('Error fetching users:', error);
+            } finally {
+                setLoading(false); // Set loading to false after data is fetched
             }
         };
 
@@ -92,9 +96,8 @@ export default function DataTable4() {
                     axios.delete(`http://localhost:3000/admin/deleteUser/${rowId}`)
                 )
             );
-            // Refetch data or update state to remove deleted rows
             setRows(rows.filter(row => !selectedRows.includes(row.id)));
-            setSelectedRows([]); // Clear selection after deletion
+            setSelectedRows([]);
         } catch (error) {
             console.error('Error deleting users:', error);
         }
@@ -107,9 +110,8 @@ export default function DataTable4() {
                     axios.put(`http://localhost:3000/admin/updateUserStatus/${rowId}`, { Status: "Accepted" })
                 )
             );
-            // Optionally refetch data or update the state
             setRows(rows.map(row => selectedRows.includes(row.id) ? { ...row, Status: "Accepted" } : row));
-            setSelectedRows([]); // Clear selection after update
+            setSelectedRows([]);
         } catch (error) {
             console.error('Error updating users:', error);
         }
@@ -127,6 +129,14 @@ export default function DataTable4() {
                     setSelectedRows(newSelection);
                 }}
                 sx={{ border: 0 }}
+                loading={loading} // Use loading prop
+                components={{
+                    NoRowsOverlay: () => (
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                            <CircularProgress />
+                        </div>
+                    ),
+                }}
             />
             {selectedRows.length > 0 && (
                 <div>

@@ -3,6 +3,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import axios from 'axios';
+import { CircularProgress } from '@mui/material';
 
 // Define the columns without TypeScript typing
 const columns = [
@@ -16,8 +17,9 @@ const columns = [
 ];
 
 export default function DataTable() {
-  const [rows, setRows] = useState([]);  // Remove typing annotations
-  const [selectedRows, setSelectedRows] = useState([]);  // Remove typing annotations
+  const [rows, setRows] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,6 +37,8 @@ export default function DataTable() {
         setRows(formattedRows);
       } catch (error) {
         console.error('Error fetching users:', error);
+      } finally {
+        setLoading(false); // Set loading to false after data is fetched
       }
     };
 
@@ -44,9 +48,9 @@ export default function DataTable() {
   const handleDelete = async () => {
     try {
       await Promise.all(
-        selectedRows.map(rowId =>
-          axios.delete(`http://localhost:3000/admin/deleteUser/${rowId}`)
-        )
+          selectedRows.map(rowId =>
+              axios.delete(`http://localhost:3000/admin/deleteUser/${rowId}`)
+          )
       );
       // Refetch data or update state to remove deleted rows
       setRows(rows.filter(row => !selectedRows.includes(row.id)));
@@ -56,47 +60,39 @@ export default function DataTable() {
     }
   };
 
-  // const handleUpdate = async () => {
-  //   try {
-  //     await Promise.all(
-  //       selectedRows.map(rowId => 
-  //         axios.put(`http://localhost:3000/admin/updateUserStatus/${rowId}`, { Status: "Accepted" })
-  //       )
-  //     );
-  //     // Optionally refetch data or update the state
-  //     setRows(rows.map(row => selectedRows.includes(row.id) ? { ...row, Status: "Accepted" } : row));
-  //     setSelectedRows([]); // Clear selection after update
-  //   } catch (error) {
-  //     console.error('Error updating users:', error);
-  //   }
-  // };
-
   return (
-    <Paper sx={{ height: 580, width: '100%' }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        getRowId={(row) => row.id}
-        pageSizeOptions={[5, 10]}
-        checkboxSelection
-        onRowSelectionModelChange={(newSelection) => {
-          setSelectedRows(newSelection);
-        }}
-        sx={{ border: 0 }}
-      />
-      {selectedRows.length > 0 && (
-        <div>
-        <Button
-          variant="contained"
-          color="error"
-          onClick={handleDelete}
-          sx={{ marginTop: 2 }}
-        >
-          Delete Selected
-        </Button>
-
-      </div>
-      )}
-    </Paper>
+      <Paper sx={{ height: 580, width: '100%' }}>
+        <DataGrid
+            rows={rows}
+            columns={columns}
+            getRowId={(row) => row.id}
+            pageSizeOptions={[5, 10]}
+            checkboxSelection
+            onRowSelectionModelChange={(newSelection) => {
+              setSelectedRows(newSelection);
+            }}
+            sx={{ border: 0 }}
+            loading={loading} // Use loading prop
+            components={{
+              NoRowsOverlay: () => (
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                    <CircularProgress />
+                  </div>
+              ),
+            }}
+        />
+        {selectedRows.length > 0 && (
+            <div>
+              <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleDelete}
+                  sx={{ marginTop: 2 }}
+              >
+                Delete Selected
+              </Button>
+            </div>
+        )}
+      </Paper>
   );
 }

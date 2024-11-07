@@ -3,6 +3,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import axios from 'axios';
+import { CircularProgress } from '@mui/material';
 
 // Define the columns without TypeScript typing
 const columns = [
@@ -13,8 +14,9 @@ const columns = [
 ];
 
 export default function DataTable5() {
-    const [rows, setRows] = useState([]);  // Remove typing annotations
-    const [selectedRows, setSelectedRows] = useState([]);  // Remove typing annotations
+    const [rows, setRows] = useState([]);
+    const [selectedRows, setSelectedRows] = useState([]);
+    const [loading, setLoading] = useState(true); // Add loading state
 
     useEffect(() => {
         const fetchData = async () => {
@@ -32,6 +34,8 @@ export default function DataTable5() {
                 setRows(formattedRows);
             } catch (error) {
                 console.error('Error fetching users:', error);
+            } finally {
+                setLoading(false); // Set loading to false after data is fetched
             }
         };
 
@@ -65,6 +69,14 @@ export default function DataTable5() {
                     setSelectedRows(newSelection);
                 }}
                 sx={{ border: 0 }}
+                loading={loading} // Use loading prop
+                components={{
+                    NoRowsOverlay: () => (
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                            <CircularProgress />
+                        </div>
+                    ),
+                }}
             />
             {selectedRows.length > 0 && (
                 <div>
