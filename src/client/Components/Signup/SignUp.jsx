@@ -11,7 +11,7 @@ const countries = [
   "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
   "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia",
   "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cape Verde", "Cambodia",
-  "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo, Democratic Republic of the Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica",
+  "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Democratic Republic of the Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica",
   "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia",
   "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea",
   "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Occupied Palestine",
@@ -165,7 +165,7 @@ const SignUp = () => {
       <div className={styles.container}>
         <Header />
         <div className={styles.formContainer}>
-          <h2>Sign Up</h2>
+          <h2 style={{color: 'white', fontWeight: 'bold', marginRight: '20px'}}>Sign Up</h2>
           {success && <p className={styles.successMessage}>Sign up successful!</p>}
           {error && <p className={styles.errorMessage}>{error}</p>}
           <form onSubmit={handleSubmit} className={styles.form}>
@@ -259,7 +259,8 @@ const SignUp = () => {
               <div className={styles.termsText}>
                 <ul>
                   <p>
-                  <span onClick={() => handleNavigate('/terms')} style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}>
+                  <span onClick={() => handleNavigate('/terms')}
+                        style={{cursor: 'pointer', color: 'blue', textDecoration: 'underline'}}>
                     Click here for the terms and conditions.
                   </span>
                   </p>
@@ -269,7 +270,7 @@ const SignUp = () => {
             <button type="submit" className={styles.submitButton}>Sign Up</button>
           </form>
         </div>
-        <Footer />
+        <Footer/>
       </div>
   );
 };

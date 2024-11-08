@@ -180,7 +180,7 @@ const SignUpExtra = () => {
     <div className={styles.container}>
       <Header />
       <div className={styles.formContainer}>
-        <h2>Sign Up Extra</h2>
+        <h2 style={{color: 'white', fontWeight: 'bold'}}>Sign Up Extra</h2>
         {success && <p className={styles.successMessage}>Sign up successful!</p>}
         {error && <p className={styles.errorMessage}>{error}</p>}
         <form onSubmit={handleSubmit} className={styles.form}>
@@ -245,32 +245,32 @@ const SignUpExtra = () => {
               </label>
           )}
 
-        {userType=="TourGuide" && (
-            <label>
-              Upload Id File:
-              <input type="file" accept="pdf" onChange={handleFileChange(setIdFile)} required />
-            </label>
+          {userType == "TourGuide" && (
+              <label>
+                Upload Id File:
+                <input type="file" accept="pdf" onChange={handleFileChange(setIdFile)} required/>
+              </label>
           )}
 
-        {userType=="TourGuide" && (
-            <label>
-              Upload Certificate:
-              <input type="file" accept="pdf" onChange={handleFileChange(setCertificateFile)} required />
-            </label>
+          {userType == "TourGuide" && (
+              <label>
+                Upload Certificate:
+                <input type="file" accept="pdf" onChange={handleFileChange(setCertificateFile)} required/>
+              </label>
           )}
 
-        {(userType=="Advertiser" || userType=="Seller") && (
-            <label>
-              Upload Id File:
-              <input type="file" accept="pdf" onChange={handleFileChange(setIdFile)} required />
-            </label>
+          {(userType == "Advertiser" || userType == "Seller") && (
+              <label>
+                Upload Id File:
+                <input type="file" accept="pdf" onChange={handleFileChange(setIdFile)} required/>
+              </label>
           )}
 
-        {(userType=="Advertiser" || userType=="Seller") && (
-            <label>
-              Upload Tax Registration Card:
-              <input type="file" accept="pdf" onChange={handleFileChange(setTaxCardFile)} required />
-            </label>
+          {(userType == "Advertiser" || userType == "Seller") && (
+              <label>
+                Upload Tax Registration Card:
+                <input type="file" accept="pdf" onChange={handleFileChange(setTaxCardFile)} required/>
+              </label>
           )}
 
           {textBoxes[0] && (

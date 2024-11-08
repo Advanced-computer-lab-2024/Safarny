@@ -18,12 +18,12 @@ import {
 import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from '../../../server/config/Firebase';
-import Tags from './tagAdmin';
 import { Link, useNavigate , useLocation} from 'react-router-dom';
-import ActivityCategory from './ActivityCategory';
 import styles from './Admin.module.css';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/Components/Footer/Footer';
+import Tags from './tagAdmin';
+import ActivityCategory from './ActivityCategory';
 
 const Admin = () => {
   const location = useLocation();
@@ -51,6 +51,7 @@ const Admin = () => {
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   const [sortBy, setSortBy] = useState('');
+  const [selectedCurrency, setSelectedCurrency] = useState(''); // Add selectedCurrency state
 
   //header items
   const [menuOpen, setMenuOpen] = useState(false);
@@ -71,7 +72,6 @@ const Admin = () => {
   }, [selectedSection]);
 
   useEffect(() => {
-
     const handleScroll = () => {
       const header = document.querySelector(`.${styles.header}`);
       if (window.scrollY > 50) {
@@ -96,13 +96,13 @@ const Admin = () => {
       console.error('Error fetching user role:', err);
     }
   };
+
   useEffect(() => {
-    console.log("id2",userId);
-    //console.log(userInfo.role);
     const fetchExchangeRates = async () => {
       try {
-        const response = await axios.get('https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP');
-        setCurrencyCodes(Object.keys(response.data.conversion_rates));
+        const response = await fetch('https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP');
+        const data = await response.json();
+        setCurrencyCodes(Object.keys(data.conversion_rates));
       } catch (error) {
         console.error('Error fetching exchange rates:', error);
       }
@@ -110,7 +110,6 @@ const Admin = () => {
 
     fetchExchangeRates();
     fetchUserRole();
-
   }, []);
 
   const fetchPosts = async () => {
@@ -208,6 +207,7 @@ const Admin = () => {
       setErrorMessage('Failed to delete post');
     }
   };
+
   const handleArchiveChange = async (postId) => {
     try {
       await axios.put(`/admin/products/${postId}`, { archived: true });
@@ -216,6 +216,7 @@ const Admin = () => {
       setErrorMessage('Failed to update archive status');
     }
   };
+
   const handleArchiveToggle = async (postId, isArchived) => {
     try {
       // Update the local state first
@@ -237,23 +238,14 @@ const Admin = () => {
     }
   };
 
-
-
   const filteredPosts = posts.filter((post) => {
     const matchesSearch = post.details.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesPrice =
         (minPrice === '' || post.price >= minPrice) &&
         (maxPrice === '' || post.price <= maxPrice);
-    return matchesSearch && matchesPrice;
+    const matchesCurrency = selectedCurrency === '' || post.currency === selectedCurrency;
+    return matchesSearch && matchesPrice && matchesCurrency;
   });
-  const handleUpcomingItinerariesClick = () => {
-    navigate("/UpcomingItineraries", { state: { userId } });
-  };
-  const handleUpcomingActivitiesClick = () => {
-    navigate("/UpcomingActivites", { state: { userId } });
-  };
-
-
 
   const sortedPosts = [...filteredPosts].sort((a, b) => {
     if (sortBy === 'rating') {
@@ -278,19 +270,12 @@ const Admin = () => {
             <button onClick={() => setSelectedSection('ActivityCategory')} className={styles.button}>Manage Categories</button>
             <Link to="/adminaddgovernor"  className={styles.button}>Add Governor</Link>
             <Link to="/adminviewcomplaints" className={styles.button}>View Complaints</Link>
-            <button onClick={handleUpcomingItinerariesClick} className={styles.button}>
-              View Itineraries
-            </button>
-            <button onClick={handleUpcomingActivitiesClick} className={styles.button}>
-              View Activities
-            </button>
           </nav>
         </header>
         <SideBar className={styles.sidebar} />
         <div className={styles.content}>
           <div className={styles.allFilters}>
             {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
-
 
             <TextField
                 label="Search by Name"
@@ -324,6 +309,19 @@ const Admin = () => {
                 />
               </div>
             </div>
+
+            {/*<FormControl fullWidth margin="normal">*/}
+            {/*  <InputLabel>Currency</InputLabel>*/}
+            {/*  <Select*/}
+            {/*      value={selectedCurrency}*/}
+            {/*      onChange={(e) => setSelectedCurrency(e.target.value)}*/}
+            {/*  >*/}
+            {/*    <MenuItem value="">All</MenuItem>*/}
+            {/*    {currencyCodes.map((code) => (*/}
+            {/*        <MenuItem key={code} value={code}>{code}</MenuItem>*/}
+            {/*    ))}*/}
+            {/*  </Select>*/}
+            {/*</FormControl>*/}
 
             <TextField
                 label="Sort By Rating"
@@ -403,6 +401,7 @@ const Admin = () => {
         <Modal open={openModal} onClose={handleCloseModal}>
           <div className={styles.modalOverlay}>
             <div className={styles.modal}>
+              <button className={styles.closeButton} onClick={handleCloseModal}>X</button>
               <Typography variant="h6">{editingPostId ? 'Edit Post' : 'Add New Post'}</Typography>
               <TextField
                   fullWidth

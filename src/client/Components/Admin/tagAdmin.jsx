@@ -39,7 +39,7 @@ const Tags = () => {
 
     return (
         <div>
-            <h1>Tags</h1>
+            <h1 style={{color: 'black'}}>Tags</h1>
             {message && <p>{message}</p>}
             <Link to="/createtags">
                 <button>Create New Tag</button>
@@ -59,7 +59,7 @@ const Tags = () => {
                         <td>{tag.name}</td>
                         <td>
                             <Link to={`/editTags/${tag._id}`}>
-                                <button>Edit</button>
+                                <button style={{marginRight: '10px'}}>Edit</button>
                             </Link>
                             <button onClick={() => handleDelete(tag._id)}>Delete</button>
                         </td>

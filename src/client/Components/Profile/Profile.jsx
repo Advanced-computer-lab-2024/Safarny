@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { FaBell } from "react-icons/fa"; // Import the notification bell icon
 import styles from "./Profile.module.css";
 import Footer from "/src/client/components/Footer/Footer";
 import Header from "/src/client/components/Header/Header";
@@ -123,12 +124,14 @@ const Profile = () => {
 
   const handleMyBookingsClick = () => {
     navigate("/mybookings", { state: { userId } });
-  }
+  };
 
   return (
     <div className={styles.container}>
       <Header />
-
+      <button className={styles.notificationButton}>
+        <FaBell />
+      </button>
       <main className={styles.main}>
         <section className={styles.intro}>
           <h1>Welcome, {userInfo.username}!</h1>
@@ -159,20 +162,6 @@ const Profile = () => {
           )}
         </section>
       </main>
-      {userInfo.role === "Tourist" && (
-        <div className={styles.loyaltyBadge}>
-          <p>Badge: </p>
-          {userInfo.loyaltyLevel === "level 1" && (
-            <img src="src\client\Assets\Img\rank1.jpg" alt="Rank 1 Badge" className={styles.rankBadge} />
-          )}
-          {userInfo.loyaltyLevel === "level 2" && (
-            <img src="src\client\Assets\Img\rank2.jpg" alt="Rank 2 Badge" className={styles.rankBadge} />
-          )}
-          {userInfo.loyaltyLevel === "level 3" && (
-            <img src="src\client\Assets\Img\rank3.jpg" alt="Rank 3 Badge" className={styles.rankBadge} />
-          )}
-        </div>
-      )}
 
       <div className={styles.buttonContainer}>
         <button
@@ -205,6 +194,32 @@ const Profile = () => {
           </button>
         </>
       )}
+      {userInfo.role === "Tourist" && (
+        <div className={styles.loyaltyBadge}>
+          <p>Badge: </p>
+          {userInfo.loyaltyLevel === "level 1" && (
+            <img
+              src="src\client\Assets\Img\rank1.jpg"
+              alt="Rank 1 Badge"
+              className={styles.rankBadge}
+            />
+          )}
+          {userInfo.loyaltyLevel === "level 2" && (
+            <img
+              src="src\client\Assets\Img\rank2.jpg"
+              alt="Rank 2 Badge"
+              className={styles.rankBadge}
+            />
+          )}
+          {userInfo.loyaltyLevel === "level 3" && (
+            <img
+              src="src\client\Assets\Img\rank3.jpg"
+              alt="Rank 3 Badge"
+              className={styles.rankBadge}
+            />
+          )}
+        </div>
+      )}
 
       {userInfo.role === "Tourist" && (
         <>
@@ -223,10 +238,10 @@ const Profile = () => {
       {userInfo.role === "Seller" && (
         <>
           <button onClick={handlePostClick} className={styles.postButton}>
-            Post
+            Add Product
           </button>
           <button onClick={handleSellerHomeClick} className={styles.postButton}>
-            Seller Home
+            My Products
           </button>
         </>
       )}

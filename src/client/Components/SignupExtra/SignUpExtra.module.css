@@ -24,3 +24,7 @@
   margin-bottom: 15px;
 }
 
+.whiteBoldText {
+  color: white;
+  font-weight: bold;
+}

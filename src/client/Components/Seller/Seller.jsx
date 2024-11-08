@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage } from "../../server/config/Firebase";
+import { storage } from "/src/server/config/Firebase";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Admin = () => {
