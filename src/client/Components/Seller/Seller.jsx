@@ -13,6 +13,7 @@ import axios from "axios";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "/src/server/config/Firebase";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+//import styles from './Seller.module.css';
 
 const Admin = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -264,7 +265,7 @@ const Admin = () => {
                         >
                           Edit
                         </Button>
-                        <label>
+                        <label style={{ color: 'black' }}>
                           <input
                               type="checkbox"
                               checked={post.archived}

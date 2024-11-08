@@ -25,6 +25,7 @@ import Footer from '/src/client/Components/Footer/Footer';
 import Tags from './tagAdmin';
 import ActivityCategory from './ActivityCategory';
 
+
 const Admin = () => {
   const location = useLocation();
   const { userId } = location.state || {};
@@ -358,16 +359,16 @@ const Admin = () => {
                             <div className={styles.cardImage}>
                               <img src={post.imageurl} alt="Image"/>
                             </div>
-                            <label style={{color: 'black'}}>Archive:</label>
-                            <div style={{marginTop: '1px'}}>
-                              <label style={{color: 'black'}}>
-                                <input
-                                    type="checkbox"
-                                    checked={post.archived}
-                                    onChange={(e) => handleArchiveToggle(post._id, e.target.checked)}
-                                />
-                              </label>
-                            </div>
+                            <label className="label-black">Archive:</label>
+<div className="checkbox-container">
+  <label className="label-black">
+    <input
+      type="checkbox"
+      checked={post.archived}
+      onChange={(e) => handleArchiveToggle(post._id, e.target.checked)}
+    />
+  </label>
+</div>
                           </CardContent>
                           <CardActions>
                             <Button
