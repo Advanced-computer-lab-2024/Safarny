@@ -7,7 +7,7 @@ const Posts = new mongoose.Schema(
     currency: String,
     quantity: Number,
     imageurl: String,
-    review: {
+    reviews: {
       type: [String],
       default: [], // Set initial value to an empty array
     },
@@ -16,6 +16,7 @@ const Posts = new mongoose.Schema(
       type: Boolean,
       default: false, // Set initial value to false
     },
+
     archived: {
       type: Boolean,
       default: false, // Set initial value to false
