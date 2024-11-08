@@ -303,7 +303,7 @@ const UpcomingActivities = () => {
                         <p style={{color: activity.bookingOpen ? "green" : "red"}}>
                           {activity.bookingOpen ? "Booking: Open" : "Booking: Closed"}
                         </p>
-                        <p>
+                        <div className={styles.buttonContainers}>
                           <button
                               onClick={() => navigator.clipboard.writeText(`${window.location.origin}/UpcomingActivities/${activity._id}`)}
                               className={styles.cardButton} >
@@ -311,7 +311,7 @@ const UpcomingActivities = () => {
                           </button>
                           <button onClick={() => handleUpcomingActivitiesDetails(activity._id)}
                                   className={styles.cardButton} >
-                            View Details
+                            Details
                           </button>
                           <button
                               onClick={() => window.location.href = `mailto:?subject=Check out this historical place&body=${window.location.origin}/UpcomingActivities/${activity._id}`}
@@ -323,7 +323,7 @@ const UpcomingActivities = () => {
                           Book
                         </button>
                       )}
-                        </p>
+                        </div>
 
                         <div className={styles.mapContainer}>
                           <MapContainer center={[activity.coordinates.lat || 51.505, activity.coordinates.lng || -0.09]}
