@@ -286,7 +286,7 @@ const UpdateProfile = () => {
               {/* Render role-specific fields */}
               {renderRoleSpecificFields(userInfo.role, userInfo)}
 
-              <button type="submit" className={styles.button}>
+              <button type="submit" className={`${styles.button} ${styles.greenButton}`}>
                 Update Profile
               </button>
             </form>
@@ -294,7 +294,7 @@ const UpdateProfile = () => {
         )}
       </main>
 
-      <Footer />
+      <Footer/>
     </div>
   );
 };
