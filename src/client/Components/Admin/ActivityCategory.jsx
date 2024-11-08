@@ -39,7 +39,7 @@ const ActivityCategory = () => {
 
     return (
         <div>
-            <h1>categories</h1>
+            <h1 style={{color: 'black'}}>Categories</h1>
             {message && <p>{message}</p>}
             <Link to="/createcategory">
                 <button>Create New Category</button>
@@ -59,7 +59,7 @@ const ActivityCategory = () => {
                         <td>{ActivityCategory.type}</td>
                         <td>
                             <Link to={`/editcategory/${ActivityCategory._id}`}>
-                                <button>Edit</button>
+                                <button style={{marginRight: '10px'}}>Edit</button>
                             </Link>
                             <button onClick={() => handleDelete(ActivityCategory._id)}>Delete</button>
                         </td>
