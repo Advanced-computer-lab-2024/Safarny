@@ -134,7 +134,7 @@ const AdminViewComplaints = () => {
     return (
         <div>
             <h2>All Complaints</h2>
-            <div>
+            <div className="select">
                 <label>Sort by date: </label>
                 <select value={sortOrder} onChange={handleSortChange}>
                     <option value="asc">Ascending</option>

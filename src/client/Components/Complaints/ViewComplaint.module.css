@@ -69,3 +69,8 @@
   margin-top: auto;
   margin-bottom: auto;
 }
+
+select {
+  min-width: 150px;
+  min-height: 50px;/* Adjust the width as needed */
+}
