@@ -140,4 +140,30 @@ p, h5 {
   cursor: pointer;
   display: flex;
   font-size: 24px;
+  margin-top: 15px;
+}
+
+@keyframes moveBell {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(5px); }
+  50% { transform: translateX(0); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+.notificationButton {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  background: black;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  font-size: 24px;
+  margin-top: 15px;
+  transition: transform 0.3s ease;
+}
+
+.notificationButton:hover {
+  animation: moveBell 0.5s;
 }
