@@ -25,27 +25,6 @@ const ProductList = () => {
   const [walletCurrency, setWalletCurrency] = useState('EGP');
   const [userRole, setUserRole] = useState('');
 
-  const handleArchiveToggle = async (productId, isArchived) => {
-    try {
-      // Update the local state first
-      setProducts(products.map(product =>
-        product._id === productId ? { ...product, archived: isArchived } : product
-      ));
-      console.log("Local state updated");
-
-      // Make a request to the server to update the archived status
-      await axios.put(`/admin/products/${productId}`, { archived: isArchived });
-      console.log("Archived status updated successfully");
-
-    } catch (error) {
-      console.error("Error updating archived status:", error);
-      // Optionally, revert the local state if the API call fails
-      setProducts(products.map(product =>
-        product._id === productId ? { ...product, archived: !isArchived } : product
-      ));
-    }
-  };
-
   const fetchExchangeRates = async () => {
     try {
       const response = await axios.get('https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP');
