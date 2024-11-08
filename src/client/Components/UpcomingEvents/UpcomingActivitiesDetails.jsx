@@ -3,7 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
-import styles from '/src/client/Components/HistoricalPlace/UpdateHistoricalPlace'; // Import the CSS module
+import Header from '/src/client/components/Header/Header';
+import styles from './UpcomingActivities.module.css';
 
 const UpcomingActivitiesDetails = () => {
     const { id } = useParams(); // Get activity ID from URL
@@ -61,8 +62,8 @@ const UpcomingActivitiesDetails = () => {
 
     return (
         <div className={styles.container}>
+            <Header/>
             <header className={styles.header}>
-                <img src={Logo} alt="Safarny Logo" className={styles.logo}/>
                 <nav className={styles.nav}>
                     <Link to="/" className={styles.button}>Back to Home</Link>
                 </nav>
