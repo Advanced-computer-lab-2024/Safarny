@@ -259,19 +259,6 @@ const ProductList = () => {
                             Add to Wishlist
                           </button>
                       )}
-                      {userRole === 'Seller' && (
-                          <div className={styles.archiveOption}>
-                            <label>
-                              <input
-                                  type="checkbox"
-                                  checked={product.archived}
-                                  onChange={(e) => handleArchiveToggle(product._id, e.target.checked)}
-                              />
-                              Archive
-                            </label>
-                          </div>
-                      )}
-
                       <img className={styles.productImage} src={product.imageurl} alt={product.details}/>
                     </div>
                 );
