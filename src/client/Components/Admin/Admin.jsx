@@ -400,6 +400,7 @@ const Admin = () => {
         <Modal open={openModal} onClose={handleCloseModal}>
           <div className={styles.modalOverlay}>
             <div className={styles.modal}>
+              <button className={styles.closeButton} onClick={handleCloseModal}>X</button>
               <Typography variant="h6">{editingPostId ? 'Edit Post' : 'Add New Post'}</Typography>
               <TextField
                   fullWidth
