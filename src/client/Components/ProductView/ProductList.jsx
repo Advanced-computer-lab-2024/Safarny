@@ -85,6 +85,8 @@ const ProductList = () => {
     fetchExchangeRates();
   }, [userId]);
 
+  
+
   const handleAddToWishlist = async (postId) => {
     try {
       console.log('Adding post to wishlist:', postId);
@@ -164,120 +166,122 @@ const ProductList = () => {
   }
 
   return (
-    <div className={styles.container}>
-      <Header />
+      <div className={styles.container}>
+        <Header/>
 
-      <button
-        className={styles.viewPurchasedButton}
-        onClick={handleClick}
-      >
-        View Purchased Products
-      </button>
-      <h1>Product List</h1>
-
-      <input
-        type="text"
-        placeholder="Search by name..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className={styles.searchInput}
-      />
-
-      <div className={styles.priceFilter}>
-        <label>Max Price:</label>
+        <button
+            className={styles.viewPurchasedButton}
+            onClick={handleClick}
+        >
+          View Purchased Products
+        </button>
+        <h1 className={styles.h1}>Product List</h1>
         <input
-          type="number"
-          value={priceFilter}
-          onChange={(e) => setPriceFilter(e.target.value)}
-          className={styles.priceInput}
+            type="text"
+            placeholder="Search by name..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className={styles.searchInput}
         />
-      </div>
-      <div className={styles.currencySelector}>
-        <FormControl fullWidth margin="normal">
-          <InputLabel><h4>Currency</h4></InputLabel>
-          <br></br>
-          <Select
-            value={selectedCurrency}
-            onChange={(e) => setSelectedCurrency(e.target.value)}
-          >
-            {currencyCodes.map(code => (
-              <MenuItem key={code} value={code}>{code}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
-      <div className={styles.sortOptions}>
-        <label>
-          Sort by Ratings
-          <input
-            type="checkbox"
-            checked={sortByRating}
-            onChange={() => setSortByRating(!sortByRating)}
-          />
-        </label>
-      </div>
 
-      {sortedProducts.length > 0 ? (
-        <div className={styles.productsAll}>
-          {sortedProducts.map(product => {
-            const convertedPrice = convertPrice(product.price, product.currency, selectedCurrency);
-            console.log("Product Reviews:", product.reviews); // Check the structure of reviews
-            return (
-              <div className={styles.productCard} key={product._id}>
-                <h2 className={styles.productDetails}>{product.details}</h2>
-                <p>Price: {convertedPrice} {selectedCurrency}</p>
-                <p>Quantity: {product.quantity}</p>
-                <p>Rating: {product.rating}</p>
-                {/* Display Reviews */}
-                <div className={styles.reviewsSection}>
-                  <h3>Reviews:</h3>
-                  {product.reviews && product.reviews.length > 0 ? (
-                    <ul>
-                      {product.reviews.map((review, index) => (
-                        <li key={index}>{review}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p>No reviews available</p>
-                  )}
-                </div>
-                <button
-                  className={styles.buyButton}
-                  onClick={() => handleBuyButtonClick(product)}
-                >
-                  Purchase
-                </button>
-                {userRole === 'Tourist' && (
-                  <button
-                    onClick={() => handleAddToWishlist(product._id)}
-                    className={styles.wishlistButton}
-                  >
-                    Add to Wishlist
-                  </button>
-                )}
-                {userRole === 'Seller' && (
-                  <div className={styles.archiveOption}>
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={product.archived}
-                        onChange={(e) => handleArchiveToggle(product._id, e.target.checked)}
-                      />
-                      Archive
-                    </label>
-                  </div>
-                )}
-
-                <img className={styles.productImage} src={product.imageurl} alt={product.details} />
-              </div>
-            );
-          })}
+        <div className={styles.filterContainer}>
+          <div className={styles.sortOptions}>
+            <label className={styles.MaxPrice}>Max Price:</label>
+            <input
+                type="number"
+                value={priceFilter}
+                onChange={(e) => setPriceFilter(e.target.value)}
+                className={styles.priceInput}
+            />
+          </div>
+          <div className={styles.currencySelector}>
+            <FormControl fullWidth margin="normal">
+              <InputLabel><h4>Currency</h4></InputLabel>
+              <br></br>
+              <Select
+                  value={selectedCurrency}
+                  onChange={(e) => setSelectedCurrency(e.target.value)}
+              >
+                {currencyCodes.map(code => (
+                    <MenuItem key={code} value={code}>{code}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <div className={styles.sortOptions}>
+            <label className={styles.sorter}>
+              Sort by Ratings:
+              <input
+                  type="checkbox"
+                  checked={sortByRating}
+                  onChange={() => setSortByRating(!sortByRating)}
+                  className={styles.largeCheckbox}
+              />
+            </label>
+          </div>
         </div>
-      ) : (
-        <p>No products available</p>
-      )}
-      <Footer />
-    </div>
+
+        {sortedProducts.length > 0 ? (
+            <div className={styles.productsAll}>
+              {sortedProducts.map(product => {
+                const convertedPrice = convertPrice(product.price, product.currency, selectedCurrency);
+                console.log("Product Reviews:", product.reviews); // Check the structure of reviews
+                return (
+                    <div className={styles.productCard} key={product._id}>
+                      <h2 className={styles.productDetails}>{product.details}</h2>
+                      <p>Price: {convertedPrice} {selectedCurrency}</p>
+                      <p>Quantity: {product.quantity}</p>
+                      <p>Rating: {product.rating}</p>
+                      {/* Display Reviews */}
+                      <div className={styles.reviewsSection}>
+                        <h3>Reviews:</h3>
+                        {product.reviews && product.reviews.length > 0 ? (
+                            <ul>
+                              {product.reviews.map((review, index) => (
+                                  <li key={index}>{review}</li>
+                              ))}
+                            </ul>
+                        ) : (
+                            <p>No reviews available</p>
+                        )}
+                      </div>
+                      <button
+                          className={styles.buyButton}
+                          onClick={() => handleBuyButtonClick(product)}
+                      >
+                        Purchase
+                      </button>
+                      {userRole === 'Tourist' && (
+                          <button
+                              onClick={() => handleAddToWishlist(product._id)}
+                              className={styles.wishlistButton}
+                          >
+                            Add to Wishlist
+                          </button>
+                      )}
+                      {userRole === 'Seller' && (
+                          <div className={styles.archiveOption}>
+                            <label>
+                              <input
+                                  type="checkbox"
+                                  checked={product.archived}
+                                  onChange={(e) => handleArchiveToggle(product._id, e.target.checked)}
+                              />
+                              Archive
+                            </label>
+                          </div>
+                      )}
+
+                      <img className={styles.productImage} src={product.imageurl} alt={product.details}/>
+                    </div>
+                );
+              })}
+            </div>
+        ) : (
+            <p>No products available</p>
+        )}
+        <Footer/>
+      </div>
   );
 };
 

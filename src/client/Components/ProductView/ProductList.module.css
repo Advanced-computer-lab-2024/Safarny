@@ -50,6 +50,11 @@
   /* min-width: ; */
 }
 
+.h1{
+    color: black;
+    font: bold;
+    margin-bottom: 20px;
+}
 .productCard:hover {
   border: 2px solid var(--glow-color);
   box-shadow: 0 0 10px var(--glow-color);
@@ -133,4 +138,26 @@
   font-size: 0.9rem;
   color: var(--text-color);
   
+}
+
+.sorter {
+  color: black;
+  font: bold;
+}
+
+.largeCheckbox {
+  transform: scale(1.35); /* Adjust the scale as needed */
+  margin-right: 10px; /* Optional: Add some space between the checkbox and the label */
+}
+
+.filterContainer {
+  display: flex;
+  align-items: center;
+  gap: 6rem; /* Adjust the gap as needed */
+}
+
+.MaxPrice {
+  color: black;
+  font: bold;
+  margin-left: 15px;
 }

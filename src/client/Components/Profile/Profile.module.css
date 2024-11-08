@@ -131,6 +131,41 @@ p, h5 {
   align-items: center;
 }
 
+/* loyalty badge */
+.loyaltyBadge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 1rem;
+}
+
+.loyaltyBadge img {
+  width: 50px;
+  height: 50px;
+}
+
+.loyaltyBadge h5 {
+  margin: 0;
+}
+
+.rankBadge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 1rem;
+}
+
+.rankBadge img {
+  width: 50px;
+  height: 50px;
+}
+
+.rankBadge h5 {
+  margin: 0;
+}
+
 .notificationButton {
   position: fixed;
   top: 10px;

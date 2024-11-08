@@ -264,7 +264,7 @@ const Admin = () => {
           </button>
           <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
             <button onClick={handleBackClick} className={styles.button}>Back</button>
-            <Link to="/" className={styles.button}>Homepage</Link>
+            <Link to="/" className={styles.button}>Log out</Link>
             <button onClick={handleOpenModal} className={styles.button}>Add Post</button>
             <button onClick={() => setSelectedSection('tags')} className={styles.button}>Manage Tags</button>
             <button onClick={() => setSelectedSection('ActivityCategory')} className={styles.button}>Manage Categories</button>

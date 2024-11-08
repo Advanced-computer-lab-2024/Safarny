@@ -93,14 +93,14 @@ const createBooking = async (req, res) => {
   // }
 
   //check if the bookingDate is not within the 2 days threshold
-  const twoDays = new Date();
-  twoDays.setDate(today.getDate() + 2);
-  if (bookingDateObj < twoDays) {
-    return res.status(400).json({
-      message:
-        "You can not Book for that date because its within the 2 days threshold",
-    });
-  }
+  // const twoDays = new Date();
+  // twoDays.setDate(today.getDate() + 2);
+  // if (bookingDateObj < twoDays) {
+  //   return res.status(400).json({
+  //     message:
+  //       "You can not Book for that date because its within the 2 days threshold",
+  //   });
+  // }
 
   //check if the tourist already has a booking on that date that is not cancelled
   const existingBooking = await Booking.find({
@@ -299,7 +299,7 @@ const getBookings = async (req, res) => {
   const bookings = await Booking.find({ tourist: touristId })
     .populate("itinerary", "name price")
     .populate("activity", "location price")
-    .populate("historicalPlace", "name ticketPrices");
+    .populate("historicalPlace", "description ticketPrices");
   res.status(200).json(bookings);
 };
 

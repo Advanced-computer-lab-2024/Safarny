@@ -71,6 +71,8 @@ import CreateTransport from "./Components/Transport/CreateTransport";
 import EditTransport from "./Components/Transport/EditTransport";
 import BookTransport from "./Components/Transport/BookTransport";
 
+import MyBookings from "./Booking/MyBookings";
+
 function App() {
   return (
     //<PurchasedProductsProvider>
@@ -148,6 +150,8 @@ function App() {
         <Route path="/transportss/edit-transport" element={<EditTransport />} />
         <Route path="/transportss/book-transport" element={<BookTransport />} />
         
+        <Route path="/mybookings" element={<MyBookings />} />
+
               </Routes>
     </Router>
     //</PurchasedProductsProvider>       

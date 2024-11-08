@@ -71,3 +71,7 @@ body{
     margin: 0.5rem 0;
     
   }
+.greenButton {
+    background-color: green;
+    color: white;
+}
