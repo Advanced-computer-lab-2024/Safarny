@@ -19,6 +19,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import EditItineraryForm from "./EditItineraryForm"; 
+import Header from '../Components/Header/Header';
 import Footer from '../Components/Footer/Footer';
 
 export default function TourGuide() {
@@ -164,6 +165,7 @@ const handlePeriodChange = (event) => setPeriod(event.target.value);
 
   return (
     <div className="container mx-auto p-4">
+      <Header />
       <Typography variant="h4" component="h1" gutterBottom>
         Tour Guide Dashboard
       </Typography>
@@ -173,7 +175,7 @@ const handlePeriodChange = (event) => setPeriod(event.target.value);
         aria-label="Tour Guide Tabs"
       >
         <Tab label="Itineraries" />
-        <Tab label="Profile" />
+        <Tab label="Create" />
       </Tabs>
       {tabValue === 0 && (
         <Card>
@@ -351,7 +353,7 @@ const handlePeriodChange = (event) => setPeriod(event.target.value);
     {/* Hours Input */}
     <TextField
       id="timeline-hours"
-      label="Hours"
+      label="Start"
       variant="outlined"
       type="number"
       inputProps={{ min: 1, max: 12 }} // restrict between 1-12 for hours
@@ -367,7 +369,7 @@ const handlePeriodChange = (event) => setPeriod(event.target.value);
     {/* Minutes Input */}
     <TextField
       id="timeline-minutes"
-      label="Minutes"
+      label="time"
       variant="outlined"
       type="number"
       inputProps={{ min: 0, max: 59 }} // restrict between 0-59 for minutes
@@ -401,6 +403,64 @@ const handlePeriodChange = (event) => setPeriod(event.target.value);
     </FormControl>
   </Box>
 </Tooltip>
+
+{/* Timeline (Hours, Minutes, AM/PM) */}
+<Tooltip title="Enter the timeline of activities in hours, minutes, and AM/PM" arrow>
+  <Box display="flex" gap={2} alignItems="center">
+    {/* Hours Input */}
+    <TextField
+      id="timeline-hours"
+      label="End"
+      variant="outlined"
+      type="number"
+      inputProps={{ min: 1, max: 12 }} // restrict between 1-12 for hours
+      value={newItinerary.timelineHours}
+      onChange={(e) =>
+        setNewItinerary({
+          ...newItinerary,
+          timelineHours: e.target.value,
+        })
+      }
+    />
+
+    {/* Minutes Input */}
+    <TextField
+      id="timeline-minutes"
+      label="time"
+      variant="outlined"
+      type="number"
+      inputProps={{ min: 0, max: 59 }} // restrict between 0-59 for minutes
+      value={newItinerary.timelineMinutes}
+      onChange={(e) =>
+        setNewItinerary({
+          ...newItinerary,
+          timelineMinutes: e.target.value,
+        })
+      }
+    />
+
+    {/* AM/PM Selection */}
+    <FormControl variant="outlined">
+      <InputLabel id="timeline-am-pm-label">AM/PM</InputLabel>
+      <Select
+        labelId="timeline-am-pm-label"
+        id="timeline-am-pm"
+        value={newItinerary.timelineAmPm}
+        onChange={(e) =>
+          setNewItinerary({
+            ...newItinerary,
+            timelineAmPm: e.target.value,
+          })
+        }
+        label="AM/PM"
+      >
+        <MenuItem value="AM">AM</MenuItem>
+        <MenuItem value="PM">PM</MenuItem>
+      </Select>
+    </FormControl>
+  </Box>
+</Tooltip>
+
 
                 {/* Language (String) */}
                 <Tooltip title="Enter the language for the tour" arrow>
@@ -475,53 +535,6 @@ const handlePeriodChange = (event) => setPeriod(event.target.value);
                       })
                     }
                   />
-                </Tooltip>
-
-                {/* Available Times (Array of Strings) */}
-                <Tooltip
-                  title="Enter the available times for the tour. You can separate multiple times with commas."
-                  arrow
-                >
-                  <TextField
-                    fullWidth
-                    id="availableTimes"
-                    label="Available Times"
-                    variant="outlined"
-                    value={newItinerary.availableTimes}
-                    onChange={(e) =>
-                      setNewItinerary({
-                        ...newItinerary,
-                        availableTimes: e.target.value,
-                      })
-                    }
-                  />
-                </Tooltip>
-
-                {/* Accessibility (Boolean) */}
-                <Tooltip
-                  title="Is the tour accessible? Select yes or no."
-                  arrow
-                >
-                  <FormControl fullWidth variant="outlined">
-                    <InputLabel id="accessibility-label">
-                      Accessibility
-                    </InputLabel>
-                    <Select
-                      labelId="accessibility-label"
-                      id="accessibility"
-                      value={newItinerary.accessibility}
-                      onChange={(e) =>
-                        setNewItinerary({
-                          ...newItinerary,
-                          accessibility: e.target.value,
-                        })
-                      }
-                      label="Accessibility"
-                    >
-                      <MenuItem value={true}>Yes</MenuItem>
-                      <MenuItem value={false}>No</MenuItem>
-                    </Select>
-                  </FormControl>
                 </Tooltip>
 
                 {/* Pickup Location */}
