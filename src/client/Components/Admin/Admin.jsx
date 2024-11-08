@@ -16,9 +16,10 @@ import {
   CircularProgress,
 } from '@mui/material';
 import axios from 'axios';
+import { Checkbox, FormControlLabel } from '@mui/material';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from '../../../server/config/Firebase';
-import { Link, useNavigate , useLocation} from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import styles from './Admin.module.css';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/Components/Footer/Footer';
@@ -152,18 +153,18 @@ const Admin = () => {
     const uploadTask = uploadBytesResumable(storageRef, file);
     return new Promise((resolve, reject) => {
       uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log(`Upload is ${progress}% done`);
-          },
-          (error) => reject(error),
-          () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              console.log("File available at", downloadURL);
-              resolve(downloadURL);
-            });
-          }
+        "state_changed",
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log(`Upload is ${progress}% done`);
+        },
+        (error) => reject(error),
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log("File available at", downloadURL);
+            resolve(downloadURL);
+          });
+        }
       );
     });
   };
@@ -222,7 +223,7 @@ const Admin = () => {
     try {
       // Update the local state first
       setPosts(posts.map(post =>
-          post._id === postId ? { ...post, archived: isArchived } : post
+        post._id === postId ? { ...post, archived: isArchived } : post
       ));
       console.log("Local state updated");
 
@@ -234,7 +235,7 @@ const Admin = () => {
       console.error("Error updating archived status:", error);
       // Optionally, revert the local state if the API call fails
       setPosts(posts.map(post =>
-          post._id === postId ? { ...post, archived: !isArchived } : post
+        post._id === postId ? { ...post, archived: !isArchived } : post
       ));
     }
   };
@@ -242,8 +243,8 @@ const Admin = () => {
   const filteredPosts = posts.filter((post) => {
     const matchesSearch = post.details.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesPrice =
-        (minPrice === '' || post.price >= minPrice) &&
-        (maxPrice === '' || post.price <= maxPrice);
+      (minPrice === '' || post.price >= minPrice) &&
+      (maxPrice === '' || post.price <= maxPrice);
     const matchesCurrency = selectedCurrency === '' || post.currency === selectedCurrency;
     return matchesSearch && matchesPrice && matchesCurrency;
   });
@@ -256,203 +257,200 @@ const Admin = () => {
   });
 
   return (
-      <div className={styles.container}>
-        <header className={styles.header}>
-          <img src={Logo} alt="Safarny Logo" className={styles.logo} />
-          <h1>Safarny</h1>
-          <button className={styles.burger} onClick={toggleMenu}>
-            <span className={styles.burgerIcon}>&#9776;</span>
-          </button>
-          <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
-            <button onClick={handleBackClick} className={styles.button}>Back</button>
-            <Link to="/" className={styles.button}>Log out</Link>
-            <button onClick={handleOpenModal} className={styles.button}>Add Post</button>
-            <button onClick={() => setSelectedSection('tags')} className={styles.button}>Manage Tags</button>
-            <button onClick={() => setSelectedSection('ActivityCategory')} className={styles.button}>Manage Categories</button>
-            <Link to="/adminaddgovernor"  className={styles.button}>Add Governor</Link>
-            <Link to="/adminviewcomplaints" className={styles.button}>View Complaints</Link>
-          </nav>
-        </header>
-        <SideBar className={styles.sidebar} />
-        <div className={styles.content}>
-          <div className={styles.allFilters}>
-            {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <img src={Logo} alt="Safarny Logo" className={styles.logo} />
+        <h1>Safarny</h1>
+        <button className={styles.burger} onClick={toggleMenu}>
+          <span className={styles.burgerIcon}>&#9776;</span>
+        </button>
+        <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
+          <button onClick={handleBackClick} className={styles.button}>Back</button>
+          <Link to="/" className={styles.button}>Log out</Link>
+          <button onClick={handleOpenModal} className={styles.button}>Add Post</button>
+          <button onClick={() => setSelectedSection('tags')} className={styles.button}>Manage Tags</button>
+          <button onClick={() => setSelectedSection('ActivityCategory')} className={styles.button}>Manage Categories</button>
+          <Link to="/adminaddgovernor" className={styles.button}>Add Governor</Link>
+          <Link to="/adminviewcomplaints" className={styles.button}>View Complaints</Link>
+        </nav>
+      </header>
+      <SideBar className={styles.sidebar} />
+      <div className={styles.content}>
+        <div className={styles.allFilters}>
+          {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
 
-            <TextField
-                label="Search by Name"
+          <TextField
+            label="Search by Name"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className={styles.searchField}
+          />
+
+          <div className={styles.priceFilterContainer}>
+            <div className={styles.minPrice}>
+              <TextField
+                label="Min Price"
                 variant="outlined"
-                fullWidth
-                margin="normal"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className={styles.searchField}
-            />
-
-            <div className={styles.priceFilterContainer}>
-              <div className={styles.minPrice}>
-                <TextField
-                    label="Min Price"
-                    variant="outlined"
-                    type="number"
-                    value={minPrice}
-                    onChange={(e) => setMinPrice(e.target.value)}
-                    className={styles.priceFilterField}
-                />
-              </div>
-              <div className={styles.maxPrice}>
-                <TextField
-                    label="Max Price"
-                    variant="outlined"
-                    type="number"
-                    value={maxPrice}
-                    onChange={(e) => setMaxPrice(e.target.value)}
-                    className={styles.priceFilterField}
-                />
-              </div>
+                type="number"
+                value={minPrice}
+                onChange={(e) => setMinPrice(e.target.value)}
+                className={styles.priceFilterField}
+              />
             </div>
-
-            {/*<FormControl fullWidth margin="normal">*/}
-            {/*  <InputLabel>Currency</InputLabel>*/}
-            {/*  <Select*/}
-            {/*      value={selectedCurrency}*/}
-            {/*      onChange={(e) => setSelectedCurrency(e.target.value)}*/}
-            {/*  >*/}
-            {/*    <MenuItem value="">All</MenuItem>*/}
-            {/*    {currencyCodes.map((code) => (*/}
-            {/*        <MenuItem key={code} value={code}>{code}</MenuItem>*/}
-            {/*    ))}*/}
-            {/*  </Select>*/}
-            {/*</FormControl>*/}
-
-            <TextField
-                label="Sort By Rating"
-                select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                SelectProps={{
-                  native: true,
-                }}
+            <div className={styles.maxPrice}>
+              <TextField
+                label="Max Price"
                 variant="outlined"
-                className={styles.sortField}
-            >
-              <option value="">None</option>
-              <option value="rating">Rating</option>
-            </TextField>
-
+                type="number"
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(e.target.value)}
+                className={styles.priceFilterField}
+              />
+            </div>
           </div>
 
-          {loading ? (
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                <CircularProgress />
-              </div>
-          ) : (
-              selectedSection === 'posts' && (
-                  <div className={styles.cardList}>
-                    {sortedPosts.map((post) => (
-                        <Card key={post._id} className={styles.card}>
-                          <CardContent className={styles.cardContent}>
-                            <Typography gutterBottom variant="h5" component="div">
-                              {post.details}
-                            </Typography>
-                            <div>Price: {post.price} {post.currency}</div>
-                            <div>Remaining quantity: {post.quantity}</div>
-                            <div className={styles.cardImage}>
-                              <img src={post.imageurl} alt="Image"/>
-                            </div>
-                            <label className="label-black">Archive:</label>
-<div className="checkbox-container">
-  <label className="label-black">
-    <input
-      type="checkbox"
-      checked={post.archived}
-      onChange={(e) => handleArchiveToggle(post._id, e.target.checked)}
-    />
-  </label>
-</div>
-                          </CardContent>
-                          <CardActions>
-                            <Button
-                                size="small"
-                                color="primary"
-                                variant="contained"
-                                style={{ marginRight: '8px' }}
-                                onClick={() => handleEditPost(post)}
-                            >
-                              Edit
-                            </Button>
-                            <Button
-                                size="small"
-                                color="error"
-                                variant="contained"
-                                onClick={() => handleDeletePost(post._id)}
-                            >
-                              Delete
-                            </Button>
-                          </CardActions>
-                        </Card>
-                    ))}
-                  </div>
-              )
-          )}
-
-          {selectedSection === 'tags' && <Tags />}
-          {selectedSection === 'ActivityCategory' && <ActivityCategory />}
+          {/*<FormControl fullWidth margin="normal">*/}
+          {/*  <InputLabel>Currency</InputLabel>*/}
+          {/*  <Select*/}
+          {/*      value={selectedCurrency}*/}
+          {/*      onChange={(e) => setSelectedCurrency(e.target.value)}*/}
+          {/*  >*/}
+          {/*    <MenuItem value="">All</MenuItem>*/}
+          {/*    {currencyCodes.map((code) => (*/}
+          {/*        <MenuItem key={code} value={code}>{code}</MenuItem>*/}
+          {/*    ))}*/}
+          {/*  </Select>*/}
+          {/*</FormControl>*/}
+          <div className={styles.sortBy}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={sortBy === 'rating'}
+                  onChange={(e) => setSortBy(e.target.checked ? 'rating' : '')}
+                  color="primary"
+                />
+              }
+              label="Sort By Rating"
+              className={`${styles.sortField} ${styles.greyLabel}`}
+            />
+          </div>
         </div>
 
-        <Modal open={openModal} onClose={handleCloseModal}>
-          <div className={styles.modalOverlay}>
-            <div className={styles.modal}>
-              <button className={styles.closeButton} onClick={handleCloseModal}>X</button>
-              <Typography variant="h6">{editingPostId ? 'Edit Post' : 'Add New Post'}</Typography>
-              <TextField
-                  fullWidth
-                  label="Details"
-                  name="details"
-                  value={currentPost.details}
-                  onChange={handleInputChange}
-                  margin="normal"
-              />
-              <TextField
-                  fullWidth
-                  label="Price"
-                  name="price"
-                  type="number"
-                  value={currentPost.price}
-                  onChange={handleInputChange}
-                  margin="normal"
-              />
-              <FormControl fullWidth margin="normal">
-                <InputLabel>Currency</InputLabel>
-                <Select
-                    name="currency"
-                    value={currentPost.currency}
-                    onChange={handleInputChange}
-                >
-                  {currencyCodes.map((code) => (
-                      <MenuItem key={code} value={code}>{code}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <TextField
-                  fullWidth
-                  label="Quantity"
-                  name="quantity"
-                  type="number"
-                  value={currentPost.quantity}
-                  onChange={handleInputChange}
-                  margin="normal"
-              />
-              <input type="file" onChange={handleImageChange} className={styles.imageInput} />
-              <Button variant="contained" color="primary" onClick={handleSubmitPost}>
-                {editingPostId ? 'Update Post' : 'Add Post'}
-              </Button>
-              {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
-            </div>
+        {loading ? (
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+            <CircularProgress />
           </div>
-        </Modal>
+        ) : (
+          selectedSection === 'posts' && (
+            <div className={styles.cardList}>
+              {sortedPosts.map((post) => (
+                <Card key={post._id} className={styles.card}>
+                  <CardContent className={styles.cardContent}>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {post.details}
+                    </Typography>
+                    <div>Price: {post.price} {post.currency}</div>
+                    <div>Remaining quantity: {post.quantity}</div>
+                    <div className={styles.cardImage}>
+                      <img src={post.imageurl} alt="Image" />
+                    </div>
+                    <label className="label-black">Archive:</label>
+                    <div className="checkbox-container">
+                      <label className="label-black">
+                        <input
+                          type="checkbox"
+                          checked={post.archived}
+                          onChange={(e) => handleArchiveToggle(post._id, e.target.checked)}
+                        />
+                      </label>
+                    </div>
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      size="small"
+                      color="primary"
+                      variant="contained"
+                      style={{ marginRight: '8px' }}
+                      onClick={() => handleEditPost(post)}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      size="small"
+                      color="error"
+                      variant="contained"
+                      onClick={() => handleDeletePost(post._id)}
+                    >
+                      Delete
+                    </Button>
+                  </CardActions>
+                </Card>
+              ))}
+            </div>
+          )
+        )}
 
-        <Footer />
+        {selectedSection === 'tags' && <Tags />}
+        {selectedSection === 'ActivityCategory' && <ActivityCategory />}
       </div>
+
+      <Modal open={openModal} onClose={handleCloseModal}>
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <button className={styles.closeButton} onClick={handleCloseModal}>X</button>
+            <Typography variant="h6">{editingPostId ? 'Edit Post' : 'Add New Post'}</Typography>
+            <TextField
+              fullWidth
+              label="Details"
+              name="details"
+              value={currentPost.details}
+              onChange={handleInputChange}
+              margin="normal"
+            />
+            <TextField
+              fullWidth
+              label="Price"
+              name="price"
+              type="number"
+              value={currentPost.price}
+              onChange={handleInputChange}
+              margin="normal"
+            />
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Currency</InputLabel>
+              <Select
+                name="currency"
+                value={currentPost.currency}
+                onChange={handleInputChange}
+              >
+                {currencyCodes.map((code) => (
+                  <MenuItem key={code} value={code}>{code}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
+              fullWidth
+              label="Quantity"
+              name="quantity"
+              type="number"
+              value={currentPost.quantity}
+              onChange={handleInputChange}
+              margin="normal"
+            />
+            <input type="file" onChange={handleImageChange} className={styles.imageInput} />
+            <Button variant="contained" color="primary" onClick={handleSubmitPost}>
+              {editingPostId ? 'Update Post' : 'Add Post'}
+            </Button>
+            {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
+          </div>
+        </div>
+      </Modal>
+
+      <Footer />
+    </div>
   );
 };
 
