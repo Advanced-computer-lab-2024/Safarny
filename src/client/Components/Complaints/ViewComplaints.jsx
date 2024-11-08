@@ -46,33 +46,27 @@ const ViewComplaints = () => {
         );
     }
 
-    if (error) {
-        return (
-            <div className={styles.fullScreen}>
-                <Header />
-                <p className={styles.error}>{error}</p>
-                <Footer />
-            </div>
-        );
-    }
-
     return (
         <div className={styles.fullScreen}>
             <Header />
             <div className={styles.container}>
                 <h2 className={styles.heading}>My Complaints</h2>
-                {complaints.length === 0 ? (
-                    <p>No complaints found. You have not made any complaints yet.</p>
+                {error ? (
+                    <p className={styles.error}>{error}</p>
                 ) : (
                     <ul className={styles.list}>
-                        {complaints.map((complaint) => (
-                            <li key={complaint._id} className={styles.item}>
-                                <h3 className={styles.title}>{complaint.title}</h3>
-                                <p className={styles.body}>{complaint.body}</p>
-                                <p className={styles.status}>Status: {complaint.status}</p>
-                                <p className={styles.date}>Date: {new Date(complaint.date).toLocaleString()}</p>
-                            </li>
-                        ))}
+                        {complaints.length === 0 ? (
+                            <p className={styles.noComplaints}>No complaints found. You have not made any complaints yet.</p>
+                        ) : (
+                            complaints.map((complaint) => (
+                                <li key={complaint._id} className={styles.item}>
+                                    <h3 className={styles.title}>{complaint.title}</h3>
+                                    <p className={styles.body}>{complaint.body}</p>
+                                    <p className={styles.status}>Status: {complaint.status}</p>
+                                    <p className={styles.date}>Date: {new Date(complaint.date).toLocaleString()}</p>
+                                </li>
+                            ))
+                        )}
                     </ul>
                 )}
             </div>

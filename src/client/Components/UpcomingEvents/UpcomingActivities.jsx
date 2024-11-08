@@ -4,6 +4,8 @@ import axios from 'axios';
 import { Link, useNavigate , useLocation,} from "react-router-dom";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { FormControl, InputLabel, MenuItem, Select, CircularProgress } from "@mui/material";
+import Footer from '/src/client/Components/Footer/Footer';
+import Header from '../Header/Header';
 
 const UpcomingActivities = () => {
   const location = useLocation();
@@ -185,6 +187,7 @@ const UpcomingActivities = () => {
       <div className={styles.container}>
       {loading && <p>Loading...</p>}
         <main className={styles.main}>
+        <Header />
           <h2>Upcoming Activities</h2>
 
           <div className={styles.sortOptions}>
@@ -330,6 +333,7 @@ const UpcomingActivities = () => {
             )}
           </section>
         </main>
+        <Footer />
       </div>
   );
 };
