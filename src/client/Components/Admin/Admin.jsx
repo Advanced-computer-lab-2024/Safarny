@@ -272,6 +272,7 @@ const Admin = () => {
             <Link to="/adminviewcomplaints" className={styles.button}>View Complaints</Link>
           </nav>
         </header>
+        <SideBar className={styles.sidebar} />
         <div className={styles.content}>
           <div className={styles.allFilters}>
             {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
