@@ -55,6 +55,7 @@
     z-index: 1;
     cursor: pointer;
     width: calc(30% - 2rem);
+    min-width: 18rem;
   }
   
   .productCard:hover {
