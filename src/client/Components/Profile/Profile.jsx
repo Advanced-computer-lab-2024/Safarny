@@ -121,11 +121,15 @@ const Profile = () => {
     navigate("/transportss/book-transport", { state: { userId } });
   };
 
+  const handleMyBookingsClick = () => {
+    navigate("/mybookings", { state: { userId } });
+  }
+
   return (
     <div className={styles.container}>
       <Header />
 
-        <main className={styles.main}>
+      <main className={styles.main}>
         <section className={styles.intro}>
           <h1>Welcome, {userInfo.username}!</h1>
           <h5>Your account details:</h5>
@@ -155,7 +159,20 @@ const Profile = () => {
           )}
         </section>
       </main>
-
+      {userInfo.role === "Tourist" && (
+        <div className={styles.loyaltyBadge}>
+          <p>Badge: </p>
+          {userInfo.loyaltyLevel === "level 1" && (
+            <img src="src\client\Assets\Img\rank1.jpg" alt="Rank 1 Badge" className={styles.rankBadge} />
+          )}
+          {userInfo.loyaltyLevel === "level 2" && (
+            <img src="src\client\Assets\Img\rank2.jpg" alt="Rank 2 Badge" className={styles.rankBadge} />
+          )}
+          {userInfo.loyaltyLevel === "level 3" && (
+            <img src="src\client\Assets\Img\rank3.jpg" alt="Rank 3 Badge" className={styles.rankBadge} />
+          )}
+        </div>
+      )}
 
       <div className={styles.buttonContainer}>
         <button
@@ -189,7 +206,7 @@ const Profile = () => {
         </>
       )}
 
-    {userInfo.role === "Tourist" && (
+      {userInfo.role === "Tourist" && (
         <>
           <button
             onClick={handleBookFlight}
@@ -197,10 +214,7 @@ const Profile = () => {
           >
             Book A Flight
           </button>
-          <button
-            onClick={handleBookHotel}
-            className={styles.createTagButton}
-          >
+          <button onClick={handleBookHotel} className={styles.createTagButton}>
             Book A Hotel
           </button>
         </>
@@ -222,13 +236,18 @@ const Profile = () => {
           <button onClick={handleAddActivity} className={styles.postButton}>
             Activity
           </button>
-          <button onClick={handleCreateTransportClick} className={styles.postButton}>
+          <button
+            onClick={handleCreateTransportClick}
+            className={styles.postButton}
+          >
             Create Transport
           </button>
-          <button onClick={handleEditTransportClick} className={styles.postButton}>
+          <button
+            onClick={handleEditTransportClick}
+            className={styles.postButton}
+          >
             Edit & Delete Transport
           </button>
-          
         </>
       )}
 
@@ -249,8 +268,19 @@ const Profile = () => {
           <button onClick={handelWishList} className={styles.postButton}>
             View Wishlist
           </button>
-          <button onClick={handlebookTransportClick} className={styles.postButton}>
+          <button
+            onClick={handlebookTransportClick}
+            className={styles.postButton}
+          >
             Book Transports
+          </button>
+        </div>
+      )}
+
+      {userInfo.role === "Tourist" && (
+        <div>
+          <button onClick={handleMyBookingsClick} className={styles.postButton}>
+            My Bookings
           </button>
         </div>
       )}

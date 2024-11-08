@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Link, useNavigate , useLocation,} from "react-router-dom";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { FormControl, InputLabel, MenuItem, Select, CircularProgress } from "@mui/material";
+import MyBookingModal from "../../Booking/MyBookingModal";
 
 const UpcomingActivities = () => {
   const location = useLocation();
@@ -28,6 +29,10 @@ const UpcomingActivities = () => {
     image: "", // Added image field
   });
   const [loading, setLoading] = useState(true); // Add loading state
+
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const [selectedActivityId, setSelectedActivityId] = useState(null);
+
 
   // Method to fetch user role
   const fetchUserRole = async () => {
@@ -181,6 +186,17 @@ const UpcomingActivities = () => {
     );
   }
 
+  const handleActivityBook = (activityId) => {
+    //use MyBookingModal.jsx to book an Activity
+    setSelectedActivityId(activityId);
+    setIsBookingModalOpen(true);
+  };
+
+  const closeBookingModal = () => {
+    setIsBookingModalOpen(false);
+    setSelectedActivityId(null);
+  };
+  
   return (
       <div className={styles.container}>
       {loading && <p>Loading...</p>}
@@ -324,12 +340,28 @@ const UpcomingActivities = () => {
                               </label>
                             </div>
                         )}
+                      {userId && (
+                        <button
+                          onClick={() => handleActivityBook(activity._id)}
+                        >
+                          Book
+                        </button>
+                      )}
                       </div>
                   );
                 })
             )}
           </section>
         </main>
+        {isBookingModalOpen && (
+        <MyBookingModal
+          userId={userId}
+          isOpen={isBookingModalOpen}
+          onRequestClose={closeBookingModal}
+          bookingType="activity"
+          bookingId={selectedActivityId}
+        />
+      )}
       </div>
   );
 };

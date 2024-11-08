@@ -23,7 +23,7 @@ const historicalPlaceSchema = new mongoose.Schema(
 
 // Creating the model for historical places
 const HistoricalPlace = mongoose.model(
-  "historicalplaces",
+  "HistoricalPlace",
   historicalPlaceSchema
 );
 
