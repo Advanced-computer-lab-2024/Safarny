@@ -63,8 +63,6 @@ const UpcomingActivitiesDetails = () => {
     return (
         <div className={styles.container}>
             <Header/>
-            <header className={styles.header}>
-            </header>
             <p>The following activity commences
                 on {new Date(activity.date).toLocaleDateString()} at {activity.time}.</p>
             <p>Price: {activity.price}</p>

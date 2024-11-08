@@ -129,10 +129,10 @@ const Profile = () => {
   return (
     <div className={styles.container}>
       <Header />
+      <main className={styles.main}>
       <button className={styles.notificationButton}>
         <FaBell />
       </button>
-      <main className={styles.main}>
         <section className={styles.intro}>
           <h1>Welcome, {userInfo.username}!</h1>
           <h5>Your account details:</h5>
