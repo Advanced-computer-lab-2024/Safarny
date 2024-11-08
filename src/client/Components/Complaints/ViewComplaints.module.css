@@ -10,22 +10,18 @@
   --container-bg-color: #dcdbdb;
 }
 
-.full-screen {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
 .container {
-  margin: 4rem auto; /* Increase vertical margins */
   padding: var(--container-spacing);
   background-color: var(--container-bg-color);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 95vw;
-  min-height: 80vh; /* Set minimum height to make the container taller */
+  height: 100vh;
   font-family: Arial, sans-serif;
   color: var(--text-color); /* Apply black text color */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .heading {
