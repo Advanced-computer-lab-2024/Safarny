@@ -201,9 +201,9 @@ const UpcomingActivities = () => {
   
   return (
       <div className={styles.container}>
+      <Header />
       {loading && <p>Loading...</p>}
         <main className={styles.main}>
-        <Header />
           <h2>Upcoming Activities</h2>
 
           <div className={styles.sortOptions}>
