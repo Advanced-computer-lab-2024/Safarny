@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import styles from "./AdminAddGovernor.module.css";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 
 const AdminAddGovernor = () => {
   const [formData, setFormData] = useState({
@@ -20,7 +23,6 @@ const AdminAddGovernor = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Ensure required fields are provided
     if (!formData.username || !formData.email || !formData.password) {
       setMessage("Username, email, and password are required");
       return;
@@ -38,7 +40,6 @@ const AdminAddGovernor = () => {
       if (response.ok) {
         const data = await response.json();
         setMessage("Tourism Governor added successfully");
-        // Reset the form after successful submission
         setFormData({
           username: "",
           email: "",
@@ -55,49 +56,53 @@ const AdminAddGovernor = () => {
   };
 
   return (
-    <div>
-      <h2>Add a New Governor</h2>
-      {message && <p>{message}</p>}
+    <div className={styles.container}>
+      <Header />
+      <div className={styles.content}>
+        <h2 className={styles.title}>Add a New Governor</h2>
+        {message && <p className={styles.message}>{message}</p>}
 
-      <form onSubmit={handleSubmit}>
-        <label>
-          Username:
-          <input
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <label className={styles.label}>
+            Username:
+            <input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              className={styles.input}
+              required
+            />
+          </label>
 
-        <label>
-          Email:
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
+          <label className={styles.label}>
+            Email:
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className={styles.input}
+              required
+            />
+          </label>
 
-        <label>
-          Password:
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
+          <label className={styles.label}>
+            Password:
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className={styles.input}
+              required
+            />
+          </label>
 
-        <button type="submit">Add Governor</button>
-      </form>
+          <button type="submit" className={styles.button}>Add Governor</button>
+        </form>
+      </div>
+      <Footer />
     </div>
   );
 };
