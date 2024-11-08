@@ -318,6 +318,11 @@ const UpcomingActivities = () => {
                               className={styles.cardButton} >
                             Email
                           </button>
+                          {userId && (
+                        <button onClick={() => handleActivityBook(activity._id)} className={styles.cardButton}>
+                          Book
+                        </button>
+                      )}
                         </p>
 
                         <div className={styles.mapContainer}>
@@ -343,13 +348,6 @@ const UpcomingActivities = () => {
                               </label>
                             </div>
                         )}
-                      {userId && (
-                        <button
-                          onClick={() => handleActivityBook(activity._id)}
-                        >
-                          Book
-                        </button>
-                      )}
                       </div>
                   );
                 })
