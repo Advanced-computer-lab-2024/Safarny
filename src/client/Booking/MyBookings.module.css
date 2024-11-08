@@ -66,7 +66,7 @@ h1 {
 }
 
 .bookingStatus.confirmed {
-  color: orange !important;
+  color: deepskyblue !important;
 }
 
 .bookingStatus.active {

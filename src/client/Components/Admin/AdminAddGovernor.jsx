@@ -38,7 +38,6 @@ const AdminAddGovernor = () => {
       });
 
       if (response.ok) {
-        const data = await response.json();
         setMessage("Tourism Governor added successfully");
         setFormData({
           username: "",
