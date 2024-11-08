@@ -21,7 +21,7 @@ import { Link, useNavigate , useLocation} from 'react-router-dom';
 import styles from './Admin.module.css';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/Components/Footer/Footer';
-import Tags from '/src/client/Components/Tags/Tags';
+import Tags from './tagAdmin';
 const Admin = () => {
   const location = useLocation();
   const { userId } = location.state || {};
