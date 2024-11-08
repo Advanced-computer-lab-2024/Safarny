@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import SideBar from '../SideBar/SideBar';
 import {
   Button,
   Modal,
@@ -22,6 +23,8 @@ import styles from './Admin.module.css';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/Components/Footer/Footer';
 import Tags from './tagAdmin';
+import ActivityCategory from './ActivityCategory';
+
 const Admin = () => {
   const location = useLocation();
   const { userId } = location.state || {};
