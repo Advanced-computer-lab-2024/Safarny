@@ -130,3 +130,13 @@ p, h5 {
   justify-content: center;
   align-items: center;
 }
+
+.notificationButton {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  background: deepskyblue;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+}
