@@ -165,7 +165,7 @@ const SignUp = () => {
       <div className={styles.container}>
         <Header />
         <div className={styles.formContainer}>
-          <h2>Sign Up</h2>
+          <h2 style={{color: 'white', fontWeight: 'bold', marginRight: '20px'}}>Sign Up</h2>
           {success && <p className={styles.successMessage}>Sign up successful!</p>}
           {error && <p className={styles.errorMessage}>{error}</p>}
           <form onSubmit={handleSubmit} className={styles.form}>
@@ -259,7 +259,8 @@ const SignUp = () => {
               <div className={styles.termsText}>
                 <ul>
                   <p>
-                  <span onClick={() => handleNavigate('/terms')} style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}>
+                  <span onClick={() => handleNavigate('/terms')}
+                        style={{cursor: 'pointer', color: 'blue', textDecoration: 'underline'}}>
                     Click here for the terms and conditions.
                   </span>
                   </p>
@@ -269,7 +270,7 @@ const SignUp = () => {
             <button type="submit" className={styles.submitButton}>Sign Up</button>
           </form>
         </div>
-        <Footer />
+        <Footer/>
       </div>
   );
 };
