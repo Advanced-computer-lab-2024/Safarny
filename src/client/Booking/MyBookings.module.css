@@ -1,0 +1,82 @@
+/* MyBookings.module.css */
+.container {
+  width: 100vw;
+  padding: 10px;
+  background-color: #f0f0f0;
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+h1 {
+  color: black;
+}
+
+.header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #444;
+}
+
+.bookingList {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.bookingCard {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s;
+}
+
+.bookingCard:hover {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.bookingDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bookingDetails p {
+  margin: 0;
+  color: #666;
+}
+
+.noBookingsText {
+  font-size: 18px;
+  color: #666;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.bookingStatus {
+  font-weight: bold;
+}
+
+.bookingStatus.confirmed {
+  color: orange !important;
+}
+
+.bookingStatus.active {
+  color: green !important;
+}
+
+.bookingStatus.cancelled {
+  color: red !important;
+}
+
+.bookingStatus.nonActive {
+  color: grey !important;
+}

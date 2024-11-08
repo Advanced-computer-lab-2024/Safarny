@@ -25,8 +25,6 @@ const ProductList = () => {
   const [walletCurrency, setWalletCurrency] = useState('EGP');
   const [userRole, setUserRole] = useState('');
 
-  
-
   const fetchExchangeRates = async () => {
     try {
       const response = await axios.get('https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP');
@@ -261,7 +259,6 @@ const ProductList = () => {
                             Add to Wishlist
                           </button>
                       )}
-
                       <img className={styles.productImage} src={product.imageurl} alt={product.details}/>
                     </div>
                 );
