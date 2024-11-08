@@ -138,5 +138,6 @@ p, h5 {
   background: deepskyblue;
   border: none;
   cursor: pointer;
+  display: flex;
   font-size: 24px;
 }
