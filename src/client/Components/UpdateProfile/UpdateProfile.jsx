@@ -222,9 +222,9 @@ const UpdateProfile = () => {
                     <label>
                       Nationality:
                       <select
-                        value={userInfo.nationality}
-                        onChange={(e) => setUserInfo({ ...userInfo, nationality: e.target.value })}
-                        required
+                          value={userInfo.nationality}
+                          onChange={(e) => setUserInfo({...userInfo, nationality: e.target.value})}
+                          required
                       >
                         <option value="">Select Nationality</option>
                         {getCountryOptions()}
@@ -233,32 +233,35 @@ const UpdateProfile = () => {
                     <label>
                       Mobile:
                       <input
-                        type="tel"
-                        value={userInfo.mobile}
-                        onChange={(e) => setUserInfo({ ...userInfo, mobile: e.target.value })}
-                        required
+                          type="tel"
+                          value={userInfo.mobile}
+                          onChange={(e) => setUserInfo({...userInfo, mobile: e.target.value})}
+                          required
                       />
                     </label>
                     <label>
                       Employed:
-                      <input
-                        type="text"
-                        value={userInfo.employed}
-                        onChange={(e) => setUserInfo({ ...userInfo, employed: e.target.value })}
-                        required
-                      />
+                      <select
+                          value={userInfo.employed}
+                          onChange={(e) => setUserInfo({...userInfo, employed: e.target.value})}
+                          required
+                      >
+                        <option value="">Select</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                      </select>
                     </label>
                     <label>
                       Age:
                       <input
-                        type="number"
-                        value={userInfo.age}
-                        onChange={(e) => setUserInfo({ ...userInfo, age: e.target.value })}
-                        required
+                          type="number"
+                          value={userInfo.age}
+                          onChange={(e) => setUserInfo({...userInfo, age: e.target.value})}
+                          required
                       />
                     </label>
                   </>
-                )}
+              )}
               <label>
                 Role:
                 <input
@@ -266,7 +269,7 @@ const UpdateProfile = () => {
                     value={userInfo.role}
                     onChange={(e) => setUserInfo({...userInfo, role: e.target.value})}
                     readOnly
-                    
+
                 />
               </label>
               <label>
@@ -283,7 +286,7 @@ const UpdateProfile = () => {
               {/* Render role-specific fields */}
               {renderRoleSpecificFields(userInfo.role, userInfo)}
 
-              <button type="submit" className={styles.button}>
+              <button type="submit" className={`${styles.button} ${styles.greenButton}`}>
                 Update Profile
               </button>
             </form>
@@ -291,7 +294,7 @@ const UpdateProfile = () => {
         )}
       </main>
 
-      <Footer />
+      <Footer/>
     </div>
   );
 };
