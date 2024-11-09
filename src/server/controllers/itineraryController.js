@@ -186,7 +186,7 @@ const getItinerariesSorted = async (req, res) => {
   }
 
   try {
-    const itineraries = await Itinerary.find()
+    const itineraries = await Itinerary.find({ accessibility: "yes" }) // Filter by accessibility
       .populate("tags", "name")
       .populate("activities")
       .sort(sortCriteria);
@@ -195,6 +195,7 @@ const getItinerariesSorted = async (req, res) => {
     res.status(500).send(error);
   }
 };
+
 const getItinerariesFiltered = async (req, res) => {
   const { price, currency, date, tags, language } = req.query;
 

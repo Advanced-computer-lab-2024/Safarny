@@ -27,6 +27,7 @@ const ToursimGovernerRoutes = require("./routes/ToursimGovernerRoutes.js");
 const AdvertiserRoutes = require("./routes/advertiserRoutes.js");
 const WishListRoutes = require("./routes/WishListRoutes.js");
 const transportRoutes = require("./routes/transportRoutes.js");
+const preferencesRoutes = require('./routes/preferencesRoutes');
 
 
 dotenv.config();
@@ -70,6 +71,7 @@ app.use('/activities', activityRoutes);
 app.use('/transport',transportRoutes);
 
 //app.use('/itineraries', ItineraryRoutes);
+app.use('/preferences', preferencesRoutes);
 
 app.use("/wishlist", WishListRoutes);
 

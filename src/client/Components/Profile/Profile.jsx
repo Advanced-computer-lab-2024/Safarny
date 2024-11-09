@@ -126,6 +126,10 @@ const Profile = () => {
     navigate("/mybookings", { state: { userId } });
   };
 
+  const handleMyPreferencesClick = () => {
+    navigate("/PreferencesPage", { state: { userId } });
+  };
+
   return (
     <div className={styles.container}>
       <Header />
@@ -288,6 +292,12 @@ const Profile = () => {
             className={styles.postButton}
           >
             Book Transports
+          </button>
+          <button
+            onClick={handleMyPreferencesClick}
+            className={styles.postButton}
+          >
+            Select your Preferences
           </button>
         </div>
       )}

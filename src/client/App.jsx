@@ -70,6 +70,7 @@ import PurchasedProducts from "./Components/PurchasedProducts/PurchasedProducts"
 import CreateTransport from "./Components/Transport/CreateTransport";
 import EditTransport from "./Components/Transport/EditTransport";
 import BookTransport from "./Components/Transport/BookTransport";
+import Preferences from "./Components/Preferences/Preferences";
 
 import MyBookings from "./Booking/MyBookings";
 
@@ -149,6 +150,7 @@ function App() {
         <Route path="/transportss/create-transport" element={<CreateTransport />} />
         <Route path="/transportss/edit-transport" element={<EditTransport />} />
         <Route path="/transportss/book-transport" element={<BookTransport />} />
+        <Route path="/PreferencesPage" element={<Preferences />} />
         
         <Route path="/mybookings" element={<MyBookings />} />
 
