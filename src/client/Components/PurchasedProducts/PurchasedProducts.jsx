@@ -239,7 +239,7 @@ const PurchasedProducts = () => {
                           onChange={(e) => handleTempReviewChange(product._id, e.target.value)}
                           className={styles.reviewInput}
                       />
-                      <button onClick={() => handleSubmitReview(product._id)} className={styles.submitReviewButton}>
+                      <button onClick={() => handleSubmitReview(product._id)} className={styles.button}>
                         Submit Review
                       </button>
 
@@ -255,7 +255,7 @@ const PurchasedProducts = () => {
                         <option value={4}>4</option>
                         <option value={5}>5</option>
                       </select>
-                      <button onClick={() => handleSubmitRating(product._id)} className={styles.submitRatingButton}>
+                      <button onClick={() => handleSubmitRating(product._id)} className={styles.button}>
                         Submit Rating
                       </button>
                     </div>
