@@ -50,7 +50,6 @@ const Search = () => {
   return (
     <div className={styles.container}>
       <Header />
-
       <main className={styles.main}>
         <h2>Search for new adventures</h2>
 
@@ -156,7 +155,6 @@ const Search = () => {
           </div>
         )}
       </main>
-
       <Footer />
     </div>
   );

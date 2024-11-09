@@ -380,6 +380,8 @@ const Admin = () => {
                     </Typography>
                     <div>Price: {post.price} {post.currency}</div>
                     <div>Remaining quantity: {post.quantity}</div>
+                    <div>Purchase Count: {post.purchasedCount}</div>
+                    <div>Sales: {post.purchasedCount * post.price}</div>
                     <div className={styles.cardImage}>
                       <img src={post.imageurl} alt="Image" />
                     </div>

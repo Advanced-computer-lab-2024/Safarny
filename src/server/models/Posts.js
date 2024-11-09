@@ -6,6 +6,7 @@ const Posts = new mongoose.Schema(
     price: Number,
     currency: String,
     quantity: Number,
+      purchasedCount: Number,
     imageurl: String,
     reviews: {
       type: [String],

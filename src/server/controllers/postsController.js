@@ -9,6 +9,7 @@ const createPost = async (req, res) => {
       price,
       currency,
       quantity,
+      purchasedCount: 0,
       imageurl,
       createdby,
       rating: 1, // Add default rating
@@ -51,11 +52,17 @@ const getAllPostsBySellerId = async (req, res) => {
 const updatePostById = async (req, res) => {
   try {
     const postId = req.params.id.trim();
-    const { details, price, currency, quantity, imageurl, purchased ,reviews, rating,archived } = req.body;
+    const { details, price, currency, quantity, imageurl, purchased, reviews, rating, archived, purchasedCount } = req.body;
+
+    const updateData = { details, price, currency, quantity, imageurl, purchased, reviews, rating, archived };
+
+    if (purchasedCount !== undefined) {
+      updateData.purchasedCount = purchasedCount;
+    }
 
     const updatedPost = await Post.findByIdAndUpdate(
       postId,
-      { details, price, currency, quantity, imageurl,purchased ,reviews, rating,archived},
+      updateData,
       { new: true, runValidators: true }
     );
 
