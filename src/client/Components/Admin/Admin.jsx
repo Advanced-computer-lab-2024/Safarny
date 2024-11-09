@@ -29,6 +29,7 @@ import ActivityCategory from './ActivityCategory';
 
 const Admin = () => {
   const location = useLocation();
+  const [activeView, setActiveView] = useState("");
   const { userId } = location.state || {};
   const [userInfo, setUserInfo] = useState({
     username: "",
@@ -58,6 +59,18 @@ const Admin = () => {
   //header items
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
+
+  const handleManageTagsClick = () => {
+    setActiveView("tags");
+  };
+
+  const handleManageCategoriesClick = () => {
+    setActiveView("categories");
+  };
+
+  const handleClearFilter = () => {
+    setActiveView("");
+  };
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
