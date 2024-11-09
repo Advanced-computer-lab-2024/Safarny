@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Footer from "/src/client/Components/Footer/Footer";
+import Header from "/src/client/Components/Header/Header";
+import styles from "./AminViewComplaints.module.css";
 
 const AdminViewComplaints = () => {
     const [complaints, setComplaints] = useState([]);
@@ -124,17 +127,18 @@ const AdminViewComplaints = () => {
     });
 
     if (loading) {
-        return <p>Loading...</p>;
+        return <p className={styles.loading}>Loading...</p>;
     }
 
     if (error) {
-        return <p>{error}</p>;
+        return <p className={styles.error}>{error}</p>;
     }
 
     return (
-        <div>
-            <h2>All Complaints</h2>
-            <div className="select">
+        <div className={styles.container}>
+            <Header />
+            <h2 className={styles.heading}>All Complaints</h2>
+            <div className={styles.select}>
                 <label>Sort by date: </label>
                 <select value={sortOrder} onChange={handleSortChange}>
                     <option value="asc">Ascending</option>
@@ -148,64 +152,69 @@ const AdminViewComplaints = () => {
                 </select>
             </div>
             {filteredComplaints.length === 0 ? (
-                <p>No complaints found.</p>
+                <p className={styles.noComplaints}>No complaints found.</p>
             ) : (
-                <ul>
+                <ul className={styles.complaintsList}>
                     {filteredComplaints.map((complaint) => (
-                        <li key={complaint._id}>
+                        <li key={complaint._id} className={styles.complaintItem}>
                             {editingComplaint === complaint._id ? (
-                                <div>
+                                <div className={styles.editComplaint}>
                                     <input
                                         type="text"
                                         name="title"
                                         value={editDetails.title}
                                         onChange={handleEditChange}
+                                        className={styles.input}
                                     />
                                     <textarea
                                         name="body"
                                         value={editDetails.body}
                                         onChange={handleEditChange}
+                                        className={styles.textarea}
                                     />
                                     <select
                                         name="status"
                                         value={editDetails.status}
                                         onChange={handleEditChange}
+                                        className={styles.selectStatus}
                                     >
                                         <option value="pending">Pending</option>
                                         <option value="resolved">Resolved</option>
                                     </select>
-                                    <button onClick={() => handleEditSubmit(complaint._id)}>Save</button>
+                                    <button onClick={() => handleEditSubmit(complaint._id)} className={styles.saveButton}>Save</button>
                                     <textarea
                                         placeholder="Add a new comment"
                                         value={newCommentText}
                                         onChange={handleNewCommentChange}
+                                        className={styles.commentInput}
                                     />
-                                    <button onClick={() => handleNewCommentSubmit(complaint._id)}>Add Comment</button>
+                                    <button onClick={() => handleNewCommentSubmit(complaint._id)} className={styles.addCommentButton}>Add Comment</button>
                                 </div>
                             ) : (
-                                <div>
-                                    <h3>{complaint.title}</h3>
-                                    <p>{complaint.body}</p>
-                                    <p>Status: {complaint.status}</p>
-                                    <p>Date: {new Date(complaint.date).toLocaleString()}</p>
-                                    <button onClick={() => handleEditClick(complaint)}>Edit</button>
-                                    <div>
+                                <div className={styles.complaint}>
+                                    <h3 className={styles.title}>{complaint.title}</h3>
+                                    <p className={styles.body}>{complaint.body}</p>
+                                    <p className={styles.status}>Status: {complaint.status}</p>
+                                    <p className={styles.date}>Date: {new Date(complaint.date).toLocaleString()}</p>
+                                    <button onClick={() => handleEditClick(complaint)} className={styles.editButton}>Edit</button>
+                                    <div className={styles.commentsSection}>
                                         <h4>Comments:</h4>
                                         {complaint.comments.length > 0 ? (
                                             complaint.comments.map((comment, index) => (
-                                                <div key={index}>
+                                                <div key={index} className={styles.comment}>
                                                     {editingComment && editingComment.complaintId === complaint._id && editingComment.commentIndex === index ? (
-                                                        <div>
+                                                        <div className={styles.editComment}>
                                                             <textarea
                                                                 value={editCommentText}
                                                                 onChange={handleEditCommentChange}
+                                                                className={styles.commentEditInput}
                                                             />
-                                                            <button onClick={handleEditCommentSubmit}>Save</button>
+                                                            <button onClick={handleEditCommentSubmit} className={styles.saveCommentButton}>Save</button>
                                                         </div>
                                                     ) : (
-                                                        <div>
+                                                        <div className={styles.commentText}>
                                                             <p>{comment}</p>
-                                                            <button onClick={() => handleEditCommentClick(complaint._id, index, comment)}>Edit</button>
+                                                            <button onClick={() => handleEditCommentClick(complaint._id, index, comment)} className={styles.editCommentButton}>Edit</button>
                                                         </div>
                                                     )}
                                                 </div>
@@ -220,6 +229,7 @@ const AdminViewComplaints = () => {
                     ))}
                 </ul>
             )}
+            <Footer />
         </div>
     );
 };

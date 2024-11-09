@@ -23,7 +23,7 @@
     z-index: 1000;
     height: var(--header-height);
     border-radius: var(--border-radius);
-    width: 90%;
+    width: 85vw;
     transition: background-color 0.3s;
     margin-bottom: 2rem;
   }

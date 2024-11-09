@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
-import styles from './ViewComplaint.module.css';
+import styles from './ViewComplaints.module.css';
 import Footer from '/src/client/Components/Footer/Footer';
 import Header from '../Header/Header';
 
@@ -47,9 +47,9 @@ const ViewComplaints = () => {
     }
 
     return (
-        <div className={styles.fullScreen}>
-            <Header />
+            
             <div className={styles.container}>
+                <Header />
                 <h2 className={styles.heading}>My Complaints</h2>
                 {error ? (
                     <p className={styles.error}>{error}</p>
@@ -69,9 +69,9 @@ const ViewComplaints = () => {
                         )}
                     </ul>
                 )}
+                <Footer />
             </div>
-            <Footer />
-        </div>
+            
     );
 };
 

@@ -185,6 +185,15 @@
   display: block;
 }
 
+.sortField{
+  align-self: flex-start;
+}
+
+.greyLabel {
+  color: var(--button-bg);
+}
+
+
 @media (max-width: 768px) {
   .burger {
     display: block;

@@ -7,20 +7,6 @@
     font-family: Arial, sans-serif;
   }
   
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  
-  .logo {
-    height: 50px;
-  }
-  
-  .nav {
-    display: flex;
-  }
 .placeImage {
   width: 300px; /* Adjust the width as needed */
   height: auto; /* Maintain aspect ratio */

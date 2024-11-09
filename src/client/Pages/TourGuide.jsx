@@ -456,19 +456,19 @@ export default function TourGuide() {
                     />
 
                     {/* AM/PM Selection */}
-                    <FormControl variant="outlined">
+                    <FormControl variant="outlined" style={{ minWidth: 111 }}>
                       <InputLabel id="timeline-am-pm-label">AM/PM</InputLabel>
                       <Select
-                        labelId="timeline-am-pm-label"
-                        id="timeline-am-pm"
-                        value={newItinerary.timelineAmPm}
-                        onChange={(e) =>
-                          setNewItinerary({
-                            ...newItinerary,
-                            timelineAmPm: e.target.value,
-                          })
-                        }
-                        label="AM/PM"
+                          labelId="timeline-am-pm-label"
+                          id="timeline-am-pm"
+                          value={newItinerary.timelineAmPm}
+                          onChange={(e) =>
+                              setNewItinerary({
+                                ...newItinerary,
+                                timelineAmPm: e.target.value,
+                              })
+                          }
+                          label="AM/PM"
                       >
                         <MenuItem value="AM">AM</MenuItem>
                         <MenuItem value="PM">PM</MenuItem>

@@ -201,9 +201,9 @@ const UpcomingActivities = () => {
   
   return (
       <div className={styles.container}>
+      <Header />
       {loading && <p>Loading...</p>}
         <main className={styles.main}>
-        <Header />
           <h2>Upcoming Activities</h2>
 
           <div className={styles.sortOptions}>
@@ -303,7 +303,7 @@ const UpcomingActivities = () => {
                         <p style={{color: activity.bookingOpen ? "green" : "red"}}>
                           {activity.bookingOpen ? "Booking: Open" : "Booking: Closed"}
                         </p>
-                        <p>
+                        <div className={styles.buttonContainers}>
                           <button
                               onClick={() => navigator.clipboard.writeText(`${window.location.origin}/UpcomingActivities/${activity._id}`)}
                               className={styles.cardButton} >
@@ -311,14 +311,19 @@ const UpcomingActivities = () => {
                           </button>
                           <button onClick={() => handleUpcomingActivitiesDetails(activity._id)}
                                   className={styles.cardButton} >
-                            View Details
+                            Details
                           </button>
                           <button
                               onClick={() => window.location.href = `mailto:?subject=Check out this historical place&body=${window.location.origin}/UpcomingActivities/${activity._id}`}
                               className={styles.cardButton} >
                             Email
                           </button>
-                        </p>
+                          {userId && (
+                        <button onClick={() => handleActivityBook(activity._id)} className={styles.cardButton}>
+                          Book
+                        </button>
+                      )}
+                        </div>
 
                         <div className={styles.mapContainer}>
                           <MapContainer center={[activity.coordinates.lat || 51.505, activity.coordinates.lng || -0.09]}
@@ -343,13 +348,6 @@ const UpcomingActivities = () => {
                               </label>
                             </div>
                         )}
-                      {userId && (
-                        <button
-                          onClick={() => handleActivityBook(activity._id)}
-                        >
-                          Book
-                        </button>
-                      )}
                       </div>
                   );
                 })
