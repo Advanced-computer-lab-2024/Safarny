@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Modal, Button } from '@mui/material';
 import { useLocation,useNavigate } from 'react-router-dom';
+import styles from './BookingHotel.module.css';
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 
 const amenitiesOptions = [
   'SWIMMING_POOL', 'SPA', 'FITNESS_CENTER', 'AIR_CONDITIONING', 'RESTAURANT', 'PARKING', 'PETS_ALLOWED', 'AIRPORT_SHUTTLE', 
@@ -136,71 +139,89 @@ const BookingHotel = () => {
   };
 
   return (
-    <div>
-      <h2>Hotel Booking</h2>
-      <form onSubmit={handleSubmit}>
+    <div className={styles.container}>
+      <Header />
+      <div className={styles.content}>
+      <h2 className={styles.title}>Hotel Booking</h2>
+      <form onSubmit={handleSubmit} className={styles.form}>
         <div>
-          <label>City Code</label>
+          <label className={styles.label}>City Code</label>
           <input
             type="text"
             name="cityCode"
             value={formData.cityCode}
             onChange={handleChange}
             required
+            className={styles.input}
           />
         </div>
-
+  
         <div>
-          <label>Radius</label>
+          <label className={styles.label}>Radius</label>
           <input
             type="number"
             name="radius"
             value={formData.radius}
             onChange={handleChange}
+            className={styles.input}
           />
         </div>
-
+  
         <div>
-          <label>Radius Unit</label>
-          <select name="radiusUnit" value={formData.radiusUnit} onChange={handleChange}>
+          <label className={styles.label}>Radius Unit</label>
+          <select
+            name="radiusUnit"
+            value={formData.radiusUnit}
+            onChange={handleChange}
+            className={styles.select}
+          >
             {radiusUnits.map((unit) => (
               <option key={unit} value={unit}>
                 {unit}
               </option>
             ))}
           </select>
-
-          <label>Amenities</label>
-          <select name="amenities" value={formData.amenities} onChange={handleChange}>
+  
+          <label className={styles.label}>Amenities</label>
+          <select
+            name="amenities"
+            value={formData.amenities}
+            onChange={handleChange}
+            className={styles.select}
+          >
             {amenitiesOptions.map((option) => (
               <option key={option} value={option}>
                 {option}
               </option>
             ))}
           </select>
-
-          <label>Rating</label>
-          <select name="ratings" value={formData.ratings} onChange={handleChange}>
+  
+          <label className={styles.label}>Rating</label>
+          <select
+            name="ratings"
+            value={formData.ratings}
+            onChange={handleChange}
+            className={styles.select}
+          >
             {ratingsOptions.map((option) => (
               <option key={option} value={option}>
                 {option}
               </option>
             ))}
           </select>
-
         </div>
-
-        <button type="submit" disabled={loading}>
+  
+        <button type="submit" disabled={loading} className={styles.button}>
           {loading ? 'Searching...' : 'Search Hotels'}
         </button>
       </form>
-
-      <div>
+  
+      <div className={styles.hotelResults}>
         <h3>Hotel Results</h3>
         {hotels.length > 0 ? (
           <ul>
             {hotels.map((hotel) => (
-              <li key={hotel.hotelId}>
+              <li key={hotel.hotelId} className={styles.hotelItem}>
                 <h4>{hotel.name}</h4>
                 <Button onClick={() => handleOfferClick(hotel)}>View Offers</Button>
               </li>
@@ -210,9 +231,12 @@ const BookingHotel = () => {
           <p>No results found.</p>
         )}
       </div>
-      <Button onClick={handleViewMyBooking}>View My Bookings</Button>
+  
+      <a href="#" className={styles.buttonLink} onClick={handleViewMyBooking}>
+          View My Bookings
+        </a>
       <Modal open={isModalOpen} onClose={handleCloseModal}>
-        <div className="modal-content">
+        <div className={styles.modalContent}>
           <h2>Hotel Offer Details</h2>
           {selectedOffer && (
             <>
@@ -221,28 +245,29 @@ const BookingHotel = () => {
             </>
           )}
           {offerDetails ? (
-            <>
-              <h4>Price: {offerDetails.offers[0].price.total} {offerDetails.offers[0].price.currency}</h4>
-              <h4>Check-in: {offerDetails.offers[0].checkInDate}</h4>
-              <h4>Check-out: {offerDetails.offers[0].checkOutDate}</h4>
-              <h4>Distance from center: {selectedOffer.distance.value}{selectedOffer.distance.unit}</h4>
-              <h4>Guests Adults{offerDetails.offers[0].guests.adults}</h4>
-              {/* <h4>Room Type: {offerDetails.offers[0].room.typeEstimated.category}</h4> */}
+            <ul className={styles.offerList}>
+              <li>Price: {offerDetails.offers[0].price.total} {offerDetails.offers[0].price.currency}</li>
+              <li>Check-in: {offerDetails.offers[0].checkInDate}</li>
+              <li>Check-out: {offerDetails.offers[0].checkOutDate}</li>
+              <li>Distance from center: {selectedOffer.distance.value}{selectedOffer.distance.unit}</li>
+              <li>Guests Adults: {offerDetails.offers[0].guests.adults}</li>
               <li>Room Type: {offerDetails.offers[0].room.typeEstimated.category}</li>
               <li>Number Of Beds: {offerDetails.offers[0].room.typeEstimated.beds}</li>
               <li>Bed Type: {offerDetails.offers[0].room.typeEstimated.bedType}</li>
-              <h4>Offer Description : {offerDetails.offers[0].room.description.text}</h4>
-              {/* Add other offer details here as needed */}
-            </>
+              <li>Offer Description: {offerDetails.offers[0].room.description.text}</li>
+            </ul>
           ) : (
             <p>Loading offer details...</p>
           )}
-          <Button onClick={handleCloseModal}>Close</Button>
-          <Button onClick={handleBooking}>Book</Button>
+          <Button onClick={handleCloseModal} className={styles.button}>Close</Button>
+          <Button onClick={handleBooking} className={styles.button}>Book</Button>
         </div>
       </Modal>
+      </div>
+      <Footer />
     </div>
   );
+  
 };
 
 export default BookingHotel;
