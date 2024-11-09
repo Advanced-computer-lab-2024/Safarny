@@ -3,6 +3,7 @@
     --secondary-color: #333;
     --background-color: #dcdbdb;
     --text-color: #616161;
+    --heading-color: white;
     --header-color: white;
     --form-background: #2a2a2a;
     --border-radius: 1rem;
@@ -32,7 +33,7 @@
   }
   
   h2 {
-    color: var(--header-color);
+    color: var(--small-text-color);
     margin-bottom: 1rem;
   }
   

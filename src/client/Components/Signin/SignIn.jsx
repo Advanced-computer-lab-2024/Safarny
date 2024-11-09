@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Footer from '/src/client/Components/Footer/Footer';
 import Header from '../Header/Header';
-import Logo from '/src/client/Assets/Img/logo.png';
 import styles from './SignIn.module.css';
 
 const SignIn = () => {
