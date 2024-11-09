@@ -172,7 +172,19 @@ const handleTempReviewChange = (productId, value) => {
                     <p>Price: ${product.price}</p>
                     <p>Quantity: {product.quantity}</p>
                     <p>Rating: {product.rating}</p>
-                    <p>Reviews: {product.review || "No reviews yet"}</p>
+                     {/* Display Reviews in a similar way to ProductList */}
+              <div className={styles.reviewsSection}>
+                <h3>Reviews:</h3>
+                {product.reviews && product.reviews.length > 0 ? (
+                  <ul>
+                    {product.reviews.map((review, index) => (
+                      <li key={index}>{review}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No reviews available</p>
+                )}
+              </div>
                     <img className={styles.productImage} src={product.imageurl} alt={product.details} />
 
                     <textarea
