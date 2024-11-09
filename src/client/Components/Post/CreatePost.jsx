@@ -16,7 +16,7 @@ const CreatePost = () => {
   useEffect(() => {
     const fetchExchangeRates = async () => {
       try {
-        const response = await axios.get('https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP');
+        const response = await axios.get('https://v6.exchangerate-api.com/v6/d9449bff3fa7ff19888a796e/latest/EGP');
         setCurrencyCodes(Object.keys(response.data.conversion_rates));
       } catch (error) {
         console.error('Error fetching exchange rates:', error);
