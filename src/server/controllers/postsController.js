@@ -12,7 +12,7 @@ const createPost = async (req, res) => {
       purchasedCount: 0,
       imageurl,
       createdby,
-      rating: 1, // Add default rating
+      
     });
 
     const savedPost = await newPost.save();
