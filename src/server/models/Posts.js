@@ -12,7 +12,6 @@ const Posts = new mongoose.Schema(
       type: [String],
       default: [], // Set initial value to an empty array
     },
-    reviews: [String],
     
     purchased: {
       type: Boolean,
@@ -24,10 +23,9 @@ const Posts = new mongoose.Schema(
       default: false, // Set initial value to false
     },
     rating: {
-      type: Number,
-      min: 1, // Minimum rating value
-      max: 5, // Maximum rating value
-      default: 1, // Set initial value to 1
+      type: [Number], // Array of numbers
+      
+      default: [], // Default to an array with a single rating of 1
     },
     createdby:{
       type: mongoose.Schema.Types.ObjectId,

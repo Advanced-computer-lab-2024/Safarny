@@ -80,20 +80,23 @@ const PurchasedProducts = () => {
   };
 
 // Function to submit a review
+// Function to submit a review
 const handleSubmitReview = async (productId) => {
   const newReview = tempReviews[productId] || "";
+  const userRating = ratings[productId]; // Get the user’s rating for this product
+
+  if (!userRating) {
+    alert("Please add a rating before submitting a review.");
+    return;
+  }
+
   console.log("New review is:", newReview);
 
   if (newReview.trim() !== "") {
     try {
       // Step 1: Fetch the current product data
       const response = await axios.get(`/admin/products/${productId}`);
-      console.log("data:", response);
-
       const product = response.data;
-      console.log("product:", product);
-      console.log("product reviews :",product.reviews);
-
 
       if (!product) {
         alert("Product not found");
@@ -101,15 +104,12 @@ const handleSubmitReview = async (productId) => {
       }
 
       // Step 2: Get the current reviews and add the new review
-      const currentReviews = product.reviews ;
+      const currentReviews = product.reviews;
       const updatedReviews = [...currentReviews, newReview];
-
       console.log("Updated reviews array:", updatedReviews);
 
       // Step 3: Update the product with the new reviews array
       await axios.put(`/admin/products/${productId}`, { reviews: updatedReviews });
-      
-
       alert("Review submitted successfully!");
 
       // Step 4: Update local state with the new reviews
@@ -140,16 +140,33 @@ const handleTempReviewChange = (productId, value) => {
   }));
 };
 
-  const handleSubmitRating = async (productId) => {
-    const rating = ratings[productId] || 0;
-    try {
-      await axios.put(`/admin/products/${productId}`, { rating });
-      alert("Rating submitted successfully!");
-    } catch (err) {
-      console.error('Error submitting rating:', err);
-      alert('Failed to submit rating. Please try again.');
-    }
-  };
+const handleSubmitRating = async (productId) => {
+  const newRating = ratings[productId] || 0; // Get the rating entered by the user
+  
+  if (newRating < 1 || newRating > 5) {
+    alert("Rating should be between 1 and 5.");
+    return;
+  }
+
+  try {
+    // Fetch the current product to get its existing ratings
+    const response = await axios.get(`/admin/products/${productId}`);
+    const product = response.data;
+    
+    // Add the new rating to the array of existing ratings
+    const updatedRatings = [...product.rating, newRating]; // Append new rating
+
+    // Update the product with the updated array of ratings
+    await axios.put(`/admin/products/${productId}`, { rating: updatedRatings });
+
+    alert("Rating submitted successfully!");
+  } catch (err) {
+    console.error("Error submitting rating:", err);
+    alert("Failed to submit rating. Please try again.");
+  }
+};
+
+
 
   if (loading) {
     return <p>Loading purchased products...</p>;
@@ -171,7 +188,9 @@ const handleTempReviewChange = (productId, value) => {
                     <h2 className={styles.productDetails}>{product.details}</h2>
                     <p>Price: ${product.price}</p>
                     <p>Quantity: {product.quantity}</p>
-                    <p>Rating: {product.rating}</p>
+                    <p>Ratings: {product.rating.length > 0 ? (product.rating.reduce((acc, val) => acc + val, 0) / product.rating.length).toFixed(1) : "No ratings yet"}</p>
+
+
                      {/* Display Reviews in a similar way to ProductList */}
               <div className={styles.reviewsSection}>
                 <h3>Reviews:</h3>
