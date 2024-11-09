@@ -23,6 +23,8 @@ const UpcomingActivities = () => {
   const [currencyCodes, setCurrencyCodes] = useState([]);
   const [rating, setRating] = useState(0);
   const navigate = useNavigate();
+  const [wallet, setWallet] = useState(0);
+  const [walletCurrency, setWalletCurrency] = useState('EGP');
   const [userRole, setUserRole] = useState(''); // State for storing user role
   const [userInfo, setUserInfo] = useState({
     username: "",
@@ -42,6 +44,10 @@ const UpcomingActivities = () => {
       // Replace `userId` with the actual user ID if available
       const response = await axios.get(`http://localhost:3000/tourist/${userId}`);
       setUserRole(response.data.role); // Store user role in state
+      const user = response.data;
+      setWallet(user.wallet);
+      setWalletCurrency(user.walletcurrency || 'EGP');
+      setSelectedCurrency(user.walletcurrency || 'EGP');
       console.log('User role:', response.data.role); // Log user role for debugging
     } catch (err) {
       console.error('Error fetching user role:', err);
@@ -50,7 +56,7 @@ const UpcomingActivities = () => {
 
   const fetchExchangeRates = async () => {
     try {
-      const response = await fetch('https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP');
+      const response = await fetch('https://v6.exchangerate-api.com/v6/d9449bff3fa7ff19888a796e/latest/EGP');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

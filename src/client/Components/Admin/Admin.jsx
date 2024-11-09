@@ -338,18 +338,18 @@ const Admin = () => {
             </div>
           </div>
 
-          {/*<FormControl fullWidth margin="normal">*/}
-          {/*  <InputLabel>Currency</InputLabel>*/}
-          {/*  <Select*/}
-          {/*      value={selectedCurrency}*/}
-          {/*      onChange={(e) => setSelectedCurrency(e.target.value)}*/}
-          {/*  >*/}
-          {/*    <MenuItem value="">All</MenuItem>*/}
-          {/*    {currencyCodes.map((code) => (*/}
-          {/*        <MenuItem key={code} value={code}>{code}</MenuItem>*/}
-          {/*    ))}*/}
-          {/*  </Select>*/}
-          {/*</FormControl>*/}
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Currency</InputLabel>
+            <Select
+                value={selectedCurrency}
+                onChange={(e) => setSelectedCurrency(e.target.value)}
+            >
+              <MenuItem value="">All</MenuItem>
+              {currencyCodes.map((code) => (
+                  <MenuItem key={code} value={code}>{code}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <div className={styles.sortBy}>
             <FormControlLabel
               control={

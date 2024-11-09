@@ -29,6 +29,8 @@ export default function TourGuide() {
   const [itineraries, setItineraries] = useState([]);
   const [activities, setActivities] = useState([]);
   const [tags, setTags] = useState([]);
+  const [currencies, setCurrencies] = useState([]);
+  const [selectedCurrency, setSelectedCurrency] = useState("");
   const [profile, setProfile] = useState({
     PrevWork: "",
     YearOfExp: 0,
@@ -94,7 +96,18 @@ export default function TourGuide() {
 
     fetchData();
   }, []);
+  useEffect(() => {
+    const fetchCurrencies = async () => {
+      try {
+        const response = await axios.get("https://api.exchangerate-api.com/v4/latest/USD");
+        setCurrencies(Object.keys(response.data.rates));
+      } catch (error) {
+        console.error("Error fetching currencies", error);
+      }
+    };
 
+    fetchCurrencies();
+  }, []);
   const handleCreateItinerary = async (e) => {
     e.preventDefault();
     try {
@@ -363,109 +376,105 @@ export default function TourGuide() {
                   arrow
                 >
                   <Box display="flex" gap={2} alignItems="center">
-                    {/* Hours Input */}
+                    {/* Starting Hour Input */}
                     <TextField
-                      id="timeline-hours"
-                      label="Start"
-                      variant="outlined"
-                      type="number"
-                      inputProps={{ min: 1, max: 12 }} // restrict between 1-12 for hours
-                      value={newItinerary.timelineHours}
-                      onChange={(e) =>
-                        setNewItinerary({
-                          ...newItinerary,
-                          timelineHours: e.target.value,
-                        })
-                      }
-                    />
-
-                    {/* Minutes Input */}
-                    <TextField
-                      id="timeline-minutes"
-                      label="time"
-                      variant="outlined"
-                      type="number"
-                      inputProps={{ min: 0, max: 59 }} // restrict between 0-59 for minutes
-                      value={newItinerary.timelineMinutes}
-                      onChange={(e) =>
-                        setNewItinerary({
-                          ...newItinerary,
-                          timelineMinutes: e.target.value,
-                        })
-                      }
-                    />
-
-                    {/* AM/PM Selection */}
-                    <FormControl variant="outlined" style={{ minWidth: 111 }}>
-                      <InputLabel id="timeline-am-pm-label">AM/PM</InputLabel>
-                      <Select
-                        labelId="timeline-am-pm-label"
-                        id="timeline-am-pm"
-                        value={newItinerary.timelineAmPm}
+                        id="timeline-start-hour"
+                        label="Starting hour"
+                        variant="outlined"
+                        type="number"
+                        inputProps={{ min: 1, max: 12 }} // restrict between 1-12 for hours
+                        value={newItinerary.timelineStartHour}
                         onChange={(e) =>
-                          setNewItinerary({
-                            ...newItinerary,
-                            timelineAmPm: e.target.value,
-                          })
+                            setNewItinerary({
+                              ...newItinerary,
+                              timelineStartHour: e.target.value,
+                            })
                         }
-                        label="AM/PM"
+                        style={{ minWidth: 80 }} // Adjust width
+                    />
+
+                    {/* Starting Minute Input */}
+                    <TextField
+                        id="timeline-start-minute"
+                        label="Starting minute"
+                        variant="outlined"
+                        type="number"
+                        inputProps={{ min: 0, max: 59 }} // restrict between 0-59 for minutes
+                        value={newItinerary.timelineStartMinute}
+                        onChange={(e) =>
+                            setNewItinerary({
+                              ...newItinerary,
+                              timelineStartMinute: e.target.value,
+                            })
+                        }
+                        style={{ minWidth: 80 }} // Adjust width
+                    />
+
+                    {/* Starting AM/PM Selection */}
+                    <FormControl variant="outlined" style={{ minWidth: 111 }}>
+                      <InputLabel id="timeline-start-am-pm-label">AM/PM</InputLabel>
+                      <Select
+                          labelId="timeline-start-am-pm-label"
+                          id="timeline-start-am-pm"
+                          value={newItinerary.timelineStartAmPm}
+                          onChange={(e) =>
+                              setNewItinerary({
+                                ...newItinerary,
+                                timelineStartAmPm: e.target.value,
+                              })
+                          }
+                          label="AM/PM"
                       >
                         <MenuItem value="AM">AM</MenuItem>
                         <MenuItem value="PM">PM</MenuItem>
                       </Select>
                     </FormControl>
-                  </Box>
-                </Tooltip>
 
-                {/* Timeline (Hours, Minutes, AM/PM) */}
-                <Tooltip
-                  title="Enter the timeline of activities in hours, minutes, and AM/PM"
-                  arrow
-                >
-                  <Box display="flex" gap={2} alignItems="center">
-                    {/* Hours Input */}
+                    {/* Ending Hour Input */}
                     <TextField
-                      id="timeline-hours"
-                      label="End"
-                      variant="outlined"
-                      type="number"
-                      inputProps={{ min: 1, max: 12 }} // restrict between 1-12 for hours
-                      value={newItinerary.timelineHours}
-                      onChange={(e) =>
-                        setNewItinerary({
-                          ...newItinerary,
-                          timelineHours: e.target.value,
-                        })
-                      }
+                        id="timeline-end-hour"
+                        label="Ending hour"
+                        variant="outlined"
+                        type="number"
+                        inputProps={{ min: 1, max: 12 }} // restrict between 1-12 for hours
+                        value={newItinerary.timelineEndHour}
+                        onChange={(e) =>
+                            setNewItinerary({
+                              ...newItinerary,
+                              timelineEndHour: e.target.value,
+                            })
+                        }
+                        style={{ minWidth: 100 }} // Adjust width
                     />
 
-                    {/* Minutes Input */}
+                    {/* Ending Minute Input */}
                     <TextField
-                      id="timeline-minutes"
-                      label="time"
-                      variant="outlined"
-                      type="number"
-                      inputProps={{ min: 0, max: 59 }} // restrict between 0-59 for minutes
-                      value={newItinerary.timelineMinutes}
-                      onChange={(e) =>
-                        setNewItinerary({
-                          ...newItinerary,
-                          timelineMinutes: e.target.value,
-                        })
-                      }
+                        id="timeline-end-minute"
+                        label="Ending minute"
+                        variant="outlined"
+                        type="number"
+                        inputProps={{ min: 0, max: 59 }} // restrict between 0-59 for minutes
+                        value={newItinerary.timelineEndMinute}
+                        onChange={(e) =>
+                            setNewItinerary({
+                              ...newItinerary,
+                              timelineEndMinute: e.target.value,
+                            })
+                        }
+                        style={{ minWidth: 80 }} // Adjust width
                     />
 
-                    {/* AM/PM Selection */}
+                    {/* Ending AM/PM Selection */}
                     <FormControl variant="outlined" style={{ minWidth: 111 }}>
-                      <InputLabel id="timeline-am-pm-label">AM/PM</InputLabel>
+                      <InputLabel id="timeline-end-am-pm-label">AM/PM</InputLabel>
                       <Select
-                          labelId="timeline-am-pm-label"
-                          id="timeline-am-pm"
-                          value={newItinerary.timelineAmPm}
+                          labelId="timeline-end-am-pm-label"
+                          id="timeline-end-am-pm"
+                          value={newItinerary.timelineEndAmPm}
                           onChange={(e) =>
                               setNewItinerary({
                                 ...newItinerary,
-                                timelineAmPm: e.target.value,
+                                timelineEndAmPm: e.target.value,
                               })
                           }
                           label="AM/PM"
@@ -499,7 +508,7 @@ export default function TourGuide() {
                   <TextField
                     fullWidth
                     id="price"
-                    label="Price ($)"
+                    label="Price"
                     variant="outlined"
                     type="number"
                     value={newItinerary.price}
@@ -514,20 +523,14 @@ export default function TourGuide() {
                 <FormControl fullWidth margin="normal">
                   <InputLabel>Currency</InputLabel>
                   <Select
-                    name="currency"
-                    value={newItinerary.currency}
-                    onChange={(e) =>
-                      setNewItinerary({
-                        ...newItinerary,
-                        currency: e.target.value,
-                      })
-                    }
+                      value={selectedCurrency}
+                      onChange={(e) => setSelectedCurrency(e.target.value)}
                   >
-                    <MenuItem value="EGP">EGP</MenuItem>
-                    <MenuItem value="SAR">SAR</MenuItem>
-                    <MenuItem value="USD">USD</MenuItem>
-                    <MenuItem value="EUR">EUR</MenuItem>
-                    <MenuItem value="GBP">GBP</MenuItem>
+                    {currencies.map((currency) => (
+                        <MenuItem key={currency} value={currency}>
+                          {currency}
+                        </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
                 {/* Available Dates (Array of Dates) */}

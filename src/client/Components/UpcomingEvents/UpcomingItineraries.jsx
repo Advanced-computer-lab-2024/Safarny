@@ -55,7 +55,7 @@ const UpcomingItineraries = () => {
   const fetchExchangeRates = async () => {
     try {
       const response = await fetch(
-        "https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP"
+        "https://v6.exchangerate-api.com/v6/d9449bff3fa7ff19888a796e/latest/EGP"
       );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
