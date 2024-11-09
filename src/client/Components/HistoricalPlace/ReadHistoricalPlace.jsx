@@ -14,7 +14,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import "./loadingContainer.css";
-import MyBookingModal from "../../Booking/MyBookingModal";
+import MyBookingModal from "/src/client/Components/Booking/MyBookingModal" ;
 
 const ReadHistoricalPlace = () => {
   const [places, setPlaces] = useState([]);

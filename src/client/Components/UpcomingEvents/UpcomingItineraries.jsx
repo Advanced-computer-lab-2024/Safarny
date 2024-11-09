@@ -13,7 +13,7 @@ import {
 
 import Header from "/src/client/Components/Header/Header";
 import axios from "axios";
-import MyBookingModal from "../../Booking/MyBookingModal";
+import MyBookingModal from "/src/client/Components/Booking/MyBookingModal" ;
 
 const UpcomingItineraries = () => {
   const [itineraries, setItineraries] = useState([]);

@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Link, useNavigate , useLocation,} from "react-router-dom";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { FormControl, InputLabel, MenuItem, Select, CircularProgress } from "@mui/material";
-import MyBookingModal from "../../Booking/MyBookingModal";
+import MyBookingModal from "/src/client/Components/Booking/MyBookingModal" ;
 import Footer from '/src/client/Components/Footer/Footer';
 import Header from '../Header/Header';
 

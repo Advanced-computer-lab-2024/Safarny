@@ -57,10 +57,10 @@ import CreateComplaints from "./Components/Complaints/CreateComplaints";
 import ViewComplaints from "./Components/Complaints/ViewComplaints";
 import AdminViewComplaints from "./Components/Complaints/AminViewComplaints";
 import AdminEditComplaints from "./Components/Complaints/AdminEditComplaints";
-import BookFlight from "./Booking/BookFlight";
-import BookingHotel from "./Booking/BookingHotel";
-import MyBookedFlights from "./Booking/MyBookedFlights";
-import MyHotelBookings from "./Booking/MyHotelBookings";
+import BookFlight from "./Components/Booking/BookFlight";
+import BookingHotel from "./Components/Booking/BookingHotel";
+import MyBookedFlights from "./Components/Booking/MyBookedFlights";
+import MyHotelBookings from "./Components/Booking/MyHotelBookings";
 import UpcomingActivitesDetails from "./Components/UpcomingEvents/UpcomingActivitiesDetails";
 import WishList from "./Components/WishList/WishList";
 import Terms from "./Components/terms/terms";
@@ -72,7 +72,7 @@ import EditTransport from "./Components/Transport/EditTransport";
 import BookTransport from "./Components/Transport/BookTransport";
 import Preferences from "./Components/Preferences/Preferences";
 
-import MyBookings from "./Booking/MyBookings";
+import MyBookings from "./Components/Booking/MyBookings";
 
 function App() {
   return (
