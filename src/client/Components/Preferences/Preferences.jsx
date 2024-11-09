@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
+import styles from './Preferences.module.css';
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 
 const Preferences = () => {
   const location = useLocation();
@@ -61,7 +64,8 @@ const Preferences = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div>
+    <div className = {styles.container}>
+      <Header />
       <h2>Edit Preferences</h2>
       <form onSubmit={handleSubmit}>
 
@@ -155,6 +159,7 @@ const Preferences = () => {
 
         <button type="submit">Save Preferences</button>
       </form>
+      <Footer />
     </div>
   );
 };
