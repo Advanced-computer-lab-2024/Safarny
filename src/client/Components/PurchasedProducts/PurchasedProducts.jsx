@@ -80,20 +80,23 @@ const PurchasedProducts = () => {
   };
 
 // Function to submit a review
+// Function to submit a review
 const handleSubmitReview = async (productId) => {
   const newReview = tempReviews[productId] || "";
+  const userRating = ratings[productId]; // Get the user’s rating for this product
+
+  if (!userRating) {
+    alert("Please add a rating before submitting a review.");
+    return;
+  }
+
   console.log("New review is:", newReview);
 
   if (newReview.trim() !== "") {
     try {
       // Step 1: Fetch the current product data
       const response = await axios.get(`/admin/products/${productId}`);
-      console.log("data:", response);
-
       const product = response.data;
-      console.log("product:", product);
-      console.log("product reviews :",product.reviews);
-
 
       if (!product) {
         alert("Product not found");
@@ -101,15 +104,12 @@ const handleSubmitReview = async (productId) => {
       }
 
       // Step 2: Get the current reviews and add the new review
-      const currentReviews = product.reviews ;
+      const currentReviews = product.reviews;
       const updatedReviews = [...currentReviews, newReview];
-
       console.log("Updated reviews array:", updatedReviews);
 
       // Step 3: Update the product with the new reviews array
       await axios.put(`/admin/products/${productId}`, { reviews: updatedReviews });
-      
-
       alert("Review submitted successfully!");
 
       // Step 4: Update local state with the new reviews
