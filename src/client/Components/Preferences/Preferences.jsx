@@ -64,16 +64,19 @@ const Preferences = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className = {styles.container}>
+    <div className={styles.container}>
       <Header />
-      <h2>Edit Preferences</h2>
-      <form onSubmit={handleSubmit}>
-
+      <div className={styles.content}>
+        <h1 className={styles.title}>Preferences</h1>
+        <p>These preferences will help you find the perfect travel experience.</p>
+      <h2 className={styles.heading}>Edit Preferences</h2>
+      <form onSubmit={handleSubmit} className={styles.form}>
+  
         {/* Historic Areas (multiple selection) */}
-        <div>
-          <h3>Historic Areas</h3>
+        <div className={styles.section}>
+          <h3 className={styles.sectionHeading}>Historic Areas</h3>
           {historicAreaOptions.map((option) => (
-            <label key={option}>
+            <label key={option} className={styles.label}>
               <input
                 type="checkbox"
                 checked={preferences.historicAreas.includes(option)}
@@ -83,17 +86,18 @@ const Preferences = () => {
                     : [...preferences.historicAreas, option];
                   handleChange('historicAreas', selected);
                 }}
+                className={styles.checkbox}
               />
               {option}
             </label>
           ))}
         </div>
-
+  
         {/* Beaches (multiple selection) */}
-        <div>
-          <h3>Beaches</h3>
+        <div className={styles.section}>
+          <h3 className={styles.sectionHeading}>Beaches</h3>
           {beachOptions.map((option) => (
-            <label key={option}>
+            <label key={option} className={styles.label}>
               <input
                 type="checkbox"
                 checked={preferences.beaches.includes(option)}
@@ -103,17 +107,18 @@ const Preferences = () => {
                     : [...preferences.beaches, option];
                   handleChange('beaches', selected);
                 }}
+                className={styles.checkbox}
               />
               {option}
             </label>
           ))}
         </div>
-
+  
         {/* Shopping (multiple selection) */}
-        <div>
-          <h3>Shopping</h3>
+        <div className={styles.section}>
+          <h3 className={styles.sectionHeading}>Shopping</h3>
           {shoppingOptions.map((option) => (
-            <label key={option}>
+            <label key={option} className={styles.label}>
               <input
                 type="checkbox"
                 checked={preferences.shopping.includes(option)}
@@ -123,18 +128,20 @@ const Preferences = () => {
                     : [...preferences.shopping, option];
                   handleChange('shopping', selected);
                 }}
+                className={styles.checkbox}
               />
               {option}
             </label>
           ))}
         </div>
-
+  
         {/* Family Friendly (single selection) */}
-        <div>
-          <h3>Family Friendly</h3>
+        <div className={styles.section}>
+          <h3 className={styles.sectionHeading}>Family Friendly</h3>
           <select
             value={preferences.familyFriendly[0] || ''}
             onChange={(e) => handleChange('familyFriendly', [e.target.value])}
+            className={styles.select}
           >
             <option value="">Select</option>
             {familyFriendlyOptions.map((option) => (
@@ -142,13 +149,14 @@ const Preferences = () => {
             ))}
           </select>
         </div>
-
+  
         {/* Budget (single selection) */}
-        <div>
-          <h3>Budget</h3>
+        <div className={styles.section}>
+          <h3 className={styles.sectionHeading}>Budget</h3>
           <select
             value={preferences.budget[0] || ''}
             onChange={(e) => handleChange('budget', [e.target.value])}
+            className={styles.select}
           >
             <option value="">Select</option>
             {budgetOptions.map((option) => (
@@ -156,12 +164,14 @@ const Preferences = () => {
             ))}
           </select>
         </div>
-
-        <button type="submit">Save Preferences</button>
+  
+        <button type="submit" className={styles.button}>Save Preferences</button>
       </form>
+      </div>
       <Footer />
     </div>
   );
+  
 };
 
 export default Preferences;
