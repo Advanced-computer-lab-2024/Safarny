@@ -11,6 +11,7 @@ const Posts = new mongoose.Schema(
       type: [String],
       default: [], // Set initial value to an empty array
     },
+    reviews: [String],
     
     purchased: {
       type: Boolean,

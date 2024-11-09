@@ -15,6 +15,7 @@ const PurchasedProducts = () => {
   const [error, setError] = useState(null);
   const [reviews, setReviews] = useState({});
   const [ratings, setRatings] = useState({});
+  const [tempReviews, setTempReviews] = useState({}); // Temporarily holds input text
 
   useEffect(() => {
     const fetchPurchasedProducts = async () => {
@@ -78,16 +79,66 @@ const PurchasedProducts = () => {
     }));
   };
 
-  const handleSubmitReview = async (productId) => {
-    const review = reviews[productId] || "no reviews";
+// Function to submit a review
+const handleSubmitReview = async (productId) => {
+  const newReview = tempReviews[productId] || "";
+  console.log("New review is:", newReview);
+
+  if (newReview.trim() !== "") {
     try {
-      await axios.put(`/admin/products/${productId}`, { review });
+      // Step 1: Fetch the current product data
+      const response = await axios.get(`/admin/products/${productId}`);
+      console.log("data:", response);
+
+      const product = response.data;
+      console.log("product:", product);
+      console.log("product reviews :",product.reviews);
+
+
+      if (!product) {
+        alert("Product not found");
+        return;
+      }
+
+      // Step 2: Get the current reviews and add the new review
+      const currentReviews = product.reviews ;
+      const updatedReviews = [...currentReviews, newReview];
+
+      console.log("Updated reviews array:", updatedReviews);
+
+      // Step 3: Update the product with the new reviews array
+      await axios.put(`/admin/products/${productId}`, { reviews: updatedReviews });
+      
+
       alert("Review submitted successfully!");
+
+      // Step 4: Update local state with the new reviews
+      setReviews(prevReviews => ({
+        ...prevReviews,
+        [productId]: updatedReviews
+      }));
+
+      // Clear the input field for the product after submission
+      setTempReviews(prevTempReviews => ({
+        ...prevTempReviews,
+        [productId]: "" // Reset the input field
+      }));
+
     } catch (err) {
-      console.error('Error submitting review:', err);
-      alert('Failed to submit review. Please try again.');
+      console.error("Error submitting review:", err);
+      alert("Failed to submit review. Please try again.");
     }
-  };
+  }
+};
+
+
+// Function to update tempReviews with the current text
+const handleTempReviewChange = (productId, value) => {
+  setTempReviews(prevTempReviews => ({
+    ...prevTempReviews,
+    [productId]: value,
+  }));
+};
 
   const handleSubmitRating = async (productId) => {
     const rating = ratings[productId] || 0;
@@ -126,8 +177,8 @@ const PurchasedProducts = () => {
 
                     <textarea
                         placeholder="Write your review..."
-                        value={reviews[product._id] || ''}
-                        onChange={(e) => handleReviewChange(product._id, e.target.value)}
+                        value={tempReviews[product._id] || ''} // Use tempReviews here
+                        onChange={(e) => handleTempReviewChange(product._id, e.target.value)} 
                         className={styles.reviewInput}
                     />
                     <button onClick={() => handleSubmitReview(product._id)} className={styles.submitReviewButton}>

@@ -50,12 +50,12 @@ const getAllPostsBySellerId = async (req, res) => {
 
 const updatePostById = async (req, res) => {
   try {
-    const postId = req.params.id;
-    const { details, price, currency, quantity, imageurl, purchased ,review, rating,archived } = req.body;
+    const postId = req.params.id.trim();
+    const { details, price, currency, quantity, imageurl, purchased ,reviews, rating,archived } = req.body;
 
     const updatedPost = await Post.findByIdAndUpdate(
       postId,
-      { details, price, currency, quantity, imageurl,purchased ,review, rating,archived},
+      { details, price, currency, quantity, imageurl,purchased ,reviews, rating,archived},
       { new: true, runValidators: true }
     );
 
