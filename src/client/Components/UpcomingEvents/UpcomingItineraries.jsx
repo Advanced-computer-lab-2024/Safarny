@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./UpcomingItinerary.module.css";
-import Logo from "/src/client/Assets/Img/logo.png";
+// import Logo from "/src/client/Assets/Img/logo.png";
 import Footer from "/src/client/components/Footer/Footer";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {

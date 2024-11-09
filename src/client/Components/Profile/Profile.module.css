@@ -16,10 +16,17 @@ body{
     height: 100%;
     position: relative;
 }
-.buttonContainer {
+
+.organizedButtonContainer {
   display: flex;
-  gap: 0.625rem; /* Adds space between buttons */
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 60rem;
+  padding: 2rem;
 }
+
 .container {
   font-family: 'Arial', sans-serif;
   color: var(--text-color);
@@ -64,81 +71,70 @@ p, h5 {
   width: 90%;
 }
 
-.buttonContainer {
+.buttonGroup {
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap;
   justify-content: center;
-  margin-top: 2rem;
+  align-items: center;
+  gap: 1rem;
 }
 
-.buttonContainer button {
-  padding: 0.75rem 1.5rem;
-  background-color: var(--secondary-color);
-  color: var(--header-color);
+.buttonGroup button {
+  padding: 1rem 2rem;
   border: none;
   border-radius: var(--border-radius);
   font-size: 1rem;
+  color: var(--header-color);
+  background-color: var(--primary-color);
   cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
-.buttonContainer button:hover {
+.buttonGroup button:hover {
   background-color: var(--card-hover);
-  box-shadow: 0 0 10px var(--glow-color);
 }
 
-.imageUpload {
-  margin-top: 20px;
-  text-align: center; /* Center the content */
-}
-
-.profileImage {
-  margin-top: 10px;
-  max-width: 150px; /* Set a maximum width for the image */
-  max-height: 150px; /* Set a maximum height for the image */
-  border-radius: var(--border-radius); /* Match your card styles */
-  border: 2px solid var(--secondary-color); /* Add a border if needed */
-}
-
-.createPlaceButton,
-.createTagButton,
-.postButton,
-.mainButton {
-  padding: 0.75rem 1.5rem;
-  margin-top: 1rem;
-  background-color: var(--secondary-color);
+.mainButton{
+  padding: 1rem 2rem;
+  background-color: var(--primary-color);
   color: var(--header-color);
   border: none;
   border-radius: var(--border-radius);
-  font-size: 1rem;
   cursor: pointer;
+  width: 40%;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  align-self: center;
+  align-items: center;
 }
 
-.createPlaceButton:hover,
-.createTagButton:hover,
-.postButton:hover,
 .mainButton:hover {
   background-color: var(--card-hover);
   box-shadow: 0 0 10px var(--glow-color);
 }
 
-.buttonGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 1rem;
-  justify-content: center;
-  align-items: center;
+.subButton {
+  padding: 0.5rem 1.25rem;
+  background-color: var(--card-background);
+  color: var(--header-color);
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* loyalty badge */
+.subButton:hover {
+  background-color: var(--card-hover);
+  box-shadow: 0 0 10px var(--glow-color);
+}
+
 .loyaltyBadge {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
-  margin-top: 1rem;
+  color: var(--text-color);
+  width: 75%;
+  align-self: center;
+  align-items: center;
 }
 
 .loyaltyBadge img {
@@ -148,14 +144,16 @@ p, h5 {
 
 .loyaltyBadge h5 {
   margin: 0;
+  align-self: center;
 }
 
 .rankBadge {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 0.625rem;
   margin-top: 1rem;
+  align-self: center;
 }
 
 .rankBadge img {
@@ -188,6 +186,19 @@ p, h5 {
   100% { transform: translateX(0); }
 }
 
+.imageUpload {
+  margin-top: 20px;
+  text-align: center; /* Center the content */
+}
+
+.profileImage {
+  margin-top: 10px;
+  max-width: 150px; /* Set a maximum width for the image */
+  max-height: 150px; /* Set a maximum height for the image */
+  border-radius: var(--border-radius); /* Match your card styles */
+  border: 2px solid var(--secondary-color); /* Add a border if needed */
+}
+
 /* .notificationButton {
   position: fixed;
   top: 10px;
@@ -203,4 +214,20 @@ p, h5 {
 
 .notificationButton:hover {
   animation: moveBell 0.5s;
+}
+
+.subButtonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  text-align: center;
+}
+
+.showButtonContainer {
+  display: none;
+}
+
+.showButtonContainer.active {
+  display: block;
 }
