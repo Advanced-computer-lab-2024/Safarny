@@ -7,7 +7,7 @@ import {
   Card,
   CardContent,
   CardActions,
-  Alert,
+  Alert, InputLabel, Select, MenuItem, FormControl,
 } from "@mui/material";
 import axios from "axios";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -28,6 +28,7 @@ const Admin = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedSection, setSelectedSection] = useState("posts");
+  const [currencyCodes, setCurrencyCodes] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [minPrice, setMinPrice] = useState("");
@@ -43,7 +44,18 @@ const Admin = () => {
       fetchPosts();
     }
   }, [selectedSection]);
+  useEffect(() => {
+    const fetchExchangeRates = async () => {
+      try {
+        const response = await axios.get('https://v6.exchangerate-api.com/v6/d9449bff3fa7ff19888a796e/latest/EGP');
+        setCurrencyCodes(Object.keys(response.data.conversion_rates));
+      } catch (error) {
+        console.error('Error fetching exchange rates:', error);
+      }
+    };
 
+    fetchExchangeRates();
+  }, []);
   const fetchPosts = async () => {
     try {
       const response = await axios.get(`/seller/products/${sellerId}`);
@@ -309,6 +321,18 @@ const Admin = () => {
                 onChange={handleInputChange}
                 margin="normal"
             />
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Currency</InputLabel>
+              <Select
+                  name="currency"
+                  value={currentPost.currency}
+                  onChange={handleInputChange}
+              >
+                {currencyCodes.map(code => (
+                    <MenuItem key={code} value={code}>{code}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <TextField
                 fullWidth
                 label="Quantity"
