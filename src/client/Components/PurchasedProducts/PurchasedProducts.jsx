@@ -140,16 +140,33 @@ const handleTempReviewChange = (productId, value) => {
   }));
 };
 
-  const handleSubmitRating = async (productId) => {
-    const rating = ratings[productId] || 0;
-    try {
-      await axios.put(`/admin/products/${productId}`, { rating });
-      alert("Rating submitted successfully!");
-    } catch (err) {
-      console.error('Error submitting rating:', err);
-      alert('Failed to submit rating. Please try again.');
-    }
-  };
+const handleSubmitRating = async (productId) => {
+  const newRating = ratings[productId] || 0; // Get the rating entered by the user
+  
+  if (newRating < 1 || newRating > 5) {
+    alert("Rating should be between 1 and 5.");
+    return;
+  }
+
+  try {
+    // Fetch the current product to get its existing ratings
+    const response = await axios.get(`/admin/products/${productId}`);
+    const product = response.data;
+    
+    // Add the new rating to the array of existing ratings
+    const updatedRatings = [...product.rating, newRating]; // Append new rating
+
+    // Update the product with the updated array of ratings
+    await axios.put(`/admin/products/${productId}`, { rating: updatedRatings });
+
+    alert("Rating submitted successfully!");
+  } catch (err) {
+    console.error("Error submitting rating:", err);
+    alert("Failed to submit rating. Please try again.");
+  }
+};
+
+
 
   if (loading) {
     return <p>Loading purchased products...</p>;
@@ -171,7 +188,9 @@ const handleTempReviewChange = (productId, value) => {
                     <h2 className={styles.productDetails}>{product.details}</h2>
                     <p>Price: ${product.price}</p>
                     <p>Quantity: {product.quantity}</p>
-                    <p>Rating: {product.rating}</p>
+                    <p>Ratings: {product.rating.length > 0 ? (product.rating.reduce((acc, val) => acc + val, 0) / product.rating.length).toFixed(1) : "No ratings yet"}</p>
+
+
                      {/* Display Reviews in a similar way to ProductList */}
               <div className={styles.reviewsSection}>
                 <h3>Reviews:</h3>

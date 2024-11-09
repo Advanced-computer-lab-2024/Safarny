@@ -231,7 +231,7 @@ const ProductList = () => {
                       <h2 className={styles.productDetails}>{product.details}</h2>
                       <p>Price: {convertedPrice} {selectedCurrency}</p>
                       <p>Quantity: {product.quantity}</p>
-                      <p>Rating: {product.rating}</p>
+                      <p>Ratings: {product.rating.length > 0 ? (product.rating.reduce((acc, val) => acc + val, 0) / product.rating.length).toFixed(1) : "No ratings yet"}</p>
                       {/* Display Reviews */}
                       <div className={styles.reviewsSection}>
                         <h3>Reviews:</h3>
