@@ -111,9 +111,9 @@ const ProductList = () => {
 
     try {
       console.log("userid: ", userId);
-      const updatedProduct = { ...product, quantity: product.quantity - 1 };
+      const updatedProduct = {...product, quantity: product.quantity - 1, purchasedCount: product.purchasedCount + 1};
       await axios.put(`/admin/products/${product._id}`, updatedProduct);
-
+      await axios.put(`/admin/products/${product._id}`, updatedProduct);
       const profileResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
       const currentPosts = profileResponse.data.posts || [];
       const updatedPosts = [...currentPosts, product._id];
@@ -232,6 +232,12 @@ const ProductList = () => {
                       <p>Price: {convertedPrice} {selectedCurrency}</p>
                       <p>Quantity: {product.quantity}</p>
                       <p>Rating: {product.rating}</p>
+                      {userRole === 'Seller' && (
+                          <>
+                            <p>Purchased Count: {product.purchasedCount}</p>
+                            <p>Sales: {product.purchasedCount * product.price}</p>
+                          </>
+                      )}
                       {/* Display Reviews */}
                       <div className={styles.reviewsSection}>
                         <h3>Reviews:</h3>
