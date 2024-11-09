@@ -370,9 +370,9 @@ const Admin = () => {
                     <div className={styles.cardImage}>
                       <img src={post.imageurl} alt="Image" />
                     </div>
-                    <label className="label-black">Archive:</label>
+                    <label className={styles.blacky}>Archive:</label>
                     <div className="checkbox-container">
-                      <label className="label-black">
+                      <label className={styles.blacky}>
                         <input
                           type="checkbox"
                           checked={post.archived}
