@@ -217,6 +217,13 @@ const Admin = () => {
       setErrorMessage('Failed to update archive status');
     }
   };
+  const handleUpcomingItinerariesClick = () => {
+    navigate("/UpcomingItineraries", { state: { userId } });
+  };
+  const handleUpcomingActivitiesClick = () => {
+    navigate("/UpcomingActivites", { state: { userId } });
+  };
+
 
   const handleArchiveToggle = async (postId, isArchived) => {
     try {
@@ -271,6 +278,12 @@ const Admin = () => {
             <button onClick={() => setSelectedSection('ActivityCategory')} className={styles.button}>Manage Categories</button>
             <Link to="/adminaddgovernor"  className={styles.button}>Add Governor</Link>
             <Link to="/adminviewcomplaints" className={styles.button}>View Complaints</Link>
+            <button onClick={handleUpcomingItinerariesClick} className={styles.button}>
+          View Itineraries
+        </button>
+        <button onClick={handleUpcomingActivitiesClick} className={styles.button}>
+          View Activities
+        </button>
           </nav>
         </header>
         <SideBar className={styles.sidebar} />
