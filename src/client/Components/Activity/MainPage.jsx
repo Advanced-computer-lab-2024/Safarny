@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Header from '/src/client/Components/Header/Header';
-import Footer from '/src/client/Components/Footer/Footer';
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 import styles from "./MainPage.module.css";
 
 const MainPage = () => {
@@ -15,37 +15,40 @@ const MainPage = () => {
     }, []);
 
     return (
-        <div>
-            <Header/>
+        <div className={styles.container}>
+          <Header />
+          <main className={styles.mainContent}>
             <h1 className={styles.heading}>Main Page</h1>
-            {userId && <p>User ID: {userId}</p>}
-            <nav>
-                <ul className={styles.navList}>
-                    <li>
-                        <Link to={`/create/${userId}`}>
-                            <button className={styles.navButton}>Create Activity</button>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to={`/read/${userId}`}>
-                            <button className={styles.navButton}>My Activities</button>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to={`/update/${userId}`}>
-                            <button className={styles.navButton}>Update Activity</button>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to={`/delete/${userId}`}>
-                            <button className={styles.navButton}>Delete Activity</button>
-                        </Link>
-                    </li>
-                </ul>
+            {userId && <p className={styles.userIdText}>User ID: {userId}</p>}
+            <nav className={styles.nav}>
+              <ul className={styles.navList}>
+                <li className={styles.navItem}>
+                  <Link to={`/create/${userId}`}>
+                    <button className={styles.navButton}>Create Activity</button>
+                  </Link>
+                </li>
+                <li className={styles.navItem}>
+                  <Link to={`/read/${userId}`}>
+                    <button className={styles.navButton}>My Activities</button>
+                  </Link>
+                </li>
+                <li className={styles.navItem}>
+                  <Link to={`/update/${userId}`}>
+                    <button className={styles.navButton}>Update Activity</button>
+                  </Link>
+                </li>
+                <li className={styles.navItem}>
+                  <Link to={`/delete/${userId}`}>
+                    <button className={styles.navButton}>Delete Activity</button>
+                  </Link>
+                </li>
+              </ul>
             </nav>
-            <Footer/>
+          </main>
+          <Footer />
         </div>
-    );
+      );
+      
 };
 
 export default MainPage;
