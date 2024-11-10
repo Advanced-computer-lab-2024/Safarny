@@ -7,6 +7,8 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../server/config/Firebase"; // Adjust the path as necessary
 import styles from "/src/client/Components/Signup/SignUp.module.css"; // Import your signup styles
 import { uploadBytes } from 'firebase/storage';
+import Modal from 'react-modal';
+
 // List of countries for nationality dropdown
 const countries = [
   "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
@@ -55,6 +57,7 @@ const SignUpExtra = () => {
   const [idFile, setIdFile] = useState(null);
   const [certificateFile, setCertificateFile] = useState(null);
   const [taxCardFile, setTaxCardFile] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // State for Terms and Conditions
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -62,6 +65,14 @@ const SignUpExtra = () => {
   const navigate = useNavigate();
 
   const handleFileChange = (setter) => (e) => setter(e.target.files[0]);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -368,13 +379,10 @@ const SignUpExtra = () => {
             <label htmlFor="terms">
               I agree to the following terms and conditions:
             </label>
-            <div className={styles.termsText}>
-              <ul>
-                <li>
-                  <Link to="/terms">Click here for the terms and conditions.</Link>
-                </li>
-              </ul>
-            </div>
+            <span onClick={openModal}
+                  style={{cursor: 'pointer', color: 'blue', textDecoration: 'underline'}}>
+                    Click here for the terms and conditions.
+                  </span>
           </div>
 
           <button type="submit" className={styles.button}>
@@ -383,6 +391,29 @@ const SignUpExtra = () => {
         </form>
       </div>
       <Footer/>
+      <Modal
+          isOpen={isModalOpen}
+          onRequestClose={closeModal}
+          contentLabel="Terms and Conditions"
+          className={styles.modal}
+          overlayClassName={styles.overlay}
+      >
+        <div className={styles.container}>
+          <Header />
+          <main style={{ flexGrow: 1 }}>
+            <h2>Terms and Conditions</h2>
+            <p>Please read the following terms and conditions carefully:</p>
+            <ul>
+              <li>Your use of this site signifies your acceptance of our terms.</li>
+              <li>Personal information you provide will be treated as per our privacy policy.</li>
+              <li>Unauthorized access or misuse of our services is strictly prohibited.</li>
+              <li>We reserve the right to modify these terms at any time without notice.</li>
+            </ul>
+            <p>Thank you for using our platform responsibly.</p>
+          </main>
+          <Footer />
+        </div>
+      </Modal>
     </div>
   );
 };

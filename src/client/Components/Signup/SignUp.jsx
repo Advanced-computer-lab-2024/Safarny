@@ -6,7 +6,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import Footer from '/src/client/Components/Footer/Footer';
 import Header from '../Header/Header';
 import styles from './SignUp.module.css';
-
+import Modal from 'react-modal';
 const countries = [
   "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
   "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia",
@@ -62,6 +62,15 @@ const SignUp = () => {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [walletCurrency, setWalletCurrency] = useState('');
   const age = DOB ? calculateAge(DOB) : null;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const navigate = useNavigate();
 
@@ -259,7 +268,7 @@ const SignUp = () => {
               <div className={styles.termsText}>
                 <ul>
                   <p>
-                  <span onClick={() => handleNavigate('/terms')}
+                  <span onClick={openModal}
                         style={{cursor: 'pointer', color: 'blue', textDecoration: 'underline'}}>
                     Click here for the terms and conditions.
                   </span>
@@ -271,6 +280,29 @@ const SignUp = () => {
           </form>
         </div>
         <Footer/>
+        <Modal
+            isOpen={isModalOpen}
+            onRequestClose={closeModal}
+            contentLabel="Terms and Conditions"
+            className={styles.modal}
+            overlayClassName={styles.overlay}
+        >
+          <div className={styles.container}>
+            <Header />
+            <main style={{ flexGrow: 1 }}>
+              <h2>Terms and Conditions</h2>
+              <p>Please read the following terms and conditions carefully:</p>
+              <ul>
+                <li>Your use of this site signifies your acceptance of our terms.</li>
+                <li>Personal information you provide will be treated as per our privacy policy.</li>
+                <li>Unauthorized access or misuse of our services is strictly prohibited.</li>
+                <li>We reserve the right to modify these terms at any time without notice.</li>
+              </ul>
+              <p>Thank you for using our platform responsibly.</p>
+            </main>
+            <Footer />
+          </div>
+        </Modal>
       </div>
   );
 };
