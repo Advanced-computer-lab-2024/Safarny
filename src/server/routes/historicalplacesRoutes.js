@@ -9,6 +9,7 @@ const {
   deleteHistoricalPlaceById,
   createHistoricalPlaceByGovernorId,
   getHistoricalPlaceByGovernorId,
+    updateRating
 } = require("../controllers/historicalplacesController.js"); // Updated import to postsController.js
 
 // Route to create a new historical place (POST request)
@@ -29,6 +30,8 @@ router.delete("/places/:id", deleteHistoricalPlaceById);
 router.post("/placesId", createHistoricalPlaceByGovernorId);
 
 router.get("/places/governor/:id", getHistoricalPlaceByGovernorId);
+
+router.put("/updaterating/:id", updateRating);
 
 
 module.exports = router;

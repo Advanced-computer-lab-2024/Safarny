@@ -53,15 +53,23 @@ const MyBookings = () => {
     return ((price / rateFrom) * rateTo).toFixed(2);
   };
 
-  const handleRatingChange = async (bookingId, newRating) => {
+  const handleRatingChange = async (bookingId, rating, bookingType, bookingTypeId) => {
     try {
-      await axios.put(
-          `http://localhost:3000/tourist/bookings/${bookingId}/rating`,
-          { rating: newRating }
+      let endpoint = "";
+      if (bookingType === "itinerary") {
+        endpoint = `http://localhost:3000/itineraries/updaterating/${bookingTypeId}`;
+      } else if (bookingType === "activity") {
+        endpoint = `http://localhost:3000/activities/updaterating/${bookingTypeId}`;
+      } else if (bookingType === "historicalPlace") {
+        endpoint = `http://localhost:3000/historicalplaces/updaterating/${bookingTypeId}`;
+      }
+
+      await axios.put(endpoint, { rating });
+      setBookings((prevBookings) =>
+          prevBookings.map((booking) =>
+              booking._id === bookingId ? { ...booking, rating } : booking
+          )
       );
-      setBookings(bookings.map(booking =>
-          booking._id === bookingId ? { ...booking, rating: newRating } : booking
-      ));
     } catch (error) {
       console.error("Error updating rating:", error);
     }
@@ -112,55 +120,67 @@ const MyBookings = () => {
             <p className={styles.noBookingsText}>No bookings found.</p>
         ) : (
             <ul className={styles.bookingList}>
-              {bookings.map((booking) => (
-                  <li key={booking._id} className={styles.bookingCard}>
-                    <div className={styles.bookingDetails}>
-                      <p>Booking Date: {booking.bookingDate}</p>
-                      {booking.itinerary && <p>Itinerary: {booking.itinerary.name}</p>}
-                      {booking.activity && <p>Activity: {booking.activity.location}</p>}
-                      {booking.historicalPlace && (
-                          <p>Historical Place: {booking.historicalPlace.description}</p>
-                      )}
-                      {booking.historicalPlace && (
-                          <p>
-                            Historical Place price:{" "}
-                            {convertPrice(
-                                booking.historicalPlace.ticketPrices,
-                                booking.historicalPlace.currency,
-                                walletCurrency
-                            )}{" "}
-                            {walletCurrency}
-                          </p>
-                      )}
-                      <p className={`${styles.bookingStatus} ${styles[booking.status]}`}>
-                        Status: {booking.status}
-                      </p>
-                      {booking.status === "active" && (
-                          <button
-                              onClick={() => handleCancelBooking(booking)}
-                              className={styles.cancelButton}
-                          >
-                            Cancel Booking
-                          </button>
-                      )}
-                      {isPastDate(booking.bookingDate) && (
-                          <FormControl fullWidth margin="normal">
-                            <InputLabel>Rate this booking</InputLabel>
-                            <Select
-                                value={booking.rating}
-                                onChange={(e) => handleRatingChange(booking._id, e.target.value)}
+              {bookings.map((booking) => {
+                const bookingType = booking.itinerary
+                    ? "itinerary"
+                    : booking.activity
+                        ? "activity"
+                        : "historicalPlace";
+                const bookingTypeId = booking.itinerary
+                    ? booking.itinerary._id
+                    : booking.activity
+                        ? booking.activity._id
+                        : booking.historicalPlace._id;
+                return (
+                    <li key={booking._id} className={styles.bookingCard}>
+                      <div className={styles.bookingDetails}>
+                        <p>Booking Date: {booking.bookingDate}</p>
+                        {booking.itinerary && <p>Itinerary: {booking.itinerary.name}</p>}
+                        {booking.activity && <p>Activity: {booking.activity.location}</p>}
+                        {booking.historicalPlace && (
+                            <p>Historical Place: {booking.historicalPlace.description}</p>
+                        )}
+                        {booking.historicalPlace && (
+                            <p>
+                              Historical Place price:{" "}
+                              {convertPrice(
+                                  booking.historicalPlace.ticketPrices,
+                                  booking.historicalPlace.currency,
+                                  walletCurrency
+                              )}{" "}
+                              {walletCurrency}
+                            </p>
+                        )}
+                        <p className={`${styles.bookingStatus} ${styles[booking.status]}`}>
+                          Status: {booking.status}
+                        </p>
+                        {booking.status === "active" && (
+                            <button
+                                onClick={() => handleCancelBooking(booking)}
+                                className={styles.cancelButton}
                             >
-                              {[1, 2, 3, 4, 5].map((rating) => (
-                                  <MenuItem key={rating} value={rating}>
-                                    {rating}
-                                  </MenuItem>
-                              ))}
-                            </Select>
-                          </FormControl>
-                      )}
-                    </div>
-                  </li>
-              ))}
+                              Cancel Booking
+                            </button>
+                        )}
+                        {isPastDate(booking.bookingDate) && (
+                            <FormControl fullWidth margin="normal">
+                              <InputLabel>Rate this booking</InputLabel>
+                              <Select
+                                  value={booking.rating}
+                                  onChange={(e) => handleRatingChange(booking._id, e.target.value, bookingType, bookingTypeId)}
+                              >
+                                {[1, 2, 3, 4, 5].map((rating) => (
+                                    <MenuItem key={rating} value={rating}>
+                                      {rating}
+                                    </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                        )}
+                      </div>
+                    </li>
+                );
+              })}
             </ul>
         )}
         <Footer />

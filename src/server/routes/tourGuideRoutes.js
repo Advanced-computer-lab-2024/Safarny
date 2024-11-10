@@ -45,4 +45,6 @@ router
   .patch(itineraryController.updateItineraryTagById);
 
 router.route("/delete_request/:id").put(usersController.updateDeleteAccount);
+
+router.put("/updaterating/:id", itineraryController.updateRating);
 module.exports = router;

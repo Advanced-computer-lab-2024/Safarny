@@ -31,6 +31,7 @@ const tourGuideSchema = new Schema(
           type: [Number], // Array of numbers
           default: [5], // Default to an array with a single rating of 5
       },
+        averageRating: { type: Number, default: 5 }, // Default average rating to 5
   },
   { timestamps: true }
 );

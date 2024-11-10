@@ -6,6 +6,7 @@ const {
   updateActivity,
   deleteActivity,
   addCategoryToActivity,
+    updateRating
 } = require("../controllers/activityController.js");
 
 const router = express.Router();
@@ -21,4 +22,5 @@ router
 
 router.route("/addCategory").post(addCategoryToActivity);
 router.get("/:id", getActivityById);
+router.put("/updaterating/:id", updateRating);
 module.exports = router;

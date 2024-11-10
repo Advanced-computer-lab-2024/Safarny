@@ -55,6 +55,7 @@ const activitySchema = new mongoose.Schema({
     type: [Number], // Array of numbers
     default: [5], // Default to an array with a single rating of 5
   },
+  averageRating: { type: Number, default: 5 }, // Default average rating to 5
 });
 
 const Activity = mongoose.model("Activity", activitySchema);

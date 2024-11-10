@@ -102,56 +102,66 @@ const getActivityById = AsyncHandler(async (req, res) => {
 
 // Update an activity
 const updateActivity = async (req, res) => {
-    const { id } = req.params;
-    const {
-      date,
-      location,
-      price,
-      currency,
-      time,
-      category, // Change to singular if your model has a single category
-      tags,
-      specialDiscount,
-      archived,
-      bookingOpen,
-      rating,
-      coordinates, // Add coordinates field
-    } = req.body; // Adjust according to your model
-  
-    try {
-      // Find and update the activity
-      const updatedActivity = await Activity.findByIdAndUpdate(
-        id,
-        {
-          date,
-          location,
-          price,
-          archived,
-          currency,
-          time,
-          category, // Ensure you update the singular field correctly
-          tags,
-          specialDiscount,
-          bookingOpen,
-          rating,
-          coordinates, // Update coordinates field
-        },
-        { new: true } // This option returns the updated document
-      );
-  
-      // Handle activity not found
-      if (!updatedActivity) {
-        return res.status(404).json({ message: "Activity not found." });
-      }
-  
-      // Success
-      res.status(200).json(updatedActivity);
-    } catch (error) {
-      console.error("Error updating activity:", error);
-      res.status(500).json({ message: "Error updating activity." });
+  const { id } = req.params;
+  const {
+    date,
+    location,
+    price,
+    currency,
+    time,
+    category,
+    tags,
+    specialDiscount,
+    archived,
+    bookingOpen,
+    rating,
+    coordinates,
+  } = req.body;
+
+  try {
+    // Find and update the activity
+    const updatedActivity = await Activity.findByIdAndUpdate(
+      id,
+      {
+        date,
+        location,
+        price,
+        archived,
+        currency,
+        time,
+        category,
+        tags,
+        specialDiscount,
+        bookingOpen,
+        rating,
+        coordinates,
+      },
+      { new: true } // This option returns the updated document
+    );
+
+    // Handle activity not found
+    if (!updatedActivity) {
+      return res.status(404).json({ message: "Activity not found." });
     }
-  };
-  
+
+    // Add the new rating to the ratings array and calculate the new average rating
+    if (rating) {
+      updatedActivity.rating.push(rating);
+
+      const totalRatings = updatedActivity.rating.length;
+      const sumRatings = updatedActivity.rating.reduce((sum, rate) => sum + rate, 0);
+      updatedActivity.averageRating = sumRatings / totalRatings;
+
+      await updatedActivity.save();
+    }
+
+    // Success
+    res.status(200).json(updatedActivity);
+  } catch (error) {
+    console.error("Error updating activity:", error);
+    res.status(500).json({ message: "Error updating activity." });
+  }
+};
 
 // Delete an activity
 const deleteActivity = AsyncHandler(async (req, res) => {
@@ -262,6 +272,39 @@ const getActivitiesSorted = AsyncHandler(async (req, res) => {
   res.json(activities);
 });
 
+
+//updateratingwithid
+const updateRating = async (req, res) => {
+  const { id } = req.params;
+  const { rating } = req.body;
+
+  try {
+    const activity = await Activity.findById(id);
+
+    if (!activity) {
+      return res.status(404).json({ message: "Activity not found." });
+    }
+
+    // Add the new rating to the ratings array
+    activity.rating.push(rating);
+
+    // Calculate the new average rating
+    const totalRatings = activity.rating.length;
+    const sumRatings = activity.rating.reduce((sum, rate) => sum + rate, 0);
+    const averageRating = sumRatings / totalRatings;
+
+    // Update the activity with the new average rating
+    activity.averageRating = averageRating;
+    const updatedActivity = await activity.save();
+
+    res.status(200).json(updatedActivity);
+  } catch (error) {
+    console.error("Error updating activity:", error);
+    res.status(500).json({ message: "Error updating activity." });
+  }
+};
+
+
 module.exports = {
   createActivity,
   getActivities,
@@ -272,4 +315,5 @@ module.exports = {
   getActivitiesFiltered,
   getActivitiesSorted,
   getActivitiesByUserId, // Add this line
+  updateRating
 };

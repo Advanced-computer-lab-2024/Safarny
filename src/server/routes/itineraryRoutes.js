@@ -7,6 +7,7 @@ const {
   updateItineraryById,
   deleteItineraryById,
   updateItineraryTagById,
+    updateRating
 } = require("../controllers/itineraryController.js");
 
 router.post("/", createItinerary);
@@ -15,5 +16,6 @@ router.get("/:id", getItineraryById);
 router.delete("/:id", deleteItineraryById);
 router.patch("/:id", updateItineraryById);
 router.patch("/:id/tags", updateItineraryTagById);
+router.put("/updaterating/:id", updateRating);
 
 module.exports = router;

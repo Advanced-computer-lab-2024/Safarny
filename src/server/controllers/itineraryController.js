@@ -97,31 +97,37 @@ const updateItineraryById = async (req, res) => {
     itinerary.language = req.body.language || itinerary.language;
     itinerary.price = req.body.price || itinerary.price;
     itinerary.currency = req.body.currency || itinerary.currency;
-    itinerary.availableDates =
-      req.body.availableDates || itinerary.availableDates;
-    itinerary.availableTimes =
-      req.body.availableTimes || itinerary.availableTimes;
+    itinerary.availableDates = req.body.availableDates || itinerary.availableDates;
+    itinerary.availableTimes = req.body.availableTimes || itinerary.availableTimes;
     itinerary.accessibility = req.body.accessibility || itinerary.accessibility;
-    itinerary.pickupLocation =
-      req.body.pickupLocation || itinerary.pickupLocation;
-    itinerary.dropoffLocation =
-      req.body.dropoffLocation || itinerary.dropoffLocation;
+    itinerary.pickupLocation = req.body.pickupLocation || itinerary.pickupLocation;
+    itinerary.dropoffLocation = req.body.dropoffLocation || itinerary.dropoffLocation;
     itinerary.createdby = req.body.createdby || itinerary.createdby;
-    itinerary.rating = req.body.rating || itinerary.rating;
+
+    // Add the new rating to the ratings array
+    if (req.body.rating) {
+      itinerary.rating.push(req.body.rating);
+
+      // Calculate the new average rating
+      const totalRatings = itinerary.rating.length;
+      const sumRatings = itinerary.rating.reduce((sum, rate) => sum + rate, 0);
+      const averageRating = sumRatings / totalRatings;
+
+      // Update the itinerary with the new average rating
+      itinerary.averageRating = averageRating;
+    }
+
     // Optionally update archived value
     if (typeof req.body.archived !== 'undefined') {
       itinerary.archived = req.body.archived;
     }
-
 
     if (req.body.tagNames) {
       let tagsId = [];
       for (let tagName of req.body.tagNames) {
         let tag = await Tag.findOne({ name: tagName });
         if (!tag) {
-          return res
-            .status(400)
-            .send({ error: `Tag ${tagName} does not exist` });
+          return res.status(400).send({ error: `Tag ${tagName} does not exist` });
         }
         tagsId.push(tag._id);
       }
@@ -134,7 +140,6 @@ const updateItineraryById = async (req, res) => {
     res.status(404).json({ message: "Itinerary not found" });
   }
 };
-
 const deleteItineraryById = async (req, res) => {
   try {
     const itinerary = await Itinerary.findByIdAndDelete(req.params.id);
@@ -258,6 +263,33 @@ const geItinerariesFor = async (req, res) => {
   res.status(200).json(itineraries);
 };
 
+//updaterating
+const updateRating = async (req, res) => {
+  try {
+    const itinerary = await Itinerary.findById(req.params.id);
+    if (!itinerary) {
+      return res.status(404).send();
+    }
+
+    // Add the new rating to the ratings array
+    itinerary.rating.push(req.body.rating);
+
+    // Calculate the new average rating
+    const totalRatings = itinerary.rating.length;
+    const sumRatings = itinerary.rating.reduce((sum, rate) => sum + rate, 0);
+    const averageRating = sumRatings / totalRatings;
+
+    // Update the itinerary with the new average rating
+    itinerary.averageRating = averageRating;
+    await itinerary.save();
+
+    res.status(200).send(itinerary);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
+
 module.exports = {
   createItinerary,
   getAllItineraries,
@@ -268,4 +300,5 @@ module.exports = {
   getItinerariesSorted,
   getItinerariesFiltered,
   geItinerariesFor,
+    updateRating
 };

@@ -131,17 +131,27 @@ const getHistoricalPlaceById = async (req, res) => {
 const updateHistoricalPlaceById = async (req, res) => {
   try {
     const placeId = req.params.id;
-    const { description, pictures, coordinates, openingHours, ticketPrices, currency, rating } =
-      req.body;
+    const { description, pictures, coordinates, openingHours, ticketPrices, currency, rating } = req.body;
 
     const updatedPlace = await HistoricalPlace.findByIdAndUpdate(
       placeId,
-      { description, pictures, coordinates, openingHours, ticketPrices, currency, rating },
+      { description, pictures, coordinates, openingHours, ticketPrices, currency },
       { new: true, runValidators: true }
     );
 
     if (!updatedPlace) {
       return res.status(404).json({ message: "Historical place not found" });
+    }
+
+    // Add the new rating to the ratings array and calculate the new average rating
+    if (rating) {
+      updatedPlace.rating.push(rating);
+
+      const totalRatings = updatedPlace.rating.length;
+      const sumRatings = updatedPlace.rating.reduce((sum, rate) => sum + rate, 0);
+      updatedPlace.averageRating = sumRatings / totalRatings;
+
+      await updatedPlace.save();
     }
 
     res.status(200).json({
@@ -206,6 +216,36 @@ const getHistoricalPlacesSorted = AsyncHandler(async (req, res) => {
   }
 });
 
+//updaterating
+const updateRating = async (req, res) => {
+  const { id } = req.params;
+  const { rating } = req.body;
+
+  try {
+    const place = await HistoricalPlace.findById(id);
+
+    if (!place) {
+      return res.status(404).json({ message: "Historical place not found." });
+    }
+
+    // Add the new rating to the ratings array
+    place.rating.push(rating);
+
+    // Calculate the new average rating
+    const totalRatings = place.rating.length;
+    const sumRatings = place.rating.reduce((sum, rate) => sum + rate, 0);
+    const averageRating = sumRatings / totalRatings;
+
+    // Update the place with the new average rating
+    place.averageRating = averageRating;
+    const updatedPlace = await place.save();
+
+    res.status(200).json(updatedPlace);
+  } catch (error) {
+    console.error("Error updating historical place:", error);
+    res.status(500).json({ message: "Error updating historical place." });
+  }
+};
 
 module.exports = {
   createHistoricalPlace,
@@ -217,4 +257,5 @@ module.exports = {
   getHistoricalPlacesSorted,
   createHistoricalPlaceByGovernorId,
   getHistoricalPlaceByGovernorId,
+    updateRating,
 };

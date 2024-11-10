@@ -12,7 +12,7 @@ const DB = require("./config/DB.js");
 // const itinerary = require("./routes/itineraryRoutes.js");
 // const Posts = require("./routes/postsRoutes.js");
 // const adminRoutes = require("./routes/adminRoutes.js");
-// const historicalplacesRoutes = require("./routes/historicalplacesRoutes.js");
+const historicalplacesRoutes = require("./routes/historicalplacesRoutes.js");
 // const tagsRoutes = require("./routes/tagsRoutes.js");
 // const touristUpdate = require("./routes/touristUpdateInfoRoutes.js");
  const ActivityCategoriesRoutes = require("./routes/ActivityCategoriesRoutes.js");
@@ -70,12 +70,16 @@ app.use('/activities', activityRoutes);
 
 app.use('/transport',transportRoutes);
 
-//app.use('/itineraries', ItineraryRoutes);
+app.use('/itineraries', ItineraryRoutes);
+
 app.use('/preferences', preferencesRoutes);
 
 app.use("/wishlist", WishListRoutes);
 
 app.use("/categories", ActivityCategoriesRoutes);
+
+app.use("/historicalplaces", historicalplacesRoutes);
+
 ViteExpress.listen(app, 3000, () => {
   console.log(`Server running on port: ${port}`);
 });
