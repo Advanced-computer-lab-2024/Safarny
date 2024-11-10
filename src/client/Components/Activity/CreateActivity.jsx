@@ -51,7 +51,8 @@ const CreateActivity = () => {
 
         const fetchExchangeRates = async () => {
             try {
-                const response = await axios.get('https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP');
+                console.log('Fetching exchange rates from:', import.meta.env.VITE_EXCHANGE_API_URL);
+                const response = await axios.get(import.meta.env.VITE_EXCHANGE_API_URL);
                 setCurrencyCodes(Object.keys(response.data.conversion_rates));
             } catch (error) {
                 console.error('Error fetching exchange rates:', error);
