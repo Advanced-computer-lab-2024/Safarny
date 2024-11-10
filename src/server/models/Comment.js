@@ -1,5 +1,5 @@
-const mongoose = require("mongoose"); // Use require instead of import
-const Schema = mongoose.Schema;
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const commentSchema = new Schema(
   { 
@@ -26,10 +26,14 @@ const commentSchema = new Schema(
       ref: "TourGuide",
       required: true,
     },
+    rating: {
+      type: [Number], // Array of numbers
+      default: [],    // Default to an empty array
+    },
   },
   { timestamps: true }
 );
 
 const Comment = mongoose.model("Comment", commentSchema);
 
-module.exports = Comment; // Use module.exports instead of export default
+module.exports = Comment;
