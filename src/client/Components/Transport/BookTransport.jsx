@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
+import styles from "./BookTransport.module.css";
 
 const BookTransport = () => {
   const location = useLocation();
@@ -43,24 +46,34 @@ const BookTransport = () => {
   };
 
   return (
-    <div>
-      <h1>Available Transports</h1>
-      <ul>
-        {transports.map((transport) => (
-          <li key={transport._id}>
-            <p>
-              {transport.departureDate} - {transport.departureTime} to{" "}
-              {transport.arrivalDate} - {transport.arrivalTime} (
-              {transport.typeOfTransportation}) at {transport.location}
-            </p>
-            <button onClick={() => toggleBooking(transport)}>
-              {transport.tourists.includes(userId) ? "Booked" : "Book Now"}
-            </button>
-          </li>
-        ))}
-      </ul>
+    <div className={styles.container}>
+      <Header />
+      <main className={styles.mainContent}>
+        <h1 className={styles.title}>Available Transportation</h1>
+        <ul className={styles.transportList}>
+          {transports.map((transport) => (
+            <li key={transport._id} className={styles.transportItem}>
+              <div className={styles.transportDetails}>
+                <p>
+                  {transport.departureDate} - {transport.departureTime} to{" "}
+                  {transport.arrivalDate} - {transport.arrivalTime} (
+                  {transport.typeOfTransportation}) at {transport.location}
+                </p>
+              </div>
+              <button
+                className={styles.bookButton}
+                onClick={() => toggleBooking(transport)}
+              >
+                {transport.tourists.includes(userId) ? "Booked" : "Book Now"}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </main>
+      <Footer />
     </div>
   );
+  
 };
 
 export default BookTransport;
