@@ -56,7 +56,7 @@ const UpcomingActivities = () => {
 
   const fetchExchangeRates = async () => {
     try {
-      const response = await fetch('https://v6.exchangerate-api.com/v6/d9449bff3fa7ff19888a796e/latest/EGP');
+      const response = await fetch(import.meta.env.VITE_EXCHANGE_API_URL);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

@@ -113,11 +113,12 @@ export default function TourGuide() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3000/tourguide/create-itineraries",
-        { ...newItinerary, createdby: userId }
+          "http://localhost:3000/tourguide/create-itineraries",
+          { ...newItinerary, createdby: userId, currency: selectedCurrency }
       );
       setItineraries([...itineraries, response.data]);
     } catch (error) {
+      console.log(newItinerary);
       console.error("Error creating itinerary", error);
     }
   };
