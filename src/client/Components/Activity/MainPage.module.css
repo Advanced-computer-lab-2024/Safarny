@@ -1,0 +1,28 @@
+.navList {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    gap: 1rem;
+  }
+
+  .heading {
+    color: black;
+}
+  
+  .navButton {
+    background-color: #000000;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s ease;
+  }
+  
+  .navButton:hover {
+    background-color: #0056b3;
+  }
+  

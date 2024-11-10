@@ -1,0 +1,127 @@
+/* CreateActivity.module.css */
+
+:root {
+    --container-spacing: 2rem;
+    --heading-font-size: 2rem;
+    --label-font-size: 1rem;
+    --input-padding: 0.75rem;
+    --button-bg-color: #007bff;
+    --button-text-color: #fff;
+    --button-hover-bg-color: #0056b3;
+    --text-color: #000;
+    --container-bg-color: #f0f0f0; /* Light gray background for the main container */
+    --page-bg-color: #e0e0e0; /* Slightly darker gray for the full page background */
+    --border-color: #ddd;
+    --input-bg-color: #ffffff;
+    --input-border-radius: 4px;
+  }
+  
+  body {
+    background-color: var(--page-bg-color); /* Apply to the entire page */
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .container {
+    padding: var(--container-spacing);
+    background-color: var(--container-bg-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 95vw;
+    height: 100vh;
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+  }
+  
+  .heading {
+    font-size: var(--heading-font-size);
+    margin-bottom: var(--container-spacing);
+    text-align: center;
+    color: var(--text-color);
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 600px;
+    gap: 1rem;
+  }
+  
+  label {
+    font-size: var(--label-font-size);
+    color: var(--text-color);
+    font-weight: bold;
+  }
+  
+  input[type="text"],
+  input[type="date"],
+  input[type="time"],
+  input[type="number"],
+  select {
+    padding: var(--input-padding);
+    background-color: var(--input-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--input-border-radius);
+    width: 100%;
+  }
+  
+  .select-container {
+    background-color: var(--container-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--input-border-radius);
+    padding: var(--input-padding);
+    display: inline-block;
+  }
+  
+  button {
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+
+  .createActivityContainer input,
+.createActivityContainer select,
+.createActivityContainer textarea,
+.createActivityContainer .MuiInputBase-input {
+    color: black;
+}
+
+.createActivityContainer label {
+    color: black;
+}
+
+.submitButton {
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+}
+  
+  button:hover {
+    background-color: var(--button-hover-bg-color);
+  }
+  
+  .mapContainer {
+    margin-top: 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
+    height: 400px;
+    width: 100%;
+  }
+  
+  .message {
+    font-size: 1rem;
+    text-align: center;
+    color: red;
+    margin-top: 1rem;
+  }
+  

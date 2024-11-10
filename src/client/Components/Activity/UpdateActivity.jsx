@@ -3,6 +3,9 @@ import axios from "axios";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import Header from '/src/client/Components/Header/Header';
+import Footer from '/src/client/Components/Footer/Footer';
+import styles from "./UpdateActivity.module.css";
 import { useParams } from "react-router-dom";
 
 // Fixing marker icon issue
@@ -132,6 +135,7 @@ const UpdateActivity = () => {
 
   return (
     <div style={{ padding: "20px" }}>
+      <Header/>
       <h2>Update Activity</h2>
       <div>
         <label>
@@ -295,6 +299,7 @@ const UpdateActivity = () => {
           {message && <p style={{ color: "red" }}>{message}</p>}
         </form>
       )}
+      <Footer/>
     </div>
   );
 };
