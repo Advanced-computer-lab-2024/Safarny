@@ -37,7 +37,7 @@ const ReadHistoricalPlace = () => {
   const fetchExchangeRates = async () => {
     try {
       const response = await axios.get(
-        "https://v6.exchangerate-api.com/v6/d9449bff3fa7ff19888a796e/latest/EGP"
+          import.meta.env.VITE_EXCHANGE_API_URL
       );
       setExchangeRates(response.data.conversion_rates);
       setCurrencyCodes(Object.keys(response.data.conversion_rates));
