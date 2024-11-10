@@ -24,7 +24,7 @@ const Posts = new mongoose.Schema(
     },
     rating: {
       type: [Number], // Array of numbers
-      default: [], // Default to an array with a single rating of 1
+      default: [5], // Default to an array with a single rating of 5
     },
     createdby:{
       type: mongoose.Schema.Types.ObjectId,

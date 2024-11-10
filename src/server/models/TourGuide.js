@@ -27,6 +27,10 @@ const tourGuideSchema = new Schema(
       type: String,
         required: false,
     },
+      rating: {
+          type: [Number], // Array of numbers
+          default: [5], // Default to an array with a single rating of 5
+      },
   },
   { timestamps: true }
 );

@@ -84,9 +84,10 @@ const itinerarySchema = new Schema(
       type: String, // Dropoff location
       required: true,
     },
-    rating: {
-      type: Number,
-    },
+      rating: {
+          type: [Number], // Array of numbers
+          default: [5], // Default to an array with a single rating of 5
+      },
     bookingOpen: {
       type: String,
       enum: ["active", "in-active"], // Whether the booking is open
