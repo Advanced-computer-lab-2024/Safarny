@@ -39,7 +39,7 @@ const userModel = new mongoose.Schema(
     //TourGuide
     YearOfExp: Number,
     PrevWork: String,
-
+      delete_request: { type: Boolean, default: false },
     //Tourist/TourGuide
     itineraries: [
       {

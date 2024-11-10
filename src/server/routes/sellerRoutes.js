@@ -6,8 +6,11 @@ const {
   getAllPosts,
   updatePostById,
   getAllPostsBySellerId,
+  deletePostsByCreator
 } = require("../controllers/postsController.js");
-
+const {
+  updateDeleteAccount
+} = require("../controllers/usersController.js");
 /*
     1-post product
     2-edit product
@@ -26,5 +29,8 @@ router.get("/products/:sellerid", getAllPostsBySellerId);
 
 router.put("/products/:id", updatePostById);
 
+router.put("/delete_request/:id", updateDeleteAccount);
+
+router.delete("/products/deleteByCreator/:creatorId", deletePostsByCreator);
 
 module.exports = router;

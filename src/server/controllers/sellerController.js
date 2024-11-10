@@ -51,5 +51,21 @@ const deleteSeller = async (req, res) => {
   await User.findOneAndDelete({ email });
   res.status(200).json({ message: "Seller deleted successfully" });
 };
+const deletePostsByCreator = async (req, res) => {
+  try {
+    const creatorId = req.params.creatorId; // Retrieve the creator's ID from the request parameters
 
-module.exports = { createSeller, getSellers, updateSeller, deleteSeller };
+    // Use deleteMany to delete all posts created by the specified user
+    const result = await Post.deleteMany({ createdby: creatorId });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "No posts found for this user" });
+    }
+
+    res.status(200).json({ message: "All posts by the user have been deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+module.exports = { createSeller, getSellers, updateSeller, deleteSeller, deletePostsByCreator };

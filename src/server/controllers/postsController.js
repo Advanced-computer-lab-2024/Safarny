@@ -108,6 +108,22 @@ const getPostById = async (req, res) => {
     res.status(500).json({ error: err.message }); // Handle any errors that occur
   }
 };
+const deletePostsByCreator = async (req, res) => {
+  try {
+    const creatorId = req.params.creatorId; // Retrieve the creator's ID from the request parameters
+
+    // Use deleteMany to delete all posts created by the specified user
+    const result = await Post.deleteMany({ createdby: creatorId });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "No posts found for this user" });
+    }
+
+    res.status(200).json({ message: "All posts by the user have been deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 module.exports = {
   createPost,
   getAllPosts,
@@ -115,4 +131,5 @@ module.exports = {
   deletePostById,
   getAllPostsBySellerId,
   getPostById, // Export the new function
+    deletePostsByCreator
 };

@@ -14,6 +14,7 @@ const {
     updatePostById,
     getPostById,
     deletePostById,
+    deletePostsByCreator
 } = require("../controllers/postsController.js");
 
 const { addAdmin } = require("../controllers/signUpController.js");
@@ -28,6 +29,9 @@ const {
     updateProfileById,
     getAllUsers,
     updateAcceptedStatus,
+    updateDeleteAccount,
+    deleteTourGuideAndIterinaries,
+    deleteAdvertiserAndActivities
 } = require("../controllers/usersController.js");
 
 const { addGovernor } = require("../controllers/addgovernorController.js");
@@ -47,6 +51,7 @@ const {
     updateComplaintById,
 
 } = require("../controllers/userComplaintsController.js");
+
 
 
 /*
@@ -120,5 +125,7 @@ router.delete("/category/:id", deleteCategory);
 
 router.get("/complaints", getAllComplaints);
 router.put("/complaints/:id", updateComplaintById);
-
+router.delete("/deleteByCreator/:creatorId", deletePostsByCreator);
+router.delete("/deleteTourGuide/:id", deleteTourGuideAndIterinaries);
+router.delete("/deleteAdvertiser/:id", deleteAdvertiserAndActivities);
 module.exports = router;
