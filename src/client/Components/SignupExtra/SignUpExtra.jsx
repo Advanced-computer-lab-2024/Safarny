@@ -195,36 +195,36 @@ const SignUpExtra = () => {
         {success && <p className={styles.successMessage}>Sign up successful!</p>}
         {error && <p className={styles.errorMessage}>{error}</p>}
         <form onSubmit={handleSubmit} className={styles.form}>
-          <label>
+          <label className={styles.label}>
             Username:
-            <input
+            <input className={styles.input}
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
             />
           </label>
-          <label>
+          <label className={styles.label}>
             Password:
-            <input
+            <input className={styles.input}
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
             />
           </label>
-          <label>
+          <label className={styles.label}>
             Email:
-            <input
+            <input className={styles.input}
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
             />
           </label>
-          <label>
+          <label className={styles.label}>
             Nationality:
-            <select
+            <select className={styles.input}
                 value={nationality}
                 onChange={handleCountryChange}
                 required
@@ -235,9 +235,9 @@ const SignUpExtra = () => {
               ))}
             </select>
           </label>
-          <label>
+          <label className={styles.label}>
             I am a:
-            <select
+            <select className={styles.input}
                 value={userType}
                 onChange={(e) => handleUserTypeChange(e.target.value)}
                 required
@@ -250,35 +250,35 @@ const SignUpExtra = () => {
           </label>
 
           {userType && (
-              <label>
+              <label className={styles.label}>
                 Upload Image:
                 <input type="file" accept="image/*" onChange={handleImageUpload} required/>
               </label>
           )}
 
           {userType == "TourGuide" && (
-              <label>
+              <label className={styles.label}>
                 Upload Id File:
                 <input type="file" accept="pdf" onChange={handleFileChange(setIdFile)} required/>
               </label>
           )}
 
           {userType == "TourGuide" && (
-              <label>
+              <label className={styles.label}>
                 Upload Certificate:
                 <input type="file" accept="pdf" onChange={handleFileChange(setCertificateFile)} required/>
               </label>
           )}
 
           {(userType == "Advertiser" || userType == "Seller") && (
-              <label>
+              <label className={styles.label}>
                 Upload Id File:
                 <input type="file" accept="pdf" onChange={handleFileChange(setIdFile)} required/>
               </label>
           )}
 
           {(userType == "Advertiser" || userType == "Seller") && (
-              <label>
+              <label className={styles.label}>
                 Upload Tax Registration Card:
                 <input type="file" accept="pdf" onChange={handleFileChange(setTaxCardFile)} required/>
               </label>
@@ -286,25 +286,25 @@ const SignUpExtra = () => {
 
           {textBoxes[0] && (
               <>
-                <label>
+                <label className={styles.label}>
                   Website link:
-                  <input
+                  <input className={styles.input}
                       type="url"
                       value={websiteLink}
                       onChange={(e) => setWebsiteLink(e.target.value)}
                       required
                   />
                 </label>
-                <label>
+                <label className={styles.label}>
                   Hotline:
-                  <input
+                  <input className={styles.input}
                       type="tel"
                       value={hotline}
                       onChange={(e) => setHotline(e.target.value)}
                       required
                   />
                 </label>
-                <label>
+                <label className={styles.label}>
                   Company profile:
                   <textarea
                       value={companyProfile}
@@ -317,16 +317,16 @@ const SignUpExtra = () => {
 
           {textBoxes[1] && (
               <>
-                <label>
+                <label className={styles.label}>
                   Seller name:
-                  <input
+                  <input className={styles.input}
                       type="text"
                       value={sellerName}
                       onChange={(e) => setSellerName(e.target.value)}
                       required
                   />
                 </label>
-                <label>
+                <label className={styles.label}>
                   Description:
                   <textarea
                       value={description}
@@ -339,25 +339,25 @@ const SignUpExtra = () => {
 
           {textBoxes[2] && (
               <>
-                <label>
+                <label className={styles.label}>
                   Mobile number:
-                  <input
+                  <input className={styles.input}
                       type="tel"
                       value={mobileNumber}
                       onChange={(e) => setMobileNumber(e.target.value)}
                       required
                   />
                 </label>
-                <label>
+                <label className={styles.label}>
                   Years of experience:
-                  <input
+                  <input className={styles.input}
                       type="number"
                       value={experience}
                       onChange={(e) => setExperience(e.target.value)}
                       required
                   />
                 </label>
-                <label>
+                <label className={styles.label}>
                   Previous work (if exists):
                   <textarea
                       value={previousWork}
@@ -369,7 +369,7 @@ const SignUpExtra = () => {
 
           {/* Terms and Conditions */}
           <div className={styles.terms}>
-            <input
+            <input className={styles.input}
                 type="checkbox"
                 id="terms"
                 checked={termsAccepted}
