@@ -226,6 +226,13 @@ const Profile = () => {
             </button>
           </div>
         )}
+        {userInfo.role === "Tourist" && (
+            <div className={styles.buttonGroup}>
+              <button onClick={handelWishList} className={styles.mainButton}>
+                View Wish List
+              </button>
+            </div>
+        )}
   
         <div className={styles.buttonGroup}>
           <button onClick={handleBookingsButtonClick} className={styles.mainButton}>
