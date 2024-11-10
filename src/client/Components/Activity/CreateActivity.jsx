@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Header from '/src/client/Components/Header/Header';
-import Footer from '/src/client/Components/Footer/Footer';
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
