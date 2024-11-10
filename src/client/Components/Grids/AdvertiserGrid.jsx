@@ -51,7 +51,7 @@ const columns = [
       {
         field: 'certificateFile',
         headerName: 'Certificate File',
-        width: 158,
+        width: 175,
         renderCell: (params) => (
           <Button variant="outlined" color="primary" onClick={() => handleView2(params.row.email)}>
             View Tax Card
