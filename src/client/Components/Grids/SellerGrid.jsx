@@ -34,6 +34,7 @@ const columns = [
   { field: 'sellerName', headerName: 'seller Name', width: 130 },
   { field: 'type', headerName: 'Type', width: 90 },
   { field: 'Status', headerName: 'Status', width: 110 },
+  { field: 'delete_request', headerName: 'delete_request', width: 110 },
   {
     field: 'idFile',
     headerName: 'ID File',
@@ -73,6 +74,7 @@ export default function DataTable3() {
           sellerName: user.sellerName,
           type: user.role,
           Status: user.Status,
+          delete_request: user.delete_request
         }));
         setRows(formattedRows);
       } catch (error) {

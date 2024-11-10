@@ -2,6 +2,9 @@ const User = require("../models/userModel.js");
 const AsyncHandler = require("express-async-handler");
 const mongoose = require("mongoose");
 const userModel = require("../models/userModel.js");
+const Itinerary = require("../models/Itinerary.js");
+const Activity = require("../models/Activity.js");
+const Booking = require("../models/Booking.js");
 
 const getAllUsers = AsyncHandler(async (req, res) => {
   try {
@@ -293,7 +296,7 @@ const deleteTourGuideAndIterinaries = async (req, res) => {
     }
 
     // Find itineraries created by this user
-    const itineraries = await Itinerary.find({ createdBy: userId });
+    const itineraries = await Itinerary.find({ createdby: userId });
 
     // Check if any itinerary has upcoming available times and if there are any bookings
     const now = new Date();
@@ -304,22 +307,22 @@ const deleteTourGuideAndIterinaries = async (req, res) => {
       });
 
       // Check if there are any bookings (i.e., if the boughtBy array is not empty)
-      if (hasUpcomingTimes && (itinerary.boughtBy.length > 0)) {
+      if (hasUpcomingTimes || (itinerary.boughtby && itinerary.boughtby.length > 0)) {
         return res.status(400).json({
           message: "Cannot delete account: There are upcoming available times or existing bookings",
         });
       }
     }
 
-    // Delete all activities created by this user
-    await Itinerary.deleteMany({ createdBy: userId });
+    // Delete all Itineraries created by this user
+    await Itinerary.deleteMany({ createdby: userId });
 
     // Delete the user account
     await User.findByIdAndDelete(userId);
 
-    res.status(200).json({ message: "Advertiser account and all related itineraries deleted successfully" });
+    res.status(200).json({ message: "Tour Guide account and all related itineraries deleted successfully" });
   } catch (error) {
-    console.error("Error deleting Advertiser account and activities:", error);
+    console.error("Error deleting Tour Guide account and Iterinaries:", error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -358,9 +361,11 @@ const deleteAdvertiserAndActivities = async (req, res) => {
       }
     }
 
+    const activityIds = activities.map(activity => activity._id);
+
     // Delete all activities created by this Advertiser
     await Activity.deleteMany({ createdby: userId });
-
+    await Booking.deleteMany({ activity: { $in: activityIds } });
     // Delete the user account
     await User.findByIdAndDelete(userId);
 

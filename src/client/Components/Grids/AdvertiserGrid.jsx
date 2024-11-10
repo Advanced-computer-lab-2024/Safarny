@@ -37,6 +37,7 @@ const columns = [
     { field: 'CompanyHotline', headerName: 'Hotline', width: 130 },
     { field: 'type', headerName: 'Type', width: 90 },
     { field: 'Status', headerName: 'Status', width: 110 },
+    { field: 'delete_request', headerName: 'delete_request', width: 110 },
     {
         field: 'idFile',
         headerName: 'ID File',
@@ -77,6 +78,7 @@ export default function DataTable4() {
                     CompanyHotline: user.CompanyHotline,
                     type: user.role,
                     Status: user.Status,
+                    delete_request: user.delete_request
                 }));
                 setRows(formattedRows);
             } catch (error) {
@@ -93,7 +95,7 @@ export default function DataTable4() {
         try {
             await Promise.all(
                 selectedRows.map(rowId =>
-                    axios.delete(`http://localhost:3000/admin/deleteUser/${rowId}`)
+                    axios.delete(`http://localhost:3000/admin/deleteAdvertiser/${rowId}`)
                 )
             );
             setRows(rows.filter(row => !selectedRows.includes(row.id)));
