@@ -26,6 +26,7 @@
     "express-async-handler": "^1.2.0",
     "firebase": "^10.14.1",
     "firebase-admin": "^12.6.0",
+    "http-proxy-middleware": "^3.0.3",
     "jsonwebtoken": "^9.0.2",
     "leaflet": "^1.9.4",
     "mongoose": "^8.6.3",
@@ -38,6 +39,7 @@
     "react-leaflet": "^4.2.1",
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.26.2",
+    "react-star-ratings": "^2.3.0",
     "safarny": "file:",
     "vite-express": "*"
   },
