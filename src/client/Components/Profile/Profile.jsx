@@ -22,6 +22,7 @@ const Profile = () => {
   const [showBookingsButtons, setShowBookingsButtons] = useState(false);
   const [showComplaintsButtons, setShowComplaintsButtons] = useState(false);
   const [showTransportationsButtons, setShowTransportButtons] = useState(false);
+  const [showPostButtons, setShowPostButtons] = useState(false);
 
 
   useEffect(() => {
@@ -151,6 +152,7 @@ const Profile = () => {
   const handleBookingsButtonClick = () => setShowBookingsButtons(prev => !prev);
   const handleComplaintsButtonClick = () => setShowComplaintsButtons(prev => !prev);
   const handleTransportButtonClick = () => setShowTransportButtons(prev => !prev);
+  const handlePostButtonClick = () => setShowPostButtons(prev => !prev);
 
   return (
     <div className={styles.container}>
@@ -279,12 +281,19 @@ const Profile = () => {
 
         {userInfo.role === "Seller" && (
           <div className={styles.buttonGroup}>
-            <button onClick={handlePostClick} className={styles.postButton}>
-              Add Product
+            <button onClick={handlePostButtonClick} className={styles.mainButton}>
+              Manage Products
             </button>
-            <button onClick={handleSellerHomeClick} className={styles.postButton}>
-              My Products
-            </button>
+            {showPostButtons && (
+              <div className={styles.subButtonGroup}>
+                <button onClick={handlePostClick} className={styles.postButton}>
+                  Add Product
+                </button>
+                <button onClick={handleSellerHomeClick} className={styles.postButton}>
+                  My Products
+                </button>
+              </div>
+            )}
           </div>
         )}
 
