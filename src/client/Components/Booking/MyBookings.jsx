@@ -11,6 +11,8 @@ const MyBookings = () => {
   const { userId } = location.state || {};
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [walletCurrency, setWalletCurrency] = useState("USD"); // Example wallet currency
+  const [exchangeRates, setExchangeRates] = useState({});
 
   const fetchBookings = async () => {
     try {
@@ -25,9 +27,36 @@ const MyBookings = () => {
     }
   };
 
+  const fetchExchangeRates = async () => {
+    try {
+      const response = await fetch(import.meta.env.VITE_EXCHANGE_API_URL);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      if (!data.conversion_rates) {
+        throw new Error("Invalid data format");
+      }
+      setExchangeRates(data.conversion_rates);
+    } catch (error) {
+      console.error("Error fetching exchange rates:", error);
+      setExchangeRates({ USD: 1 }); // Default to USD if there's an error
+    }
+  };
+
+  const convertPrice = (price, fromCurrency, toCurrency) => {
+    if (price == null) {
+      return "N/A";
+    }
+    const rateFrom = exchangeRates[fromCurrency] || 1;
+    const rateTo = exchangeRates[toCurrency] || 1;
+    return ((price / rateFrom) * rateTo).toFixed(2);
+  };
+
   useEffect(() => {
     if (userId) {
       fetchBookings();
+      fetchExchangeRates();
     }
   }, [userId]);
 
@@ -75,7 +104,15 @@ const MyBookings = () => {
                           <p>Historical Place: {booking.historicalPlace.description}</p>
                       )}
                       {booking.historicalPlace && (
-                          <p>Historical Place price: {booking.historicalPlace.ticketPrices}</p>
+                          <p>
+                            Historical Place price:{" "}
+                            {convertPrice(
+                                booking.historicalPlace.ticketPrices,
+                                booking.historicalPlace.currency,
+                                walletCurrency
+                            )}{" "}
+                            {walletCurrency}
+                          </p>
                       )}
                       <p className={`${styles.bookingStatus} ${styles[booking.status]}`}>
                         Status: {booking.status}

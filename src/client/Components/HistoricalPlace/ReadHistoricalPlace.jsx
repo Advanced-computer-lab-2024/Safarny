@@ -37,7 +37,7 @@ const ReadHistoricalPlace = () => {
   const fetchExchangeRates = async () => {
     try {
       const response = await axios.get(
-        "https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP"
+        "https://v6.exchangerate-api.com/v6/d9449bff3fa7ff19888a796e/latest/EGP"
       );
       setExchangeRates(response.data.conversion_rates);
       setCurrencyCodes(Object.keys(response.data.conversion_rates));
@@ -81,10 +81,11 @@ const ReadHistoricalPlace = () => {
   const fetchUserInfo = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/tourist/${userId}`
+          `http://localhost:3000/tourist/${userId}`
       );
-      setUserInfo(response.data);
-      console.log(userInfo.role);
+      const userData = response.data;
+      setUserInfo(userData);
+      setSelectedCurrency(userData.walletcurrency); // Set the default selected currency
     } catch (err) {
       console.error("Error fetching user info:", err);
     }
@@ -185,7 +186,7 @@ const ReadHistoricalPlace = () => {
     setIsBookingModalOpen(false);
     setSelectedPlaceId(null);
   };
-  
+
 
   if (loading) {
     return (
