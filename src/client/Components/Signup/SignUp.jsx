@@ -174,13 +174,13 @@ const SignUp = () => {
       <div className={styles.container}>
         <Header />
         <div className={styles.formContainer}>
-          <h2 style={{color: 'white', fontWeight: 'bold', marginRight: '20px'}}>Sign Up</h2>
+          <h2 className={styles.heading}>Sign Up</h2>
           {success && <p className={styles.successMessage}>Sign up successful!</p>}
           {error && <p className={styles.errorMessage}>{error}</p>}
           <form onSubmit={handleSubmit} className={styles.form}>
-            <label>
+            <label className={styles.label}>
               Name:
-              <input
+              <input className={styles.input}
                   type="text"
                   name="username"
                   value={username}
@@ -188,9 +188,9 @@ const SignUp = () => {
                   required
               />
             </label>
-            <label>
+            <label className={styles.label}>
               Email:
-              <input
+              <input className={styles.input}
                   type="email"
                   name="email"
                   value={email}
@@ -198,9 +198,9 @@ const SignUp = () => {
                   required
               />
             </label>
-            <label>
+            <label className={styles.label}>
               Password:
-              <input
+              <input className={styles.input}
                   type="password"
                   name="password"
                   value={password}
@@ -208,7 +208,7 @@ const SignUp = () => {
                   required
               />
             </label>
-            <label>
+            <label className={styles.label}>
               Date of Birth:
               <DatePicker
                   selected={DOB}
@@ -219,9 +219,9 @@ const SignUp = () => {
                   required
               />
             </label>
-            <label>
+            <label className={styles.label}>
               Mobile:
-              <input
+              <input className={styles.input}
                   type="text"
                   name="mobile"
                   value={mobile}
@@ -229,9 +229,9 @@ const SignUp = () => {
                   required
               />
             </label>
-            <label>
+            <label className={styles.label}>
               Nationality:
-              <select
+              <select className={styles.input}
                   value={nationality}
                   onChange={handleCountryChange}
                   required
@@ -242,9 +242,9 @@ const SignUp = () => {
                 ))}
               </select>
             </label>
-            <label>
+            <label className={styles.label}>
               Employment Status:
-              <select
+              <select className={styles.input}
                   value={employed}
                   onChange={(e) => setEmployed(e.target.value)}
                   required
@@ -255,14 +255,14 @@ const SignUp = () => {
               </select>
             </label>
             <div className={styles.terms}>
-              <input
+              <input className={styles.input}
                   type="checkbox"
                   id="terms"
                   checked={termsAccepted}
                   onChange={(e) => setTermsAccepted(e.target.checked)}
                   required
               />
-              <label htmlFor="terms">
+              <label htmlFor="terms" className={styles.label}>
                 I agree to the following terms and conditions:
               </label>
               <div className={styles.termsText}>

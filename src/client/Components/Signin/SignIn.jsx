@@ -73,7 +73,7 @@ const SignIn = () => {
       <Header />
 
       <div className={styles.formContainer}>
-        <h2>Sign In</h2>
+        <h2 className={styles.heading}>Sign In</h2>
 
         {/* Show success or error messages */}
         {success && <p className={styles.successMessage}>Sign in successful!</p>}
@@ -81,9 +81,9 @@ const SignIn = () => {
 
         {/* Form structure with state handlers */}
         <form onSubmit={handleSubmit} className={styles.form}>
-          <label>
+          <label className={styles.label}>
             Email:
-            <input
+            <input className={styles.input}
               type="email"
               name="email"
               value={email}
@@ -91,9 +91,9 @@ const SignIn = () => {
               required
             />
           </label>
-          <label>
+          <label className={styles.label}>
             Password:
-            <input
+            <input className={styles.input}
               type="password"
               name="password"
               value={password}
