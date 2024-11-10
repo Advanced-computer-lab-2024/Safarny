@@ -30,10 +30,8 @@ const ReadActivities = () => {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
-                console.log("Activities data:", data);
                 setActivities(data);
             } catch (error) {
-                console.error("Error fetching activities:", error);
                 setErrorMessage("Error fetching activities. Please try again later.");
             }
         };
@@ -41,16 +39,11 @@ const ReadActivities = () => {
         const fetchCategories = async () => {
             try {
                 const response = await fetch('http://localhost:3000/advertiser/GetCategories');
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
                 const data = await response.json();
-                console.log("Categories data:", data);
-                const categoryMap = {};
-                data.forEach(category => {
-                    categoryMap[category._id] = category.type; // Mapping category ID to type
-                });
-                console.log("Category Map:", categoryMap); // Log the final category map
+                const categoryMap = data.reduce((acc, category) => {
+                    acc[category._id] = category.type;
+                    return acc;
+                }, {});
                 setCategories(categoryMap);
             } catch (error) {
                 console.error("Error fetching categories:", error);
@@ -60,14 +53,11 @@ const ReadActivities = () => {
         const fetchTags = async () => {
             try {
                 const response = await fetch('http://localhost:3000/admin/tag');
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
                 const data = await response.json();
-                const tagMap = {};
-                data.forEach(tag => {
-                    tagMap[tag._id] = tag.name;
-                });
+                const tagMap = data.reduce((acc, tag) => {
+                    acc[tag._id] = tag.name;
+                    return acc;
+                }, {});
                 setTags(tagMap);
             } catch (error) {
                 console.error("Error fetching tags:", error);
@@ -80,48 +70,49 @@ const ReadActivities = () => {
     }, [userId]);
 
     return (
-        <div>
-            <Header/>
-            <h2>Activities</h2>
-            {errorMessage && <p>{errorMessage}</p>}
+        <div className={styles.container}>
+            <Header />
+            <h2 className={styles.header}>Activities</h2>
+            {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
             {activities.length === 0 ? (
-                <p>No activities found for this user.</p>
+                <p className={styles.noActivitiesMessage}>No activities found for this user.</p>
             ) : (
-                <ul>
+                <ul className={styles.activitiesList}>
                     {activities.map((activity) => (
-                        <li key={activity._id}>
-                            {activity.date} - {activity.location} - {activity.price}$ - {activity.time} - 
-                            
-                            {/* Mapping category IDs to category types */}
-                            {activity.category && activity.category.length > 0 
-                                ? activity.category.map(catId => {
-                                    const categoryType = categories[catId]; // Get category type using ID
-                                    return categoryType || "Unknown Category"; // If undefined, return "Unknown Category"
-                                  }).join(", ")
-                                : "No categories"} - 
-
-                            {activity.tags && activity.tags.length > 0 
-                                ? activity.tags.map(tagId => tags[tagId] || "Unknown Tag").join(", ")
-                                : "No tags"} - 
-
-                            {activity.specialDiscount} - 
-
-                            {/* Displaying bookingOpen status */}
-                            {activity.bookingOpen ? "Booking Open" : "Booking Closed"}
-
-                            {/* Display Leaflet Map for the activity's coordinates if available */}
+                        <li key={activity._id} className={styles.activityItem}>
+                            <div className={styles.activityDetails}>
+                                <p className={styles.activityText}>
+                                    {activity.date} - {activity.location} - ${activity.price} - {activity.time}
+                                </p>
+                                <p className={styles.activityText}>
+                                    Categories: {activity.category && activity.category.length > 0
+                                        ? activity.category.map(catId => categories[catId] || "Unknown Category").join(", ")
+                                        : "No categories"}
+                                </p>
+                                <p className={styles.activityText}>
+                                    Tags: {activity.tags && activity.tags.length > 0
+                                        ? activity.tags.map(tagId => tags[tagId] || "Unknown Tag").join(", ")
+                                        : "No tags"}
+                                </p>
+                                <p className={styles.activityText}>
+                                    Special Discount: {activity.specialDiscount}
+                                </p>
+                                <p className={styles.activityText}>
+                                    {activity.bookingOpen ? "Booking Open" : "Booking Closed"}
+                                </p>
+                            </div>
                             {activity.coordinates && activity.coordinates.lat && activity.coordinates.lng && (
                                 <MapContainer
                                     center={[activity.coordinates.lat, activity.coordinates.lng]}
                                     zoom={13}
-                                    style={{ height: '300px', width: '100%', marginTop: '10px' }}
+                                    className={styles.mapContainer}
                                 >
                                     <TileLayer
                                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                                     />
                                     <Marker position={[activity.coordinates.lat, activity.coordinates.lng]}>
                                         <Popup>
-                                            {activity.location} <br /> {activity.price}$.
+                                            {activity.location} <br /> ${activity.price}
                                         </Popup>
                                     </Marker>
                                 </MapContainer>
@@ -130,7 +121,7 @@ const ReadActivities = () => {
                     ))}
                 </ul>
             )}
-            <Footer/>
+            <Footer />
         </div>
     );
 };

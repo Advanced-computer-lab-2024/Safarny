@@ -35,19 +35,33 @@ const DeleteActivity = () => {
     };
 
     return (
-        <div>
-            <Header/>
-            <h2>Delete Activity</h2>
-            <select onChange={(e) => setSelectedActivityId(e.target.value)} value={selectedActivityId}>
-                <option value="">Select an Activity</option>
-                {Array.isArray(activities) && activities.length > 0 && activities.map(activity => (
-                    <option key={activity._id} value={activity._id}>
-                        {activity.location} - {activity.date}
-                    </option>
-                ))}
-            </select>
-            <button onClick={handleDelete} disabled={!selectedActivityId}>Delete Activity</button>
-            <Footer/>
+        <div className={styles.container}>
+            <Header />
+            <div className={styles.mainContent}>
+                <h2 className={styles.heading}>Delete Activity</h2>
+                <div className={styles.selectContainer}>
+                    <select 
+                        onChange={(e) => setSelectedActivityId(e.target.value)} 
+                        value={selectedActivityId} 
+                        className={styles.select}
+                    >
+                        <option value="">Select an Activity</option>
+                        {Array.isArray(activities) && activities.length > 0 && activities.map(activity => (
+                            <option key={activity._id} value={activity._id}>
+                                {activity.location} - {activity.date}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <button 
+                    onClick={handleDelete} 
+                    disabled={!selectedActivityId} 
+                    className={styles.button}
+                >
+                    Delete Activity
+                </button>
+            </div>
+            <Footer />
         </div>
     );
 };

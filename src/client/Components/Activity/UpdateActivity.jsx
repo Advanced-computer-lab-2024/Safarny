@@ -3,12 +3,11 @@ import axios from "axios";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import Header from '/src/client/Components/Header/Header';
-import Footer from '/src/client/Components/Footer/Footer';
+import Header from "/src/client/Components/Header/Header";
+import Footer from "/src/client/Components/Footer/Footer";
 import styles from "./UpdateActivity.module.css";
 import { useParams } from "react-router-dom";
 
-// Fixing marker icon issue
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "https://unpkg.com/leaflet/dist/images/marker-icon-2x.png",
@@ -30,7 +29,7 @@ const UpdateActivity = () => {
     location: "",
     coordinates: { lat: null, lng: null },
     price: "",
-    category: "", // Updated for single category
+    category: "",
     tags: [],
     specialDiscount: "",
     bookingOpen: true,
@@ -103,7 +102,7 @@ const UpdateActivity = () => {
 
     const payload = {
       ...activityDetails,
-      category: activityDetails.category, // Ensure category is sent as an ID
+      category: activityDetails.category,
       tags: activityDetails.tags,
     };
 
@@ -134,11 +133,11 @@ const UpdateActivity = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <Header/>
-      <h2>Update Activity</h2>
+    <div className={styles.container}>
+      <Header />
+      <h2 className={styles.header}>Update Activity</h2>
       <div>
-        <label>
+        <label className={styles.selectActivity}>
           Select Activity:
           <select
             onChange={handleSelectChange}
@@ -155,7 +154,7 @@ const UpdateActivity = () => {
       </div>
 
       {selectedActivity && (
-        <form onSubmit={handleSubmit} style={{ marginTop: "20px" }}>
+        <form onSubmit={handleSubmit} className={styles.form}>
           <div>
             <label>
               Date:
@@ -215,7 +214,7 @@ const UpdateActivity = () => {
                 <option value="">Select a category</option>
                 {categories.map((cat) => (
                   <option key={cat._id} value={cat._id}>
-                    {cat.type}
+                    {cat.name}
                   </option>
                 ))}
               </select>
@@ -225,15 +224,10 @@ const UpdateActivity = () => {
             <label>
               Tags:
               <select
-                name="tags"
                 multiple
+                name="tags"
                 value={activityDetails.tags}
-                onChange={(e) =>
-                  setActivityDetails({
-                    ...activityDetails,
-                    tags: [...e.target.selectedOptions].map((o) => o.value),
-                  })
-                }
+                onChange={handleChange}
               >
                 {tags.map((tag) => (
                   <option key={tag._id} value={tag._id}>
@@ -251,6 +245,7 @@ const UpdateActivity = () => {
                 type="text"
                 value={activityDetails.specialDiscount}
                 onChange={handleChange}
+                placeholder="Enter discount description"
               />
             </label>
           </div>
@@ -258,6 +253,7 @@ const UpdateActivity = () => {
             <label>
               Booking Open:
               <input
+                name="bookingOpen"
                 type="checkbox"
                 checked={activityDetails.bookingOpen}
                 onChange={(e) =>
@@ -270,36 +266,34 @@ const UpdateActivity = () => {
             </label>
           </div>
 
-          <div style={{ height: "400px", width: "100%", marginTop: "20px" }}>
+          <div className={styles.mapContainer}>
             <MapContainer
-              center={[
-                activityDetails.coordinates.lat || 51.505,
-                activityDetails.coordinates.lng || -0.09,
-              ]}
+              center={activityDetails.coordinates.lat ? [activityDetails.coordinates.lat, activityDetails.coordinates.lng] : [51.505, -0.09]}
               zoom={13}
-              style={{ height: "100%", width: "100%" }}
+              scrollWheelZoom={false}
+              style={{ height: "100%" }}
             >
-              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
               <LocationMap />
-              {activityDetails.coordinates.lat &&
-                activityDetails.coordinates.lng && (
-                  <Marker
-                    position={[
-                      activityDetails.coordinates.lat,
-                      activityDetails.coordinates.lng,
-                    ]}
-                  />
-                )}
+              {activityDetails.coordinates.lat && (
+                <Marker
+                  position={[
+                    activityDetails.coordinates.lat,
+                    activityDetails.coordinates.lng,
+                  ]}
+                />
+              )}
             </MapContainer>
           </div>
-
-          <button type="submit" style={{ marginTop: "10px" }}>
+          <button type="submit" className={styles.updateButton}>
             Update Activity
           </button>
-          {message && <p style={{ color: "red" }}>{message}</p>}
         </form>
       )}
-      <Footer/>
+      {message && <div className={styles.message}>{message}</div>}
+      <Footer />
     </div>
   );
 };
