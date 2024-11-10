@@ -3,6 +3,9 @@ const usersController = require("../controllers/usersController.js");
 const searchController = require("../controllers/searchController.js");
 const flightController = require("../controllers/FlightController.js");
 const HotelController = require("../controllers/HotelController.js");
+const commentActivity = require("../controllers/commentActivity.js");
+const commentItinerary = require("../controllers/commentItinerary.js");
+const commentTourguid = require("../controllers/commentTourguid.js");
 
 const {
   getAllComplaints,
@@ -18,6 +21,8 @@ const {
   cancelBookingHistoricalPlace,
   cancelBooking,
 } = require("../controllers/bookingController.js");
+
+
 
 const router = Router();
 /*
@@ -62,6 +67,19 @@ router.post("/bookings/historicalPlace", bookHistoricalPlace);
 router.get("/bookings/:touristId", getBookings);
 router.put("/bookings/:id/cancel", cancelBooking);
 router.put("/bookings/:id/cancel/historicalPlace", cancelBookingHistoricalPlace);
+
+// Routes for Activity Comments
+router.post("/activity/:activityId", commentActivity.createCommentForActivity);
+router.get("/activity/:activityId", commentActivity.getCommentsByActivity);
+
+// Routes for Itinerary Comments
+router.post("/itinerary/:itineraryId", commentItinerary.createCommentForItinerary);
+router.get("/itinerary/:itineraryId", commentItinerary.getCommentsByItinerary);
+
+// Routes for Tour Guide Comments
+router.post("/tourguide/:tourGuideId", commentTourguid.createCommentForTourGuide);
+router.get("/tourguide/:tourGuideId", commentTourguid.getCommentsByTourGuide);
+
 
 router.put("/updatewallet", usersController.updateWallet);
 
