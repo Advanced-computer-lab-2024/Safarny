@@ -4,6 +4,7 @@ import axios from 'axios';
 import Footer from '/src/client/components/Footer/Footer';
 import Header from '/src/client/components/Header/Header';
 import styles from './PurchasedProducts.module.css';
+import StarRatings from 'react-star-ratings';
 
 const PurchasedProducts = () => {
   const location = useLocation();
@@ -233,13 +234,23 @@ const PurchasedProducts = () => {
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
               {products.map(product => {
                 const convertedPrice = convertPrice(product.price, product.currency, selectedCurrency);
+                const averageRating = product.rating.length > 0 ? (product.rating.reduce((acc, val) => acc + val, 0) / product.rating.length).toFixed(1) : 0;
                 return (
                     <div className={styles.productCard} key={product._id}>
                       <h2 className={styles.productDetails}>{product.details}</h2>
                       <p>Price: {convertedPrice} {selectedCurrency}</p>
                       <p>Quantity: {product.quantity}</p>
-                      <p>Ratings: {product.rating.length > 0 ? (product.rating.reduce((acc, val) => acc + val, 0) / product.rating.length).toFixed(1) : "No ratings yet"}</p>
-
+                      <div className={styles.ratingContainer}>
+                        <StarRatings
+                            rating={Math.round(averageRating * 2) / 2}
+                            starRatedColor="gold"
+                            numberOfStars={5}
+                            starDimension="20px"
+                            starSpacing="2px"
+                            name='rating'
+                        />
+                        <p>{averageRating} out of 5</p>
+                      </div>
                       <div className={styles.reviewsSection}>
                         <h3>Reviews:</h3>
                         {product.reviews && product.reviews.length > 0 ? (
