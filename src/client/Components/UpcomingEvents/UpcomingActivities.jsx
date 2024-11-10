@@ -179,20 +179,7 @@ const UpcomingActivities = () => {
   const handleUpcomingActivitiesDetails = (activityId) => {
     navigate(`/UpcomingActivities/${activityId}`);
   };
-  if (loading) {
-    return (
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100%',
-          marginLeft: '700px'
-        }}>
-          <span style={{marginRight: '10px'}}>Loading Activities...</span>
-          <CircularProgress/>
-        </div>
-    );
-  }
+
 
   const handleActivityBook = (activityId) => {
     //use MyBookingModal.jsx to book an Activity

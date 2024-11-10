@@ -6,7 +6,7 @@ const AdvertisersAdmin = () => {
   return (
     <div style={{ display: 'flex' }}>
     <SideBar />
-    <div style={{ marginLeft: '15px', padding: '20px' }}> {/* Adjust the margin */}
+    <div style={{ marginLeft: '10px', padding: '20px' }}> {/* Adjust the margin */}
       <DataTable4/>
     </div>
   </div>

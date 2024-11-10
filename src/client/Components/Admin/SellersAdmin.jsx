@@ -6,7 +6,7 @@ const SellersAdmin = () => {
   return (
     <div style={{ display: 'flex' }}>
     <SideBar />
-    <div style={{ marginLeft: '80px', padding: '20px' }}> {/* Adjust the margin */}
+    <div style={{ marginLeft: '20px', padding: '20px' }}> {/* Adjust the margin */}
       <DataTable3/>
     </div>
   </div>

@@ -29,19 +29,19 @@ const handleView1 = async (email) => {
 
 // Define the columns without TypeScript typing
 const columns = [
-    { field: 'id', headerName: 'ID', width: 250 },
+    { field: 'id', headerName: 'ID', width: 220 },
     { field: 'username', headerName: 'Username', width: 130 },
-    { field: 'email', headerName: 'Email', width: 150 },
+    { field: 'email', headerName: 'Email', width: 120 },
     { field: 'CompanyName', headerName: 'Company name', width: 130 },
     { field: 'CompanyLink', headerName: 'Company Link', width: 130 },
-    { field: 'CompanyHotline', headerName: 'Hotline', width: 130 },
+    { field: 'CompanyHotline', headerName: 'Hotline', width: 120 },
     { field: 'type', headerName: 'Type', width: 90 },
-    { field: 'Status', headerName: 'Status', width: 110 },
+    { field: 'Status', headerName: 'Status', width: 90 },
     { field: 'delete_request', headerName: 'delete_request', width: 110 },
     {
         field: 'idFile',
         headerName: 'ID File',
-        width: 130,
+        width: 110,
         renderCell: (params) => (
           <Button variant="outlined" color="primary" onClick={() => handleView1(params.row.email)}>
             View ID
@@ -51,7 +51,7 @@ const columns = [
       {
         field: 'certificateFile',
         headerName: 'Certificate File',
-        width: 170,
+        width: 175,
         renderCell: (params) => (
           <Button variant="outlined" color="primary" onClick={() => handleView2(params.row.email)}>
             View Tax Card

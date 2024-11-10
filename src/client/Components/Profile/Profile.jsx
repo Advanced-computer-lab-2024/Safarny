@@ -21,6 +21,8 @@ const Profile = () => {
   const [showButtons, setShowButtons] = useState(false);
   const [showBookingsButtons, setShowBookingsButtons] = useState(false);
   const [showComplaintsButtons, setShowComplaintsButtons] = useState(false);
+  const [showTransportationsButtons, setShowTransportButtons] = useState(false);
+  const [showPostButtons, setShowPostButtons] = useState(false);
 
 
   useEffect(() => {
@@ -131,24 +133,26 @@ const Profile = () => {
     navigate("/PreferencesPage", { state: { userId } });
   };
 
-  const handleDelete = async() => {
-    if(userInfo.role==="Seller"){
-      axios.put(`/seller/delete_request/${userId}`,{ delete_request: true });
+  const handleDelete = async () => {
+    if (userInfo.role === "Seller") {
+      axios.put(`/seller/delete_request/${userId}`, { delete_request: true });
     }
-    else if(userInfo.role==="TourGuide"){
-      axios.put(`/tourGuide/delete_request/${userId}`,{ delete_request: true });
+    else if (userInfo.role === "TourGuide") {
+      axios.put(`/tourGuide/delete_request/${userId}`, { delete_request: true });
     }
-    else if(userInfo.role==="Tourist"){
-      axios.put(`/tourist/delete_request/${userId}`,{ delete_request: true });
+    else if (userInfo.role === "Tourist") {
+      axios.put(`/tourist/delete_request/${userId}`, { delete_request: true });
     }
-    else if(userInfo.role==="Advertiser"){
-      axios.put(`/advertiser/delete_request/${userId}`,{ delete_request: true });
+    else if (userInfo.role === "Advertiser") {
+      axios.put(`/advertiser/delete_request/${userId}`, { delete_request: true });
     }
   };
 
   const handleViewButtonClick = () => setShowButtons((prevShow) => !prevShow);
   const handleBookingsButtonClick = () => setShowBookingsButtons(prev => !prev);
   const handleComplaintsButtonClick = () => setShowComplaintsButtons(prev => !prev);
+  const handleTransportButtonClick = () => setShowTransportButtons(prev => !prev);
+  const handlePostButtonClick = () => setShowPostButtons(prev => !prev);
 
   return (
     <div className={styles.container}>
@@ -199,10 +203,10 @@ const Profile = () => {
           </div>
         )}
       </main>
-  
+
       <div className={styles.organizedButtonContainer}>
         <div className={styles.delete_requestButton}>
-        <Button onClick={handleDelete}>Request Account To be Deleted</Button>
+          <Button onClick={handleDelete}>Request Account To be Deleted</Button>
         </div>
         <div className={styles.buttonGroup}>
           <button onClick={handleProductViewClick} className={styles.productButton}>
@@ -215,7 +219,7 @@ const Profile = () => {
             Update Profile
           </button>
         </div>
-  
+
         {userInfo.role === "TourismGovernor" && (
           <div className={styles.buttonGroup}>
             <button onClick={handleCreateHistoricalPlaceClick} className={styles.createPlaceButton}>
@@ -226,7 +230,14 @@ const Profile = () => {
             </button>
           </div>
         )}
-  
+        {userInfo.role === "Tourist" && (
+          <div className={styles.buttonGroup}>
+            <button onClick={handelWishList} className={styles.mainButton}>
+              View Wish List
+            </button>
+          </div>
+        )}
+
         <div className={styles.buttonGroup}>
           <button onClick={handleBookingsButtonClick} className={styles.mainButton}>
             View & Book Services
@@ -251,7 +262,7 @@ const Profile = () => {
             </div>
           )}
         </div>
-  
+
         <div className={styles.buttonGroup}>
           <button onClick={handleComplaintsButtonClick} className={styles.mainButton}>
             Manage Complaints
@@ -267,32 +278,46 @@ const Profile = () => {
             </div>
           )}
         </div>
-  
+
         {userInfo.role === "Seller" && (
           <div className={styles.buttonGroup}>
-            <button onClick={handlePostClick} className={styles.postButton}>
-              Add Product
+            <button onClick={handlePostButtonClick} className={styles.mainButton}>
+              Manage Products
             </button>
-            <button onClick={handleSellerHomeClick} className={styles.postButton}>
-              My Products
-            </button>
+            {showPostButtons && (
+              <div className={styles.subButtonGroup}>
+                <button onClick={handlePostClick} className={styles.postButton}>
+                  Add Product
+                </button>
+                <button onClick={handleSellerHomeClick} className={styles.postButton}>
+                  My Products
+                </button>
+              </div>
+            )}
           </div>
         )}
-  
+
         {userInfo.role === "Advertiser" && (
           <div className={styles.buttonGroup}>
-            <button onClick={handleAddActivity} className={styles.postButton}>
-              Activity
+            <button onClick={handleTransportButtonClick} className={styles.mainButton}>
+              Transportation and Activities
             </button>
-            <button onClick={handleCreateTransportClick} className={styles.postButton}>
-              Create Transport
-            </button>
-            <button onClick={handleEditTransportClick} className={styles.postButton}>
-              Edit & Delete Transport
-            </button>
+            {showTransportationsButtons && (
+              <div className={styles.subButtonGroup}>
+                <button onClick={handleAddActivity} className={styles.postButton}>
+                  Activity
+                </button>
+                <button onClick={handleCreateTransportClick} className={styles.postButton}>
+                  Create Transport
+                </button>
+                <button onClick={handleEditTransportClick} className={styles.postButton}>
+                  Edit & Delete Transport
+                </button>
+              </div>
+            )}
           </div>
         )}
-  
+
         {userInfo.role === "TourGuide" && (
           <div className={styles.buttonGroup}>
             <button onClick={handleAddItinerary} className={styles.postButton}>
@@ -300,7 +325,7 @@ const Profile = () => {
             </button>
           </div>
         )}
-  
+
         <button onClick={handleViewButtonClick} className={styles.mainButton}>
           View Upcoming Events
         </button>
@@ -318,12 +343,12 @@ const Profile = () => {
           </div>
         )}
       </div>
-  
+
       <Footer />
     </div>
   );
-  
-  
+
+
 };
 
 export default Profile;
