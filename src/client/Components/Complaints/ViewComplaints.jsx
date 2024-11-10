@@ -47,31 +47,41 @@ const ViewComplaints = () => {
     }
 
     return (
-            
-            <div className={styles.container}>
-                <Header />
-                <h2 className={styles.heading}>My Complaints</h2>
-                {error ? (
-                    <p className={styles.error}>{error}</p>
-                ) : (
-                    <ul className={styles.list}>
-                        {complaints.length === 0 ? (
-                            <p className={styles.noComplaints}>No complaints found. You have not made any complaints yet.</p>
-                        ) : (
-                            complaints.map((complaint) => (
-                                <li key={complaint._id} className={styles.item}>
-                                    <h3 className={styles.title}>{complaint.title}</h3>
-                                    <p className={styles.body}>{complaint.body}</p>
-                                    <p className={styles.status}>Status: {complaint.status}</p>
-                                    <p className={styles.date}>Date: {new Date(complaint.date).toLocaleString()}</p>
-                                </li>
-                            ))
-                        )}
-                    </ul>
-                )}
-                <Footer />
-            </div>
-            
+        <div className={styles.container}>
+            <Header />
+            <h2 className={styles.heading}>My Complaints</h2>
+            {error ? (
+                <p className={styles.error}>{error}</p>
+            ) : (
+                <ul className={styles.list}>
+                    {complaints.length === 0 ? (
+                        <p className={styles.noComplaints}>No complaints found. You have not made any complaints yet.</p>
+                    ) : (
+                        complaints.map((complaint) => (
+                            <li key={complaint._id} className={styles.item}>
+                                <h3 className={styles.title}>{complaint.title}</h3>
+                                <p className={styles.body}>{complaint.body}</p>
+                                <p className={styles.status}>Status: {complaint.status}</p>
+                                <p className={styles.date}>Date: {new Date(complaint.date).toLocaleString()}</p>
+                                {complaint.comments && complaint.comments.length > 0 && (
+                                    <div className={styles.comments}>
+                                        <h4>Comments:</h4>
+                                        <ul>
+                                            {complaint.comments.map((comment, index) => (
+                                                <li key={index} className={styles.comment}>
+                                                    <p>{comment}</p>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                            </li>
+                        ))
+                    )}
+                </ul>
+            )}
+            <Footer />
+        </div>
     );
 };
 
