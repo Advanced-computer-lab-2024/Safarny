@@ -39,7 +39,6 @@ h2 {
 .form {
   display: flex;
   flex-direction: column;
-  /* top: 5rem; */
   gap: 1rem;
   width: 95%;
 }
@@ -99,19 +98,25 @@ button:hover {
   margin-bottom: 0.5rem;
 }
 
+/* Add this to SignUp CSS */
 .termsText {
   background-color: #333;
   padding: 1rem;
   border-radius: 0.5rem;
   font-size: 0.9rem;
   line-height: 1.5;
-  color: #bfbfbf;
+  color: black; /* Changed text color to black */
 }
 
 .termsText p {
   margin-bottom: 0.5rem;
   font-weight: bold;
-  color: #e0e0e0;
+  color: black; /* Ensures the paragraphs are also black */
+}
+
+.termsText ul li {
+  margin-bottom: 0.5rem;
+  color: black; /* Ensure list items are black */
 }
 
 .termsText ul {
@@ -119,23 +124,16 @@ button:hover {
   padding-left: 1.5rem;
 }
 
-.termsText ul li {
-  margin-bottom: 0.5rem;
-}
-
 .modal {
   position: absolute;
   top: 50%;
-  left: 50%;
-  right: auto;
-  bottom: auto;
-  margin-right: -50%;
+  left: 0%;
   transform: translate(-50%, -50%);
   background: white;
-  padding: 20px;
+  padding: 15px; /* Reduced padding */
   border-radius: 10px;
-  max-width: 600px;
-  width: 100%;
+  max-width: 100px; /* Smaller width */
+  width: 100%; /* Ensure it scales within the max-width */
   z-index: 1000;
 }
 
@@ -147,4 +145,15 @@ button:hover {
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.75);
   z-index: 999;
+}
+
+/* Full screen for Terms and Conditions page */
+.termsPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: var(--background-color);
+  padding: 1rem;
 }
