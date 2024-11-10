@@ -6,6 +6,7 @@ import Header from '/src/client/components/Header/Header';
 import styles from './ProductList.module.css';
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import StarRatings from 'react-star-ratings';
+import { Bookmark, BookmarkBorder } from '@mui/icons-material';
 
 const ProductList = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ const ProductList = () => {
   const [wallet, setWallet] = useState(0);
   const [walletCurrency, setWalletCurrency] = useState('EGP');
   const [userRole, setUserRole] = useState('');
+  const [wishlist, setWishlist] = useState({});
 
   const fetchExchangeRates = async () => {
     try {
@@ -105,8 +107,11 @@ const ProductList = () => {
 
   const handleAddToWishlist = async (postId) => {
     try {
-      console.log('Adding post to wishlist:', postId);
       const response = await axios.post('/wishlist/add', { userId, postId });
+      setWishlist(prevWishlist => ({
+        ...prevWishlist,
+        [postId]: true,
+      }));
       alert('Post added to wishlist');
     } catch (err) {
       console.error('Error adding post to wishlist:', err);
@@ -241,8 +246,14 @@ const ProductList = () => {
                 const convertedPrice = convertPrice(product.price, product.currency, selectedCurrency);
                 const sellerName = sellers[product.createdby] || "Unknown Seller";
                 const averageRating = product.rating.length > 0 ? (product.rating.reduce((acc, val) => acc + val, 0) / product.rating.length).toFixed(1) : 0;
+                const isWishlisted = wishlist[product._id] || false;
                 return (
                     <div className={styles.productCard} key={product._id}>
+                      {userRole === 'Tourist' && (
+                          <div className={styles.bookmarkIcon} onClick={() => handleAddToWishlist(product._id)}>
+                            {isWishlisted ? <Bookmark/> : <BookmarkBorder/>}
+                          </div>
+                      )}
                       <h2 className={styles.productDetails}>{product.details}</h2>
                       <p>Price: {convertedPrice} {selectedCurrency}</p>
                       <p>Quantity: {product.quantity}</p>
@@ -276,21 +287,15 @@ const ProductList = () => {
                             <p>No reviews available</p>
                         )}
                       </div>
-                      <button
-                          className={styles.buyButton}
-                          onClick={() => handleBuyButtonClick(product)}
-                      >
-                        Purchase
-                      </button>
-                      {userRole === 'Tourist' && (
-                          <button
-                              onClick={() => handleAddToWishlist(product._id)}
-                              className={styles.wishlistButton}
-                          >
-                            Add to Wishlist
-                          </button>
-                      )}
-                      <img className={styles.productImage} src={product.imageurl} alt={product.details} />
+                      <div className={styles.buttonContainer}>
+                        <button
+                            className={styles.buyButton}
+                            onClick={() => handleBuyButtonClick(product)}
+                        >
+                          Purchase
+                        </button>
+                      </div>
+                      <img className={styles.productImage} src={product.imageurl} alt={product.details}/>
                     </div>
                 );
               })}
@@ -298,7 +303,7 @@ const ProductList = () => {
         ) : (
             <p>No products available</p>
         )}
-        <Footer />
+        <Footer/>
       </div>
   );
 };

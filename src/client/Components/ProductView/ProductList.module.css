@@ -161,3 +161,25 @@
   font: bold;
   margin-left: 15px;
 }
+
+.buttonContainer {
+  display: flex;
+  gap: 20px;
+}
+
+.bookmarkIcon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  color: gray;
+}
+
+.bookmarkIcon svg {
+  font-size: 24px;
+}
+
+.productCard {
+  position: relative;
+  /* other styles */
+}
