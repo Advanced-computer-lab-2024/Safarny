@@ -153,7 +153,6 @@ const Profile = () => {
   return (
     <div className={styles.container}>
       <Header />
-      <Button color="error" onClick={handleDelete}>Request Account To be Deleted</Button>
 
       <main className={styles.main}>
         <button className={styles.notificationButton}>
@@ -202,6 +201,9 @@ const Profile = () => {
       </main>
   
       <div className={styles.organizedButtonContainer}>
+        <div className={styles.delete_requestButton}>
+        <Button onClick={handleDelete}>Request Account To be Deleted</Button>
+        </div>
         <div className={styles.buttonGroup}>
           <button onClick={handleProductViewClick} className={styles.productButton}>
             View Products
