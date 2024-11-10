@@ -9,7 +9,11 @@ const historicalPlaceSchema = new mongoose.Schema(
       lat: { type: Number, required: true },
       lng: { type: Number, required: true },
     },
-    openingHours: { type: String, required: true }, // Opening hours (e.g., "9:00 AM - 5:00 PM")
+    openingHours: { type: String, required: true },
+      rating: {
+          type: [Number], // Array of numbers
+          default: [5], // Default to an array with a single rating of 5
+      },
     ticketPrices: { type: Number, required: true }, // Ticket price for entry
     currency: { type: String, required: true }, // Currency of the ticket price
     tags: [{ type: mongoose.Schema.Types.ObjectId, ref: "HistoricalTags" }], // Reference to tags

@@ -4,14 +4,14 @@ import styles from "./MyBookings.module.css";
 import Header from "/src/client/components/Header/Header";
 import Footer from "/src/client/components/Footer/Footer";
 import axios from "axios";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, MenuItem, Select, FormControl, InputLabel } from "@mui/material";
 
 const MyBookings = () => {
   const location = useLocation();
   const { userId } = location.state || {};
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [walletCurrency, setWalletCurrency] = useState("USD"); // Example wallet currency
+  const [walletCurrency, setWalletCurrency] = useState("USD");
   const [exchangeRates, setExchangeRates] = useState({});
 
   const fetchBookings = async () => {
@@ -19,7 +19,7 @@ const MyBookings = () => {
       const response = await axios.get(
           `http://localhost:3000/tourist/bookings/${userId}`
       );
-      setBookings(response.data);
+      setBookings(response.data.map(booking => ({ ...booking, rating: 5 })));
     } catch (error) {
       console.error("Error fetching bookings:", error);
     } finally {
@@ -40,7 +40,7 @@ const MyBookings = () => {
       setExchangeRates(data.conversion_rates);
     } catch (error) {
       console.error("Error fetching exchange rates:", error);
-      setExchangeRates({ USD: 1 }); // Default to USD if there's an error
+      setExchangeRates({ USD: 1 });
     }
   };
 
@@ -53,12 +53,19 @@ const MyBookings = () => {
     return ((price / rateFrom) * rateTo).toFixed(2);
   };
 
-  useEffect(() => {
-    if (userId) {
-      fetchBookings();
-      fetchExchangeRates();
+  const handleRatingChange = async (bookingId, newRating) => {
+    try {
+      await axios.put(
+          `http://localhost:3000/tourist/bookings/${bookingId}/rating`,
+          { rating: newRating }
+      );
+      setBookings(bookings.map(booking =>
+          booking._id === bookingId ? { ...booking, rating: newRating } : booking
+      ));
+    } catch (error) {
+      console.error("Error updating rating:", error);
     }
-  }, [userId]);
+  };
 
   const handleCancelBooking = async (booking) => {
     try {
@@ -75,10 +82,21 @@ const MyBookings = () => {
             `http://localhost:3000/tourist/bookings/${booking._id}/cancel`
         );
       }
-      fetchBookings(); // Refresh bookings after canceling
+      fetchBookings();
     } catch (error) {
       console.error("Error cancelling booking:", error);
     }
+  };
+
+  useEffect(() => {
+    if (userId) {
+      fetchBookings();
+      fetchExchangeRates();
+    }
+  }, [userId]);
+
+  const isPastDate = (date) => {
+    return new Date(date) < new Date();
   };
 
   return (
@@ -124,6 +142,21 @@ const MyBookings = () => {
                           >
                             Cancel Booking
                           </button>
+                      )}
+                      {isPastDate(booking.bookingDate) && (
+                          <FormControl fullWidth margin="normal">
+                            <InputLabel>Rate this booking</InputLabel>
+                            <Select
+                                value={booking.rating}
+                                onChange={(e) => handleRatingChange(booking._id, e.target.value)}
+                            >
+                              {[1, 2, 3, 4, 5].map((rating) => (
+                                  <MenuItem key={rating} value={rating}>
+                                    {rating}
+                                  </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
                       )}
                     </div>
                   </li>

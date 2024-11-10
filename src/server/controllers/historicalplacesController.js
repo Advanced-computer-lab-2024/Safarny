@@ -131,12 +131,12 @@ const getHistoricalPlaceById = async (req, res) => {
 const updateHistoricalPlaceById = async (req, res) => {
   try {
     const placeId = req.params.id;
-    const { description, pictures, coordinates, openingHours, ticketPrices, currency } =
+    const { description, pictures, coordinates, openingHours, ticketPrices, currency, rating } =
       req.body;
 
     const updatedPlace = await HistoricalPlace.findByIdAndUpdate(
       placeId,
-      { description, pictures, coordinates, openingHours, ticketPrices, currency },
+      { description, pictures, coordinates, openingHours, ticketPrices, currency, rating },
       { new: true, runValidators: true }
     );
 

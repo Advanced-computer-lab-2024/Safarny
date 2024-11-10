@@ -107,7 +107,7 @@ const updateItineraryById = async (req, res) => {
     itinerary.dropoffLocation =
       req.body.dropoffLocation || itinerary.dropoffLocation;
     itinerary.createdby = req.body.createdby || itinerary.createdby;
-
+    itinerary.rating = req.body.rating || itinerary.rating;
     // Optionally update archived value
     if (typeof req.body.archived !== 'undefined') {
       itinerary.archived = req.body.archived;

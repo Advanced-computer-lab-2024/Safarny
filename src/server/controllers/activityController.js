@@ -114,6 +114,7 @@ const updateActivity = async (req, res) => {
       specialDiscount,
       archived,
       bookingOpen,
+      rating,
       coordinates, // Add coordinates field
     } = req.body; // Adjust according to your model
   
@@ -132,6 +133,7 @@ const updateActivity = async (req, res) => {
           tags,
           specialDiscount,
           bookingOpen,
+          rating,
           coordinates, // Update coordinates field
         },
         { new: true } // This option returns the updated document
