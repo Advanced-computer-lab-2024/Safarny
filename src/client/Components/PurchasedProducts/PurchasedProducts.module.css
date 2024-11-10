@@ -26,6 +26,10 @@
     height: 100%;
   }
   
+.headerTitle{
+  color: var(--primary-color);
+}
+
   .button {
     text-decoration: none;
     padding: 0.5rem 1rem;

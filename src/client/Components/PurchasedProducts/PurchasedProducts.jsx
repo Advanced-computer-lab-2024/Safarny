@@ -228,8 +228,7 @@ const PurchasedProducts = () => {
   return (
       <div className={styles.container}>
         <Header />
-        <h1>Purchased Products</h1>
-
+        <h1 className={styles.headerTitle}>Purchased Products</h1>
         {products.length > 0 ? (
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
               {products.map(product => {
