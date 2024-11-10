@@ -2,11 +2,11 @@
   --primary-color: #1a1a1a;
   --secondary-color: #333;
   --background-color: #dcdbdb;
-  --text-color: #616161;
+  --text-color: #000000;
   --header-color: white;
   --form-background: #2a2a2a;
   --border-radius: 1rem;
-  --small-text-color: white;
+  --small-text-color: #000000;
 }
 
 .container {
@@ -127,15 +127,15 @@ button:hover {
 
 .modal {
   position: absolute;
-  top: 50%;
-  left: 0%;
+  top: 50%; /* Centered vertically */
+  left: 5%; /* Centered horizontally */
   transform: translate(-50%, -50%);
   background: white;
-  padding: 15px; /* Reduced padding */
+  padding: 10px; /* Minimal padding for compactness */
   border-radius: 10px;
-  max-width: 100px; /* Smaller width */
-  width: 100%; /* Ensure it scales within the max-width */
-  z-index: 1000;
+  max-width: 200px; /* Smaller width for pop-up size */
+  width: 0%; /* Slightly flexible width */
+  z-index: 2000; /* Above header */
 }
 
 .overlay {
@@ -145,8 +145,9 @@ button:hover {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.75);
-  z-index: 999;
+  z-index: 1999; /* Just below the modal */
 }
+
 
 /* Full screen for Terms and Conditions page */
 .termsPage {
