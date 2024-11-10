@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Header from '/src/client/Components/Header/Header';
+import Footer from '/src/client/Components/Footer/Footer';
+import styles from "./DeleteActivity.module.css";
 import { useParams } from 'react-router-dom';
 
 const DeleteActivity = () => {
@@ -33,6 +36,7 @@ const DeleteActivity = () => {
 
     return (
         <div>
+            <Header/>
             <h2>Delete Activity</h2>
             <select onChange={(e) => setSelectedActivityId(e.target.value)} value={selectedActivityId}>
                 <option value="">Select an Activity</option>
@@ -43,6 +47,7 @@ const DeleteActivity = () => {
                 ))}
             </select>
             <button onClick={handleDelete} disabled={!selectedActivityId}>Delete Activity</button>
+            <Footer/>
         </div>
     );
 };
