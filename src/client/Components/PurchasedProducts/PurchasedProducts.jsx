@@ -66,11 +66,26 @@ const PurchasedProducts = () => {
         if (postIds.length > 0) {
           const productDetails = await Promise.all(
               postIds.map(async (postId) => {
-                const productResponse = await axios.get(`/admin/products/${postId}`);
-                return productResponse.data;
+                try {
+                  const productResponse = await axios.get(`/admin/products/${postId}`);
+                  return productResponse.data;
+                } catch (err) {
+                  if (err.response && err.response.status === 404) {
+                    console.warn(`Product with ID ${postId} not found.`);
+                    return null; // Return null if product is not found
+                  } else {
+                    throw err; // Re-throw other errors
+                  }
+                }
               })
           );
-          setProducts(productDetails);
+
+          const validProducts = productDetails.filter(product => product !== null);
+          setProducts(validProducts);
+
+          if (validProducts.length === 0) {
+            setError('No purchased products found for this user.');
+          }
         } else {
           setError('No purchased products found for this user.');
         }
@@ -134,9 +149,10 @@ const PurchasedProducts = () => {
 
         const currentReviews = product.reviews;
         const updatedReviews = [...currentReviews, newReview];
+        const updatedRatings = [...product.rating, userRating];
 
-        await axios.put(`/admin/products/${productId}`, { reviews: updatedReviews });
-        alert("Review submitted successfully!");
+        await axios.put(`/admin/products/${productId}`, { reviews: updatedReviews, rating: updatedRatings });
+        alert("Review and rating submitted successfully!");
 
         setReviews(prevReviews => ({
           ...prevReviews,
@@ -148,9 +164,14 @@ const PurchasedProducts = () => {
           [productId]: ""
         }));
 
+        setRatings(prevRatings => ({
+          ...prevRatings,
+          [productId]: 0
+        }));
+
       } catch (err) {
-        console.error("Error submitting review:", err);
-        alert("Failed to submit review. Please try again.");
+        console.error("Error submitting review and rating:", err);
+        alert("Failed to submit review and rating. Please try again.");
       }
     }
   };
