@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import styles from "./TourGuide.module.css";
 import {
   Button,
   TextField,
@@ -181,7 +182,7 @@ export default function TourGuide() {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className={styles.container}>
       <Header />
       <Typography variant="h4" component="h1" gutterBottom>
         Tour Guide Dashboard
