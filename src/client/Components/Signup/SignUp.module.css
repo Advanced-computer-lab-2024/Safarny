@@ -60,6 +60,7 @@ input,
 select {
   padding: 1rem;
   border: 1px solid #ccc;
+  color: #1a1a1a;
   border-radius: 0.5rem;
   width: 100%; /* Ensure inputs take full width */
 }
