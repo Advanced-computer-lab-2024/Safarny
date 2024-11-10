@@ -65,4 +65,6 @@ router.put("/bookings/:id/cancel/historicalPlace", cancelBookingHistoricalPlace)
 
 router.put("/updatewallet", usersController.updateWallet);
 
+router.put("/delete_request/:id", usersController.updateProfileById);
+
 module.exports = router;

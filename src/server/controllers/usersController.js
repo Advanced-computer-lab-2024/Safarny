@@ -2,6 +2,9 @@ const User = require("../models/userModel.js");
 const AsyncHandler = require("express-async-handler");
 const mongoose = require("mongoose");
 const userModel = require("../models/userModel.js");
+const Itinerary = require("../models/Itinerary.js");
+const Activity = require("../models/Activity.js");
+const Booking = require("../models/Booking.js");
 
 const getAllUsers = AsyncHandler(async (req, res) => {
   try {
@@ -254,7 +257,124 @@ const updateAcceptedStatus = async (req, res) => {
   }
 };
 
+const updateDeleteAccount = async (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid ID" });
+    }
+    const { delete_request } = req.body;
+    const updatedDocument = await userModel.findByIdAndUpdate(
+        id,
+        { delete_request },
+        { new: true }
+    );
+    if (!updatedDocument) {
+      return res.status(404).json({ message: "Document not found" });
+    }
+    res.status(200).json(updatedDocument);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error updating Accepted status", error });
+  }
+};
 
+const deleteTourGuideAndIterinaries = async (req, res) => {
+  try {
+    const userId = req.params.id; // Assume the user ID is provided as a URL parameter
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Check if the user is an Advertiser (or TourGuide, depending on the role name)
+    if (user.role !== "TourGuide") {
+      return res.status(400).json({ message: "User is not an TourGuide" });
+    }
+
+    // Find itineraries created by this user
+    const itineraries = await Itinerary.find({ createdby: userId });
+
+    // Check if any itinerary has upcoming available times and if there are any bookings
+    const now = new Date();
+    for (const itinerary of itineraries) {
+      // Check if there are upcoming available times
+      const hasUpcomingTimes = itinerary.availableTimes.some(time => {
+        return new Date(time) > now;
+      });
+
+      // Check if there are any bookings (i.e., if the boughtBy array is not empty)
+      if (hasUpcomingTimes || (itinerary.boughtby && itinerary.boughtby.length > 0)) {
+        return res.status(400).json({
+          message: "Cannot delete account: There are upcoming available times or existing bookings",
+        });
+      }
+    }
+
+    // Delete all Itineraries created by this user
+    await Itinerary.deleteMany({ createdby: userId });
+
+    // Delete the user account
+    await User.findByIdAndDelete(userId);
+
+    res.status(200).json({ message: "Tour Guide account and all related itineraries deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting Tour Guide account and Iterinaries:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const deleteAdvertiserAndActivities = async (req, res) => {
+  try {
+    const userId = req.params.id; // Assume the user ID is provided as a URL parameter
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Check if the user is an Advertiser
+    if (user.role !== "Advertiser") {
+      return res.status(400).json({ message: "User is not an Advertiser" });
+    }
+
+    // Find activities created by this Advertiser
+    const activities = await Activity.find({ createdby: userId });
+
+    // Check if any activity has an upcoming date and if there are any bookings
+    const now = new Date();
+    for (const activity of activities) {
+      // Check if the activity has an upcoming date
+      const activityDate = new Date(activity.date);
+      const hasUpcomingDate = activityDate > now;
+
+      // Check if there are any bookings (i.e., if the boughtBy array is not empty)
+      if (hasUpcomingDate || (activity.boughtby && activity.boughtby.length > 0)) {
+        return res.status(400).json({
+          message: "Cannot delete account: There are upcoming activities or existing bookings",
+        });
+      }
+    }
+
+    const activityIds = activities.map(activity => activity._id);
+
+    // Delete all activities created by this Advertiser
+    await Activity.deleteMany({ createdby: userId });
+    await Booking.deleteMany({ activity: { $in: activityIds } });
+    // Delete the user account
+    await User.findByIdAndDelete(userId);
+
+    res.status(200).json({ message: "Advertiser account and all related activities deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting Advertiser account and activities:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
 
 
 module.exports = {
@@ -267,5 +387,8 @@ module.exports = {
   updateProfileById,
   getAllUsers, // Export the new function
   updateAcceptedStatus,
-    updateWallet
+    updateWallet,
+  updateDeleteAccount,
+  deleteTourGuideAndIterinaries,
+  deleteAdvertiserAndActivities
 };

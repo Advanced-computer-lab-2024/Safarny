@@ -4,6 +4,8 @@ import { FaBell } from "react-icons/fa"; // Import the notification bell icon
 import styles from "./Profile.module.css";
 import Footer from "/src/client/components/Footer/Footer";
 import Header from "/src/client/components/Header/Header";
+import { Button } from "@mui/material";
+import axios from "axios";
 
 const Profile = () => {
   const location = useLocation();
@@ -129,6 +131,21 @@ const Profile = () => {
     navigate("/PreferencesPage", { state: { userId } });
   };
 
+  const handleDelete = async() => {
+    if(userInfo.role==="Seller"){
+      axios.put(`/seller/delete_request/${userId}`,{ delete_request: true });
+    }
+    else if(userInfo.role==="TourGuide"){
+      axios.put(`/tourGuide/delete_request/${userId}`,{ delete_request: true });
+    }
+    else if(userInfo.role==="Tourist"){
+      axios.put(`/tourist/delete_request/${userId}`,{ delete_request: true });
+    }
+    else if(userInfo.role==="Advertiser"){
+      axios.put(`/advertiser/delete_request/${userId}`,{ delete_request: true });
+    }
+  };
+
   const handleViewButtonClick = () => setShowButtons((prevShow) => !prevShow);
   const handleBookingsButtonClick = () => setShowBookingsButtons(prev => !prev);
   const handleComplaintsButtonClick = () => setShowComplaintsButtons(prev => !prev);
@@ -136,6 +153,7 @@ const Profile = () => {
   return (
     <div className={styles.container}>
       <Header />
+
       <main className={styles.main}>
         <button className={styles.notificationButton}>
           <FaBell />
@@ -183,6 +201,9 @@ const Profile = () => {
       </main>
   
       <div className={styles.organizedButtonContainer}>
+        <div className={styles.delete_requestButton}>
+        <Button onClick={handleDelete}>Request Account To be Deleted</Button>
+        </div>
         <div className={styles.buttonGroup}>
           <button onClick={handleProductViewClick} className={styles.productButton}>
             View Products

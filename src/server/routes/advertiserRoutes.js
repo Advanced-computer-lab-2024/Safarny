@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 
+const usersController = require("../controllers/usersController.js");
 const {
     createActivity,
     getActivities,
@@ -36,5 +37,5 @@ const {
     .delete(deleteActivity);
   
   router.route("/addCategory").post(addCategoryToActivity);
-
+  router.route("/delete_request/:id").put(usersController.updateDeleteAccount);
 module.exports = router;

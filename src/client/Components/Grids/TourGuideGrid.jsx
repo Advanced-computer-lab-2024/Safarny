@@ -36,6 +36,7 @@ const columns = [
   { field: 'YearOfExp', headerName: 'Years of Exp.', width: 120 },
   { field: 'type', headerName: 'Type', width: 90 },
   { field: 'Status', headerName: 'Status', width: 110 },
+  { field: 'delete_request', headerName: 'delete_request', width: 110 },
   {
     field: 'idFile',
     headerName: 'ID File',
@@ -77,6 +78,7 @@ export default function DataTable2() {
           YearOfExp: user.YearOfExp,
           type: user.role,
           Status: user.Status,
+          delete_request: user.delete_request
         }));
 
         setRows(formattedRows);
@@ -94,7 +96,7 @@ export default function DataTable2() {
     try {
       await Promise.all(
           selectedRows.map(rowId =>
-              axios.delete(`http://localhost:3000/admin/deleteUser/${rowId}`)
+              axios.delete(`http://localhost:3000/admin/deleteTourGuide/${rowId}`)
           )
       );
       // Refetch data or update state to remove deleted rows

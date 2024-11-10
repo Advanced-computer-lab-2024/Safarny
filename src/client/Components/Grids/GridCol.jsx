@@ -14,6 +14,7 @@ const columns = [
   { field: 'walletcurrency', headerName: 'Wallet Currency', width: 130},
   { field: 'mobile', headerName: 'Mobile', width: 130 },
   { field: 'employed', headerName: 'Employed', width: 90 },
+  { field: 'delete_request', headerName: 'delete_request', width: 110 },
 ];
 
 export default function DataTable() {
@@ -33,6 +34,7 @@ export default function DataTable() {
           walletcurrency: user.walletcurrency,
           mobile: user.mobile,
           employed: user.employed,
+          delete_request: user.delete_request
         }));
         setRows(formattedRows);
       } catch (error) {

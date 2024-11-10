@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import Header from '/src/client/Components/Header/Header';
+import Footer from '/src/client/Components/Footer/Footer';
+import styles from "./ReadActivity.module.css";
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
@@ -78,6 +81,7 @@ const ReadActivities = () => {
 
     return (
         <div>
+            <Header/>
             <h2>Activities</h2>
             {errorMessage && <p>{errorMessage}</p>}
             {activities.length === 0 ? (
@@ -126,6 +130,7 @@ const ReadActivities = () => {
                     ))}
                 </ul>
             )}
+            <Footer/>
         </div>
     );
 };
