@@ -3,17 +3,18 @@ import axios from 'axios';
 import Footer from '/src/client/Components/Footer/Footer';
 import Header from '../Header/Header';
 import styles from './CreateCommentForTourGuide.module.css';
+import { useParams } from 'react-router-dom';
 
 const CreateCommentForTourGuide = () => {
+  const { tourGuideId } = useParams();  // Get tourGuideId from URL
   const [comment, setComment] = useState('');  // State for storing the comment
   const [message, setMessage] = useState('');  // State for displaying success/error message
-  const [tourGuideId, setTourGuideId] = useState('');  // Optional: Tour Guide ID (can be empty)
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newComment = { 
-      comment, 
-      tourGuideId: tourGuideId || undefined,  // Pass tourGuideId if available, otherwise omit it
+    const newComment = {
+      comment,
+      tourGuideId: tourGuideId,  // Pass tourGuideId if available, otherwise omit it
     };
 
     try {
@@ -39,15 +40,6 @@ const CreateCommentForTourGuide = () => {
             onChange={(e) => setComment(e.target.value)}  // Handling comment change
             required
             className={styles.textarea}
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label className={styles.label}>Tour Guide ID (optional):</label>
-          <input
-            type="text"
-            value={tourGuideId}
-            onChange={(e) => setTourGuideId(e.target.value)}  // Handle tour guide ID input
-            className={styles.input}
           />
         </div>
         <button type="submit" className={styles.button}>Submit Comment</button>
