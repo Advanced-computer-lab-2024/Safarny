@@ -25,7 +25,7 @@ const ManageTransports = () => {
   const fetchTransports = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/transport/transports?advertiserId=${advertiserId}`
+        `http://localhost:3000/transport/transports/advertiser/${advertiserId}`
       );
       setTransports(response.data);
     } catch (error) {
