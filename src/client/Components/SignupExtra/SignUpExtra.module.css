@@ -29,8 +29,7 @@
 .label {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  color: var(--text-color);
+  color: white;  /* Set label text color to white */
 }
 
 .input {
@@ -92,6 +91,15 @@
 
 li {
   color: black;
+}
+
+.backButton {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .termsLabel {
