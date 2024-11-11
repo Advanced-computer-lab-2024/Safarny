@@ -86,6 +86,24 @@
   background-color: var(--primary-hover-color);
 }
 
+.termsText {
+  color: var(--text-color); /* Ensures text inside terms is black */
+}
+
+li {
+  color: black;
+}
+
+.termsLabel {
+  color: var(--text-color); /* Makes sure the label is black */
+}
+
+.modal h2,
+.modal p,
+.modal li {
+  color: var(--text-color); /* Ensures the modal text is black */
+}
+
 .modal {
   position: absolute;
   top: 50%; /* Centered vertically */
