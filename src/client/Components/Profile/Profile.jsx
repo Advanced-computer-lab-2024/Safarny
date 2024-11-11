@@ -20,7 +20,7 @@ const Profile = () => {
     wallet: 0,
     walletCurrency: "EGP"
   });
-
+  const [message, setMessage] = useState("");
   const [showButtons, setShowButtons] = useState(false);
   const [showBookingsButtons, setShowBookingsButtons] = useState(false);
   const [showComplaintsButtons, setShowComplaintsButtons] = useState(false);
@@ -44,42 +44,47 @@ const Profile = () => {
     fetchUserData();
   }, [userId]);
 
-const handleCashInPoints = async () => {
-  try {
-    const response = await fetch(import.meta.env.VITE_EXCHANGE_API_URL);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+  const handleCashInPoints = async () => {
+    try {
+      if (userInfo.loyaltyPoints === 0) {
+        setMessage("You do not have any loyalty points!");
+        return;
+      }
+
+      const response = await fetch(import.meta.env.VITE_EXCHANGE_API_URL);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      const exchangeRate = data.conversion_rates[userInfo.walletcurrency];
+      const pointsInWallet = userInfo.loyaltyPoints * 0.01 * exchangeRate;
+
+      if (isNaN(pointsInWallet)) {
+        throw new Error("Invalid points calculation");
+      }
+
+      if (!userId) {
+        throw new Error("User ID is required");
+      }
+
+      await axios.put(`http://localhost:3000/tourist/${userId}`, {
+        wallet: userInfo.wallet + pointsInWallet,
+        loyaltyPoints: 0
+      });
+
+      setUserInfo((prevState) => ({
+        ...prevState,
+        wallet: prevState.wallet + pointsInWallet,
+        loyaltyPoints: 0
+      }));
+
+      setMessage("Points redeemed!");
+    } catch (error) {
+      console.error("Error cashing in points:", error);
     }
-    const data = await response.json();
-    const exchangeRate = data.conversion_rates[userInfo.walletcurrency];
-    const pointsInWallet = userInfo.loyaltyPoints * 0.01 * exchangeRate;
+  };
 
-    if (isNaN(pointsInWallet)) {
-      throw new Error("Invalid points calculation");
-    }
-
-    // Ensure userId is defined
-    if (!userId) {
-      throw new Error("User ID is required");
-    }
-
-    // Update the user's wallet and loyalty points in the backend
-    await axios.put(`http://localhost:3000/tourist/${userId}`, {userId,
-      wallet: userInfo.wallet + pointsInWallet,
-      loyaltyPoints: 0
-    });
-
-    // Update the state to reflect the changes
-    setUserInfo((prevState) => ({
-      ...prevState,
-      wallet: prevState.wallet + pointsInWallet,
-      loyaltyPoints: 0
-    }));
-  } catch (error) {
-    console.error("Error cashing in points:", error);
-  }
-};
-const handleUpdateClick = () => {
+  const handleUpdateClick = () => {
     localStorage.setItem("userId", userId);
     window.location.href = "/UpdateProfile";
   };
@@ -239,9 +244,11 @@ const handleUpdateClick = () => {
                 )}
               </div>
           )}
+          <br></br>
           <button onClick={handleCashInPoints} className={styles.cashInButton}>
             Cash in points
           </button>
+          {message && <p style={{ textAlign: 'center' }}>{message}</p>}
         </main>
 
         <div className={styles.organizedButtonContainer}>
