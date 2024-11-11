@@ -75,3 +75,11 @@ body{
     background-color: green;
     color: white;
 }
+
+/* UpdateProfile.module.css */
+input[type="email"],
+input[type="tel"],
+input[type="password"] {
+    background-color: white;
+    color: black; /* Ensure text is visible */
+}
