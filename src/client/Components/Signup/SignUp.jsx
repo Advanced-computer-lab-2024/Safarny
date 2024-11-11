@@ -300,7 +300,7 @@ const SignUp = () => {
             </ul>
             <p>Thank you for using our platform responsibly.</p>
             {/* Add Back Button */}
-            <button onClick={closeModal} style={{ marginTop: '20px', cursor: 'pointer' }}>
+            <button onClick={closeModal} className={styles.backButton}>
               Back
             </button>
           </main>
