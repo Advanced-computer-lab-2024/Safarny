@@ -1,4 +1,6 @@
 const Comment = require("../models/Comment.js");
+const User = require("../models/userModel.js");
+const Itinerary = require("../models/Itinerary.js"); // Import the Itinerary model
 
 // Create a comment for a specific tour guide (optional tourGuideId)
 const createCommentForTourGuide = async (req, res) => {
@@ -23,14 +25,34 @@ const createCommentForTourGuide = async (req, res) => {
 // Get all comments for a specific tour guide
 const getCommentsByTourGuide = async (req, res) => {
   try {
-    const { tourGuideId } = req.params.id; // Extracting the tour guide ID from the URL
+    const { tourGuideId } = req.params;
+    console.log(tourGuideId);
 
-    // Find all comments associated with the given tour guide ID and populate related fields
-    const comments = await Comment.find({ tourGuideId }).populate("itinerary activity tourGuideId");
+    // Check if the tourGuideId exists
+    const tourGuideExists = await User.exists({ _id: tourGuideId });
+    if (!tourGuideExists) {
+      return res.status(404).json({ message: 'Tour guide not found' });
+    }
 
-    res.status(200).json(comments); // Respond with the comments
+    // Fetch comments by tourGuideId
+    const comments = await Comment.find({ tourGuideId });
+
+    // Fetch related data for each comment
+    const commentsWithDetails = await Promise.all(comments.map(async (comment) => {
+      const itinerary = await Itinerary.findById(comment.itinerary);
+      //const activity = await Activity.findById(comment.activity);
+      return {
+        ...comment.toObject(),
+        itinerary,
+        //activity,
+      };
+    }));
+
+    //console.log(commentsWithDetails);
+    res.status(200).json(commentsWithDetails);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching comments for tour guide", error });
+    //console.log(error);
+    res.status(500).json({ message: 'Error fetching comments for tour guide', error });
   }
 };
 

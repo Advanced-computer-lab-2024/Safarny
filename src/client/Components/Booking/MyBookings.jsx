@@ -18,71 +18,95 @@ const MyBookings = () => {
   const [tourGuideRatings, setTourGuideRatings] = useState({});
   const [comments, setComments] = useState({});  // Store comments by activityId ///
 
-  const fetchBookings = async () => {
-    try {
-      const response = await axios.get(`http://localhost:3000/tourist/bookings/${userId}`);
-      const bookingsWithTourGuide = await Promise.all(
-        response.data.map(async (booking) => {
-          try {
-            let tourGuideUsername = null;
-            let tourGuideId = null;
-            let activityComments = [];  // Variable to store activity comments
-  
-            // Check if the booking has an itinerary or activity
-            if (booking.itinerary && booking.itinerary._id) {
-              const itineraryResponse = await axios.get(`http://localhost:3000/itineraries/${booking.itinerary._id}`);
-              tourGuideId = itineraryResponse.data.createdby;
-            } else if (booking.activity && booking.activity._id) {
-              const activityResponse = await axios.get(`http://localhost:3000/activities/${booking.activity._id}`);
-              tourGuideId = activityResponse.data.createdby;
-  
-              // Fetch comments for the activity
-              const activityCommentsResponse = await axios.get(`/tourist/comments/activity/${booking.activity._id}`);
-              activityComments = activityCommentsResponse.data;  // Store activity comments
+const fetchBookings = async () => {
+  try {
+    const response = await axios.get(`http://localhost:3000/tourist/bookings/${userId}`);
+    const bookingsWithTourGuide = await Promise.all(
+      response.data.map(async (booking) => {
+        try {
+          let tourGuideUsername = null;
+          let tourGuideId = null;
+          let activityComments = [];
+          let iteneraryComments = [];
+          let tourGuideComments = [];
+
+          if (booking.itinerary && booking.itinerary._id) {
+            const itineraryResponse = await axios.get(`http://localhost:3000/itineraries/${booking.itinerary._id}`);
+            try {
+              if (booking.itinerary && booking.itinerary._id) {
+                const iteneraryCommentsResponse = await axios.get(`http://localhost:3000/tourist/comments/itinerary/${booking.itinerary._id}`);
+                iteneraryComments = iteneraryCommentsResponse.data;
+              }
+            } catch (error) {
+              console.error("Error fetching comments for itinerary:", error);
             }
-  
-            // Fetch tour guide username
-            if (tourGuideId) {
+            tourGuideId = itineraryResponse.data.createdby;
+          } else if (booking.activity && booking.activity._id) {
+            const activityResponse = await axios.get(`http://localhost:3000/activities/${booking.activity._id}`);
+            tourGuideId = activityResponse.data.createdby;
+            try {
+              if (booking.activity && booking.activity._id) {
+                const activityCommentsResponse = await axios.get(`http://localhost:3000/tourist/comments/activity/${booking.activity._id}`);
+                activityComments = activityCommentsResponse.data;
+              }
+            } catch (error) {
+              console.error("Error fetching comments for activity:", error);
+            }
+          }
+          if (tourGuideId && /^[a-fA-F0-9]{24}$/.test(tourGuideId)) {
+            try {
+              const tourGuideResponse = await axios.get(`http://localhost:3000/tourist/${tourGuideId}`);
+              tourGuideUsername = tourGuideResponse.data.username;
               try {
-                const tourGuideResponse = await axios.get(`http://localhost:3000/tourist/${tourGuideId}`);
-                tourGuideUsername = tourGuideResponse.data.username;
-              } catch (error) {
-                if (error.response && error.response.status === 404) {
-                  console.error(`Tour guide profile not found for ID ${tourGuideId}`);
-                } else {
-                  throw error;
+                if (tourGuideId && /^[a-fA-F0-9]{24}$/.test(tourGuideId)) {
+                  const tourGuideCommentsResponse = await axios.get(`http://localhost:3000/tourist/comments/tourguide/${tourGuideId}`);
+                  tourGuideComments = tourGuideCommentsResponse.data;
                 }
+              } catch (error) {
+                console.error("Error fetching comments for tour guide:", error);
+              }
+            } catch (error) {
+              if (error.response && error.response.status === 404) {
+                console.error(`Tour guide profile not found for ID ${tourGuideId}`);
+              } else {
+                throw error;
               }
             }
-  
-            return { 
-              ...booking, 
-              tourGuideUsername, 
-              tourGuideId, 
-              rating: 5, 
-              activityComments // Add the fetched activity comments to the booking object
-            };
-          } catch (error) {
-            console.error(`Error fetching details for booking ${booking._id || "unknown"}:`, error);
-            return { 
-              ...booking, 
-              tourGuideUsername: "Unknown", 
-              tourGuideId: null, 
-              rating: 5, 
-              activityComments: [] // Ensure the activityComments is an empty array if there's an error
-            };
           }
-        })
-      );
-      setBookings(bookingsWithTourGuide);
-    } catch (error) {
-      console.error("Error fetching bookings:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const fetchExchangeRates = async () => {
+          return {
+            ...booking,
+            tourGuideUsername,
+            tourGuideId,
+            rating: 5,
+            activityComments,
+            iteneraryComments,
+            tourGuideComments
+          };
+        } catch (error) {
+          console.error(`Error fetching details for booking ${booking._id || "unknown"}:`, error);
+          return {
+            ...booking,
+            tourGuideUsername: "Unknown",
+            tourGuideId: null,
+            rating: 5,
+            activityComments: [],
+            iteneraryComments: [],
+            tourGuideComments: []
+          };
+        }
+      })
+    );
+    setBookings(bookingsWithTourGuide);
+  } catch (error) {
+    console.error("Error fetching bookings:", error);
+    alert("An error occurred while fetching bookings. Please try again later.");
+  } finally {
+    setLoading(false);
+  }
+};
+
+const fetchExchangeRates = async () => {
     try {
       const response = await fetch(import.meta.env.VITE_EXCHANGE_API_URL);
       if (!response.ok) {
@@ -249,7 +273,44 @@ const MyBookings = () => {
                       )}
                     </>
                   )}
+                  {booking.itinerary && (
+                      <>
+                        <p>Itinerary: {booking.itinerary.location}</p>
 
+                        {/* Display the comments for the activity */}
+                        {Array.isArray(booking.iteneraryComments) && booking.iteneraryComments.length > 0 ? (
+                            <div>
+                              <h3>Comments for this Itinerary:</h3>
+                              <ul>
+                                {booking.iteneraryComments.map((comment, index) => (
+                                    <li key={index}>{comment.comment}</li>  // Adjust to match your comment structure
+                                ))}
+                              </ul>
+                            </div>
+                        ) : (
+                            <p>No comments yet for this itinerary.</p>
+                        )}
+                      </>
+                  )}
+                  {booking.tourGuideId && booking.tourGuideUsername && (
+                      <>
+                        <p>Tour Guide: {booking.tourGuideUsername}</p>
+
+                        {/* Display the comments for the tour guide */}
+                        {Array.isArray(booking.tourGuideComments) && booking.tourGuideComments.length > 0 ? (
+                        <div>
+                          <h3>Comments for this Tour Guide:</h3>
+                            <ul>
+                              {booking.tourGuideComments.map((comment, index) => (
+                                  <li key={index}>{comment.comment}</li>  // Adjust to match your comment structure
+                              ))}
+                            </ul>
+                        </div>
+                        ) : (
+                            <p>No comments yet for this tour guide.</p>
+                        )}
+                      </>
+                  )}
                   {booking.historicalPlace && (
                     <p>Historical Place: {booking.historicalPlace.description}</p>
                   )}

@@ -71,15 +71,15 @@ router.put("/bookings/:id/cancel/historicalPlace", cancelBookingHistoricalPlace)
 
 // Routes for Activity Comments
 router.post("/comments/activity", commentActivity.createCommentForActivity);
-router.get("/comments/activity/:id", commentActivity.getCommentsByActivity);
+router.get("/comments/activity/:activityId", commentActivity.getCommentsByActivity);
 
 // Routes for Itinerary Comments
 router.post("/comments/itinerary", commentItinerary.createCommentForItinerary);
-router.get("/comments/itinerary/:id", commentItinerary.getCommentsByItinerary);
+router.get("/comments/itinerary/:itineraryId", commentItinerary.getCommentsByItinerary);
 
 // Routes for Tour Guide Comments
 router.post("/comments/tourguide", commentTourguid.createCommentForTourGuide);
-router.get("/comments/tourguide/id", commentTourguid.getCommentsByTourGuide);
+router.get("/comments/tourguide/:tourGuideId", commentTourguid.getCommentsByTourGuide);
 
 
 router.put("/updatewallet", usersController.updateWallet);

@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+// src/server/models/TourGuide.js
+/*const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const tourGuideSchema = new Schema(
@@ -25,16 +26,16 @@ const tourGuideSchema = new Schema(
     },
     previousWork: {
       type: String,
-        required: false,
+      required: false,
     },
-      rating: {
-          type: [Number], // Array of numbers
-          default: [5], // Default to an array with a single rating of 5
-      },
-        averageRating: { type: Number, default: 5 }, // Default average rating to 5
+    rating: {
+      type: [Number], // Array of numbers
+      default: [5], // Default to an array with a single rating of 5
+    },
+    averageRating: { type: Number, default: 5 }, // Default average rating to 5
   },
   { timestamps: true }
 );
 
-const TourGuide = mongoose.model("TourGuide", tourGuideSchema);
-export default TourGuide;
+const TourGuide = mongoose.model('TourGuide', tourGuideSchema);
+module.exports = TourGuide;*/
