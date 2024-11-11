@@ -138,6 +138,10 @@ button:hover {
   z-index: 2000; /* Above header */
 }
 
+li {
+  color: black;
+}
+
 .overlay {
   position: fixed;
   top: 0;
