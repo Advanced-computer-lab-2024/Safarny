@@ -183,3 +183,13 @@
   position: relative;
   /* other styles */
 }
+
+/* ProductList.module.css */
+.priceInput {
+  color: black;
+}
+
+/* ProductList.module.css */
+.searchInput {
+  color: black;
+}
