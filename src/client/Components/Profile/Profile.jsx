@@ -282,11 +282,7 @@ const Profile = () => {
                 <button onClick={handelWishList} className={styles.mainButton}>
                   View Wish List
                 </button>
-              </div>
-          )}
-
-          <div className={styles.buttonGroup}>
-            <button onClick={handleBookingsButtonClick} className={styles.mainButton}>
+                <button onClick={handleBookingsButtonClick} className={styles.mainButton}>
               View & Book Services
             </button>
             {showBookingsButtons && (
@@ -308,9 +304,6 @@ const Profile = () => {
                   </button>
                 </div>
             )}
-          </div>
-
-          <div className={styles.buttonGroup}>
             <button onClick={handleComplaintsButtonClick} className={styles.mainButton}>
               Manage Complaints
             </button>
@@ -324,7 +317,8 @@ const Profile = () => {
                   </button>
                 </div>
             )}
-          </div>
+              </div>
+          )}
 
           {userInfo.role === "Seller" && (
               <div className={styles.buttonGroup}>
