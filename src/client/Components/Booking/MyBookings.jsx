@@ -16,6 +16,7 @@ const MyBookings = () => {
   const [walletCurrency, setWalletCurrency] = useState("USD");
   const [exchangeRates, setExchangeRates] = useState({});
   const [tourGuideRatings, setTourGuideRatings] = useState({});
+  const [comments, setComments] = useState({});  // Store comments by activityId ///
 
   const fetchBookings = async () => {
     try {
@@ -25,15 +26,22 @@ const MyBookings = () => {
           try {
             let tourGuideUsername = null;
             let tourGuideId = null;
-
+            let activityComments = [];  // Variable to store activity comments
+  
+            // Check if the booking has an itinerary or activity
             if (booking.itinerary && booking.itinerary._id) {
               const itineraryResponse = await axios.get(`http://localhost:3000/itineraries/${booking.itinerary._id}`);
               tourGuideId = itineraryResponse.data.createdby;
             } else if (booking.activity && booking.activity._id) {
               const activityResponse = await axios.get(`http://localhost:3000/activities/${booking.activity._id}`);
               tourGuideId = activityResponse.data.createdby;
+  
+              // Fetch comments for the activity
+              const activityCommentsResponse = await axios.get(`/tourist/comments/activity/${booking.activity._id}`);
+              activityComments = activityCommentsResponse.data;  // Store activity comments
             }
-
+  
+            // Fetch tour guide username
             if (tourGuideId) {
               try {
                 const tourGuideResponse = await axios.get(`http://localhost:3000/tourist/${tourGuideId}`);
@@ -46,11 +54,23 @@ const MyBookings = () => {
                 }
               }
             }
-
-            return { ...booking, tourGuideUsername, tourGuideId, rating: 5 };
+  
+            return { 
+              ...booking, 
+              tourGuideUsername, 
+              tourGuideId, 
+              rating: 5, 
+              activityComments // Add the fetched activity comments to the booking object
+            };
           } catch (error) {
             console.error(`Error fetching details for booking ${booking._id || "unknown"}:`, error);
-            return { ...booking, tourGuideUsername: "Unknown", tourGuideId: null, rating: 5 };
+            return { 
+              ...booking, 
+              tourGuideUsername: "Unknown", 
+              tourGuideId: null, 
+              rating: 5, 
+              activityComments: [] // Ensure the activityComments is an empty array if there's an error
+            };
           }
         })
       );
@@ -208,7 +228,28 @@ const MyBookings = () => {
                 <div className={styles.bookingDetails}>
                   <p>Booking Date: {booking.bookingDate}</p>
                   {booking.itinerary && <p>Itinerary: {booking.itinerary.name}</p>}
-                  {booking.activity && <p>Activity: {booking.activity.location}</p>}
+
+                  {/* Displaying Activity details */}
+                  {booking.activity && (
+                    <>
+                      <p>Activity: {booking.activity.location}</p>
+
+                      {/* Display the comments for the activity */}
+                      {Array.isArray(booking.activityComments) && booking.activityComments.length > 0 ? (
+                        <div>
+                          <h3>Comments for this Activity:</h3>
+                          <ul>
+                            {booking.activityComments.map((comment, index) => (
+                              <li key={index}>{comment.comment}</li>  // Adjust to match your comment structure
+                            ))}
+                          </ul>
+                        </div>
+                      ) : (
+                        <p>No comments yet for this activity.</p>
+                      )}
+                    </>
+                  )}
+
                   {booking.historicalPlace && (
                     <p>Historical Place: {booking.historicalPlace.description}</p>
                   )}
@@ -224,6 +265,7 @@ const MyBookings = () => {
                     </p>
                   )}
 
+                  {/* Tour guide details */}
                   {booking.tourGuideId && booking.tourGuideUsername && (
                     <>
                       <p>{tourGuideInfo}</p>
@@ -286,7 +328,9 @@ const MyBookings = () => {
                       <InputLabel>Rate this booking</InputLabel>
                       <Select
                         value={booking.rating}
-                        onChange={(e) => handleRatingChange(booking._id, e.target.value, bookingType, bookingTypeId)}
+                        onChange={(e) =>
+                          handleRatingChange(booking._id, e.target.value, bookingType, bookingTypeId)
+                        }
                       >
                         {[1, 2, 3, 4, 5].map((rating) => (
                           <MenuItem key={rating} value={rating}>

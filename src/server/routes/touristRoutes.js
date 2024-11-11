@@ -79,7 +79,7 @@ router.get("/comments/itinerary/:id", commentItinerary.getCommentsByItinerary);
 
 // Routes for Tour Guide Comments
 router.post("/comments/tourguide", commentTourguid.createCommentForTourGuide);
-router.get("/comments/tourguide/:id", commentTourguid.getCommentsByTourGuide);
+router.get("/comments/tourguide/id", commentTourguid.getCommentsByTourGuide);
 
 
 router.put("/updatewallet", usersController.updateWallet);
