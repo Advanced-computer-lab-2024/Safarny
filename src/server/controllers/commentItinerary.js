@@ -12,7 +12,7 @@ const createCommentForItinerary = async (req, res) => {
       itinerary: itineraryId || null, // Itinerary is optional now, so we either use the passed value or set it to null
       comment,
     });
-
+     console.log(newComment);
     await newComment.save(); // Save the comment to the database
     res.status(201).json(newComment); // Respond with the created comment
   } catch (error) {

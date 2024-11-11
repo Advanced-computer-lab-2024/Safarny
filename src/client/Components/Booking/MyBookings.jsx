@@ -153,15 +153,15 @@ const MyBookings = () => {
 
   // Button handlers for navigation
   const handleNavigateToCommentForTourGuide = (booking) => {
-    navigate(`/create-comment-for-tourguide/${booking.tourGuideId}`, { state: { bookingId: booking._id } });
+    navigate(`/create-comment-tourguide/${booking.tourGuideId}`, { state: { bookingId: booking._id } });
   };
 
   const handleNavigateToCommentForItinerary = (booking) => {
-    navigate(`/create-comment-for-itinerary/${booking.itinerary._id}`, { state: { bookingId: booking._id } });
+    navigate(`/create-comment-itinerary/${booking.itinerary._id}`, { state: { bookingId: booking._id } });
   };
 
   const handleNavigateToCommentForActivity = (booking) => {
-    navigate(`/create-comment-for-activity/${booking.activity._id}`, { state: { bookingId: booking._id } });
+    navigate(`/create-comment-activity/${booking.activity._id}`, { state: { bookingId: booking._id } });
   };
 
   useEffect(() => {

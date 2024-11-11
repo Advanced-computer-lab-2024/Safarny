@@ -17,7 +17,7 @@ const CreateCommentForTourGuide = () => {
     };
 
     try {
-      const response = await axios.post('/comments', newComment);  // API URL adjusted to handle comments generically
+      const response = await axios.post('/tourist/comments/tourguide', newComment);  // API URL adjusted to handle comments generically
       console.log('Comment created:', response.data);
       setMessage('Comment created successfully!');
       setComment('');  // Clear the comment input field
