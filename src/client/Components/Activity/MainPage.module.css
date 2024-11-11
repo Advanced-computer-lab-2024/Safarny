@@ -9,7 +9,7 @@
   --card-background: #2a2a2a;
   --card-hover: #444;
   --glow-color: #958efa;
-  --error-button: maroon;
+  /* --error-button: maroon; */
 }
 
 .container {
@@ -58,10 +58,11 @@
 .navItem {
   display: flex;
   justify-content: center;
+  background-color: var(--background-color);
 }
 
 .navButton {
-  background-color: var(--primary-color);
+  background-color: #1a1a1a;
   color: var(--header-color);
   border: none;
   border-radius: var(--border-radius);
