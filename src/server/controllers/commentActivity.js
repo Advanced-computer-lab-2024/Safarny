@@ -23,7 +23,7 @@ const createCommentForActivity = async (req, res) => {
 // Get all comments for a specific activity
 const getCommentsByActivity = async (req, res) => {
   try {
-    const { activityId } = req.params; // Extracting the activity ID from the URL
+    const { activityId } = req.params.id; // Extracting the activity ID from the URL
 
     // Find all comments associated with the given activity ID and populate related fields
     const comments = await Comment.find({ activity: activityId }).populate("itinerary activity tourGuideId");
