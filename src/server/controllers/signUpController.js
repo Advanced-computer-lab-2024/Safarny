@@ -7,7 +7,7 @@ const AdvertiserController = require("./advertiserController.js");
 
 //Tourist SingUp
 const signUp = AsyncHandler(async (req, res) => {
-  const { email, username, password, nationality, walletcurrency, mobile, DOB, employed } =
+  const { email, username, password, nationality, walletcurrency, mobile, DOB, employed,photo } =
     req.body;
 
   try {
@@ -22,6 +22,7 @@ const signUp = AsyncHandler(async (req, res) => {
       DOB,
       employed,
       role: "Tourist",
+      photo,
     });
 
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
