@@ -51,13 +51,12 @@ const handleCashInPoints = async () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    const exchangeRate = data.conversion_rates[userInfo.walletCurrency];
+    const exchangeRate = data.conversion_rates[userInfo.walletcurrency];
     const pointsInWallet = userInfo.loyaltyPoints * 0.01 * exchangeRate;
 
-    await axios.put('/cashInPoints', {
-      walletCurrency: userInfo.walletCurrency,
-      id: userId
-    });
+    if (isNaN(pointsInWallet)) {
+      throw new Error("Invalid points calculation");
+    }
 
     setUserInfo((prevState) => ({
       ...prevState,
@@ -65,11 +64,9 @@ const handleCashInPoints = async () => {
       loyaltyPoints: 0
     }));
   } catch (error) {
-    console.log(userId)
     console.error("Error cashing in points:", error);
   }
-};
-const handleUpdateClick = () => {
+};const handleUpdateClick = () => {
     localStorage.setItem("userId", userId);
     window.location.href = "/UpdateProfile";
   };
