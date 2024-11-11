@@ -245,7 +245,7 @@ const Profile = () => {
               </div>
           )}
           <br></br>
-          <button onClick={handleCashInPoints} className={styles.cashInButton}>
+          <button onClick={handleCashInPoints} className={styles.subButton}>
             Cash in points
           </button>
           {message && <p style={{ textAlign: 'center' }}>{message}</p>}
