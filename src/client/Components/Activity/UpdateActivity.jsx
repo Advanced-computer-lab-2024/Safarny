@@ -3,8 +3,8 @@ import axios from "axios";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import Header from "/src/client/Components/Header/Header";
-import Footer from "/src/client/Components/Footer/Footer";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 import styles from "./UpdateActivity.module.css";
 import { useParams } from "react-router-dom";
 
@@ -135,7 +135,7 @@ const UpdateActivity = () => {
   return (
     <div className={styles.container}>
       <Header />
-      <h2 className={styles.header}>Update Activity</h2>
+      <h2 className={styles.heading}>Update Activity</h2>
       <div>
         <label className={styles.selectActivity}>
           Select Activity:
