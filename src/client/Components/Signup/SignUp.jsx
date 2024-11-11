@@ -7,6 +7,8 @@ import Footer from '/src/client/Components/Footer/Footer';
 import Header from '../Header/Header';
 import styles from './SignUp.module.css';
 import Modal from 'react-modal';
+import { storage } from '../../../server/config/Firebase';
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 const countries = [
   "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
   "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia",
@@ -61,6 +63,8 @@ const SignUp = () => {
   const [DOB, setDob] = useState(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [walletCurrency, setWalletCurrency] = useState('');
+  const [photo, setPhoto] = useState(null);
+  const [photoURL, setPhotoURL] = useState('');
   const age = DOB ? calculateAge(DOB) : null;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -99,10 +103,11 @@ const SignUp = () => {
       employed,
       DOB,
       termsAccepted,
-      walletCurrency
+      walletCurrency,
+      photoURL
     };
     localStorage.setItem('signUpFormData', JSON.stringify(formData));
-  }, [username, email, password, mobile, nationality, employed, DOB, termsAccepted, walletCurrency]);
+  }, [username, email, password, mobile, nationality, employed, DOB, termsAccepted, walletCurrency, photoURL]);
 
   function calculateAge(dob) {
     const dobDate = new Date(dob);
@@ -121,6 +126,35 @@ const SignUp = () => {
     setWalletCurrency(countryToCurrency[selectedCountry] || '');
   };
 
+  const handlePhotoChange = (e) => {
+    if (e.target.files[0]) {
+      setPhoto(e.target.files[0]);
+    }
+  };
+
+  const handlePhotoUpload = async () => {
+    if (!photo) return;
+
+    const storageRef = ref(storage, `photos/${photo.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, photo);
+
+    return new Promise((resolve, reject) => {
+      uploadTask.on(
+          'state_changed',
+          (snapshot) => {},
+          (error) => {
+            console.error('Photo upload error:', error);
+            reject(error);
+          },
+          async () => {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            setPhotoURL(downloadURL);
+            resolve(downloadURL);
+          }
+      );
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -129,19 +163,22 @@ const SignUp = () => {
       return;
     }
 
-    const userData = {
-      username,
-      email,
-      password,
-      mobile,
-      nationality,
-      employed,
-      DOB,
-      age,
-      walletCurrency
-    };
-
     try {
+      const photoURL = await handlePhotoUpload();
+
+      const userData = {
+        username,
+        email,
+        password,
+        mobile,
+        nationality,
+        employed,
+        DOB,
+        age,
+        walletCurrency,
+        photo: photoURL
+      };
+
       const response = await axios.post('http://localhost:3000/guest/tourist-signup', userData);
       if (response.status === 201) {
         setSuccess(true);
@@ -150,144 +187,138 @@ const SignUp = () => {
         navigate('/signin');
       }
     } catch (err) {
+      console.log(err);
       setError('Registration failed. Please try again.');
       setSuccess(false);
     }
   };
 
-  const handleNavigate = (path) => {
-    const formData = {
-      username,
-      email,
-      password,
-      mobile,
-      nationality,
-      employed,
-      DOB,
-      termsAccepted,
-      walletCurrency
-    };
-    navigate(path);
-  };
-
   return (
-    <div className={styles.container}>
-      <Header />
-      <div className={styles.formContainer}>
-        <h2 className={styles.heading}>Sign Up</h2>
-        {success && <p className={styles.successMessage}>Sign up successful!</p>}
-        {error && <p className={styles.errorMessage}>{error}</p>}
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <label className={styles.label}>
-            Name:
-            <input className={styles.input}
-                type="text"
-                name="username"
-                value={username}
-                onChange={(e) => setUserName(e.target.value)}
-                required
-            />
-          </label>
-          <label className={styles.label}>
-            Email:
-            <input className={styles.input}
-                type="email"
-                name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-            />
-          </label>
-          <label className={styles.label}>
-            Password:
-            <input className={styles.input}
-                type="password"
-                name="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-            />
-          </label>
-          <label className={styles.label}>
-            Date of Birth:
-            <DatePicker
-                selected={DOB}
-                onChange={(date) => setDob(date)}
-                dateFormat="MM/dd/yyyy"
-                className="form-control"
-                placeholderText="Select your date of birth"
-                required
-            />
-          </label>
-          <label className={styles.label}>
-            Mobile:
-            <input className={styles.input}
-                type="text"
-                name="mobile"
-                value={mobile}
-                onChange={(e) => setMobile(e.target.value)}
-                required
-            />
-          </label>
-          <label className={styles.label}>
-            Nationality:
-            <select className={styles.input}
-                value={nationality}
-                onChange={handleCountryChange}
-                required
-            >
-              <option value="">Select Country of Origin</option>
-              {countries.map((country) => (
-                  <option key={country} value={country}>{country}</option>
-              ))}
-            </select>
-          </label>
-          <label className={styles.label}>
-            Employment Status:
-            <select className={styles.input}
-                value={employed}
-                onChange={(e) => setEmployed(e.target.value)}
-                required
-            >
-              <option value="">Select employment status</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-            </select>
-          </label>
-          <div className={styles.terms}>
-            <input className={styles.input}
-                type="checkbox"
-                id="terms"
-                checked={termsAccepted}
-                onChange={(e) => setTermsAccepted(e.target.checked)}
-                required
-            />
-            <label htmlFor="terms" className={styles.label}>
-              I agree to the following terms and conditions:
+      <div className={styles.container}>
+        <Header />
+        <div className={styles.formContainer}>
+          <h2 className={styles.heading}>Sign Up</h2>
+          {success && <p className={styles.successMessage}>Sign up successful!</p>}
+          {error && <p className={styles.errorMessage}>{error}</p>}
+          <form onSubmit={handleSubmit} className={styles.form}>
+            <label className={styles.label}>
+              Name:
+              <input className={styles.input}
+                     type="text"
+                     name="username"
+                     value={username}
+                     onChange={(e) => setUserName(e.target.value)}
+                     required
+              />
             </label>
-            <div className={styles.termsText}>
-              <ul>
-                <p>
+            <label className={styles.label}>
+              Email:
+              <input className={styles.input}
+                     type="email"
+                     name="email"
+                     value={email}
+                     onChange={(e) => setEmail(e.target.value)}
+                     required
+              />
+            </label>
+            <label className={styles.label}>
+              Password:
+              <input className={styles.input}
+                     type="password"
+                     name="password"
+                     value={password}
+                     onChange={(e) => setPassword(e.target.value)}
+                     required
+              />
+            </label>
+            <label className={styles.label}>
+              Date of Birth:
+              <DatePicker
+                  selected={DOB}
+                  onChange={(date) => setDob(date)}
+                  dateFormat="MM/dd/yyyy"
+                  className="form-control"
+                  placeholderText="Select your date of birth"
+                  required
+              />
+            </label>
+            <label className={styles.label}>
+              Mobile:
+              <input className={styles.input}
+                     type="text"
+                     name="mobile"
+                     value={mobile}
+                     onChange={(e) => setMobile(e.target.value)}
+                     required
+              />
+            </label>
+            <label className={styles.label}>
+              Nationality:
+              <select className={styles.input}
+                      value={nationality}
+                      onChange={handleCountryChange}
+                      required
+              >
+                <option value="">Select Country of Origin</option>
+                {countries.map((country) => (
+                    <option key={country} value={country}>{country}</option>
+                ))}
+              </select>
+            </label>
+            <label className={styles.label}>
+              Employment Status:
+              <select className={styles.input}
+                      value={employed}
+                      onChange={(e) => setEmployed(e.target.value)}
+                      required
+              >
+                <option value="">Select employment status</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </label>
+            <label className={styles.label}>
+              Photo:
+              <input className={styles.input}
+                     type="file"
+                     onChange={handlePhotoChange}
+                     required
+              />
+            </label>
+            <div className={styles.terms}>
+              <input className={styles.input}
+                     type="checkbox"
+                     id="terms"
+                     checked={termsAccepted}
+                     onChange={(e) => setTermsAccepted(e.target.checked)}
+                     required
+              />
+              <label htmlFor="terms" className={styles.label}>
+                I agree to the following terms and conditions:
+              </label>
+              <div className={styles.termsText}>
+                <ul>
+                  <p>
                 <span onClick={openModal}
                       style={{cursor: 'pointer', color: 'blue', textDecoration: 'underline'}}>
                   Click here for the terms and conditions.
                 </span>
-                </p>
-              </ul>
+                  </p>
+                </ul>
+              </div>
             </div>
-          </div>
-          <button type="submit" className={styles.submitButton}>Sign Up</button>
-        </form>
-      </div>
-      <Footer/>
-      <Modal
-          isOpen={isModalOpen}
-          onRequestClose={closeModal}
-          contentLabel="Terms and Conditions"
-          className={styles.modal}
-          overlayClassName={styles.overlay}
-      >
-        <div className={styles.container}>
+            <button type="submit" className={styles.submitButton}>Sign Up</button>
+          </form>
+        </div>
+        <Footer/>
+        <Modal
+            isOpen={isModalOpen}
+            onRequestClose={closeModal}
+            contentLabel="Terms and Conditions"
+            className={styles.modal}
+            overlayClassName={styles.overlay}
+        >
+          <div className={styles.container}>
           <Header />
           <main style={{ flexGrow: 1 }}>
             <h2 className={styles.heading2}>Terms and Conditions</h2>
@@ -306,9 +337,9 @@ const SignUp = () => {
           </main>
           <Footer />
         </div>
-      </Modal>
-    </div>
-  );  
+        </Modal>
+      </div>
+  );
 };
 
 export default SignUp;

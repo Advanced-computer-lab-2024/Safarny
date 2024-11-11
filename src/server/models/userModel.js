@@ -98,6 +98,8 @@ const userModel = new mongoose.Schema(
         ref: "ActivityCategory",
       },
     ],
+    //firebase storage photo url
+    photo: String,
 
     Status: {
       type: String,

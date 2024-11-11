@@ -222,6 +222,13 @@ const Profile = () => {
                         </p>
                     ))
             )}
+            {userInfo.photo && (
+                <img
+                    src={userInfo.photo}
+                    alt="Profile"
+                    className={styles.profileImage}
+                />
+            )}
             {userInfo.image && (
                 <img
                     src={userInfo.image}

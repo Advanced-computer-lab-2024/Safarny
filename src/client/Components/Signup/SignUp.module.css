@@ -53,7 +53,15 @@
 .label {
   display: flex;
   flex-direction: column;
-  color: white;  /* Set label text color to white */
+  color: black; /* Ensure the label text is black */
+}
+
+label input {
+  color: black; /* Ensure the input text is black as well */
+}
+
+label .react-datepicker-wrapper {
+  color: black; /* Make sure the wrapper text (if any) is black */
 }
 
 .logo {
