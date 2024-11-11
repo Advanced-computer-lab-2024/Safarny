@@ -12,8 +12,7 @@ const createCommentForActivity = async (req, res) => {
       // tourGuideId,
       // itinerary,
       // typeOfComment,
-      comment,
-      rating,
+      comment,   
     });
 
     await newComment.save(); // Save the comment to the database

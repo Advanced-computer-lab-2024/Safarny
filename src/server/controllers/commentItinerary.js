@@ -13,7 +13,6 @@ const createCommentForItinerary = async (req, res) => {
       // activity,
       // typeOfComment,
       comment,
-      rating,
     });
 
     await newComment.save(); // Save the comment to the database
