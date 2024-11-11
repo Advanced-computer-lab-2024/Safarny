@@ -375,8 +375,40 @@ const deleteAdvertiserAndActivities = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const cashInPoints = async (req, res) => {
+  const { id } = req.params;
+  const { walletCurrency } = req.body;
 
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'Invalid ID format' });
+  }
 
+  try {
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const response = await fetch(process.env.VITE_EXCHANGE_API_URL);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    const exchangeRate = data.conversion_rates[walletCurrency];
+    const pointsInWallet = user.loyaltyPoints * 0.01 * exchangeRate;
+
+    user.wallet += pointsInWallet;
+    user.loyaltyPoints = 0;
+
+    await user.save();
+
+    res.status(200).json({ message: 'Points cashed in successfully', user });
+  } catch (error) {
+    console.error('Error cashing in points:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 module.exports = {
   getUsers,
   deleteUser,
@@ -389,6 +421,7 @@ module.exports = {
   updateAcceptedStatus,
     updateWallet,
   updateDeleteAccount,
+  cashInPoints,
   deleteTourGuideAndIterinaries,
   deleteAdvertiserAndActivities
 };

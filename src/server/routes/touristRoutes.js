@@ -6,6 +6,7 @@ const HotelController = require("../controllers/HotelController.js");
 const commentActivity = require("../controllers/commentActivity.js");
 const commentItinerary = require("../controllers/commentItinerary.js");
 const commentTourguid = require("../controllers/commentTourguid.js");
+const { cashInPoints } = require('../controllers/usersController.js');
 
 const {
   getAllComplaints,
@@ -44,7 +45,7 @@ router.get("/getBookFlight/:touristId", flightController.getAllBookingsByid);
 router.post("/BookHotel", HotelController.createHotelBooking);
 router.get("/getBookHotel/:touristId", HotelController.getAllBookingsByid);
 router.get("/profile", usersController.getSingleUser);
-
+router.put('/profile/:id/cash-in-points', cashInPoints);
 router.delete("/:id", usersController.deleteUser);
 router.put("/update", usersController.updateUser);
 // Route for creating a new profile
@@ -82,7 +83,7 @@ router.get("/comments", commentTourguid.getCommentsByTourGuide);
 
 
 router.put("/updatewallet", usersController.updateWallet);
-
+router.put("/cashInPoints", usersController.cashInPoints);
 router.put("/delete_request/:id", usersController.updateProfileById);
 
 module.exports = router;

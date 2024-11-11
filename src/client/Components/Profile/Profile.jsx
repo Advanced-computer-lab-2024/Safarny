@@ -16,6 +16,9 @@ const Profile = () => {
     email: "",
     role: "",
     image: "",
+    loyaltyPoints: 0,
+    wallet: 0,
+    walletCurrency: "EGP"
   });
 
   const [showButtons, setShowButtons] = useState(false);
@@ -23,7 +26,6 @@ const Profile = () => {
   const [showComplaintsButtons, setShowComplaintsButtons] = useState(false);
   const [showTransportationsButtons, setShowTransportButtons] = useState(false);
   const [showPostButtons, setShowPostButtons] = useState(false);
-
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -33,7 +35,7 @@ const Profile = () => {
           throw new Error("Failed to fetch user data");
         }
         const { password, __v, _id, imageurl, ...userData } =
-          await response.json();
+            await response.json();
         setUserInfo({ ...userData, image: imageurl });
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -42,7 +44,32 @@ const Profile = () => {
     fetchUserData();
   }, [userId]);
 
-  const handleUpdateClick = () => {
+const handleCashInPoints = async () => {
+  try {
+    const response = await fetch(import.meta.env.VITE_EXCHANGE_API_URL);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    const exchangeRate = data.conversion_rates[userInfo.walletCurrency];
+    const pointsInWallet = userInfo.loyaltyPoints * 0.01 * exchangeRate;
+
+    await axios.put('/cashInPoints', {
+      walletCurrency: userInfo.walletCurrency,
+      id: userId
+    });
+
+    setUserInfo((prevState) => ({
+      ...prevState,
+      wallet: prevState.wallet + pointsInWallet,
+      loyaltyPoints: 0
+    }));
+  } catch (error) {
+    console.log(userId)
+    console.error("Error cashing in points:", error);
+  }
+};
+const handleUpdateClick = () => {
     localStorage.setItem("userId", userId);
     window.location.href = "/UpdateProfile";
   };
@@ -155,200 +182,201 @@ const Profile = () => {
   const handlePostButtonClick = () => setShowPostButtons(prev => !prev);
 
   return (
-    <div className={styles.container}>
-      <Header />
+      <div className={styles.container}>
+        <Header />
 
-      <main className={styles.main}>
-        <button className={styles.notificationButton}>
-          <FaBell />
-        </button>
-        <section className={styles.intro}>
-          <h1>Welcome, {userInfo.username}!</h1>
-          <h5>Your account details:</h5>
-          {userInfo.role === "TourismGovernor" ? (
-            <>
-              <p>Username: {userInfo.username}</p>
-              <p>Email: {userInfo.email}</p>
-              <p>Role: {userInfo.role}</p>
-            </>
-          ) : (
-            Object.entries(userInfo)
-              .filter(([key]) => key !== "image")
-              .map(([key, value]) => (
-                <p key={key}>
-                  {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
-                </p>
-              ))
+        <main className={styles.main}>
+          <button className={styles.notificationButton}>
+            <FaBell />
+          </button>
+          <section className={styles.intro}>
+            <h1>Welcome, {userInfo.username}!</h1>
+            <h5>Your account details:</h5>
+            {userInfo.role === "TourismGovernor" ? (
+                <>
+                  <p>Username: {userInfo.username}</p>
+                  <p>Email: {userInfo.email}</p>
+                  <p>Role: {userInfo.role}</p>
+                </>
+            ) : (
+                Object.entries(userInfo)
+                    .filter(([key]) => key !== "image")
+                    .map(([key, value]) => (
+                        <p key={key}>
+                          {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
+                        </p>
+                    ))
+            )}
+            {userInfo.image && (
+                <img
+                    src={userInfo.image}
+                    alt="Profile"
+                    className={styles.profileImage}
+                />
+            )}
+          </section>
+          {userInfo.role === "Tourist" && (
+              <div className={styles.loyaltyBadge}>
+                <p>Badge: </p>
+                {userInfo.loyaltyLevel === "level 1" && (
+                    <img src="src/client/Assets/Img/rank1.jpg" alt="Rank 1 Badge" className={styles.rankBadge} />
+                )}
+                {userInfo.loyaltyLevel === "level 2" && (
+                    <img src="src/client/Assets/Img/rank2.jpg" alt="Rank 2 Badge" className={styles.rankBadge} />
+                )}
+                {userInfo.loyaltyLevel === "level 3" && (
+                    <img src="src/client/Assets/Img/rank3.jpg" alt="Rank 3 Badge" className={styles.rankBadge} />
+                )}
+              </div>
           )}
-          {userInfo.image && (
-            <img
-              src={userInfo.image}
-              alt="Profile"
-              className={styles.profileImage}
-            />
-          )}
-        </section>
-        {userInfo.role === "Tourist" && (
-          <div className={styles.loyaltyBadge}>
-            <p>Badge: </p>
-            {userInfo.loyaltyLevel === "level 1" && (
-              <img src="src/client/Assets/Img/rank1.jpg" alt="Rank 1 Badge" className={styles.rankBadge} />
-            )}
-            {userInfo.loyaltyLevel === "level 2" && (
-              <img src="src/client/Assets/Img/rank2.jpg" alt="Rank 2 Badge" className={styles.rankBadge} />
-            )}
-            {userInfo.loyaltyLevel === "level 3" && (
-              <img src="src/client/Assets/Img/rank3.jpg" alt="Rank 3 Badge" className={styles.rankBadge} />
-            )}
+          <button onClick={handleCashInPoints} className={styles.cashInButton}>
+            Cash in points
+          </button>
+        </main>
+
+        <div className={styles.organizedButtonContainer}>
+          <div className={styles.delete_requestButton}>
+            <Button onClick={handleDelete}>Request Account To be Deleted</Button>
           </div>
-        )}
-      </main>
-
-      <div className={styles.organizedButtonContainer}>
-        <div className={styles.delete_requestButton}>
-          <Button onClick={handleDelete}>Request Account To be Deleted</Button>
-        </div>
-        <div className={styles.buttonGroup}>
-          <button onClick={handleProductViewClick} className={styles.productButton}>
-            View Products
-          </button>
-          <button onClick={handleUpdateClick2} className={styles.searchButton}>
-            Search
-          </button>
-          <button onClick={handleUpdateClick} className={styles.searchButton}>
-            Update Profile
-          </button>
-        </div>
-
-        {userInfo.role === "TourismGovernor" && (
           <div className={styles.buttonGroup}>
-            <button onClick={handleCreateHistoricalPlaceClick} className={styles.createPlaceButton}>
-              Create Historical Place
+            <button onClick={handleProductViewClick} className={styles.productButton}>
+              View Products
             </button>
-            <button onClick={handleCreateHistoricalTagClick} className={styles.createTagButton}>
-              Create Historical Tag
+            <button onClick={handleUpdateClick2} className={styles.searchButton}>
+              Search
+            </button>
+            <button onClick={handleUpdateClick} className={styles.searchButton}>
+              Update Profile
             </button>
           </div>
-        )}
-        {userInfo.role === "Tourist" && (
-          <div className={styles.buttonGroup}>
-            <button onClick={handelWishList} className={styles.mainButton}>
-              View Wish List
-            </button>
-          </div>
-        )}
 
-        <div className={styles.buttonGroup}>
-          <button onClick={handleBookingsButtonClick} className={styles.mainButton}>
-            View & Book Services
-          </button>
-          {showBookingsButtons && (
-            <div className={styles.subButtonGroup}>
-              <button onClick={handleBookFlight} className={styles.subButton}>
-                Book A Flight
-              </button>
-              <button onClick={handleBookHotel} className={styles.subButton}>
-                Book A Hotel
-              </button>
-              <button onClick={handlebookTransportClick} className={styles.subButton}>
-                Book Transports
-              </button>
-              <button onClick={handleMyBookingsClick} className={styles.subButton}>
-                My Bookings
-              </button>
-              <button onClick={handleMyPreferencesClick} className={styles.subButton}>
-                Select Your Preferences
-              </button>
-            </div>
-          )}
-        </div>
-
-        <div className={styles.buttonGroup}>
-          <button onClick={handleComplaintsButtonClick} className={styles.mainButton}>
-            Manage Complaints
-          </button>
-          {showComplaintsButtons && (
-            <div className={styles.subButtonGroup}>
-              <button onClick={handleCreateComplaint} className={styles.subButton}>
-                Create Complaint
-              </button>
-              <button onClick={handleViewComplaints} className={styles.subButton}>
-                View Complaints
-              </button>
-            </div>
-          )}
-        </div>
-
-        {userInfo.role === "Seller" && (
-          <div className={styles.buttonGroup}>
-            <button onClick={handlePostButtonClick} className={styles.mainButton}>
-              Manage Products
-            </button>
-            {showPostButtons && (
-              <div className={styles.subButtonGroup}>
-                <button onClick={handlePostClick} className={styles.postButton}>
-                  Add Product
+          {userInfo.role === "TourismGovernor" && (
+              <div className={styles.buttonGroup}>
+                <button onClick={handleCreateHistoricalPlaceClick} className={styles.createPlaceButton}>
+                  Create Historical Place
                 </button>
-                <button onClick={handleSellerHomeClick} className={styles.postButton}>
-                  My Products
+                <button onClick={handleCreateHistoricalTagClick} className={styles.createTagButton}>
+                  Create Historical Tag
                 </button>
               </div>
-            )}
-          </div>
-        )}
-
-        {userInfo.role === "Advertiser" && (
-          <div className={styles.buttonGroup}>
-            <button onClick={handleTransportButtonClick} className={styles.mainButton}>
-              Transportation and Activities
-            </button>
-            {showTransportationsButtons && (
-              <div className={styles.subButtonGroup}>
-                <button onClick={handleAddActivity} className={styles.postButton}>
-                  Activity
-                </button>
-                <button onClick={handleCreateTransportClick} className={styles.postButton}>
-                  Create Transport
-                </button>
-                <button onClick={handleEditTransportClick} className={styles.postButton}>
-                  Edit & Delete Transport
+          )}
+          {userInfo.role === "Tourist" && (
+              <div className={styles.buttonGroup}>
+                <button onClick={handelWishList} className={styles.mainButton}>
+                  View Wish List
                 </button>
               </div>
+          )}
+
+          <div className={styles.buttonGroup}>
+            <button onClick={handleBookingsButtonClick} className={styles.mainButton}>
+              View & Book Services
+            </button>
+            {showBookingsButtons && (
+                <div className={styles.subButtonGroup}>
+                  <button onClick={handleBookFlight} className={styles.subButton}>
+                    Book A Flight
+                  </button>
+                  <button onClick={handleBookHotel} className={styles.subButton}>
+                    Book A Hotel
+                  </button>
+                  <button onClick={handlebookTransportClick} className={styles.subButton}>
+                    Book Transports
+                  </button>
+                  <button onClick={handleMyBookingsClick} className={styles.subButton}>
+                    My Bookings
+                  </button>
+                  <button onClick={handleMyPreferencesClick} className={styles.subButton}>
+                    Select Your Preferences
+                  </button>
+                </div>
             )}
           </div>
-        )}
 
-        {userInfo.role === "TourGuide" && (
           <div className={styles.buttonGroup}>
-            <button onClick={handleAddItinerary} className={styles.postButton}>
-              Add Itinerary
+            <button onClick={handleComplaintsButtonClick} className={styles.mainButton}>
+              Manage Complaints
             </button>
+            {showComplaintsButtons && (
+                <div className={styles.subButtonGroup}>
+                  <button onClick={handleCreateComplaint} className={styles.subButton}>
+                    Create Complaint
+                  </button>
+                  <button onClick={handleViewComplaints} className={styles.subButton}>
+                    View Complaints
+                  </button>
+                </div>
+            )}
           </div>
-        )}
 
-        <button onClick={handleViewButtonClick} className={styles.mainButton}>
-          View Upcoming Events
-        </button>
-        {showButtons && (
-          <div className={styles.subButtonGroup}>
-            <button onClick={handleUpcomingActivitiesClick} className={styles.subButton}>
-              Upcoming Activities
-            </button>
-            <button onClick={handleUpcomingItinerariesClick} className={styles.subButton}>
-              Upcoming Itineraries
-            </button>
-            <button onClick={handleViewHistoricalPlacesClick} className={styles.subButton}>
-              Upcoming Historical Places
-            </button>
-          </div>
-        )}
+          {userInfo.role === "Seller" && (
+              <div className={styles.buttonGroup}>
+                <button onClick={handlePostButtonClick} className={styles.mainButton}>
+                  Manage Products
+                </button>
+                {showPostButtons && (
+                    <div className={styles.subButtonGroup}>
+                      <button onClick={handlePostClick} className={styles.postButton}>
+                        Add Product
+                      </button>
+                      <button onClick={handleSellerHomeClick} className={styles.postButton}>
+                        My Products
+                      </button>
+                    </div>
+                )}
+              </div>
+          )}
+
+          {userInfo.role === "Advertiser" && (
+              <div className={styles.buttonGroup}>
+                <button onClick={handleTransportButtonClick} className={styles.mainButton}>
+                  Transportation and Activities
+                </button>
+                {showTransportationsButtons && (
+                    <div className={styles.subButtonGroup}>
+                      <button onClick={handleAddActivity} className={styles.postButton}>
+                        Activity
+                      </button>
+                      <button onClick={handleCreateTransportClick} className={styles.postButton}>
+                        Create Transport
+                      </button>
+                      <button onClick={handleEditTransportClick} className={styles.postButton}>
+                        Edit & Delete Transport
+                      </button>
+                    </div>
+                )}
+              </div>
+          )}
+
+          {userInfo.role === "TourGuide" && (
+              <div className={styles.buttonGroup}>
+                <button onClick={handleAddItinerary} className={styles.postButton}>
+                  Add Itinerary
+                </button>
+              </div>
+          )}
+
+          <button onClick={handleViewButtonClick} className={styles.mainButton}>
+            View Upcoming Events
+          </button>
+          {showButtons && (
+              <div className={styles.subButtonGroup}>
+                <button onClick={handleUpcomingActivitiesClick} className={styles.subButton}>
+                  Upcoming Activities
+                </button>
+                <button onClick={handleUpcomingItinerariesClick} className={styles.subButton}>
+                  Upcoming Itineraries
+                </button>
+                <button onClick={handleViewHistoricalPlacesClick} className={styles.subButton}>
+                  Upcoming Historical Places
+                </button>
+              </div>
+          )}
+        </div>
+
+        <Footer />
       </div>
-
-      <Footer />
-    </div>
   );
-
-
 };
 
 export default Profile;
