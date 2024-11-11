@@ -17,43 +17,50 @@ const MyBookings = () => {
   const [tourGuideRatings, setTourGuideRatings] = useState({});
 
 
-  const fetchBookings = async () => {
-    try {
-      const response = await axios.get(`http://localhost:3000/tourist/bookings/${userId}`);
-      const bookingsWithTourGuide = await Promise.all(
-          response.data.map(async (booking) => {
+const fetchBookings = async () => {
+  try {
+    const response = await axios.get(`http://localhost:3000/tourist/bookings/${userId}`);
+    const bookingsWithTourGuide = await Promise.all(
+      response.data.map(async (booking) => {
+        try {
+          let tourGuideUsername = null;
+          let tourGuideId = null;
+
+          if (booking.itinerary && booking.itinerary._id) {
+            const itineraryResponse = await axios.get(`http://localhost:3000/itineraries/${booking.itinerary._id}`);
+            tourGuideId = itineraryResponse.data.createdby;
+          } else if (booking.activity && booking.activity._id) {
+            const activityResponse = await axios.get(`http://localhost:3000/activities/${booking.activity._id}`);
+            tourGuideId = activityResponse.data.createdby;
+          }
+
+          if (tourGuideId) {
             try {
-              let tourGuideUsername = null;
-              let tourGuideId = null;
-
-              if (booking.itinerary) {
-                const itineraryResponse = await axios.get(`http://localhost:3000/itineraries/${booking.itinerary._id}`);
-                tourGuideId = itineraryResponse.data.createdby;
-              } else if (booking.activity) {
-                const activityResponse = await axios.get(`http://localhost:3000/activities/${booking.activity._id}`);
-                tourGuideId = activityResponse.data.createdby;
-              }
-
-              if (tourGuideId) {
-                const tourGuideResponse = await axios.get(`http://localhost:3000/tourist/${tourGuideId}`);
-                tourGuideUsername = tourGuideResponse.data.username;
-              }
-
-              return { ...booking, tourGuideUsername, tourGuideId, rating: 5 };
+              const tourGuideResponse = await axios.get(`http://localhost:3000/tourist/${tourGuideId}`);
+              tourGuideUsername = tourGuideResponse.data.username;
             } catch (error) {
-              console.error(`Error fetching details for booking ${booking._id}:`, error);
-              return { ...booking, tourGuideUsername: "Unknown", tourGuideId: null, rating: 5 };
+              if (error.response && error.response.status === 404) {
+                console.error(`Tour guide profile not found for ID ${tourGuideId}`);
+              } else {
+                throw error;
+              }
             }
-          })
-      );
-      setBookings(bookingsWithTourGuide);
-    } catch (error) {
-      console.error("Error fetching bookings:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+          }
 
+          return { ...booking, tourGuideUsername, tourGuideId, rating: 5 };
+        } catch (error) {
+          console.error(`Error fetching details for booking ${booking._id || "unknown"}:`, error);
+          return { ...booking, tourGuideUsername: "Unknown", tourGuideId: null, rating: 5 };
+        }
+      })
+    );
+    setBookings(bookingsWithTourGuide);
+  } catch (error) {
+    console.error("Error fetching bookings:", error);
+  } finally {
+    setLoading(false);
+  }
+};
   const fetchExchangeRates = async () => {
     try {
       const response = await fetch(import.meta.env.VITE_EXCHANGE_API_URL);
@@ -172,13 +179,20 @@ const MyBookings = () => {
                     ? "itinerary"
                     : booking.activity
                         ? "activity"
-                        : "historicalPlace";
-                const bookingTypeId = booking.itinerary
+                        : booking.historicalPlace
+                            ? "historicalPlace"
+                            : null;
+
+                const bookingTypeId = booking.itinerary && booking.itinerary._id
                     ? booking.itinerary._id
-                    : booking.activity
+                    : booking.activity && booking.activity._id
                         ? booking.activity._id
-                        : booking.historicalPlace._id;
+                        : booking.historicalPlace && booking.historicalPlace._id
+                            ? booking.historicalPlace._id
+                            : null;
+
                 const tourGuideInfo = `Tour Guide: ${booking.tourGuideUsername}`;
+
                 return (
                     <li key={booking._id} className={styles.bookingCard}>
                       <div className={styles.bookingDetails}>
@@ -200,9 +214,9 @@ const MyBookings = () => {
                             </p>
                         )}
 
-                       {booking.tourGuideId && (
-                           <>
-                             <p>{tourGuideInfo}</p>
+                        {booking.tourGuideId && booking.tourGuideUsername && (
+                            <>
+                              <p>{tourGuideInfo}</p>
                               <FormControl fullWidth margin="normal">
                                 <InputLabel>Rate this tour guide</InputLabel>
                                 <Select
@@ -216,8 +230,8 @@ const MyBookings = () => {
                                   ))}
                                 </Select>
                               </FormControl>
-                           </>
-                       )}
+                            </>
+                        )}
                         <p className={`${styles.bookingStatus} ${styles[booking.status]}`}>
                           Status: {booking.status}
                         </p>
