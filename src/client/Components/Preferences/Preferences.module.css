@@ -41,7 +41,7 @@
 }
 
 h1, h2 {
-    color: var(--primary-color);
+    color: white;
     text-align: center;
     margin-bottom: var(--margin-base);
 }
