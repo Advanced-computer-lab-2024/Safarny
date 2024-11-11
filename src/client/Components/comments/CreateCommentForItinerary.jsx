@@ -17,7 +17,7 @@ const CreateCommentForItinerary = () => {
     };
 
     try {
-      const response = await axios.post('/comments', newComment);  // API URL adjusted
+      const response = await axios.post('/tourist/comments/itinerary', newComment);  // API URL adjusted
       console.log('Comment created:', response.data);
       setMessage('Comment created successfully!');
       setComment('');  // Clear the comment input field
