@@ -58,6 +58,13 @@ const handleCashInPoints = async () => {
       throw new Error("Invalid points calculation");
     }
 
+    // Update the user's wallet and loyalty points in the backend
+    await axios.put(`http://localhost:3000/tourist/${userId}`, {
+      wallet: userInfo.wallet + pointsInWallet,
+      loyaltyPoints: 0
+    });
+
+    // Update the state to reflect the changes
     setUserInfo((prevState) => ({
       ...prevState,
       wallet: prevState.wallet + pointsInWallet,
