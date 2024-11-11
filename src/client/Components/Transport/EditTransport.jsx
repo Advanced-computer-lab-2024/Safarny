@@ -182,7 +182,7 @@ const ManageTransports = () => {
         </form>
       ) : (
         <div>
-          <h2>Your Transports</h2>
+          <h1>Your Transports</h1>
           <ul>
             {transports.map((transport) => (
               <li key={transport._id} className={styles.transportItem}>
