@@ -397,18 +397,13 @@ const Admin = () => {
                   </CardContent>
                   <CardActions>
                     <button
-                      size="small"
-                      color="primary"
-                      variant="contained"
-                      style={{ marginRight: '8px' }}
+                      className={styles.button}
                       onClick={() => handleEditPost(post)}
                     >
                       Edit
                     </button>
                     <button
-                      size="small"
-                      color="error"
-                      variant="contained"
+                      className={styles.button}
                       onClick={() => handleDeletePost(post._id)}
                     >
                       Delete
@@ -468,7 +463,7 @@ const Admin = () => {
               margin="normal"
             />
             <input type="file" onChange={handleImageChange} className={styles.imageInput} />
-            <button variant="contained" color="primary" onClick={handleSubmitPost}>
+            <button className={styles.button} onClick={handleSubmitPost}>
               {editingPostId ? 'Update Post' : 'Add Post'}
             </button>
             {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}

@@ -14,8 +14,6 @@
   --sidebar-width: 12rem;
 }
 
-/* Main Container */
-
 .container {
   display: flex;
   flex-direction: column;
