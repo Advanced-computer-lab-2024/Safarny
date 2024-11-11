@@ -37,6 +37,12 @@
   margin-bottom: 2rem;
 }
 
+.heading2{
+  color: var(--secondary-color);
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
 .form {
   display: flex;
   flex-direction: column;

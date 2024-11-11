@@ -290,7 +290,7 @@ const SignUp = () => {
         <div className={styles.container}>
           <Header />
           <main style={{ flexGrow: 1 }}>
-            <h2>Terms and Conditions</h2>
+            <h2 className={styles.heading2}>Terms and Conditions</h2>
             <p>Please read the following terms and conditions carefully:</p>
             <ul>
               <li>Your use of this site signifies your acceptance of our terms.</li>
