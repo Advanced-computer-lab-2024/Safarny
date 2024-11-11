@@ -5,6 +5,7 @@ import Header from "/src/client/components/Header/Header";
 import Footer from "/src/client/components/Footer/Footer";
 import axios from "axios";
 import { CircularProgress, MenuItem, Select, FormControl, InputLabel } from "@mui/material";
+import mongoose from "mongoose";
 
 const MyBookings = () => {
   const location = useLocation();
@@ -13,19 +14,49 @@ const MyBookings = () => {
   const [loading, setLoading] = useState(true);
   const [walletCurrency, setWalletCurrency] = useState("USD");
   const [exchangeRates, setExchangeRates] = useState({});
+  const [tourGuideRatings, setTourGuideRatings] = useState({});
+
 
   const fetchBookings = async () => {
     try {
+      let tourGuideUsername = null;
+      let tourGuideId = null;
       const response = await axios.get(
           `http://localhost:3000/tourist/bookings/${userId}`
       );
-      setBookings(response.data.map(booking => ({ ...booking, rating: 5 })));
+      const bookingsWithTourGuide = await Promise.all(
+          response.data.map(async (booking) => {
+
+            if (booking.itinerary) {
+              const itineraryResponse = await axios.get(
+                  `http://localhost:3000/itineraries/${booking.itinerary._id}`
+              );
+              tourGuideId = itineraryResponse.data.createdby;
+            } else if (booking.activity) {
+              const activityResponse = await axios.get(
+                  `http://localhost:3000/activities/${booking.activity._id}`
+              );
+              tourGuideId = activityResponse.data.createdby;
+            }
+            if (tourGuideId) {
+              const tourGuideResponse = await axios.get(
+                  `http://localhost:3000/tourist/${tourGuideId}`
+              );
+              tourGuideUsername = tourGuideResponse.data.username;
+            }
+            console.log(tourGuideId);
+            console.log(tourGuideUsername);
+            return { ...booking, tourGuideUsername, tourGuideId,rating: 5 };
+          })
+      );
+      setBookings(bookingsWithTourGuide);
     } catch (error) {
       console.error("Error fetching bookings:", error);
     } finally {
       setLoading(false);
     }
   };
+
 
   const fetchExchangeRates = async () => {
     try {
@@ -66,28 +97,48 @@ const MyBookings = () => {
 
       await axios.put(endpoint, { rating });
       setBookings((prevBookings) =>
-          prevBookings.map((booking) =>
-              booking._id === bookingId ? { ...booking, rating } : booking
-          )
+        prevBookings.map((booking) =>
+          booking._id === bookingId ? { ...booking, rating } : booking
+        )
       );
     } catch (error) {
       console.error("Error updating rating:", error);
     }
   };
 
+  const handleTourGuideRatingChange = async (tourGuideId, rating) => {
+  try {
+    // Convert the tourGuideId to a string
+    const stringTourGuideId = String(tourGuideId);
+    console.log(stringTourGuideId);
+
+    if (!/^[a-fA-F0-9]{24}$/.test(stringTourGuideId)) {
+      throw new Error("Invalid tour guide ID");
+    }
+    console.log("Rating:", rating);
+    await axios.put(`http://localhost:3000/tourguide/updaterating/`, { id: stringTourGuideId, newRating: rating });
+    setTourGuideRatings((prevRatings) => ({
+      ...prevRatings,
+      [stringTourGuideId]: rating,
+    }));
+  } catch (error) {
+    console.error("Error updating tour guide rating:", error);
+  }
+};
+
   const handleCancelBooking = async (booking) => {
     try {
       if (booking.historicalPlace) {
         await axios.put(
-            `http://localhost:3000/tourist/bookings/${booking._id}/cancel/historicalPlace`
+          `http://localhost:3000/tourist/bookings/${booking._id}/cancel/historicalPlace`
         );
       } else if (booking.activity) {
         await axios.put(
-            `http://localhost:3000/tourist/bookings/${booking._id}/cancel`
+          `http://localhost:3000/tourist/bookings/${booking._id}/cancel`
         );
       } else if (booking.itinerary) {
         await axios.put(
-            `http://localhost:3000/tourist/bookings/${booking._id}/cancel`
+          `http://localhost:3000/tourist/bookings/${booking._id}/cancel`
         );
       }
       fetchBookings();
@@ -131,6 +182,7 @@ const MyBookings = () => {
                     : booking.activity
                         ? booking.activity._id
                         : booking.historicalPlace._id;
+                const tourGuideInfo = `Tour Guide: ${booking.tourGuideUsername}`;
                 return (
                     <li key={booking._id} className={styles.bookingCard}>
                       <div className={styles.bookingDetails}>
@@ -151,6 +203,25 @@ const MyBookings = () => {
                               {walletCurrency}
                             </p>
                         )}
+
+                       {booking.tourGuideId && (
+                           <>
+                             <p>{tourGuideInfo}</p>
+                              <FormControl fullWidth margin="normal">
+                                <InputLabel>Rate this tour guide</InputLabel>
+                                <Select
+                                    value={tourGuideRatings[booking.tourGuideId] || 5}
+                                    onChange={(e) => handleTourGuideRatingChange(booking.tourGuideId, e.target.value)}
+                                >
+                                  {[1, 2, 3, 4, 5].map((rating) => (
+                                      <MenuItem key={rating} value={rating}>
+                                        {rating}
+                                      </MenuItem>
+                                  ))}
+                                </Select>
+                              </FormControl>
+                           </>
+                       )}
                         <p className={`${styles.bookingStatus} ${styles[booking.status]}`}>
                           Status: {booking.status}
                         </p>

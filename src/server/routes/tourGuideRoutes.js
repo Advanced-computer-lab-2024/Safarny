@@ -6,6 +6,8 @@ const usersController = require("../controllers/usersController.js");
 const activityController = require("../controllers/activityController.js");
 const tagsController = require("../controllers/tagsController.js");
 const { protect, restrict } = require("../middleware/authMiddleWare.js");
+//const tourGuide = require("../models/TourGuide");
+const tourGuideController = require("../controllers/tourGuideController.js");
 
 /*
     1-get all this TourGuide Itinerary
@@ -46,5 +48,6 @@ router
 
 router.route("/delete_request/:id").put(usersController.updateDeleteAccount);
 
-router.put("/updaterating/:id", itineraryController.updateRating);
+router.put("/updaterating", tourGuideController.updateAverageRatingById);
+
 module.exports = router;

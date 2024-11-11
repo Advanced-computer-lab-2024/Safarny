@@ -47,6 +47,11 @@ const userModel = new mongoose.Schema(
         ref: "Itinerary",
       },
     ],
+      rating: {
+            type: [Number], // Array of numbers
+            default: [5], // Default to an array with a single rating of 5
+        },
+      averageRating: { type: Number, default: 5 }, // Default average rating to 5
 
     //Seller
     description: String,

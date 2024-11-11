@@ -1,6 +1,7 @@
 const User = require("../models/userModel.js");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const mongoose = require("mongoose");
 dotenv.config();
 
 const createTourGuide = async (req, res) => {
@@ -75,17 +76,37 @@ const deleteTourGuide = async (req, res) => {
 
 //update average rating
 
-const updateAverageRatingById = async (id, newRating) => {
-  try {
-    // Find the tour guide by ID
-    const tourGuide = await TourGuide.findById(id);
 
-    if (!tourGuide) {
-      throw new Error("Tour guide not found");
+
+const updateAverageRatingById = async (req, res) => {
+  try {
+    const { id, newRating } = req.body;
+
+    // Convert the ID to a string
+    const stringId = String(id);
+    console.log("Received ID:", stringId);
+
+    // Check if the id is a valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(stringId)) {
+      return res.status(400).json({ message: "Invalid tour guide ID" });
     }
 
+    // Find the tour guide by ID
+    const tourGuide = await User.findById(stringId);
+
+    if (!tourGuide) {
+      return res.status(404).json({ message: "Tour guide not found" });
+    }
+
+    // Initialize the rating array if it doesn't exist
+    if (!Array.isArray(tourGuide.rating)) {
+      tourGuide.rating = [];
+    }
+
+    console.log("Rating before push:", tourGuide.rating);
     // Add the new rating to the ratings array
     tourGuide.rating.push(newRating);
+    console.log("Rating after push:", tourGuide.rating);
 
     // Calculate the new average rating
     const totalRatings = tourGuide.rating.length;
@@ -95,12 +116,13 @@ const updateAverageRatingById = async (id, newRating) => {
     // Save the updated tour guide
     await tourGuide.save();
 
-    return tourGuide;
+    return res.status(200).json(tourGuide);
   } catch (error) {
     console.error("Error updating average rating:", error);
-    throw error;
+    return res.status(500).json({ message: "Error updating average rating" });
   }
 };
+
 
 module.exports = {
   createTourGuide,
