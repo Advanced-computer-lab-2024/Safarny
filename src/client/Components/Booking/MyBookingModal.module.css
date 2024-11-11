@@ -14,7 +14,7 @@
 .modalContent {
     width: 400px; /* Small size for the modal */
     padding: 20px;
-    background-color: #fff;
+    background-color: #121212;
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
     display: flex;
@@ -45,4 +45,13 @@
 .cancelButton {
     background-color: #f44336;
     color: white;
+}
+
+.bookdate{
+    color: white;
+}
+
+/* MyBookingModal.module.css */
+input[type="date"] {
+    color: black;
 }
