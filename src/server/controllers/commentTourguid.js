@@ -3,7 +3,7 @@ const Comment = require("../models/Comment.js");
 // Create a comment for a specific tour guide (optional tourGuideId)
 const createCommentForTourGuide = async (req, res) => {
   try {
-    const { tourGuideId } = req.params; // Extracting the tour guide ID from the URL (optional)
+    const { tourGuideId } = req.body; // Extracting the tour guide ID from the URL (optional)
     const { comment } = req.body;
 
     // Create a new comment document

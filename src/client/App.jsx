@@ -160,9 +160,9 @@ function App() {
         <Route path="/mybookings" element={<MyBookings />} />
 
         {/* Comments routes */}
-        <Route path="/create-comment-activity/:id?" element={<CreateCommentForActivity />} />
-        <Route path="/create-comment-itinerary/:id?" element={<CreateCommentForItinerary />} />
-        <Route path="/create-comment-tourguide/:id?" element={<CreateCommentForTourGuide />} />
+        <Route path="/create-comment-activity/:activityId?" element={<CreateCommentForActivity />} />
+        <Route path="/create-comment-itinerary/:itineraryId" element={<CreateCommentForItinerary />} />
+        <Route path="/create-comment-tourguide/:tourGuideId?" element={<CreateCommentForTourGuide />} />
 
       </Routes>
     </Router>

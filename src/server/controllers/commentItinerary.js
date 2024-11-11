@@ -3,7 +3,7 @@ const Comment = require("../models/Comment.js");
 // Create a comment for a specific itinerary (optional itineraryId)
 const createCommentForItinerary = async (req, res) => {
   try {
-    const { itineraryId } = req.params; // Extracting the itinerary ID from the URL (optional)
+    const { itineraryId } = req.body; // Extracting the itinerary ID from the URL (optional)
     const { comment } = req.body;
 
     // Create a new comment document
@@ -12,10 +12,11 @@ const createCommentForItinerary = async (req, res) => {
       itinerary: itineraryId || null, // Itinerary is optional now, so we either use the passed value or set it to null
       comment,
     });
-     console.log(newComment);
+    console.log(newComment);
     await newComment.save(); // Save the comment to the database
     res.status(201).json(newComment); // Respond with the created comment
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Error creating comment for itinerary", error });
   }
 };

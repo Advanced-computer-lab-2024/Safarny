@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Footer from '/src/client/Components/Footer/Footer';
 import Header from '../Header/Header';
 import styles from './CreateCommentForItinerary.module.css';
 
 const CreateCommentForItinerary = () => {
+  const { itineraryId } = useParams();  // Get itineraryId from URL
   const [comment, setComment] = useState('');  // State for storing the comment
   const [message, setMessage] = useState('');  // State for displaying success/error message
-  const [itineraryId, setItineraryId] = useState('');  // Optional: Itinerary ID (can be empty)
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newComment = { 
-      comment, 
-      itineraryId: itineraryId || undefined,  // Pass itineraryId if available, otherwise omit it
+    const newComment = {
+      itineraryId,  // Use itineraryId from URL
+      comment
     };
-
+    console.log('Creating comment:', newComment);
     try {
       const response = await axios.post('/tourist/comments/itinerary', newComment);  // API URL adjusted
       console.log('Comment created:', response.data);
@@ -39,15 +40,6 @@ const CreateCommentForItinerary = () => {
             onChange={(e) => setComment(e.target.value)}  // Handling comment change
             required
             className={styles.textarea}
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label className={styles.label}>Itinerary ID (optional):</label>
-          <input
-            type="text"
-            value={itineraryId}
-            onChange={(e) => setItineraryId(e.target.value)}  // Handle itinerary ID input
-            className={styles.input}
           />
         </div>
         <button type="submit" className={styles.button}>Submit Comment</button>
