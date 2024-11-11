@@ -234,9 +234,14 @@ const fetchBookings = async () => {
                                   )}
                             </>
                         )}
+                        { (isPastDate(booking.bookingDate))  && (
+                            <p>Status: Finished</p>
+                        )}
+                        { (!isPastDate(booking.bookingDate))  && (
                         <p className={`${styles.bookingStatus} ${styles[booking.status]}`}>
                           Status: {booking.status}
                         </p>
+                        )}
                         {booking.status === "active" && (
                             <button
                                 onClick={() => handleCancelBooking(booking)}
