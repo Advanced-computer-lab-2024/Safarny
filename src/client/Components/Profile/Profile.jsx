@@ -58,8 +58,13 @@ const handleCashInPoints = async () => {
       throw new Error("Invalid points calculation");
     }
 
+    // Ensure userId is defined
+    if (!userId) {
+      throw new Error("User ID is required");
+    }
+
     // Update the user's wallet and loyalty points in the backend
-    await axios.put(`http://localhost:3000/tourist/${userId}`, {
+    await axios.put(`http://localhost:3000/tourist/${userId}`, {userId,
       wallet: userInfo.wallet + pointsInWallet,
       loyaltyPoints: 0
     });
@@ -73,7 +78,8 @@ const handleCashInPoints = async () => {
   } catch (error) {
     console.error("Error cashing in points:", error);
   }
-};const handleUpdateClick = () => {
+};
+const handleUpdateClick = () => {
     localStorage.setItem("userId", userId);
     window.location.href = "/UpdateProfile";
   };

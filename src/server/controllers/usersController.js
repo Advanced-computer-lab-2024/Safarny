@@ -178,7 +178,7 @@ const getProfileById = async (req, res) => {
 // Controller for updating a profile by ID
 const updateProfileById = AsyncHandler(async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
     if (!id) {
       return res.status(400).json({ error: "User ID is required" });
     }
@@ -208,6 +208,7 @@ const updateProfileById = AsyncHandler(async (req, res) => {
       tags: req.body.tags,
       activityCategories: req.body.activityCategories,
       Status: req.body.Status,
+      loyaltyPoints: req.body.loyaltyPoints, // Added support for loyalty points
     };
 
     // Remove undefined fields from updateData
@@ -233,7 +234,6 @@ const updateProfileById = AsyncHandler(async (req, res) => {
     res.status(400).json({ error: "An error occurred while updating the user" });
   }
 });
-
 
 const updateAcceptedStatus = async (req, res) => {
   try {
