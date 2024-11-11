@@ -217,6 +217,7 @@ const fetchBookings = async () => {
                         {booking.tourGuideId && booking.tourGuideUsername && (
                             <>
                               <p>{tourGuideInfo}</p>
+                              {isPastDate(booking.bookingDate) && (
                               <FormControl fullWidth margin="normal">
                                 <InputLabel>Rate this tour guide</InputLabel>
                                 <Select
@@ -230,11 +231,17 @@ const fetchBookings = async () => {
                                   ))}
                                 </Select>
                               </FormControl>
+                                  )}
                             </>
                         )}
+                        { (isPastDate(booking.bookingDate))  && (
+                            <p>Status: Finished</p>
+                        )}
+                        { (!isPastDate(booking.bookingDate))  && (
                         <p className={`${styles.bookingStatus} ${styles[booking.status]}`}>
                           Status: {booking.status}
                         </p>
+                        )}
                         {booking.status === "active" && (
                             <button
                                 onClick={() => handleCancelBooking(booking)}
