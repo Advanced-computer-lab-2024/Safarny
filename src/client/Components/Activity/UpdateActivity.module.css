@@ -18,10 +18,11 @@
     padding: 2rem;
     background-color: var(--background-color);
     color: var(--text-color);
-    min-height: 100vh;
+    width: 95vw;
+    height: 100vh;
   }
   
-  .header {
+  .heading {
     color: var(--primary-color);
     text-align: center;
     font-size: 2rem;

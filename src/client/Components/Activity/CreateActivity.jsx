@@ -103,7 +103,7 @@ const CreateActivity = () => {
     return (
         <div className={styles.createActivityContainer}>
             <Header/>
-            <h2>Create Activity</h2>
+            <h2 className={styles.heading}>Create Activity</h2>
 
             <form onSubmit={handleSubmit}>
                 <div className={styles.formGroup}>
@@ -216,7 +216,7 @@ const CreateActivity = () => {
                         )}
                     </MapContainer>
                 </div>
-                <button type="submit" className={styles.submitButton}>
+                <button className={styles.button} type="submit">
                     Create Activity
                 </button>
                 {message && <p className={styles.message}>{message}</p>}

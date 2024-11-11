@@ -38,7 +38,7 @@
   right: -40px;
   width: 30px;
   height: 30px;
-  background-color: var(--toggle-bg-color, #555); /* Darker background for button */
+  background-color: var(--toggle-bg-color, #555) !important; /* Darker background for button */
   color: #fff;
   border-radius: 50%;
   display: flex;
@@ -60,7 +60,7 @@
   width: 100%;
   padding: 10px;
   margin: 5px 0;
-  background-color: var(--button-bg-color, #444);
+  background-color: #333;
   color: #fff;
   text-align: center;
   cursor: pointer;

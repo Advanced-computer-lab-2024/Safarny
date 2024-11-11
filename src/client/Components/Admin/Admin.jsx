@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SideBar from '../SideBar/SideBar';
 import {
-  Button,
   Modal,
   TextField,
   Typography,
@@ -22,7 +21,7 @@ import { storage } from '../../../server/config/Firebase';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import styles from './Admin.module.css';
 import Logo from '/src/client/Assets/Img/logo.png';
-import Footer from '/src/client/Components/Footer/Footer';
+import Footer from '../Footer/Footer';
 import Tags from './tagAdmin';
 import ActivityCategory from './ActivityCategory';
 
@@ -280,7 +279,7 @@ const Admin = () => {
       <div className={styles.container}>
         <header className={styles.header}>
           <img src={Logo} alt="Safarny Logo" className={styles.logo} />
-          <h1>Safarny</h1>
+          <h1 className={styles.heading}>Safarny</h1>
           <button className={styles.burger} onClick={toggleMenu}>
             <span className={styles.burgerIcon}>&#9776;</span>
           </button>
@@ -397,7 +396,7 @@ const Admin = () => {
                     </div>
                   </CardContent>
                   <CardActions>
-                    <Button
+                    <button
                       size="small"
                       color="primary"
                       variant="contained"
@@ -405,15 +404,15 @@ const Admin = () => {
                       onClick={() => handleEditPost(post)}
                     >
                       Edit
-                    </Button>
-                    <Button
+                    </button>
+                    <button
                       size="small"
                       color="error"
                       variant="contained"
                       onClick={() => handleDeletePost(post._id)}
                     >
                       Delete
-                    </Button>
+                    </button>
                   </CardActions>
                 </Card>
               ))}
@@ -469,9 +468,9 @@ const Admin = () => {
               margin="normal"
             />
             <input type="file" onChange={handleImageChange} className={styles.imageInput} />
-            <Button variant="contained" color="primary" onClick={handleSubmitPost}>
+            <button variant="contained" color="primary" onClick={handleSubmitPost}>
               {editingPostId ? 'Update Post' : 'Add Post'}
-            </Button>
+            </button>
             {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
           </div>
         </div>

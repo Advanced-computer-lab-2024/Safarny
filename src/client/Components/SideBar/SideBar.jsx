@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+// import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import styles from './SideBar.module.css';
@@ -16,27 +16,27 @@ const SideBar = () => {
       </div>
       {isOpen && (
         <div className={styles.buttonsContainer}>
-          <Button className={styles.button} onClick={() => navigate('/admin')}>
+          <button className={styles.button} onClick={() => navigate('/admin')}>
             HomePage
-          </Button>
-          <Button className={styles.button} onClick={() => navigate('/tourguidesadmin')}>
+          </button>
+          <button className={styles.button} onClick={() => navigate('/tourguidesadmin')}>
             Tour Guides
-          </Button>
-          <Button className={styles.button} onClick={() => navigate('/touristsadmin')}>
+          </button>
+          <button className={styles.button} onClick={() => navigate('/touristsadmin')}>
             Tourists
-          </Button>
-          <Button className={styles.button} onClick={() => navigate('/sellersadmin')}>
+          </button>
+          <button className={styles.button} onClick={() => navigate('/sellersadmin')}>
             Sellers
-          </Button>
-          <Button className={styles.button} onClick={() => navigate('/advertisersadmin')}>
+          </button>
+          <button className={styles.button} onClick={() => navigate('/advertisersadmin')}>
             Advertisers
-          </Button>
-          <Button className={styles.button} onClick={() => navigate('/adminlist')}>
+          </button>
+          <button className={styles.button} onClick={() => navigate('/adminlist')}>
             Admins
-          </Button>
-          <Button className={styles.button} onClick={() => navigate('/tourismgoverneradmin')}>
+          </button>
+          <button className={styles.button} onClick={() => navigate('/tourismgoverneradmin')}>
             Tourism Governor
-          </Button>
+          </button>
         </div>
       )}
     </div>
