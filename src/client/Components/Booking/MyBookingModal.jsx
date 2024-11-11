@@ -70,7 +70,7 @@ const MyBookingModal = ({
           </div>
         )}
         <div>
-          <label>Booking Date:</label>
+          <label className={styles.bookdate}>Booking Date:</label>
           <input
             type="date"
             value={bookingDate}
