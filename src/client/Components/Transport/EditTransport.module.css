@@ -1,0 +1,118 @@
+/* EditTransport.module.css */
+
+/* Styling for the overall page container */
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .formContainer {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  /* Form styling */
+  .form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  h1, h2 {
+    text-align: center;
+    color: var(--primary-color);
+  }
+  
+  .label {
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: var(--primary-color);
+  }
+  
+  .input, select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    color: black;
+    background-color: #f9f9f9;
+  }
+  
+  .input:focus, select:focus {
+    border-color: var(--secondary-color);
+    outline: none;
+  }
+  
+  /* Button styles */
+  button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: var(--secondary-color);
+  }
+  
+  /* Edit Transport Button styles */
+  button[type="button"] {
+    background-color: #f44336; /* Red for cancel */
+  }
+  
+  button[type="button"]:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+  }
+  
+  /* Styling for the transport list */
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li {
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 4px;
+  }
+  
+  li p {
+    margin: 0;
+    color: #333;
+  }
+  
+  li button {
+    margin-left: 10px;
+    background-color: #2196f3; /* Blue for edit */
+  }
+  
+  li button:hover {
+    background-color: #1976d2;
+  }
+  
+  li button:last-of-type {
+    background-color: #f44336; /* Red for delete */
+  }
+  
+  li button:last-of-type:hover {
+    background-color: #d32f2f;
+  }
+  

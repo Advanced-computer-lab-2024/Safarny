@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import styles from "./EditTransport.module.css";
+import Footer from "/src/client/Components/Footer/Footer";
+import Header from "../Header/Header";
 
 const ManageTransports = () => {
   const location = useLocation();
@@ -84,63 +87,69 @@ const ManageTransports = () => {
   };
 
   return (
-    <div>
+    <div className={styles.pageContainer}>
+      <Header />
       <h1>Manage Transports</h1>
 
       {editTransport ? (
-        <form onSubmit={handleUpdate}>
+        <form onSubmit={handleUpdate} className={styles.form}>
           <h2>Edit Transport</h2>
 
-          <label>
+          <label className={styles.label}>
             Departure Date:
             <input
               type="date"
               name="departureDate"
               value={formData.departureDate}
               onChange={handleInputChange}
+              className={styles.input}
               required
             />
           </label>
 
-          <label>
+          <label className={styles.label}>
             Departure Time:
             <input
               type="time"
               name="departureTime"
               value={formData.departureTime}
               onChange={handleInputChange}
+              className={styles.input}
               required
             />
           </label>
 
-          <label>
+          <label className={styles.label}>
             Arrival Date:
             <input
               type="date"
               name="arrivalDate"
               value={formData.arrivalDate}
               onChange={handleInputChange}
+              className={styles.input}
               required
             />
           </label>
 
-          <label>
+          <label className={styles.label}>
             Arrival Time:
             <input
               type="time"
               name="arrivalTime"
               value={formData.arrivalTime}
               onChange={handleInputChange}
+              className={styles.input}
               required
             />
           </label>
 
-          <label>
+          <label className={styles.label}>
             Type of Transportation:
             <select
               name="typeOfTransportation"
               value={formData.typeOfTransportation}
               onChange={handleInputChange}
+              className={styles.input}
               required
             >
               <option value="Bus">Bus</option>
@@ -150,19 +159,24 @@ const ManageTransports = () => {
             </select>
           </label>
 
-          <label>
+          <label className={styles.label}>
             Location:
             <input
               type="text"
               name="location"
               value={formData.location}
               onChange={handleInputChange}
+              className={styles.input}
               required
             />
           </label>
 
-          <button type="submit">Update Transport</button>
-          <button type="button" onClick={() => setEditTransport(null)}>
+          <button type="submit" className={styles.button}>Update Transport</button>
+          <button
+            type="button"
+            onClick={() => setEditTransport(null)}
+            className={styles.button}
+          >
             Cancel
           </button>
         </form>
@@ -171,19 +185,31 @@ const ManageTransports = () => {
           <h2>Your Transports</h2>
           <ul>
             {transports.map((transport) => (
-              <li key={transport._id}>
+              <li key={transport._id} className={styles.transportItem}>
                 <p>
                   {transport.departureDate} - {transport.departureTime} to{" "}
-                  {transport.arrivalDate} - {transport.arrivalTime} ({transport.typeOfTransportation}) at {transport.location}
+                  {transport.arrivalDate} - {transport.arrivalTime} (
+                  {transport.typeOfTransportation}) at {transport.location}
                   Number of bookings: {transport.numberOfTourists}
                 </p>
-                <button onClick={() => handleEdit(transport)}>Edit</button>
-                <button onClick={() => handleDelete(transport._id)}>Delete</button>
+                <button
+                  onClick={() => handleEdit(transport)}
+                  className={styles.editButton}
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(transport._id)}
+                  className={styles.deleteButton}
+                >
+                  Delete
+                </button>
               </li>
             ))}
           </ul>
         </div>
       )}
+      <Footer />
     </div>
   );
 };
