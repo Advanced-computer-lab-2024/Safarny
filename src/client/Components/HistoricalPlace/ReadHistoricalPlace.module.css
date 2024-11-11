@@ -104,7 +104,7 @@ h1 {
     margin: 1rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s, background-color 0.3s;
-    width: calc(30% - 2rem); /* 3 cards per row with spacing */
+    width: calc(25% - 2rem); /* 3 cards per row with spacing */
 }
 
 .placeCard:hover {
