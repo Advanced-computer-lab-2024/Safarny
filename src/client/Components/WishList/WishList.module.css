@@ -49,6 +49,7 @@
     z-index: 1;
     cursor: pointer;
     width: calc(30% - 2rem); /* Three items per row with margin */ /* Set a minimum width to maintain a good layout */
+    min-width: 20rem;
 }
 
 .productCard:hover {
