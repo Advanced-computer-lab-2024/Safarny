@@ -30,7 +30,7 @@
 }
 
 .heading {
-  color: var(--primary-color);
+  color: var(--primary-color); /* Override the default color */
   text-align: center;
   margin-bottom: 2rem;
 }
@@ -62,7 +62,7 @@
 }
 
 .navButton {
-  background-color: #1a1a1a;
+  background-color:var(--secondary-color) !important;
   color: var(--header-color);
   border: none;
   border-radius: var(--border-radius);
@@ -73,5 +73,5 @@
 }
 
 .navButton:hover {
-  background-color: var(--glow-color);
+  background-color: var(--primary-color);
 }
