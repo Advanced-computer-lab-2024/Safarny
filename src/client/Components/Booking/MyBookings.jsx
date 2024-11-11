@@ -19,34 +19,31 @@ const MyBookings = () => {
 
   const fetchBookings = async () => {
     try {
-      let tourGuideUsername = null;
-      let tourGuideId = null;
-      const response = await axios.get(
-          `http://localhost:3000/tourist/bookings/${userId}`
-      );
+      const response = await axios.get(`http://localhost:3000/tourist/bookings/${userId}`);
       const bookingsWithTourGuide = await Promise.all(
           response.data.map(async (booking) => {
+            try {
+              let tourGuideUsername = null;
+              let tourGuideId = null;
 
-            if (booking.itinerary) {
-              const itineraryResponse = await axios.get(
-                  `http://localhost:3000/itineraries/${booking.itinerary._id}`
-              );
-              tourGuideId = itineraryResponse.data.createdby;
-            } else if (booking.activity) {
-              const activityResponse = await axios.get(
-                  `http://localhost:3000/activities/${booking.activity._id}`
-              );
-              tourGuideId = activityResponse.data.createdby;
+              if (booking.itinerary) {
+                const itineraryResponse = await axios.get(`http://localhost:3000/itineraries/${booking.itinerary._id}`);
+                tourGuideId = itineraryResponse.data.createdby;
+              } else if (booking.activity) {
+                const activityResponse = await axios.get(`http://localhost:3000/activities/${booking.activity._id}`);
+                tourGuideId = activityResponse.data.createdby;
+              }
+
+              if (tourGuideId) {
+                const tourGuideResponse = await axios.get(`http://localhost:3000/tourist/${tourGuideId}`);
+                tourGuideUsername = tourGuideResponse.data.username;
+              }
+
+              return { ...booking, tourGuideUsername, tourGuideId, rating: 5 };
+            } catch (error) {
+              console.error(`Error fetching details for booking ${booking._id}:`, error);
+              return { ...booking, tourGuideUsername: "Unknown", tourGuideId: null, rating: 5 };
             }
-            if (tourGuideId) {
-              const tourGuideResponse = await axios.get(
-                  `http://localhost:3000/tourist/${tourGuideId}`
-              );
-              tourGuideUsername = tourGuideResponse.data.username;
-            }
-            console.log(tourGuideId);
-            console.log(tourGuideUsername);
-            return { ...booking, tourGuideUsername, tourGuideId,rating: 5 };
           })
       );
       setBookings(bookingsWithTourGuide);
@@ -56,7 +53,6 @@ const MyBookings = () => {
       setLoading(false);
     }
   };
-
 
   const fetchExchangeRates = async () => {
     try {
