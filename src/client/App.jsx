@@ -55,7 +55,7 @@ import ReadHistoricalPlaceDetails from "./Components/HistoricalPlace/ReadHistori
 //import UpcomingItineraries from './Components/UpcomingEvents/UpcomingItineraries';
 import CreateComplaints from "./Components/Complaints/CreateComplaints";
 import ViewComplaints from "./Components/Complaints/ViewComplaints";
-import AdminViewComplaints from "./Components/Complaints/AminViewComplaints";
+import AdminViewComplaints from "./Components/Complaints/AdminViewComplaints";
 import AdminEditComplaints from "./Components/Complaints/AdminEditComplaints";
 import BookFlight from "./Components/Booking/BookFlight";
 import BookingHotel from "./Components/Booking/BookingHotel";

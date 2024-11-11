@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Footer from "/src/client/Components/Footer/Footer";
 import Header from "/src/client/Components/Header/Header";
-import styles from "./AminViewComplaints.module.css";
+import styles from "./AdminViewComplaints.module.css";
 
 const AdminViewComplaints = () => {
     const [complaints, setComplaints] = useState([]);
@@ -137,6 +137,7 @@ const AdminViewComplaints = () => {
     return (
         <div className={styles.container}>
             <Header />
+            <div className={styles.mainontent}>
             <h2 className={styles.heading}>All Complaints</h2>
             <div className={styles.select}>
                 <label>Sort by date: </label>
@@ -229,6 +230,7 @@ const AdminViewComplaints = () => {
                     ))}
                 </ul>
             )}
+            </div>
             <Footer />
         </div>
     );
