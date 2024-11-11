@@ -410,6 +410,10 @@ const SignUpExtra = () => {
               <li>We reserve the right to modify these terms at any time without notice.</li>
             </ul>
             <p>Thank you for using our platform responsibly.</p>
+            {/* Add Back Button */}
+            <button onClick={closeModal} style={{ marginTop: '20px', cursor: 'pointer' }}>
+              Back
+            </button>
           </main>
           <Footer />
         </div>

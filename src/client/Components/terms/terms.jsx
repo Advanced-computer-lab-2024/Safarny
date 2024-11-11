@@ -14,7 +14,7 @@ const Terms = () => {
                     <li>Your use of this site signifies your acceptance of our terms.</li>
                     <li>Personal information you provide will be treated as per our privacy policy.</li>
                     <li>Unauthorized access or misuse of our services is strictly prohibited.</li>
-                    <li>We reserve the right to modify these terms at any time without notice.</li>
+                    <li>We reserve the right to modify these terms.</li>
                 </ul>
                 <p>Thank you for using our platform responsibly.</p>
             </main>
