@@ -217,6 +217,7 @@ const fetchBookings = async () => {
                         {booking.tourGuideId && booking.tourGuideUsername && (
                             <>
                               <p>{tourGuideInfo}</p>
+                              {isPastDate(booking.bookingDate) && (
                               <FormControl fullWidth margin="normal">
                                 <InputLabel>Rate this tour guide</InputLabel>
                                 <Select
@@ -230,6 +231,7 @@ const fetchBookings = async () => {
                                   ))}
                                 </Select>
                               </FormControl>
+                                  )}
                             </>
                         )}
                         <p className={`${styles.bookingStatus} ${styles[booking.status]}`}>

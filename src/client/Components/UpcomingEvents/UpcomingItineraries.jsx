@@ -12,6 +12,7 @@ import {
 import Header from "/src/client/Components/Header/Header";
 import axios from "axios";
 import MyBookingModal from "/src/client/Components/Booking/MyBookingModal";
+import { Rating } from "@mui/material";
 
 const UpcomingItineraries = () => {
   const [itineraries, setItineraries] = useState([]);
@@ -301,7 +302,7 @@ const UpcomingItineraries = () => {
                         <p>Accessibility: {itinerary.accessibility ? "Yes" : "No"}</p>
                         <p>Pickup Location: {itinerary.pickupLocation}</p>
                         <p>Dropoff Location: {itinerary.dropoffLocation}</p>
-                        <p>Rating: {renderStars(itinerary.rating)}</p>
+                        <p>Rating: <Rating value={Math.round(itinerary.averageRating * 2) / 2} precision={0.5} readOnly /></p>
                         {itinerary.tags && itinerary.tags.length > 0 && (
                             <p>
                               Tags: {itinerary.tags.map((tag) => tag.name).join(", ")}
