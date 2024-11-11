@@ -112,7 +112,6 @@ const ProductList = () => {
         ...prevWishlist,
         [postId]: true,
       }));
-      alert('Post added to wishlist');
     } catch (err) {
       console.error('Error adding post to wishlist:', err);
       alert('Failed to add post to wishlist');
