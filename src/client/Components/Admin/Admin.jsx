@@ -397,13 +397,13 @@ const Admin = () => {
                   </CardContent>
                   <CardActions>
                     <button
-                      className={styles.button}
+                      className={styles.bluebutton}
                       onClick={() => handleEditPost(post)}
                     >
                       Edit
                     </button>
                     <button
-                      className={styles.button}
+                      className={styles.redbutton}
                       onClick={() => handleDeletePost(post._id)}
                     >
                       Delete

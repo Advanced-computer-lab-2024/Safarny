@@ -253,3 +253,21 @@
 .checkbox-container {
   margin-top: 1px;
 }
+
+/* Admin.module.css */
+.redbutton {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.redbutton:hover {
+  background-color: darkred;
+}
+
+.bluebutton{
+
+}
