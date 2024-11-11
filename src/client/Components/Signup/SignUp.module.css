@@ -53,7 +53,7 @@
 .label {
   display: flex;
   flex-direction: column;
-  color: black; /* Ensure the label text is black */
+  color: white; /* Ensure the label text is black */
 }
 
 label input {
