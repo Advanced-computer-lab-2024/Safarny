@@ -14,6 +14,10 @@
     --font-size-large: 1.125rem;
 }
 
+.searchSection h2 {
+    color: white;
+}
+
 .container{
 
     width: 100vw;
@@ -69,9 +73,13 @@
     padding: 0.8rem;
     border: 0.1rem solid var(--secondary-color);
     border-radius: var(--border-radius);
-    background-color: var(--card-background);
-    color: white;
+    background-color: white; /* Set the background to white */
+    color: black; /* Set the input text to black */
     outline: none;
+}
+
+.searchForm input::placeholder {
+    color: black; /* Set placeholder text to black as well */
 }
 
 .searchForm input:focus,

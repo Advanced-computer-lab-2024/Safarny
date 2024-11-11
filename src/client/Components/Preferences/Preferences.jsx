@@ -67,7 +67,7 @@ const Preferences = () => {
     <div className={styles.container}>
       <Header />
       <div className={styles.content}>
-        <h1 className={styles.title}>Preferences</h1>
+        <h2>Preferences</h2>
         <p>These preferences will help you find the perfect travel experience.</p>
       <h2 className={styles.heading}>Edit Preferences</h2>
       <form onSubmit={handleSubmit} className={styles.form}>

@@ -115,7 +115,7 @@ const Admin = () => {
   useEffect(() => {
     const fetchExchangeRates = async () => {
       try {
-        const response = await fetch('https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP');
+        const response = await fetch(import.meta.env.VITE_EXCHANGE_API_URL);
         const data = await response.json();
         setCurrencyCodes(Object.keys(data.conversion_rates));
       } catch (error) {
