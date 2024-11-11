@@ -43,8 +43,8 @@
   .label {
     display: flex;
     flex-direction: column;
-    color: var(--small-text-color);
-  }
+    color: white;  /* Set label text color to white */
+  }  
 
   .heading{
     color: var(--heading-color);
@@ -53,13 +53,14 @@
   }
   
   .input,
-  .select {
-    padding: 1rem;
-    border: 1px solid #ccc;
-    color: var(--small-text-color);
-    border-radius: 0.5rem;
-    width: 100%;
-  }
+.select {
+  padding: 1rem;
+  border: 1px solid #ccc;
+  color: black;  /* Set text color to black */
+  background-color: white;  /* Set background color to white */
+  border-radius: 0.5rem;
+  width: 100%;
+}
   
   button {
     padding: 1rem 2rem;

@@ -29,8 +29,7 @@
 .label {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  color: var(--text-color);
+  color: white;  /* Set label text color to white */
 }
 
 .input {
