@@ -68,7 +68,7 @@ const Admin = () => {
   };
 
   const handleOpenModal = () => {
-    setCurrentPost({ details: "", price: "", quantity: "", imageurl: "" });
+    setCurrentPost({ details: "", price: "", currency: "", quantity: "", imageurl: "" });
     setEditingPostId(null);
     setOpenModal(true);
   };
@@ -113,32 +113,36 @@ const Admin = () => {
     });
   };
 
-  const handleSubmitPost = async () => {
-    let imageUrl = currentPost.imageurl;
+const handleSubmitPost = async () => {
+  if (!currentPost.details || !currentPost.price || !currentPost.currency || !currentPost.quantity) {
+    setErrorMessage("All fields are required.");
+    return;
+  }
 
-    if (selectedImage) {
-      imageUrl = await uploadImage(selectedImage);
-      if (!imageUrl) return;
+  let imageUrl = currentPost.imageurl;
+
+  if (selectedImage) {
+    imageUrl = await uploadImage(selectedImage);
+    if (!imageUrl) return;
+  }
+
+  const postData = { ...currentPost, imageurl: imageUrl };
+
+  try {
+    if (editingPostId) {
+      await axios.put(`/seller/products/${editingPostId}`, postData);
+    } else {
+      await axios.post("/seller/createProduct", {
+        ...postData,
+        createdby: sellerId,
+      });
     }
-
-    const postData = { ...currentPost, imageurl: imageUrl };
-
-    try {
-      if (editingPostId) {
-        await axios.put(`/seller/products/${editingPostId}`, postData);
-      } else {
-        await axios.post("/seller/createProduct", {
-          ...postData,
-          createdby: sellerId,
-        });
-      }
-      fetchPosts();
-      handleCloseModal();
-    } catch (error) {
-      setErrorMessage(`Failed to ${editingPostId ? "update" : "add"} post`);
-    }
-  };
-
+    fetchPosts();
+    handleCloseModal();
+  } catch (error) {
+    setErrorMessage(`Failed to ${editingPostId ? "update" : "add"} post`);
+  }
+};
   const handleArchiveToggle = async (postId, isArchived) => {
     try {
       // Update the local state first
@@ -262,7 +266,7 @@ const Admin = () => {
                         <Typography gutterBottom variant="h5" component="div">
                           {post.details}
                         </Typography>
-                        <div>Price: {post.price}</div>
+                        <div>Price: {post.price} {post.currency}</div>
                         <div>Quantity: {post.quantity}</div>
                         <img
                             src={post.imageurl}
