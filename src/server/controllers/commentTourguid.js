@@ -1,17 +1,15 @@
 const Comment = require("../models/Comment.js");
 
-// Create a comment for a specific tour guide
+// Create a comment for a specific tour guide (optional tourGuideId)
 const createCommentForTourGuide = async (req, res) => {
   try {
-    const { tourGuideId } = req.params; // Extracting the tour guide ID from the URL
+    const { tourGuideId } = req.params; // Extracting the tour guide ID from the URL (optional)
     const { comment } = req.body;
 
-    // Create a new comment document with the tour guide ID
+    // Create a new comment document
     const newComment = new Comment({
-      tourGuideId,
-      // itinerary,
-      // activity,
-      // typeOfComment,
+      // If tourGuideId is provided in the URL, use it; if not, set it to null (optional)
+      tourGuideId: tourGuideId || null, // If no tourGuideId is provided, it will be set to null
       comment,
     });
 

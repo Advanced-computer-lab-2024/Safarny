@@ -1,24 +1,26 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
 import Footer from '/src/client/Components/Footer/Footer';
 import Header from '../Header/Header';
 import styles from './CreateCommentForItinerary.module.css';
 
 const CreateCommentForActivity = () => {
-  const { activityId } = useParams(); // Extracting activityId from URL
-  const [comment, setComment] = useState('');
-  const [message, setMessage] = useState('');
-
+  const [comment, setComment] = useState('');  // State for storing the comment
+  const [message, setMessage] = useState('');  // State for displaying success/error message
+  const [activityId, setActivityId] = useState('');  // Optional: Activity ID (can be empty)
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newComment = { comment };
+    const newComment = { 
+      comment, 
+      activityId: activityId || undefined,  // Pass activityId if available, otherwise omit it
+    };
 
     try {
-      const response = await axios.post(`/activities/${activityId}/comments`, newComment);
+      const response = await axios.post('/comments', newComment);  // API URL adjusted
       console.log('Comment created:', response.data);
       setMessage('Comment created successfully!');
-      setComment('');
+      setComment('');  // Clear the comment input field
     } catch (error) {
       console.error('Error creating comment:', error);
       setMessage('Error creating comment. Please try again.');
@@ -34,9 +36,18 @@ const CreateCommentForActivity = () => {
           <label className={styles.label}>Comment:</label>
           <textarea
             value={comment}
-            onChange={(e) => setComment(e.target.value)}
+            onChange={(e) => setComment(e.target.value)}  // Handling comment change
             required
             className={styles.textarea}
+          />
+        </div>
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Activity ID (optional):</label>
+          <input
+            type="text"
+            value={activityId}
+            onChange={(e) => setActivityId(e.target.value)}  // Handle activity ID input
+            className={styles.input}
           />
         </div>
         <button type="submit" className={styles.button}>Submit Comment</button>

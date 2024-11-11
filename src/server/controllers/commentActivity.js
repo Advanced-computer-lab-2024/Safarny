@@ -1,18 +1,16 @@
 const Comment = require("../models/Comment.js");
 
-// Create a comment for a specific activity
+// Create a comment for a specific activity or without activity (optional activityId)
 const createCommentForActivity = async (req, res) => {
   try {
-    const { activityId } = req.params; // Extracting the activity ID from the URL
+    const { activityId } = req.body; // Extracting the activityId from the body if provided
     const { comment } = req.body;
 
-    // Create a new comment document with the activity ID
+    // Create a new comment document
     const newComment = new Comment({
-      activity: activityId,
-      // tourGuideId,
-      // itinerary,
-      // typeOfComment,
-      comment,   
+      // If activityId is provided in the body, use it; otherwise, leave it undefined (optional)
+      activity: activityId || undefined, // Set to undefined if no activityId is provided
+      comment,
     });
 
     await newComment.save(); // Save the comment to the database

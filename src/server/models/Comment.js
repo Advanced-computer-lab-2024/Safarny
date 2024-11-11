@@ -6,12 +6,12 @@ const commentSchema = new Schema(
     itinerary: {
       type: Schema.Types.ObjectId,
       ref: "Itinerary",
-      required: true,
+      required: false,
     },
     activity: {
       type: Schema.Types.ObjectId,
       ref: "Activity",
-      required: true,
+      required: false,
     },
     typeOfComment: {
       type: String,
@@ -24,11 +24,7 @@ const commentSchema = new Schema(
     tourGuideId: {
       type: Schema.Types.ObjectId,
       ref: "TourGuide",
-      required: true,
-    },
-    rating: {
-      type: [Number], // Array of numbers
-      default: [],    // Default to an empty array
+      required: false,
     },
   },
   { timestamps: true }
