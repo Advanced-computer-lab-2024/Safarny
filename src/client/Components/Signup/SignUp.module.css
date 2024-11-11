@@ -128,7 +128,7 @@ button:hover {
 .modal {
   position: absolute;
   top: 50%; /* Centered vertically */
-  left: 5%; /* Centered horizontally */
+  left: 0%; /* Centered horizontally */
   transform: translate(-50%, -50%);
   background: white;
   padding: 10px; /* Minimal padding for compactness */

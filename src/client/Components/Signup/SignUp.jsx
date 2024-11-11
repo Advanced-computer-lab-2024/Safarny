@@ -171,140 +171,144 @@ const SignUp = () => {
   };
 
   return (
-      <div className={styles.container}>
-        <Header />
-        <div className={styles.formContainer}>
-          <h2 className={styles.heading}>Sign Up</h2>
-          {success && <p className={styles.successMessage}>Sign up successful!</p>}
-          {error && <p className={styles.errorMessage}>{error}</p>}
-          <form onSubmit={handleSubmit} className={styles.form}>
-            <label className={styles.label}>
-              Name:
-              <input className={styles.input}
-                  type="text"
-                  name="username"
-                  value={username}
-                  onChange={(e) => setUserName(e.target.value)}
-                  required
-              />
+    <div className={styles.container}>
+      <Header />
+      <div className={styles.formContainer}>
+        <h2 className={styles.heading}>Sign Up</h2>
+        {success && <p className={styles.successMessage}>Sign up successful!</p>}
+        {error && <p className={styles.errorMessage}>{error}</p>}
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <label className={styles.label}>
+            Name:
+            <input className={styles.input}
+                type="text"
+                name="username"
+                value={username}
+                onChange={(e) => setUserName(e.target.value)}
+                required
+            />
+          </label>
+          <label className={styles.label}>
+            Email:
+            <input className={styles.input}
+                type="email"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+            />
+          </label>
+          <label className={styles.label}>
+            Password:
+            <input className={styles.input}
+                type="password"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+            />
+          </label>
+          <label className={styles.label}>
+            Date of Birth:
+            <DatePicker
+                selected={DOB}
+                onChange={(date) => setDob(date)}
+                dateFormat="MM/dd/yyyy"
+                className="form-control"
+                placeholderText="Select your date of birth"
+                required
+            />
+          </label>
+          <label className={styles.label}>
+            Mobile:
+            <input className={styles.input}
+                type="text"
+                name="mobile"
+                value={mobile}
+                onChange={(e) => setMobile(e.target.value)}
+                required
+            />
+          </label>
+          <label className={styles.label}>
+            Nationality:
+            <select className={styles.input}
+                value={nationality}
+                onChange={handleCountryChange}
+                required
+            >
+              <option value="">Select Country of Origin</option>
+              {countries.map((country) => (
+                  <option key={country} value={country}>{country}</option>
+              ))}
+            </select>
+          </label>
+          <label className={styles.label}>
+            Employment Status:
+            <select className={styles.input}
+                value={employed}
+                onChange={(e) => setEmployed(e.target.value)}
+                required
+            >
+              <option value="">Select employment status</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </label>
+          <div className={styles.terms}>
+            <input className={styles.input}
+                type="checkbox"
+                id="terms"
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
+                required
+            />
+            <label htmlFor="terms" className={styles.label}>
+              I agree to the following terms and conditions:
             </label>
-            <label className={styles.label}>
-              Email:
-              <input className={styles.input}
-                  type="email"
-                  name="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-              />
-            </label>
-            <label className={styles.label}>
-              Password:
-              <input className={styles.input}
-                  type="password"
-                  name="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-              />
-            </label>
-            <label className={styles.label}>
-              Date of Birth:
-              <DatePicker
-                  selected={DOB}
-                  onChange={(date) => setDob(date)}
-                  dateFormat="MM/dd/yyyy"
-                  className="form-control"
-                  placeholderText="Select your date of birth"
-                  required
-              />
-            </label>
-            <label className={styles.label}>
-              Mobile:
-              <input className={styles.input}
-                  type="text"
-                  name="mobile"
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
-                  required
-              />
-            </label>
-            <label className={styles.label}>
-              Nationality:
-              <select className={styles.input}
-                  value={nationality}
-                  onChange={handleCountryChange}
-                  required
-              >
-                <option value="">Select Country of Origin</option>
-                {countries.map((country) => (
-                    <option key={country} value={country}>{country}</option>
-                ))}
-              </select>
-            </label>
-            <label className={styles.label}>
-              Employment Status:
-              <select className={styles.input}
-                  value={employed}
-                  onChange={(e) => setEmployed(e.target.value)}
-                  required
-              >
-                <option value="">Select employment status</option>
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-              </select>
-            </label>
-            <div className={styles.terms}>
-              <input className={styles.input}
-                  type="checkbox"
-                  id="terms"
-                  checked={termsAccepted}
-                  onChange={(e) => setTermsAccepted(e.target.checked)}
-                  required
-              />
-              <label htmlFor="terms" className={styles.label}>
-                I agree to the following terms and conditions:
-              </label>
-              <div className={styles.termsText}>
-                <ul>
-                  <p>
-                  <span onClick={openModal}
-                        style={{cursor: 'pointer', color: 'blue', textDecoration: 'underline'}}>
-                    Click here for the terms and conditions.
-                  </span>
-                  </p>
-                </ul>
-              </div>
-            </div>
-            <button type="submit" className={styles.submitButton}>Sign Up</button>
-          </form>
-        </div>
-        <Footer/>
-        <Modal
-            isOpen={isModalOpen}
-            onRequestClose={closeModal}
-            contentLabel="Terms and Conditions"
-            className={styles.modal}
-            overlayClassName={styles.overlay}
-        >
-          <div className={styles.container}>
-            <Header />
-            <main style={{ flexGrow: 1 }}>
-              <h2>Terms and Conditions</h2>
-              <p>Please read the following terms and conditions carefully:</p>
+            <div className={styles.termsText}>
               <ul>
-                <li>Your use of this site signifies your acceptance of our terms.</li>
-                <li>Personal information you provide will be treated as per our privacy policy.</li>
-                <li>Unauthorized access or misuse of our services is strictly prohibited.</li>
-                <li>We reserve the right to modify these terms at any time without notice.</li>
+                <p>
+                <span onClick={openModal}
+                      style={{cursor: 'pointer', color: 'blue', textDecoration: 'underline'}}>
+                  Click here for the terms and conditions.
+                </span>
+                </p>
               </ul>
-              <p>Thank you for using our platform responsibly.</p>
-            </main>
-            <Footer />
+            </div>
           </div>
-        </Modal>
+          <button type="submit" className={styles.submitButton}>Sign Up</button>
+        </form>
       </div>
-  );
+      <Footer/>
+      <Modal
+          isOpen={isModalOpen}
+          onRequestClose={closeModal}
+          contentLabel="Terms and Conditions"
+          className={styles.modal}
+          overlayClassName={styles.overlay}
+      >
+        <div className={styles.container}>
+          <Header />
+          <main style={{ flexGrow: 1 }}>
+            <h2>Terms and Conditions</h2>
+            <p>Please read the following terms and conditions carefully:</p>
+            <ul>
+              <li>Your use of this site signifies your acceptance of our terms.</li>
+              <li>Personal information you provide will be treated as per our privacy policy.</li>
+              <li>Unauthorized access or misuse of our services is strictly prohibited.</li>
+              <li>We reserve the right to modify these terms at any time without notice.</li>
+            </ul>
+            <p>Thank you for using our platform responsibly.</p>
+            {/* Add Back Button */}
+            <button onClick={closeModal} style={{ marginTop: '20px', cursor: 'pointer' }}>
+              Back
+            </button>
+          </main>
+          <Footer />
+        </div>
+      </Modal>
+    </div>
+  );  
 };
 
 export default SignUp;
