@@ -3,10 +3,10 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Footer from '/src/client/Components/Footer/Footer';
 import Header from '../Header/Header';
-import styles from './CreateComment.module.css';
+import styles from './CreateCommentForItinerary.module.css';
 
-const CreateCommentForItinerary = () => {
-  const { itineraryId } = useParams(); // Extracting itineraryId from URL
+const CreateCommentForActivity = () => {
+  const { activityId } = useParams(); // Extracting activityId from URL
   const [comment, setComment] = useState('');
   const [message, setMessage] = useState('');
 
@@ -15,7 +15,7 @@ const CreateCommentForItinerary = () => {
     const newComment = { comment };
 
     try {
-      const response = await axios.post(`/itineraries/${itineraryId}/comments`, newComment);
+      const response = await axios.post(`/activities/${activityId}/comments`, newComment);
       console.log('Comment created:', response.data);
       setMessage('Comment created successfully!');
       setComment('');
@@ -28,7 +28,7 @@ const CreateCommentForItinerary = () => {
   return (
     <div className={styles.container}>
       <Header />
-      <h2 className={styles.heading}>Create Comment for Itinerary</h2>
+      <h2 className={styles.heading}>Create Comment for Activity</h2>
       <form onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
           <label className={styles.label}>Comment:</label>
@@ -47,4 +47,4 @@ const CreateCommentForItinerary = () => {
   );
 };
 
-export default CreateCommentForItinerary;
+export default CreateCommentForActivity;

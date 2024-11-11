@@ -74,6 +74,11 @@ import Preferences from "./Components/Preferences/Preferences";
 
 import MyBookings from "./Components/Booking/MyBookings";
 
+// Importing new comment components
+import CreateCommentForActivity from "./Components/Comments/CreateCommentForActivity";
+import CreateCommentForItinerary from "./Components/Comments/CreateCommentForItinerary";
+import CreateCommentForTourGuide from "./Components/Comments/CreateCommentForTourGuide";
+
 function App() {
   return (
     //<PurchasedProductsProvider>
@@ -154,7 +159,12 @@ function App() {
         
         <Route path="/mybookings" element={<MyBookings />} />
 
-              </Routes>
+        {/* Comments routes */}
+        <Route path="/create-comment-activity/:activityId" element={<CreateCommentForActivity />} />
+        <Route path="/create-comment-itinerary/:itineraryId" element={<CreateCommentForItinerary />} />
+        <Route path="/create-comment-tourguide/:tourGuideId" element={<CreateCommentForTourGuide />} />
+
+      </Routes>
     </Router>
     //</PurchasedProductsProvider>       
 
