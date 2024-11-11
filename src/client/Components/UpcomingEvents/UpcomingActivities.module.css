@@ -85,6 +85,10 @@ body{
     
   }
 
+  .filters{
+    color: black;
+  }
+
   .activityList {
     display: flex;
     flex-wrap: wrap;

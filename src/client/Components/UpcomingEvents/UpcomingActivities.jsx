@@ -213,7 +213,7 @@ const UpcomingActivities = () => {
 
           <div className={styles.filterOptions}>
             <label htmlFor="filter">Filter by: </label>
-            <select id="filter" onChange={(e) => setFilterCriteria(e.target.value)}>
+            <select id="filter" onChange={(e) => setFilterCriteria(e.target.value)} className={styles.filters}>
               <option value="">None</option>
               <option value="budget">Budget</option>
               <option value="date">Date</option>
