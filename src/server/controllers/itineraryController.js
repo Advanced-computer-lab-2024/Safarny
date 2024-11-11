@@ -105,6 +105,7 @@ const updateItineraryById = async (req, res) => {
     itinerary.createdby = req.body.createdby || itinerary.createdby;
 
     // Add the new rating to the ratings array
+    console.log(req.body);
     if (req.body.rating) {
       itinerary.rating.push(req.body.rating);
 

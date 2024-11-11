@@ -166,21 +166,26 @@ export default function TourGuide() {
 
   // Handle update itinerary
   const handleUpdateItinerary = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.put(
-        `http://localhost:3000/tourguide/edit-itineraries/${selectedItinerary._id}`,
-        selectedItinerary
-      );
-      const updatedItineraries = itineraries.map((itinerary) =>
-        itinerary._id === selectedItinerary._id ? response.data : itinerary
-      );
-      setItineraries(updatedItineraries);
-      setEditModalOpen(false); // Close the modal after saving
-    } catch (error) {
-      console.error("Error updating itinerary", error);
-    }
-  };
+  e.preventDefault();
+  try {
+    console.log("selectedItinerary: ", selectedItinerary);
+
+    // Create a shallow copy of selectedItinerary and remove rating and averageRating
+    const { rating, averageRating, ...itineraryWithoutRatings } = selectedItinerary;
+
+    const response = await axios.put(
+      `http://localhost:3000/tourguide/edit-itineraries/${selectedItinerary._id}`,
+      itineraryWithoutRatings
+    );
+    const updatedItineraries = itineraries.map((itinerary) =>
+      itinerary._id === selectedItinerary._id ? response.data : itinerary
+    );
+    setItineraries(updatedItineraries);
+    setEditModalOpen(false); // Close the modal after saving
+  } catch (error) {
+    console.error("Error updating itinerary", error);
+  }
+};
 
   return (
     <div className={styles.container}>
