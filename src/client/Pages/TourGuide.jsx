@@ -58,7 +58,7 @@ export default function TourGuide() {
     currency: "",
     availableDates: [],
     availableTimes: [],
-    accessibility: false,
+    accessibility: true,
     pickupLocation: "",
     dropoffLocation: "",
     tagNames: [],

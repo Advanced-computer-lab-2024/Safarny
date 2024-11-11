@@ -222,6 +222,13 @@ const Profile = () => {
                         </p>
                     ))
             )}
+            {userInfo.photo && (
+                <img
+                    src={userInfo.photo}
+                    alt="Profile"
+                    className={styles.profileImage}
+                />
+            )}
             {userInfo.image && (
                 <img
                     src={userInfo.image}
@@ -317,6 +324,22 @@ const Profile = () => {
                   </button>
                 </div>
             )}
+            <button onClick={handleViewButtonClick} className={styles.mainButton}>
+            View Upcoming Events
+          </button>
+          {showButtons && (
+              <div className={styles.subButtonGroup}>
+                <button onClick={handleUpcomingActivitiesClick} className={styles.subButton}>
+                  Upcoming Activities
+                </button>
+                <button onClick={handleUpcomingItinerariesClick} className={styles.subButton}>
+                  Upcoming Itineraries
+                </button>
+                <button onClick={handleViewHistoricalPlacesClick} className={styles.subButton}>
+                  Upcoming Historical Places
+                </button>
+              </div>
+          )}
               </div>
           )}
 
@@ -363,23 +386,6 @@ const Profile = () => {
               <div className={styles.buttonGroup}>
                 <button onClick={handleAddItinerary} className={styles.postButton}>
                   Add Itinerary
-                </button>
-              </div>
-          )}
-
-          <button onClick={handleViewButtonClick} className={styles.mainButton}>
-            View Upcoming Events
-          </button>
-          {showButtons && (
-              <div className={styles.subButtonGroup}>
-                <button onClick={handleUpcomingActivitiesClick} className={styles.subButton}>
-                  Upcoming Activities
-                </button>
-                <button onClick={handleUpcomingItinerariesClick} className={styles.subButton}>
-                  Upcoming Itineraries
-                </button>
-                <button onClick={handleViewHistoricalPlacesClick} className={styles.subButton}>
-                  Upcoming Historical Places
                 </button>
               </div>
           )}

@@ -75,6 +75,8 @@ const itinerarySchema = new Schema(
     accessibility: {
       type: Boolean, // Whether the tour is accessible
       required: true,
+        default: true, // Set initial value to true
+
     },
     pickupLocation: {
       type: String, // Pickup location (Link maybe?)
