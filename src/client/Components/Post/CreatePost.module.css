@@ -78,4 +78,23 @@
     text-align: center;
     margin-bottom: 15px;
   }
-  
+.inputText {
+  color: black;
+}
+
+input[type="text"], textarea {
+  color: black; /* Sets the text color to black */
+}
+
+.blacky {
+  color:black;
+}
+
+.dropdownMenu {
+  background-color: white;
+  color: black;
+}
+
+.dropdownMenuItem {
+  color: black;
+}

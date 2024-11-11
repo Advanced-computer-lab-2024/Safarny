@@ -13,7 +13,10 @@ import axios from "axios";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "/src/server/config/Firebase";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import Footer from "/src/client/components/Footer/Footer";
+import Header from "/src/client/components/Header/Header";
 //import styles from './Seller.module.css';
+import { Rating } from "@mui/material";
 
 const Admin = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -38,7 +41,6 @@ const Admin = () => {
   const location = useLocation();
   const { userId } = location.state;
   const sellerId = userId;
-
   useEffect(() => {
     if (selectedSection === "posts") {
       fetchPosts();
@@ -113,36 +115,36 @@ const Admin = () => {
     });
   };
 
-const handleSubmitPost = async () => {
-  if (!currentPost.details || !currentPost.price || !currentPost.currency || !currentPost.quantity) {
-    setErrorMessage("All fields are required.");
-    return;
-  }
-
-  let imageUrl = currentPost.imageurl;
-
-  if (selectedImage) {
-    imageUrl = await uploadImage(selectedImage);
-    if (!imageUrl) return;
-  }
-
-  const postData = { ...currentPost, imageurl: imageUrl };
-
-  try {
-    if (editingPostId) {
-      await axios.put(`/seller/products/${editingPostId}`, postData);
-    } else {
-      await axios.post("/seller/createProduct", {
-        ...postData,
-        createdby: sellerId,
-      });
+  const handleSubmitPost = async () => {
+    if (!currentPost.details || !currentPost.price || !currentPost.currency || !currentPost.quantity) {
+      setErrorMessage("All fields are required.");
+      return;
     }
-    fetchPosts();
-    handleCloseModal();
-  } catch (error) {
-    setErrorMessage(`Failed to ${editingPostId ? "update" : "add"} post`);
-  }
-};
+
+    let imageUrl = currentPost.imageurl;
+
+    if (selectedImage) {
+      imageUrl = await uploadImage(selectedImage);
+      if (!imageUrl) return;
+    }
+
+    const postData = { ...currentPost, imageurl: imageUrl };
+
+    try {
+      if (editingPostId) {
+        await axios.put(`/seller/products/${editingPostId}`, postData);
+      } else {
+        await axios.post("/seller/createProduct", {
+          ...postData,
+          createdby: sellerId,
+        });
+      }
+      fetchPosts();
+      handleCloseModal();
+    } catch (error) {
+      setErrorMessage(`Failed to ${editingPostId ? "update" : "add"} post`);
+    }
+  };
   const handleArchiveToggle = async (postId, isArchived) => {
     try {
       // Update the local state first
@@ -183,186 +185,191 @@ const handleSubmitPost = async () => {
   });
 
   return (
-      <div style={{ display: "flex" }}>
-        <div style={{ marginLeft: "250px", padding: "20px" }}>
-          <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: "20px",
-              }}
-          >
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={handleOpenModal}
-                style={{ marginRight: "10px" }}
+      <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+        <Header style={{ position: 'relative' }} />
+
+        <div style={{ flex: 1, display: "flex" }}>
+          <div style={{ marginLeft: "250px", padding: "20px" }}>
+            <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: "20px",
+                }}
             >
-              Add Post
-            </Button>
-          </div>
+            </div>
 
-          {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+            {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 
-          {/* Search Bar */}
-          <TextField
-              label="Search by Name"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-          />
-
-          {/* Price Filter */}
-          <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginBottom: "1rem",
-              }}
-          >
+            {/* Search Bar */}
             <TextField
-                label="Min Price"
+                label="Search by Name"
                 variant="outlined"
-                type="number"
-                value={minPrice}
-                onChange={(e) => setMinPrice(e.target.value)}
-                style={{ marginRight: "10px" }}
+                fullWidth
+                margin="normal"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
             />
+
+            {/* Price Filter */}
+            <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "1rem",
+                }}
+            >
+              <TextField
+                  label="Min Price"
+                  variant="outlined"
+                  type="number"
+                  value={minPrice}
+                  onChange={(e) => setMinPrice(e.target.value)}
+                  style={{ marginRight: "10px" }}
+              />
+              <TextField
+                  label="Max Price"
+                  variant="outlined"
+                  type="number"
+                  value={maxPrice}
+                  onChange={(e) => setMaxPrice(e.target.value)}
+              />
+            </div>
+
+            {/* Sort By */}
             <TextField
-                label="Max Price"
+                label="Sort By Rating"
+                select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                SelectProps={{
+                  native: true,
+                }}
                 variant="outlined"
-                type="number"
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(e.target.value)}
-            />
-          </div>
+                style={{ marginBottom: "1rem" }}
+            >
+              <option value="">None</option>
+              <option value="rating">Rating</option>
+            </TextField>
 
-          {/* Sort By */}
-          <TextField
-              label="Sort By Rating"
-              select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              SelectProps={{
-                native: true,
-              }}
-              variant="outlined"
-              style={{ marginBottom: "1rem" }}
-          >
-            <option value="">None</option>
-            <option value="rating">Rating</option>
-          </TextField>
-
-          {selectedSection === "posts" && (
-              <div style={{ marginTop: "20px" }}>
-                {sortedPosts.map((post) => (
-                    <Card
-                        key={post._id}
-                        sx={{ maxWidth: 345, margin: "10px", backgroundColor: "white" }}
-                    >
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                          {post.details}
-                        </Typography>
-                        <div>Price: {post.price} {post.currency}</div>
-                        <div>Quantity: {post.quantity}</div>
-                        <img
-                            src={post.imageurl}
-                            alt="Post"
-                            style={{ width: "100%", height: "auto" }}
-                        />
-                      </CardContent>
-                      <CardActions>
-                        <Button
-                            size="small"
-                            color="primary"
-                            onClick={() => handleEditPost(post)}
-                        >
-                          Edit
-                        </Button>
-                        <label style={{ color: 'black' }}>
-                          <input
-                              type="checkbox"
-                              checked={post.archived}
-                              onChange={(e) => handleArchiveToggle(post._id, e.target.checked)}
+            {selectedSection === "posts" && (
+                <div style={{ marginTop: "20px" }}>
+                  {sortedPosts.map((post) => (
+                      <Card
+                          key={post._id}
+                          sx={{ maxWidth: 345, margin: "10px", backgroundColor: "white" }}
+                      >
+                        <CardContent>
+                          <Typography gutterBottom variant="h5" component="div">
+                            {post.details}
+                          </Typography>
+                          <div>Price: {post.price} {post.currency}</div>
+                          <div>Quantity: {post.quantity}</div>
+                          <div>
+                            Rating:
+                            <Rating
+                                value={Math.round(post.rating * 2) / 2}
+                                precision={0.5}
+                                readOnly
+                            />
+                          </div>
+                          <img
+                              src={post.imageurl}
+                              alt="Post"
+                              style={{ width: "100%", height: "auto" }}
                           />
-                          Archive
-                        </label>
-                      </CardActions>
-                    </Card>
-                ))}
-              </div>
-          )}
-        </div>
-
-        <Modal open={openModal} onClose={handleCloseModal}>
-          <div
-              style={{
-                padding: "20px",
-                backgroundColor: "white",
-                margin: "100px auto",
-                width: "400px",
-              }}
-          >
-            <Typography variant="h6">
-              {editingPostId ? "Edit Post" : "Add New Post"}
-            </Typography>
-            <TextField
-                fullWidth
-                label="Details"
-                name="details"
-                value={currentPost.details}
-                onChange={handleInputChange}
-                margin="normal"
-            />
-            <TextField
-                fullWidth
-                label="Price"
-                name="price"
-                type="number"
-                value={currentPost.price}
-                onChange={handleInputChange}
-                margin="normal"
-            />
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Currency</InputLabel>
-              <Select
-                  name="currency"
-                  value={currentPost.currency}
-                  onChange={handleInputChange}
-              >
-                {currencyCodes.map(code => (
-                    <MenuItem key={code} value={code}>{code}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <TextField
-                fullWidth
-                label="Quantity"
-                name="quantity"
-                type="number"
-                value={currentPost.quantity}
-                onChange={handleInputChange}
-                margin="normal"
-            />
-            <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                style={{ margin: "10px 0" }}
-            />
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSubmitPost}
-                style={{ marginTop: "20px" }}
-            >
-              {editingPostId ? "Update Post" : "Add Post"}
-            </Button>
+                        </CardContent>
+                        <CardActions>
+                          <Button
+                              size="small"
+                              color="primary"
+                              onClick={() => handleEditPost(post)}
+                          >
+                            Edit
+                          </Button>
+                          <label style={{ color: 'black' }}>
+                            <input
+                                type="checkbox"
+                                checked={post.archived}
+                                onChange={(e) => handleArchiveToggle(post._id, e.target.checked)}
+                            />
+                            Archive
+                          </label>
+                        </CardActions>
+                      </Card>
+                  ))}
+                </div>
+            )}
           </div>
-        </Modal>
+
+          <Modal open={openModal} onClose={handleCloseModal}>
+            <div
+                style={{
+                  padding: "20px",
+                  backgroundColor: "white",
+                  margin: "100px auto",
+                  width: "400px",
+                }}
+            >
+              <Typography variant="h6">
+                {editingPostId ? "Edit Post" : "Add New Post"}
+              </Typography>
+              <TextField
+                  fullWidth
+                  label="Details"
+                  name="details"
+                  value={currentPost.details}
+                  onChange={handleInputChange}
+                  margin="normal"
+              />
+              <TextField
+                  fullWidth
+                  label="Price"
+                  name="price"
+                  type="number"
+                  value={currentPost.price}
+                  onChange={handleInputChange}
+                  margin="normal"
+              />
+              <FormControl fullWidth margin="normal">
+                <InputLabel>Currency</InputLabel>
+                <Select
+                    name="currency"
+                    value={currentPost.currency}
+                    onChange={handleInputChange}
+                >
+                  {currencyCodes.map(code => (
+                      <MenuItem key={code} value={code}>{code}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <TextField
+                  fullWidth
+                  label="Quantity"
+                  name="quantity"
+                  type="number"
+                  value={currentPost.quantity}
+                  onChange={handleInputChange}
+                  margin="normal"
+              />
+              <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  style={{ margin: "10px 0" }}
+              />
+              <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleSubmitPost}
+                  style={{ marginTop: "20px" }}
+              >
+                {editingPostId ? "Update Post" : "Add Post"}
+              </Button>
+            </div>
+          </Modal>
+        </div>
+        <Footer />
       </div>
   );
 };

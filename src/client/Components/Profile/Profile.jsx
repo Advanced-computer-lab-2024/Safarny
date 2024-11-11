@@ -98,7 +98,7 @@ const Profile = () => {
   };
 
   const handlePostClick = () => {
-    navigate("/create-post");
+    navigate("/create-post", { state: { userId } });
   };
 
   const handleAddActivity = () => {
@@ -199,7 +199,6 @@ const Profile = () => {
   return (
       <div className={styles.container}>
         <Header />
-
         <main className={styles.main}>
           <button className={styles.notificationButton}>
             <FaBell />

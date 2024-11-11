@@ -17,6 +17,7 @@ import { storage } from "../../../server/config/Firebase";
 import styles from "./CreatePost.module.css";
 import Footer from "/src/client/Components/Footer/Footer";
 import Header from "/src/client/Components/Header/Header";
+import { Link, useLocation, } from "react-router-dom";
 
 const CreatePost = () => {
   const navigate = useNavigate();
@@ -31,7 +32,11 @@ const CreatePost = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [currencyCodes, setCurrencyCodes] = useState([]);
-
+  const [successMessage, setSuccessMessage] = useState("");
+  const location = useLocation();
+  const { userId } = location.state || {};
+  const sellerId = userId;
+  console.log(sellerId);
   useEffect(() => {
     const fetchExchangeRates = async () => {
       try {
@@ -87,96 +92,122 @@ const CreatePost = () => {
     });
   };
 
-  const handleSubmitPost = async () => {
-    let imageUrl = currentPost.imageurl;
+const handleSubmitPost = async () => {
+  const { details, price, currency, quantity } = currentPost;
 
-    if (selectedImage) {
-      imageUrl = await uploadImage(selectedImage);
-      if (!imageUrl) return;
-    }
+  // Check if any of the required fields are empty
+  if (!details || !price || !currency || !quantity) {
+    setErrorMessage("All fields are required!");
+    return;
+  }
 
-    const postData = { ...currentPost, imageurl: imageUrl };
+  let imageUrl = currentPost.imageurl;
 
-    try {
-      await axios.post("/admin/createProduct", postData);
-      handleCloseModal();
-    } catch (error) {
-      setErrorMessage("Failed to add post");
-    }
-  };
+  if (selectedImage) {
+    imageUrl = await uploadImage(selectedImage);
+    if (!imageUrl) return;
+  }
 
+  const postData = { ...currentPost, imageurl: imageUrl };
+
+  try {
+    await axios.post("/admin/createProduct", postData);
+    await axios.post("/seller/createProduct", {
+      ...postData,
+      createdby: sellerId,
+    });
+    setSuccessMessage("Post added successfully");
+  } catch (error) {
+    setErrorMessage("Failed to add post");
+  }
+};
   return (
-    <Modal open={openModal} onClose={handleCloseModal}>
-      <div className={styles.modalOverlay}>
-        <Header />
-        <div className={styles.modalContainer}>
-        <h2 style={{color: 'white', fontWeight: 'bold'}}>Create new Post</h2>
-          {errorMessage && (
-            <Alert severity="error" className={styles.alert}>
-              {errorMessage}
-            </Alert>
-          )}
-          <TextField
-            fullWidth
-            label="Details"
-            name="details"
-            value={currentPost.details}
-            onChange={handleInputChange}
-            margin="normal"
-            className={styles.inputField}
-          />
-          <TextField
-            fullWidth
-            label="Price"
-            name="price"
-            type="number"
-            value={currentPost.price}
-            onChange={handleInputChange}
-            margin="normal"
-            className={styles.inputField}
-          />
-          <FormControl fullWidth margin="normal" className={styles.inputField}>
-            <InputLabel>Currency</InputLabel>
-            <Select
-              name="currency"
-              value={currentPost.currency}
-              onChange={handleInputChange}
+      <Modal open={openModal} onClose={handleCloseModal}>
+        <div className={styles.modalOverlay}>
+          <Header />
+          <div className={styles.modalContainer}>
+            <h2 style={{ color: 'white', fontWeight: 'bold' }}>Create new Post</h2>
+            {errorMessage && (
+                <Alert severity="error" className={styles.alert}>
+                  {errorMessage}
+                </Alert>
+            )}
+            {successMessage && (
+                <Alert severity="success" className={styles.alert}>
+                  {successMessage}
+                </Alert>
+            )}
+            <TextField
+                fullWidth
+                label="Details"
+                name="details"
+                value={currentPost.details}
+                onChange={handleInputChange}
+                margin="normal"
+                className={styles.inputField}
+                InputLabelProps={{ style: { color: 'gray' } }}
+                InputProps={{ style: { color: 'black' } }}
+            />
+            <TextField
+                fullWidth
+                label="Price"
+                name="price"
+                type="number"
+                value={currentPost.price}
+                onChange={handleInputChange}
+                margin="normal"
+                className={styles.blacky}
+                InputLabelProps={{ style: { color: 'gray' } }}
+                InputProps={{ style: { color: 'black' } }}
+            />
+            <FormControl fullWidth margin="normal" className={styles.inputField}>
+              <InputLabel>Currency</InputLabel>
+              <Select
+                  name="currency"
+                  value={currentPost.currency}
+                  onChange={handleInputChange}
+                  MenuProps={{ classes: { paper: styles.dropdownMenu } }}
+              >
+                {currencyCodes.map((code) => (
+                    <MenuItem key={code} value={code} className={styles.dropdownMenuItem}>
+                      {code}
+                    </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
+                fullWidth
+                label="Quantity"
+                name="quantity"
+                value={currentPost.quantity}
+                onChange={handleInputChange}
+                margin="normal"
+                className={styles.inputField}
+                InputLabelProps={{ style: { color: 'gray' } }}
+                InputProps={{ style: { color: 'black' } }}
+            />
+            <br />
+            <br />
+            <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className={styles.fileInput}
+            />
+            <br />
+            <br />
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSubmitPost}
+                className={styles.submitButton}
             >
-              {currencyCodes.map((code) => (
-                <MenuItem key={code} value={code}>
-                  {code}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <TextField
-            fullWidth
-            label="Details"
-            name="details"
-            value={currentPost.details}
-            onChange={handleInputChange}
-            margin="normal"
-            className={styles.inputField}
-          />
-
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className={styles.fileInput}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSubmitPost}
-            className={styles.submitButton}
-          >
-            Add Post
-          </Button>
+              Add Post
+            </Button>
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    </Modal>
+      </Modal>
   );
 };
 
