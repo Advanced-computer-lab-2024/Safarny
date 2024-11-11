@@ -186,3 +186,8 @@ li {
   background-color: var(--background-color);
   padding: 1rem;
 }
+
+/* SignUp.module.css */
+.label {
+  margin-left: 20px; /* Adjust the value as needed */
+}
