@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import styles from './MyFlights.module.css'; // Import the CSS module
+import styles from './MyFlights.module.css';
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 
 const MyBookedFlights = () => {
   const location = useLocation();
@@ -27,6 +29,7 @@ const MyBookedFlights = () => {
 
   return (
     <div className={styles.container}>
+      <Header />
       <h2 className={styles.header}>My Booked Flights</h2>
       {bookings.length > 0 ? (
         <div className={styles.cardContainer}>
@@ -50,6 +53,7 @@ const MyBookedFlights = () => {
       ) : (
         <p className={styles.noBookingsText}>No bookings found.</p>
       )}
+      <Footer />
     </div>
   );
 };
