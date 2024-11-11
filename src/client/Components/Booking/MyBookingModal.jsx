@@ -60,7 +60,7 @@ const MyBookingModal = ({
 
         {bookingType === "historicalPlace" && (
           <div>
-            <label>Booking Hour:</label>
+            <label className={styles.hour}>Booking Hour:</label>
             <input
               type="time"
               value={bookingHour}
@@ -69,6 +69,7 @@ const MyBookingModal = ({
             />
           </div>
         )}
+        <br></br>
         <div>
           <label className={styles.bookdate}>Booking Date:</label>
           <input

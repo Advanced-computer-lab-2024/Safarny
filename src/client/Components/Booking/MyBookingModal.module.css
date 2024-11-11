@@ -55,3 +55,13 @@
 input[type="date"] {
     color: black;
 }
+
+.hour{
+    color: white;
+}
+
+/* MyBookingModal.module.css */
+input[type="time"] {
+    background-color: white;
+    color: black; /* Ensure text is visible */
+}
