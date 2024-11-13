@@ -4,7 +4,7 @@ import styles from "./MyBookings.module.css";
 import Header from "/src/client/components/Header/Header";
 import Footer from "/src/client/components/Footer/Footer";
 import axios from "axios";
-import { CircularProgress, MenuItem, Select, FormControl, InputLabel } from "@mui/material";
+import {CircularProgress, MenuItem, Select, FormControl, InputLabel, Button} from "@mui/material";
 import mongoose from "mongoose";
 
 const MyBookings = () => {
@@ -17,8 +17,17 @@ const MyBookings = () => {
   const [exchangeRates, setExchangeRates] = useState({});
   const [tourGuideRatings, setTourGuideRatings] = useState({});
   const [comments, setComments] = useState({});  // Store comments by activityId ///
+  const [selectedRating, setSelectedRating] = useState({});
+  const [submittedRatings, setSubmittedRatings] = useState(() => {
+    const savedRatings = localStorage.getItem("submittedRatings");
+    return savedRatings ? JSON.parse(savedRatings) : {};
+  });
+  const [submittedTourGuideRatings, setSubmittedTourGuideRatings] = useState(() => {
+    const savedRatings = localStorage.getItem("submittedTourGuideRatings");
+    return savedRatings ? JSON.parse(savedRatings) : {};
+  });
 
-const fetchBookings = async () => {
+  const fetchBookings = async () => {
   try {
     const response = await axios.get(`http://localhost:3000/tourist/bookings/${userId}`);
     const bookingsWithTourGuide = await Promise.all(
@@ -145,10 +154,13 @@ const fetchExchangeRates = async () => {
 
       await axios.put(endpoint, { rating });
       setBookings((prevBookings) =>
-        prevBookings.map((booking) =>
-          booking._id === bookingId ? { ...booking, rating } : booking
-        )
+          prevBookings.map((booking) =>
+              booking._id === bookingId ? { ...booking, rating } : booking
+          )
       );
+      const updatedRatings = { ...submittedRatings, [bookingId]: true };
+      setSubmittedRatings(updatedRatings);
+      localStorage.setItem("submittedRatings", JSON.stringify(updatedRatings));
     } catch (error) {
       console.error("Error updating rating:", error);
     }
@@ -165,6 +177,9 @@ const fetchExchangeRates = async () => {
         ...prevRatings,
         [stringTourGuideId]: rating,
       }));
+      const updatedRatings = { ...submittedTourGuideRatings, [stringTourGuideId]: true };
+      setSubmittedTourGuideRatings(updatedRatings);
+      localStorage.setItem("submittedTourGuideRatings", JSON.stringify(updatedRatings));
     } catch (error) {
       console.error("Error updating tour guide rating:", error);
     }
@@ -328,26 +343,37 @@ const fetchExchangeRates = async () => {
 
                   {/* Tour guide details */}
                   {booking.tourGuideId && booking.tourGuideUsername && (
-                    <>
-                      <p>{tourGuideInfo}</p>
-                      {isPastDate(booking.bookingDate) && (
-                        <FormControl fullWidth margin="normal">
-                          <InputLabel>Rate this tour guide</InputLabel>
-                          <Select
-                            value={tourGuideRatings[booking.tourGuideId] || 5}
-                            onChange={(e) =>
-                              handleTourGuideRatingChange(booking.tourGuideId, e.target.value)
-                            }
-                          >
-                            {[1, 2, 3, 4, 5].map((rating) => (
-                              <MenuItem key={rating} value={rating}>
-                                {rating}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      )}
-                    </>
+                      <>
+                        <p>Tour Guide: {booking.tourGuideUsername}</p>
+                        {!isPastDate(booking.bookingDate) && !submittedTourGuideRatings[booking.tourGuideId] && (
+                            <FormControl fullWidth margin="normal">
+                              <InputLabel>Rate this tour guide</InputLabel>
+                              <Select
+                                  value={tourGuideRatings[booking.tourGuideId] || 5}
+                                  onChange={(e) =>
+                                      setTourGuideRatings({ ...tourGuideRatings, [booking.tourGuideId]: e.target.value })
+                                  }
+                              >
+                                {[1, 2, 3, 4, 5].map((rating) => (
+                                    <MenuItem key={rating} value={rating}>
+                                      {rating}
+                                    </MenuItem>
+                                ))}
+                              </Select>
+                              <Button
+                                  variant="contained"
+                                  color="primary"
+                                  onClick={() =>
+                                      handleTourGuideRatingChange(booking.tourGuideId, tourGuideRatings[booking.tourGuideId])
+                                  }
+                                  style={{ marginTop: '10px' }}
+                              >
+                                Submit
+                              </Button>
+                            </FormControl>
+                        )}
+                        {submittedTourGuideRatings[booking.tourGuideId] && <p>Tour Guide Rating submitted.</p>}
+                      </>
                   )}
 
                   {isPastDate(booking.bookingDate) && <p>Status: Finished</p>}
@@ -384,29 +410,40 @@ const fetchExchangeRates = async () => {
                     </button>
                   )}
 
-                  {isPastDate(booking.bookingDate) && (
-                    <FormControl fullWidth margin="normal">
-                      <InputLabel>Rate this booking</InputLabel>
-                      <Select
-                        value={booking.rating}
-                        onChange={(e) =>
-                          handleRatingChange(booking._id, e.target.value, bookingType, bookingTypeId)
-                        }
-                      >
-                        {[1, 2, 3, 4, 5].map((rating) => (
-                          <MenuItem key={rating} value={rating}>
-                            {rating}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
+                  {!isPastDate(booking.bookingDate) && !submittedRatings[booking._id] && (
+                      <FormControl fullWidth margin="normal">
+                        <InputLabel>Rate this booking</InputLabel>
+                        <Select
+                            value={selectedRating[booking._id] || booking.rating}
+                            onChange={(e) =>
+                                setSelectedRating({ ...selectedRating, [booking._id]: e.target.value })
+                            }
+                        >
+                          {[1, 2, 3, 4, 5].map((rating) => (
+                              <MenuItem key={rating} value={rating}>
+                                {rating}
+                              </MenuItem>
+                          ))}
+                        </Select>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() =>
+                                handleRatingChange(booking._id, selectedRating[booking._id], bookingType, bookingTypeId)
+                            }
+                            style={{ marginTop: '10px' }}
+                        >
+                          Submit
+                        </Button>
+                      </FormControl>
                   )}
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      )}
+                  {submittedRatings[booking._id] && <p>Rating submitted.</p>}
+</div>
+</li>
+);
+})}
+</ul>
+)}
       <Footer />
     </div>
   );

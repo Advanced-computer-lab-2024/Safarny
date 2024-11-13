@@ -18,7 +18,7 @@ const Profile = () => {
     image: "",
     loyaltyPoints: 0,
     wallet: 0,
-    walletCurrency: "EGP"
+    walletcurrency: "EGP"
   });
   const [message, setMessage] = useState("");
   const [showButtons, setShowButtons] = useState(false);

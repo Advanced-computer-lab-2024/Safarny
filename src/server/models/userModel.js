@@ -49,7 +49,7 @@ const userModel = new mongoose.Schema(
     ],
       rating: {
             type: [Number], // Array of numbers
-            default: [5], // Default to an array with a single rating of 5
+            default: [], // Default to an array with a single rating of 5
         },
       averageRating: { type: Number, default: 5 }, // Default average rating to 5
 

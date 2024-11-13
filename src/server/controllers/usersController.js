@@ -377,7 +377,7 @@ const deleteAdvertiserAndActivities = async (req, res) => {
 };
 const cashInPoints = async (req, res) => {
   const { id } = req.params;
-  const { walletCurrency } = req.body;
+  const { walletcurrency } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ error: 'Invalid ID format' });
@@ -395,7 +395,7 @@ const cashInPoints = async (req, res) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    const exchangeRate = data.conversion_rates[walletCurrency];
+    const exchangeRate = data.conversion_rates[walletcurrency];
     const pointsInWallet = user.loyaltyPoints * 0.01 * exchangeRate;
 
     user.wallet += pointsInWallet;

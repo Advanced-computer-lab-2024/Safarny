@@ -62,7 +62,7 @@ const SignUp = () => {
   const [success, setSuccess] = useState(false);
   const [DOB, setDob] = useState(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
-  const [walletCurrency, setWalletCurrency] = useState('');
+  const [walletcurrency, setWalletcurrency] = useState('');
   const [photo, setPhoto] = useState(null);
   const [photoURL, setPhotoURL] = useState('');
   const age = DOB ? calculateAge(DOB) : null;
@@ -89,7 +89,7 @@ const SignUp = () => {
       setEmployed(savedData.employed || '');
       setDob(savedData.DOB ? new Date(savedData.DOB) : null);
       setTermsAccepted(savedData.termsAccepted || false);
-      setWalletCurrency(savedData.walletCurrency || '');
+      setWalletcurrency(savedData.walletcurrency || '');
     }
   }, []);
 
@@ -103,11 +103,11 @@ const SignUp = () => {
       employed,
       DOB,
       termsAccepted,
-      walletCurrency,
+      walletcurrency,
       photoURL
     };
     localStorage.setItem('signUpFormData', JSON.stringify(formData));
-  }, [username, email, password, mobile, nationality, employed, DOB, termsAccepted, walletCurrency, photoURL]);
+  }, [username, email, password, mobile, nationality, employed, DOB, termsAccepted, walletcurrency, photoURL]);
 
   function calculateAge(dob) {
     const dobDate = new Date(dob);
@@ -123,7 +123,7 @@ const SignUp = () => {
   const handleCountryChange = (e) => {
     const selectedCountry = e.target.value;
     setNationality(selectedCountry);
-    setWalletCurrency(countryToCurrency[selectedCountry] || '');
+    setWalletcurrency(countryToCurrency[selectedCountry] || '');
   };
 
   const handlePhotoChange = (e) => {
@@ -175,7 +175,7 @@ const SignUp = () => {
         employed,
         DOB,
         age,
-        walletCurrency,
+        walletcurrency,
         photo: photoURL
       };
 

@@ -322,14 +322,6 @@ const ReadHistoricalPlace = () => {
                     >
                       Email
                     </button>
-                    {userId && (
-                      <button
-                        onClick={() => handleReadHistoricalPlaceBook(place._id)}
-                        className={styles.cardButton}
-                      >
-                        Book
-                      </button>
-                    )}
                   </h2>
                   <p>Opening Hours: {place.openingHours}</p>
                   <p>Description: {place.description}</p>
