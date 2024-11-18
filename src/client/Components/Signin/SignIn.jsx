@@ -15,25 +15,24 @@ const SignIn = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const userData = { email, password };
-  
+
     try {
       const response = await axios.post('http://localhost:3000/guest/login', userData);
-  
+
       // Assuming 'type', 'status', and 'id' are part of the response data
       const { type, Status, id } = response.data;
       const userId = id;
 
-
-   // If the user is 'admin', sign in without checking status
-   if (type === 'admin' || type === 'Admin') {
-    setSuccess(true);
-    setError('');
-    console.log("id1",userId);
-    navigate('/admin', { state: { userId } }); // Pass userId to Admin page
-    return; // Stop further execution for admin
-  }
+      // If the user is 'admin', sign in without checking status
+      if (type === 'admin' || type === 'Admin') {
+        setSuccess(true);
+        setError('');
+        console.log('id1', userId);
+        navigate('/admin', { state: { userId } }); // Pass userId to Admin page
+        return; // Stop further execution for admin
+      }
 
       if (type === 'Tourist') {
         setSuccess(true);
@@ -41,22 +40,21 @@ const SignIn = () => {
         navigate('/Profile', { state: { userId } });
         return; // Stop further execution for admin
       }
-      
+
       // For non-admin users, check if the account is accepted
       if (Status !== 'Accepted') {
         setError('Your account is not accepted yet. Please wait for approval.');
         setSuccess(false);
         return; // Stop further execution if the account is not accepted
       }
-  
+
       // If account is accepted, proceed to the profile
       setSuccess(true);
       setError('');
-       // Assuming `id` is the user identifier in the response
-      if (['Seller', 'TourGuide', 'Advertiser','TourismGovernor'].includes(type)) {
+      // Assuming `id` is the user identifier in the response
+      if (['Seller', 'TourGuide', 'Advertiser', 'TourismGovernor'].includes(type)) {
         navigate('/Profile', { state: { userId } });
       }
-  
     } catch (err) {
       if (err.response) {
         setError(err.response.data.message);
@@ -66,7 +64,6 @@ const SignIn = () => {
       setSuccess(false);
     }
   };
-  
 
   return (
     <div className={styles.container}>
@@ -83,7 +80,8 @@ const SignIn = () => {
         <form onSubmit={handleSubmit} className={styles.form}>
           <label className={styles.label}>
             Email:
-            <input className={styles.input}
+            <input
+              className={styles.input}
               type="email"
               name="email"
               value={email}
@@ -93,7 +91,8 @@ const SignIn = () => {
           </label>
           <label className={styles.label}>
             Password:
-            <input className={styles.input}
+            <input
+              className={styles.input}
               type="password"
               name="password"
               value={password}
@@ -105,6 +104,11 @@ const SignIn = () => {
           <button type="submit" className={styles.button}>
             Sign In
           </button>
+
+          {/* Forget Password Button */}
+          <Link to="/password-recovery" className={styles.forgetPassword}>
+            Forget Password
+          </Link>
         </form>
       </div>
 
