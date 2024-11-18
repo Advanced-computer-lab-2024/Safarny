@@ -4,7 +4,7 @@ import axios from "axios";
 import Footer from "/src/client/components/Footer/Footer";
 import Header from "/src/client/components/Header/Header";
 import styles from "./ReadHistoricalPlace.module.css";
-import styles1 from "/src/client/components/Home/Homepage.module.css";
+// import styles1 from "/src/client/components/Home/Homepage.module.css";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import {
   FormControl,
@@ -212,7 +212,7 @@ const ReadHistoricalPlace = () => {
   }
 
   return (
-    <div className={styles1.container}>
+    <div className={styles.container}>
       <Header />
       <div className={styles.contentContainer}>
         <h1>Historical Places</h1>
