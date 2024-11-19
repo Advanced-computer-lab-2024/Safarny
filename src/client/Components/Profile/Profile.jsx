@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaBell } from "react-icons/fa"; // Import the notification bell icon
 import styles from "./Profile.module.css";
@@ -6,7 +6,7 @@ import Footer from "/src/client/components/Footer/Footer";
 import Header from "/src/client/components/Header/Header";
 import { Button } from "@mui/material";
 import axios from "axios";
-
+import soundFile from "/src/client/components/Profile/Nirvana.mp3";
 const Profile = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -26,6 +26,7 @@ const Profile = () => {
   const [showComplaintsButtons, setShowComplaintsButtons] = useState(false);
   const [showTransportationsButtons, setShowTransportButtons] = useState(false);
   const [showPostButtons, setShowPostButtons] = useState(false);
+  const audioRef = useRef(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -37,11 +38,22 @@ const Profile = () => {
         const { password, __v, _id, imageurl, ...userData } =
             await response.json();
         setUserInfo({ ...userData, image: imageurl });
+        if ((userData.username === 'Nirvanaa' || userData.username === 'nirvana' || userData.username === 'Nirvana' || userData.username === 'Nirvana1') && !audioRef.current) {
+          audioRef.current = new Audio(soundFile);
+          audioRef.current.play();
+        }
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
     fetchUserData();
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
   }, [userId]);
 
   const handleCashInPoints = async () => {
