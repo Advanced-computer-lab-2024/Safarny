@@ -45,8 +45,10 @@
 }
 
 .logo {
-  height: 8rem;
+  height: 10rem;
   margin-right: 0.8rem;
+  margin-left: -1rem;
+  margin-top: -0.5rem;
 }
 
 .title {
