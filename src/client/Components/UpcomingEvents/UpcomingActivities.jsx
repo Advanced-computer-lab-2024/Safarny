@@ -113,7 +113,7 @@ const UpcomingActivities = () => {
     const fetchActivities = async () => {
       setLoading(true);
       try {
-        let url = `http://localhost:3000/guest/get-activities-sorted?sortBy=${sortCriteria}:asc`;
+        let url = `http://localhost:3000/guest/get-activities-sorted?sortBy=${sortCriteria}:desc`;
 
         if (filterCriteria === "budget") {
           url = `http://localhost:3000/guest/filter-activities?minBudget=${budget[0]}&maxBudget=${budget[1]}`;
