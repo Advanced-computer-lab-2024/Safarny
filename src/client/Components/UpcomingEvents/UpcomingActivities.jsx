@@ -7,6 +7,7 @@ import { FormControl, InputLabel, MenuItem, Select, CircularProgress } from "@mu
 import MyBookingModal from "/src/client/Components/Booking/MyBookingModal" ;
 import Footer from '/src/client/Components/Footer/Footer';
 import Header from '../Header/Header';
+import { Rating } from "@mui/material";
 
 const UpcomingActivities = () => {
   const location = useLocation();
@@ -21,7 +22,7 @@ const UpcomingActivities = () => {
   const [selectedCurrency, setSelectedCurrency] = useState('EGP');
   const [exchangeRates, setExchangeRates] = useState({});
   const [currencyCodes, setCurrencyCodes] = useState([]);
-  const [rating, setRating] = useState(0);
+  const [averageRating, setAverageRating] = useState(0);
   const navigate = useNavigate();
   const [wallet, setWallet] = useState(0);
   const [walletCurrency, setWalletCurrency] = useState('EGP');
@@ -120,10 +121,14 @@ const UpcomingActivities = () => {
           url = `http://localhost:3000/guest/filter-activities?&date=${dateRange}`;
         } else if (filterCriteria === "category" && selectedCategories.length > 0) {
           url = `http://localhost:3000/guest/filter-activities?&category=${selectedCategories.join(",")}`;
-        } else if (filterCriteria === "rating") {
-          url = `http://localhost:3000/guest/filter-activities?&rating=${rating}`;
+        } else if (filterCriteria === "averageRating") {
+          url = `http://localhost:3000/guest/filter-activities?&averageRating=${averageRating}`;
         }
 
+        // Update the sort order for rating to descending
+        if (sortCriteria === "averageRating") {
+          url = `http://localhost:3000/guest/get-activities-sorted?sortBy=averageRating:desc`;
+        }
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Failed to fetch activities");
@@ -147,7 +152,7 @@ const UpcomingActivities = () => {
     };
 
     fetchActivities();
-  }, [sortCriteria, filterCriteria, budget, dateRange, selectedCategories, rating, userRole]);
+  }, [sortCriteria, filterCriteria, budget, dateRange, selectedCategories, averageRating, userRole]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -162,13 +167,9 @@ const UpcomingActivities = () => {
 
     fetchCategories();
   }, []);
-  const renderStars = (rating) => {
-    if (rating == null) return null;
-    const stars = [];
-    for (let i = 0; i < rating; i++) {
-      stars.push(<span key={i}>&#9733;</span>); // Shaded star
-    }
-    return stars;
+  const renderStars = (averageRating) => {
+    if (averageRating == null) return null;
+    return <Rating value={Math.round(averageRating * 2) / 2} precision={0.5} readOnly />;
   };
   const handleCategoryChange = (category) => {
     setSelectedCategories((prev) =>
@@ -206,7 +207,7 @@ const UpcomingActivities = () => {
             <button onClick={() => setSortCriteria("price")} className={styles.cardButton}>
               Sort by Price
             </button>
-            <button onClick={() => setSortCriteria("rating")} className={styles.cardButton}>
+            <button onClick={() => setSortCriteria("averageRating")} className={styles.cardButton}>
               Sort by Rating
             </button>
           </div>
@@ -218,7 +219,7 @@ const UpcomingActivities = () => {
               <option value="budget">Budget</option>
               <option value="date">Date</option>
               <option value="category">Category</option>
-              <option value="rating">Rating</option>
+              <option value="averageRating">Rating</option>
             </select>
           </div>
 
@@ -261,10 +262,10 @@ const UpcomingActivities = () => {
               </div>
           )}
 
-          {filterCriteria === "rating" && (
+          {filterCriteria === "averageRating" && (
               <div className={styles.filterInput}>
-                <label>Rating: {rating} </label>
-                <input type="range" min="0" max="5" value={rating} onChange={(e) => setRating(e.target.value)} />
+                <label>Rating: {averageRating} </label>
+                <input type="range" min="0" max="5" value={averageRating} onChange={(e) => setAverageRating(e.target.value)} />
               </div>
           )}
 
@@ -281,7 +282,7 @@ const UpcomingActivities = () => {
                         <p>Time: {activity.time}</p>
                         <p>Location: {activity.location}</p>
                         <p>Price: {convertedPrice} {selectedCurrency}</p>
-                        <p>Rating: {renderStars(activity.rating)}</p>
+                        <p>Rating: {renderStars(activity.averageRating)}</p>
                         {activity.specialDiscount && (
                             <p>Discount: {activity.specialDiscount}</p>
                         )}
