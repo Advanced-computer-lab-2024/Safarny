@@ -40,10 +40,10 @@ const UpcomingItineraries = () => {
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [selectedItineraryId, setSelectedItineraryId] = useState(null);
 
-  const renderStars = (rating) => {
-    if (rating == null) return null;
+  const renderStars = (averageRating) => {
+    if (averageRating == null) return null;
     const stars = [];
-    for (let i = 0; i < rating; i++) {
+    for (let i = 0; i < averageRating; i++) {
       stars.push(<span key={i}>&#9733;</span>);
     }
     return stars;
@@ -127,7 +127,7 @@ const UpcomingItineraries = () => {
     setLoading(true);
     try {
       const queryParams = new URLSearchParams({
-        sortBy: `${sortCriteria}:asc`,
+        sortBy: sortCriteria === "averageRating" ? "averageRating:desc" : `${sortCriteria}:asc`,
         price: budget,
         date: date,
         tags: preferences.join(","),
@@ -198,7 +198,7 @@ const UpcomingItineraries = () => {
             <button onClick={() => setSortCriteria("duration")}>
               Sort by Duration
             </button>
-            <button onClick={() => setSortCriteria("rating")}>
+            <button onClick={() => setSortCriteria("averageRating")}>
               Sort by Rating
             </button>
           </div>

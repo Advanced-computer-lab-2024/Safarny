@@ -410,7 +410,7 @@ const fetchExchangeRates = async () => {
                     </button>
                   )}
 
-                  {!isPastDate(booking.bookingDate) && !submittedRatings[booking._id] && (
+                  {isPastDate(booking.bookingDate) && !submittedRatings[booking._id] && (
                       <FormControl fullWidth margin="normal">
                         <InputLabel>Rate this booking</InputLabel>
                         <Select
