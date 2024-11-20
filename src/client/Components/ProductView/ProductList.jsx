@@ -29,6 +29,8 @@ const ProductList = () => {
   const [userRole, setUserRole] = useState('');
   const [wishlist, setWishlist] = useState({});
 
+
+
   const fetchExchangeRates = async () => {
     try {
       const response = await axios.get(import.meta.env.VITE_EXCHANGE_API_URL);
@@ -184,127 +186,135 @@ const ProductList = () => {
   }
 
   return (
-      <div className={styles.container}>
-        <Header />
+    <div className={styles.container}>
+  <Header />
 
-        <button
-            className={styles.viewPurchasedButton}
-            onClick={handleClick}
-        >
-          View Purchased Products
-        </button>
-        <h1 className={styles.h1}>Product List</h1>
+  <div className={styles.actionsContainer}>
+    <div className={styles.filterContainer}>
+      <div className={styles.sortOptions}>
+        <label className={styles.MaxPrice}>Max Price:</label>
         <input
-            type="text"
-            placeholder="Search by name..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className={styles.searchInput}
+          type="number"
+          value={priceFilter}
+          onChange={(e) => setPriceFilter(e.target.value)}
+          className={styles.priceInput}
         />
-
-        <div className={styles.filterContainer}>
-          <div className={styles.sortOptions}>
-            <label className={styles.MaxPrice}>Max Price:</label>
-            <input
-                type="number"
-                value={priceFilter}
-                onChange={(e) => setPriceFilter(e.target.value)}
-                className={styles.priceInput}
-            />
-          </div>
-          <div className={styles.currencySelector}>
-            <FormControl fullWidth margin="normal">
-              <InputLabel><h4>Currency</h4></InputLabel>
-              <br></br>
-              <Select
-                  value={selectedCurrency}
-                  onChange={(e) => setSelectedCurrency(e.target.value)}
-              >
-                {currencyCodes.map(code => (
-                    <MenuItem key={code} value={code}>{code}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </div>
-          <div className={styles.sortOptions}>
-            <label className={styles.sorter}>
-              Sort by Ratings:
-              <input
-                  type="checkbox"
-                  checked={sortByRating}
-                  onChange={() => setSortByRating(!sortByRating)}
-                  className={styles.largeCheckbox}
-              />
-            </label>
-          </div>
-        </div>
-
-        {sortedProducts.length > 0 ? (
-            <div className={styles.productsAll}>
-              {sortedProducts.map(product => {
-                const convertedPrice = convertPrice(product.price, product.currency, selectedCurrency);
-                const sellerName = sellers[product.createdby] || "Unknown Seller";
-                const averageRating = product.rating.length > 0 ? (product.rating.reduce((acc, val) => acc + val, 0) / product.rating.length).toFixed(1) : 0;
-                const isWishlisted = wishlist[product._id] || false;
-                return (
-                    <div className={styles.productCard} key={product._id}>
-                      {userRole === 'Tourist' && (
-                          <div className={styles.bookmarkIcon} onClick={() => handleAddToWishlist(product._id)}>
-                            {isWishlisted ? <Bookmark/> : <BookmarkBorder/>}
-                          </div>
-                      )}
-                      <h2 className={styles.productDetails}>{product.details}</h2>
-                      <p>Price: {convertedPrice} {selectedCurrency}</p>
-                      <p>Quantity: {product.quantity}</p>
-                      <div className={styles.ratingContainer}>
-                        <StarRatings
-                            rating={Math.round(averageRating * 2) / 2}
-                            starRatedColor="gold"
-                            numberOfStars={5}
-                            starDimension="20px"
-                            starSpacing="2px"
-                            name='rating'
-                        />
-                        <p>{averageRating} out of 5</p>
-                      </div>
-                      <p>Seller: {sellerName}</p>
-                      {userRole === 'Seller' && (
-                          <>
-                            <p>Purchased Count: {product.purchasedCount}</p>
-                            <p>Sales: {product.purchasedCount * product.price}</p>
-                          </>
-                      )}
-                      <div className={styles.reviewsSection}>
-                        <h3>Reviews:</h3>
-                        {product.reviews && product.reviews.length > 0 ? (
-                            <ul>
-                              {product.reviews.map((review, index) => (
-                                  <li key={index}>{review}</li>
-                              ))}
-                            </ul>
-                        ) : (
-                            <p>No reviews available</p>
-                        )}
-                      </div>
-                      <div className={styles.buttonContainer}>
-                        <button
-                            className={styles.buyButton}
-                            onClick={() => handleBuyButtonClick(product)}
-                        >
-                          Purchase
-                        </button>
-                      </div>
-                      <img className={styles.productImage} src={product.imageurl} alt={product.details}/>
-                    </div>
-                );
-              })}
-            </div>
-        ) : (
-            <p>No products available</p>
-        )}
-        <Footer/>
       </div>
+      <div className={styles.currencySelector}>
+        <FormControl fullWidth margin="normal">
+          <InputLabel><h4>Currency</h4></InputLabel>
+          <Select
+            value={selectedCurrency}
+            onChange={(e) => setSelectedCurrency(e.target.value)}
+            className={styles.selectInput}
+          >
+            {currencyCodes.map(code => (
+              <MenuItem key={code} value={code}>{code}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
+      <div className={styles.sortOptions}>
+        <label className={styles.sorter}>
+          Sort by Ratings:
+          <input
+            type="checkbox"
+            checked={sortByRating}
+            onChange={() => setSortByRating(!sortByRating)}
+            className={styles.largeCheckbox}
+          />
+        </label>
+      </div>
+    </div>
+    <input
+      type="text"
+      placeholder="Search by name..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className={styles.searchInput}
+    />
+<button
+      className={styles.viewPurchasedButton}
+      onClick={handleClick}
+    >
+      View Purchased Products
+    </button>
+  </div>
+
+  <h1 className={styles.h1}>Product List</h1>
+
+  {sortedProducts.length > 0 ? (
+    <div className={styles.productsAll}>
+      {sortedProducts.map(product => {
+        const convertedPrice = convertPrice(product.price, product.currency, selectedCurrency);
+        const sellerName = sellers[product.createdby] || "Unknown Seller";
+        const averageRating = product.rating.length > 0 ? (product.rating.reduce((acc, val) => acc + val, 0) / product.rating.length).toFixed(1) : 0;
+        const isWishlisted = wishlist[product._id] || false;
+
+        return (
+          <div className={styles.productCard} key={product._id}>
+            <div className={styles.productImageContainer}>
+              <img className={styles.productImage} src={product.imageurl} alt={product.details} />
+              <p className={styles.productPrice}>{convertedPrice} {selectedCurrency}</p>
+            </div>
+            <div className={styles.productDetails}>
+              <div className={styles.bookmarkIcon} onClick={() => handleAddToWishlist(product._id)}>
+                {isWishlisted ? <Bookmark /> : <BookmarkBorder />}
+              </div>
+              <h2 className={styles.title}>{product.details}</h2>
+              <p className={styles.quantity}>Quantity: {product.quantity}</p>
+              <div className={styles.ratingContainer}>
+                <StarRatings
+                  rating={Math.round(averageRating * 2) / 2}
+                  starRatedColor="gold"
+                  numberOfStars={5}
+                  starDimension="20px"
+                  starSpacing="2px"
+                  name="rating"
+                />
+                <p>{averageRating} out of 5</p>
+              </div>
+              <p className={styles.seller}>Seller: {sellerName}</p>
+              {userRole === 'Seller' && (
+                <>
+                  <p className={styles.purchasedCount}>Purchased Count: {product.purchasedCount}</p>
+                  <p className={styles.sales}>Sales: {product.purchasedCount * product.price}</p>
+                </>
+              )}
+              <div className={styles.reviewsSection}>
+                <h3 className={styles.reviewsTitle}>Reviews:</h3>
+                {product.reviews && product.reviews.length > 0 ? (
+                  <ul>
+                    {product.reviews.map((review, index) => (
+                      <li key={index}>{review}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No reviews available</p>
+                )}
+              </div>
+              <div className={styles.buttonContainer}>
+                <button
+                  className={styles.buyButton}
+                  onClick={() => handleBuyButtonClick(product)}
+                >
+                  Purchase
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  ) : (
+    <p>No products available</p>
+  )}
+  <Footer />
+</div>
+
+
   );
 };
 
 export default ProductList;
+
