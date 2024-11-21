@@ -65,27 +65,34 @@ const PurchasedProducts = () => {
       try {
         const response = await axios.get(`/tourist/${touristId}`);
         const postIds = response.data?.posts || [];
-
+  
         if (postIds.length > 0) {
-          const productDetails = await Promise.all(
-              postIds.map(async (postId) => {
-                try {
-                  const productResponse = await axios.get(`/admin/products/${postId}`);
-                  return productResponse.data;
-                } catch (err) {
-                  if (err.response && err.response.status === 404) {
-                    console.warn(`Product with ID ${postId} not found.`);
-                    return null; // Return null if product is not found
-                  } else {
-                    throw err; // Re-throw other errors
-                  }
+          // Count occurrences of each product ID
+          const idCounts = postIds.reduce((acc, id) => {
+            acc[id] = (acc[id] || 0) + 1;
+            return acc;
+          }, {});
+  
+          // Fetch unique product details
+          const uniqueProductDetails = await Promise.all(
+            Object.keys(idCounts).map(async (postId) => {
+              try {
+                const productResponse = await axios.get(`/admin/products/${postId}`);
+                return { ...productResponse.data, count: idCounts[postId] };
+              } catch (err) {
+                if (err.response && err.response.status === 404) {
+                  console.warn(`Product with ID ${postId} not found.`);
+                  return null; // Return null if product is not found
+                } else {
+                  throw err; // Re-throw other errors
                 }
-              })
+              }
+            })
           );
-
-          const validProducts = productDetails.filter(product => product !== null);
+  
+          const validProducts = uniqueProductDetails.filter(product => product !== null);
           setProducts(validProducts);
-
+  
           if (validProducts.length === 0) {
             setError('No purchased products found for this user.');
           }
@@ -99,11 +106,12 @@ const PurchasedProducts = () => {
         setLoading(false);
       }
     };
-
+  
     if (touristId) {
       fetchPurchasedProducts();
     }
   }, [touristId]);
+  
 
   const handleReviewChange = (productId, value) => {
     setReviews(prevReviews => {
@@ -240,6 +248,7 @@ const PurchasedProducts = () => {
                     <div className={styles.productCard} key={product._id}>
                       <h2 className={styles.productDetails}>{product.details}</h2>
                       <p>Price: {convertedPrice} {selectedCurrency}</p>
+                      <p>Purchased Quantity: {product.count}</p> {/* Display the count */}
                       <p>Quantity: {product.quantity}</p>
                       <div className={styles.ratingContainer}>
                         <StarRatings

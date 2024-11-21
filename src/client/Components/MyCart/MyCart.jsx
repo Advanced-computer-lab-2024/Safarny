@@ -20,6 +20,7 @@ const Cart = () => {
   const [selectedCurrency, setSelectedCurrency] = useState(walletCurrency);
   const [products, setProducts] = useState([]);
 
+  const [desiredQuantities, setDesiredQuantities] = useState({});
 
 
 
@@ -87,6 +88,12 @@ const Cart = () => {
 
           const validCartItems = productDetails.filter((item) => item !== null);
           setCartItems(validCartItems);
+          // Initialize desiredQuantities
+        const initialQuantities = productDetails.reduce((acc, item) => {
+          acc[item._id] = 1; // Default quantity is 1
+          return acc;
+        }, {});
+        setDesiredQuantities(initialQuantities);
 
           if (validCartItems.length === 0) {
             setError('No items in the cart for this user.');
@@ -116,13 +123,21 @@ const Cart = () => {
     const rateTo = exchangeRates[toCurrency];
     return ((price / rateFrom) * rateTo).toFixed(2);
   };
-  const handleBuyButtonClick = async (product) => {
+  const handleBuyButtonClick = async (product, desiredQuantity) => {
     const convertedPrice = convertPrice(product.price, product.currency, walletCurrency);
-    console.log('Wallet:', wallet);
-    console.log('Converted Price:', convertedPrice);
+    const totalPrice = convertedPrice * desiredQuantity;
   
-    if (wallet < convertedPrice) {
-      alert('You do not have enough funds to purchase this product.');
+    console.log('Wallet:', wallet);
+    console.log('Converted Price (each):', convertedPrice);
+    console.log('Total Price:', totalPrice);
+  
+    if (wallet < totalPrice) {
+      alert('You do not have enough funds to purchase this quantity of the product.');
+      return;
+    }
+  
+    if (product.quantity < desiredQuantity) {
+      alert('Not enough stock available for the desired quantity.');
       return;
     }
   
@@ -132,8 +147,8 @@ const Cart = () => {
       // Update the product
       const updatedProduct = {
         ...product,
-        quantity: product.quantity - 1,
-        purchasedCount: product.purchasedCount + 1,
+        quantity: product.quantity - desiredQuantity,
+        purchasedCount: product.purchasedCount + desiredQuantity,
       };
   
       await axios.put(`/admin/products/${product._id}`, updatedProduct);
@@ -141,27 +156,36 @@ const Cart = () => {
       // Fetch the current user profile
       const profileResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
       const currentPosts = profileResponse.data.posts || [];
-      const updatedPosts = [...currentPosts, product._id];
+      const updatedPosts = [...currentPosts, ...Array(desiredQuantity).fill(product._id)];
   
       // Update the user's profile with the new wallet and posts
       await axios.put(`http://localhost:3000/tourist/${userId}`, {
         id: userId,
         posts: updatedPosts,
-        wallet: wallet - convertedPrice,
+        wallet: wallet - totalPrice,
       });
   
       // Update local state
       setProducts(products.map(p => (p._id === product._id ? updatedProduct : p)));
-      setWallet(wallet - convertedPrice);
+      setWallet(wallet - totalPrice);
   
       // Display success message
-      alert('Product successfully purchased!');
+      alert(`Successfully purchased ${desiredQuantity} ${product.details}(s)!`);
+  
       // Remove the item from the cart
-    await handleRemoveFromCart(product); // Call the function to remove from the cart
+      await handleRemoveFromCart(product); // Call the function to remove from the cart
     } catch (err) {
       console.error('Error updating product status:', err);
       alert('An error occurred while purchasing the product. Please try again.');
     }
+  };
+  
+  
+  const handleQuantityChange = (productId, change) => {
+    setDesiredQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [productId]: Math.max(1, (prevQuantities[productId] || 1) + change),
+    }));
   };
   
   const handleRemoveFromCart = async (product) => {
@@ -204,6 +228,8 @@ const Cart = () => {
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
           {cartItems.map((item) => {
             const convertedPrice = convertPrice(item.price, item.currency, walletCurrency);
+            const desiredQuantity = desiredQuantities[item._id] || 1; // Default to 1 if not set
+
             const averageRating =
               item.rating.length > 0
                 ? (item.rating.reduce((acc, val) => acc + val, 0) / item.rating.length).toFixed(1)
@@ -213,6 +239,21 @@ const Cart = () => {
                 <h2 className={styles.productDetails}>{item.details}</h2>
                 <p>Price: {convertedPrice} {walletCurrency}</p>
                 <p>Quantity: {item.quantity}</p>
+                <div>
+        <button
+          onClick={() => handleQuantityChange(item._id, -1)}
+          disabled={desiredQuantity <= 1}
+        >
+          -
+        </button>
+        <span>{desiredQuantity}</span>
+        <button
+          onClick={() => handleQuantityChange(item._id, 1)}
+          disabled={desiredQuantity >= item.quantity}
+        >
+          +
+        </button>
+      </div>
                 <div className={styles.ratingContainer}>
                   <StarRatings
                     rating={Math.round(averageRating * 2) / 2}
@@ -228,11 +269,11 @@ const Cart = () => {
                 
                 <img className={styles.productImage} src={item.imageurl} alt={item.details} />
                 <button
-                  className={styles.buyButton}
-                  onClick={() => handleBuyButtonClick(item)}
-                >
-                  Purchase
-                </button>
+  className={styles.buyButton}
+  onClick={() => handleBuyButtonClick(item, desiredQuantities[item._id] || 1)}
+>
+  Purchase
+</button>
                 <button
                   className={styles.button}
                   onClick={() => handleRemoveFromCart(item)}
