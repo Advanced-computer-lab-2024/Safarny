@@ -57,6 +57,28 @@ const WishList = () => {
       setError('Failed to remove item from wishlist');
     }
   };
+  const handleAddToCartClick = async (product) => {
+    try {
+      console.log("userid: ", userId);
+  
+      // Fetch the current user data to get the existing cart
+      const profileResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
+      const currentCart = profileResponse.data.cart || [];
+  
+      // Add the product ID to the cart array
+      const updatedCart = [...currentCart, product._id];
+  
+      // Update the user profile with the new cart
+      await axios.put(`http://localhost:3000/tourist/${userId}`, {
+        id: userId,
+        cart: updatedCart,
+      });
+  
+      console.log(`Product ${product._id} added to cart.`);
+    } catch (err) {
+      console.error('Error adding product to cart:', err);
+    }
+  };
 
   const filteredProducts = products.filter(product =>
     wishList.some(wishItem => wishItem._id === product._id)
@@ -88,6 +110,13 @@ const WishList = () => {
                 <div className={styles.productImage}>
                   <img src={item.imageurl} alt={item.title} />
                 </div>
+                {/* Add to Cart Button */}
+                <button
+    className={styles.cartButton} // Add styling for this button
+    onClick={() => handleAddToCartClick(item)}
+  >
+    Add to Cart
+  </button>
                 <button
                   onClick={() => handleRemove(item._id)}
                   className={styles.wishlistButton}
