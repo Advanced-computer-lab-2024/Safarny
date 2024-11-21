@@ -40,6 +40,8 @@ const PurchasedProducts = () => {
         setWalletCurrency(user.walletcurrency || 'EGP');
         setSelectedCurrency(user.walletcurrency || 'EGP'); // Set selectedCurrency to walletCurrency
         console.log('User role:', user.role);
+       // console.log('Wallet fetched:', user.wallet);
+       
       } catch (err) {
         console.error('Error fetching user role:', err);
       }
