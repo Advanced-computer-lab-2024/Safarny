@@ -93,6 +93,29 @@ const Cart = () => {
     const rateTo = exchangeRates[toCurrency];
     return ((price / rateFrom) * rateTo).toFixed(2);
   };
+  const handleRemoveFromCart = async (product) => {
+    try {
+      console.log("User ID: ", userId);
+      // Fetch the user's current cart
+      const profileResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
+      const currentCart = profileResponse.data.cart || [];
+  
+      // Remove the product ID from the cart
+      const updatedCart = currentCart.filter(id => id !== product._id);
+  
+      // Update the user's profile with the updated cart
+      await axios.put(`http://localhost:3000/tourist/${userId}`, {
+        id: userId,
+        cart: updatedCart,
+      });
+  
+      // Update the state locally to reflect the removal
+      setCartItems(cartItems.filter(item => item._id !== product._id));
+    } catch (err) {
+      console.error('Error removing product from cart:', err);
+    }
+  };
+  
 
   if (loading) {
     return <p>Loading cart items...</p>;
@@ -130,7 +153,15 @@ const Cart = () => {
                   />
                   <p>{averageRating} out of 5</p>
                 </div>
+                
+                
                 <img className={styles.productImage} src={item.imageurl} alt={item.details} />
+                <button
+                  className={styles.button}
+                  onClick={() => handleRemoveFromCart(item)}
+                >
+                  Remove
+                </button>
               </div>
             );
           })}
