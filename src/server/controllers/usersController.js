@@ -200,6 +200,7 @@ const updateProfileById = AsyncHandler(async (req, res) => {
       description: req.body.description,
       sellerName: req.body.sellerName,
       posts: req.body.posts,
+      cart: req.body.cart,
       CompanyName: req.body.CompanyName,
       CompanyLink: req.body.CompanyLink,
       CompanyHotline: req.body.CompanyHotline,

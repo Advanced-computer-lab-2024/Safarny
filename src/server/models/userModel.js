@@ -63,6 +63,14 @@ const userModel = new mongoose.Schema(
       },
     ],
 
+    cart: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Posts",
+      },
+    ],
+
+
     //Advertiser
     CompanyName: String,
     CompanyLink: String,

@@ -71,6 +71,7 @@ import CreateTransport from "./Components/Transport/CreateTransport";
 import EditTransport from "./Components/Transport/EditTransport";
 import BookTransport from "./Components/Transport/BookTransport";
 import Preferences from "./Components/Preferences/Preferences";
+import MyCart from "./Components/MyCart/MyCart";
 
 import MyBookings from "./Components/Booking/MyBookings";
 
@@ -158,7 +159,7 @@ function App() {
         <Route path="/transportss/edit-transport" element={<EditTransport />} />
         <Route path="/transportss/book-transport" element={<BookTransport />} />
         <Route path="/PreferencesPage" element={<Preferences />} />
-        
+        <Route path="/MyCart" element={<MyCart />} />
         <Route path="/mybookings" element={<MyBookings />} />
 
         {/* Comments routes */}

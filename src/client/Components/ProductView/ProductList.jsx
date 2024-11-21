@@ -153,10 +153,38 @@ const ProductList = () => {
     }
   };
 
+  const handleAddToCartClick = async (product) => {
+    try {
+      console.log("userid: ", userId);
+  
+      // Fetch the current user data to get the existing cart
+      const profileResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
+      const currentCart = profileResponse.data.cart || [];
+  
+      // Add the product ID to the cart array
+      const updatedCart = [...currentCart, product._id];
+  
+      // Update the user profile with the new cart
+      await axios.put(`http://localhost:3000/tourist/${userId}`, {
+        id: userId,
+        cart: updatedCart,
+      });
+  
+      console.log(`Product ${product._id} added to cart.`);
+    } catch (err) {
+      console.error('Error adding product to cart:', err);
+    }
+  };
+  
   const handleClick = () => {
     console.log(userId);
     navigate("/PurchasedProducts", { state: { userId } });
   };
+  const handleViewMyCartClick = () => {
+    console.log(userId);
+    navigate("/MyCart", { state: { userId } });
+  };
+  
 
   const filteredProducts = products.filter(product => {
     const convertedPrice = convertPrice(product.price, product.currency, selectedCurrency);
@@ -239,6 +267,12 @@ const ProductList = () => {
     >
       View Purchased Products
     </button>
+    <button
+      className={styles.viewPurchasedButton}
+      onClick={handleViewMyCartClick}
+    >
+      View My Cart
+    </button>
   </div>
 
   <h1 className={styles.h1}>Product List</h1>
@@ -300,6 +334,13 @@ const ProductList = () => {
                 >
                   Purchase
                 </button>
+                 {/* Add to Cart Button */}
+  <button
+    className={styles.cartButton} // Add styling for this button
+    onClick={() => handleAddToCartClick(product)}
+  >
+    Add to Cart
+  </button>
               </div>
             </div>
           </div>
