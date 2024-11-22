@@ -171,6 +171,8 @@ const ProductList = () => {
       });
   
       console.log(`Product ${product._id} added to cart.`);
+      // Display success message
+      alert(`Successfully added to cart .`);
     } catch (err) {
       console.error('Error adding product to cart:', err);
     }
@@ -328,12 +330,13 @@ const ProductList = () => {
                 )}
               </div>
               <div className={styles.buttonContainer}>
-                <button
+                {/* <button
                   className={styles.buyButton}
                   onClick={() => handleBuyButtonClick(product)}
                 >
                   Purchase
-                </button>
+                </button> */}
+                
                  {/* Add to Cart Button */}
                 <button
     className={styles.cartButton} // Add styling for this button
