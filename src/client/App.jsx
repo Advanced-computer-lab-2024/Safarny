@@ -80,6 +80,7 @@ import CreateCommentForActivity from "./Components/Comments/CreateCommentForActi
 import CreateCommentForItinerary from "./Components/Comments/CreateCommentForItinerary";
 import CreateCommentForTourGuide from "./Components/Comments/CreateCommentForTourGuide";
 import PasswordRecovery from "./Components/PasswordRecovery/PasswordRecovery";
+import Notifications from "./Components/Notifications/Notifications";
 
 
 function App() {
@@ -167,7 +168,7 @@ function App() {
         <Route path="/create-comment-itinerary/:itineraryId" element={<CreateCommentForItinerary />} />
         <Route path="/create-comment-tourguide/:tourGuideId?" element={<CreateCommentForTourGuide />} />
         <Route path="/password-recovery" element={<PasswordRecovery />} />
-
+        <Route path="/notifications" element={<Notifications />} />
       </Routes>
     </Router>
     //</PurchasedProductsProvider>       

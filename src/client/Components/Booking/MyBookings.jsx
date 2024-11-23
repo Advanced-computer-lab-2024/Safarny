@@ -256,12 +256,35 @@ const sendReminderEmail = async () => {
     console.error("Error sending reminder email:", error);
   }
 };
+  const sendReminderNotification = async (userId) => {
+    try {
+      // Fetch the user's bookings using the userId
+      const bookingsResponse = await axios.get(`http://localhost:3000/tourist/bookings/${userId}`);
+      const bookings = bookingsResponse.data;
 
-useEffect(() => {
+      // Loop over the bookings and send a notification for each booking
+      for (const booking of bookings) {
+        const title = `Reminder for your booking on ${booking.bookingDate}`;
+        const message = `You have a booking for ${booking.itinerary ? booking.itinerary.name : booking.activity ? booking.activity.name : 'an activity'} on ${booking.bookingDate}.`;
+
+        const response = await axios.post('http://localhost:3000/notification/create', {
+          title,
+          message,
+          userId,
+        });
+        console.log('Notification sent successfully:', response.data);
+      }
+    } catch (error) {
+      console.error('Error sending notification:', error);
+    }
+  };
+
+  useEffect(() => {
     if (userId) {
       fetchBookings();
       fetchExchangeRates();
       sendReminderEmail();
+      sendReminderNotification(userId);
     }
   }, [userId]);
 

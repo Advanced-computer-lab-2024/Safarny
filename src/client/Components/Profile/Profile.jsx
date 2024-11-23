@@ -202,7 +202,9 @@ const Profile = () => {
       axios.put(`/advertiser/delete_request/${userId}`, { delete_request: true });
     }
   };
-
+  const handleNotification = () => {
+    navigate("/notifications", { state: { userId } });
+  }
   const handleViewButtonClick = () => setShowButtons((prevShow) => !prevShow);
   const handleBookingsButtonClick = () => setShowBookingsButtons(prev => !prev);
   const handleComplaintsButtonClick = () => setShowComplaintsButtons(prev => !prev);
@@ -213,8 +215,8 @@ const Profile = () => {
       <div className={styles.container}>
         <Header />
         <main className={styles.main}>
-          <button className={styles.notificationButton}>
-            <FaBell />
+          <button className={styles.notificationButton} onClick={handleNotification}>
+          <FaBell />
           </button>
           <section className={styles.intro}>
             <h1>Welcome, {userInfo.username}!</h1>
