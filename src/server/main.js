@@ -28,6 +28,7 @@ const AdvertiserRoutes = require("./routes/advertiserRoutes.js");
 const WishListRoutes = require("./routes/WishListRoutes.js");
 const transportRoutes = require("./routes/transportRoutes.js");
 const preferencesRoutes = require('./routes/preferencesRoutes');
+const emailRoutes = require('./routes/emailRoutes');
 
 
 dotenv.config();
@@ -79,6 +80,8 @@ app.use("/wishlist", WishListRoutes);
 app.use("/categories", ActivityCategoriesRoutes);
 
 app.use("/historicalplaces", historicalplacesRoutes);
+
+app.use("/email", emailRoutes);
 
 ViteExpress.listen(app, 3000, () => {
   console.log(`Server running on port: ${port}`);

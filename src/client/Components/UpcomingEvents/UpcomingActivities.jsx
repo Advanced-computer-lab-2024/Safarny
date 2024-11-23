@@ -79,28 +79,38 @@ const UpcomingActivities = () => {
     fetchExchangeRates();
   }, []);
 
-  const handleArchiveToggle = async (ActivityId, isArchived) => {
-    try {
-      // Update the local state first
-      setActivities(activities.map(activity =>
-          activity._id === ActivityId ? { ...activity, archived: isArchived } : activity
-      ));
-      console.log("Local state updated");
+const handleArchiveToggle = async (ActivityId, isArchived) => {
+  try {
+    // Update the local state first
+    setActivities(activities.map(activity =>
+      activity._id === ActivityId ? { ...activity, archived: isArchived } : activity
+    ));
+    console.log("Local state updated");
 
-      // Make a request to the server to update the archived status
-      await axios.put(`/activities/${ActivityId}`, { archived: isArchived });
-      console.log("Archived status updated successfully");
+    // Make a request to the server to update the archived status
+    await axios.put(`/activities/${ActivityId}`, { archived: isArchived });
+    console.log("Archived status updated successfully");
 
-    } catch (error) {
-      console.error("Error updating archived status:", error);
-      // Optionally, revert the local state if the API call fails
-      setActivities(activities.map(activity =>
-          activity._id === activity ? { ...activity, archived: !isArchived } : activity
-      ));
+    // Send an email to the creator of the activity if it is archived
+    if (isArchived) {
+      const activity = activities.find(activity => activity._id === ActivityId);
+      const response = await axios.get(`/tourist/${activity.createdby}`);
+      const creatorEmail = response.data.email;
+      await axios.post('/email/send-activity-archived-email', {
+        email: creatorEmail,
+        name: activity.location
+      });
+      console.log("Email sent to the creator");
     }
-  };
-
-  const convertPrice = (price, fromCurrency, toCurrency) => {
+  } catch (error) {
+    console.error("Error updating archived status:", error);
+    // Optionally, revert the local state if the API call fails
+    setActivities(activities.map(activity =>
+      activity._id === ActivityId ? { ...activity, archived: !isArchived } : activity
+    ));
+  }
+};
+const convertPrice = (price, fromCurrency, toCurrency) => {
     if (price == null) {
       return 'N/A'; // Return 'N/A' or any default value if price is null
     }

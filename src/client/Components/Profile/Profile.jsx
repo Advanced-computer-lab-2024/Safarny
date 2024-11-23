@@ -7,6 +7,7 @@ import Header from "/src/client/components/Header/Header";
 import { Button } from "@mui/material";
 import axios from "axios";
 import soundFile from "/src/client/components/Profile/Nirvana.mp3";
+
 const Profile = () => {
   const location = useLocation();
   const navigate = useNavigate();

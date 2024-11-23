@@ -77,30 +77,43 @@ const UpcomingItineraries = () => {
     return ((price / rateFrom) * rateTo).toFixed(2);
   };
 
-  const handleArchiveToggle = async (ItineraryId, isArchived) => {
-    try {
-      setItineraries(
-          itineraries.map((itinerary) =>
-              itinerary._id === ItineraryId
-                  ? { ...itinerary, archived: isArchived }
-                  : itinerary
-          )
-      );
-      await axios.put(`/tourguide/edit-itineraries/${ItineraryId}`, {
-        archived: isArchived,
-      });
-    } catch (error) {
-      console.error("Error updating archived status:", error);
-      setItineraries(
-          itineraries.map((itinerary) =>
-              itinerary._id === itinerary
-                  ? { ...itinerary, archived: !isArchived }
-                  : itinerary
-          )
-      );
-    }
-  };
+const handleArchiveToggle = async (ItineraryId, isArchived) => {
+  try {
+    setItineraries(
+      itineraries.map((itinerary) =>
+        itinerary._id === ItineraryId
+          ? { ...itinerary, archived: isArchived }
+          : itinerary
+      )
+    );
 
+    await axios.put(`/tourguide/edit-itineraries/${ItineraryId}`, {
+      archived: isArchived,
+    });
+
+    if (isArchived) {
+      const itinerary = itineraries.find(itinerary => itinerary._id === ItineraryId);
+      const response = await axios.get(`/tourist/${itinerary.createdby}`);
+      const creatorEmail = response.data.email;
+
+      await axios.post('/email/send-itinerary-archived-email', {
+        email: creatorEmail,
+        name: itinerary.name
+      });
+
+      console.log("Email sent to the creator");
+    }
+  } catch (error) {
+    console.error("Error updating archived status:", error);
+    setItineraries(
+      itineraries.map((itinerary) =>
+        itinerary._id === ItineraryId
+          ? { ...itinerary, archived: !isArchived }
+          : itinerary
+      )
+    );
+  }
+};
   const fetchUserRole = async () => {
     try {
       const response = await axios.get(`/tourist/${userId}`);

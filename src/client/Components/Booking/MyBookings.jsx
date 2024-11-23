@@ -223,10 +223,45 @@ const fetchExchangeRates = async () => {
     navigate(`/create-comment-activity/${booking.activity._id}`, { state: { bookingId: booking._id } });
   };
 
-  useEffect(() => {
+
+const sendReminderEmail = async () => {
+  try {
+    // Fetch the user's email using the userId
+    const userResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
+    const userEmail = userResponse.data.email;
+    const userName = userResponse.data.name;
+
+    // Fetch the data for the activities/itineraries
+    const activitiesResponse = await axios.get(`http://localhost:3000/tourist/activities/${userId}`);
+    const itinerariesResponse = await axios.get(`http://localhost:3000/tourist/itineraries/${userId}`);
+    const activities = Array.isArray(activitiesResponse.data) ? activitiesResponse.data : [];
+    const itineraries = Array.isArray(itinerariesResponse.data) ? itinerariesResponse.data : [];
+
+    // Format the data into a single string
+    const formattedActivities = activities.map(activity => `Activity: ${activity.name}, Location: ${activity.location}`).join('\n');
+    const formattedItineraries = itineraries.map(itinerary => `Itinerary: ${itinerary.name}, Description: ${itinerary.description}`).join('\n');
+    const formattedData = `Activities:\n${formattedActivities}\n\nItineraries:\n${formattedItineraries}`;
+
+    // Send the email with the formatted string
+    await axios.post("http://localhost:3000/email/send-tourist-reminder-email", {
+      email: userEmail,
+      name: userName,
+      eventName: "Your Upcoming Activities and Itineraries",
+      eventDate: new Date().toLocaleDateString(), // Example event date
+      data: formattedData
+    });
+
+    console.log("Reminder email sent successfully");
+  } catch (error) {
+    console.error("Error sending reminder email:", error);
+  }
+};
+
+useEffect(() => {
     if (userId) {
       fetchBookings();
       fetchExchangeRates();
+      sendReminderEmail();
     }
   }, [userId]);
 
