@@ -237,9 +237,14 @@ const sendReminderEmail = async () => {
     const activities = Array.isArray(activitiesResponse.data) ? activitiesResponse.data : [];
     const itineraries = Array.isArray(itinerariesResponse.data) ? itinerariesResponse.data : [];
 
+    // Filter activities and itineraries to include only those after today
+    const today = new Date();
+    const upcomingActivities = activities.filter(activity => new Date(activity.date) > today);
+    const upcomingItineraries = itineraries.filter(itinerary => new Date(itinerary.date) > today);
+
     // Format the data into a single string
-    const formattedActivities = activities.map(activity => `Activity: ${activity.name}, Location: ${activity.location}`).join('\n');
-    const formattedItineraries = itineraries.map(itinerary => `Itinerary: ${itinerary.name}, Description: ${itinerary.description}`).join('\n');
+    const formattedActivities = upcomingActivities.map(activity => `Activity: ${activity.name}, Location: ${activity.location}`).join('\n');
+    const formattedItineraries = upcomingItineraries.map(itinerary => `Itinerary: ${itinerary.name}, Description: ${itinerary.description}`).join('\n');
     const formattedData = `Activities:\n${formattedActivities}\n\nItineraries:\n${formattedItineraries}`;
 
     // Send the email with the formatted string
@@ -256,14 +261,17 @@ const sendReminderEmail = async () => {
     console.error("Error sending reminder email:", error);
   }
 };
-  const sendReminderNotification = async (userId) => {
-    try {
-      // Fetch the user's bookings using the userId
-      const bookingsResponse = await axios.get(`http://localhost:3000/tourist/bookings/${userId}`);
-      const bookings = bookingsResponse.data;
 
-      // Loop over the bookings and send a notification for each booking
-      for (const booking of bookings) {
+const sendReminderNotification = async (userId) => {
+  try {
+    // Fetch the user's bookings using the userId
+    const bookingsResponse = await axios.get(`http://localhost:3000/tourist/bookings/${userId}`);
+    const bookings = bookingsResponse.data;
+
+    // Loop over the bookings and send a notification for each booking after today
+    const today = new Date();
+    for (const booking of bookings) {
+      if (new Date(booking.bookingDate) > today) {
         const title = `Reminder for your booking on ${booking.bookingDate}`;
         const message = `You have a booking for ${booking.itinerary ? booking.itinerary.name : booking.activity ? booking.activity.name : 'an activity'} on ${booking.bookingDate}.`;
 
@@ -274,11 +282,11 @@ const sendReminderEmail = async () => {
         });
         console.log('Notification sent successfully:', response.data);
       }
-    } catch (error) {
-      console.error('Error sending notification:', error);
     }
-  };
-
+  } catch (error) {
+    console.error('Error sending notification:', error);
+  }
+};
   useEffect(() => {
     if (userId) {
       fetchBookings();
