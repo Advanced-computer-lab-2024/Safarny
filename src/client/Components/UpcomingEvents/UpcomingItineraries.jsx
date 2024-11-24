@@ -95,6 +95,7 @@ const handleArchiveToggle = async (ItineraryId, isArchived) => {
       const itinerary = itineraries.find(itinerary => itinerary._id === ItineraryId);
       const response = await axios.get(`/tourist/${itinerary.createdby}`);
       const creatorEmail = response.data.email;
+      const creatorId = response.data._id;
 
       await axios.post('/email/send-itinerary-archived-email', {
         email: creatorEmail,
@@ -102,6 +103,16 @@ const handleArchiveToggle = async (ItineraryId, isArchived) => {
       });
 
       console.log("Email sent to the creator");
+
+      // Send a notification to the creator
+      const title = `Your itinerary "${itinerary.name}" has been archived`;
+      const message = `The itinerary "${itinerary.name}" has been archived.`;
+      await axios.post('/notification/create', {
+        title,
+        message,
+        userId: creatorId
+      });
+      console.log("Notification sent to the creator");
     }
   } catch (error) {
     console.error("Error updating archived status:", error);
@@ -113,8 +124,7 @@ const handleArchiveToggle = async (ItineraryId, isArchived) => {
       )
     );
   }
-};
-  const fetchUserRole = async () => {
+};  const fetchUserRole = async () => {
     try {
       const response = await axios.get(`/tourist/${userId}`);
       setUserRole(response.data.role);

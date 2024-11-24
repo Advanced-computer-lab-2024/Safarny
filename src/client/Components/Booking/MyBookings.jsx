@@ -273,7 +273,7 @@ const sendReminderNotification = async (userId) => {
     for (const booking of bookings) {
       if (new Date(booking.bookingDate) > today) {
         const title = `Reminder for your booking on ${booking.bookingDate}`;
-        const message = `You have a booking for ${booking.itinerary ? booking.itinerary.name : booking.activity ? booking.activity.name : 'an activity'} on ${booking.bookingDate}.`;
+        const message = `You have a booking for ${booking.itinerary ? booking.itinerary.name : booking.activity ? booking.activity.location : 'an activity'} on ${booking.bookingDate}.`;
 
         const response = await axios.post('http://localhost:3000/notification/create', {
           title,

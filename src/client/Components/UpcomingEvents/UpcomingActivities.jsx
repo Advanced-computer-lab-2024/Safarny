@@ -91,16 +91,28 @@ const handleArchiveToggle = async (ActivityId, isArchived) => {
     await axios.put(`/activities/${ActivityId}`, { archived: isArchived });
     console.log("Archived status updated successfully");
 
-    // Send an email to the creator of the activity if it is archived
+    // Send an email and notification to the creator of the activity if it is archived
     if (isArchived) {
       const activity = activities.find(activity => activity._id === ActivityId);
       const response = await axios.get(`/tourist/${activity.createdby}`);
       const creatorEmail = response.data.email;
+      const creatorId = response.data._id;
+
       await axios.post('/email/send-activity-archived-email', {
         email: creatorEmail,
         name: activity.location
       });
       console.log("Email sent to the creator");
+
+      // Send a notification to the creator
+      const title = `Your activity "${activity.location}" has been archived`;
+      const message = `The activity "${activity.location}" at ${activity.location} has been archived.`;
+      await axios.post('/notification/create', {
+        title,
+        message,
+        userId: creatorId
+      });
+      console.log("Notification sent to the creator");
     }
   } catch (error) {
     console.error("Error updating archived status:", error);
