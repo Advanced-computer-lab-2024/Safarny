@@ -108,20 +108,28 @@ const handleSubmitPost = async () => {
     if (!imageUrl) return;
   }
 
-  const postData = { ...currentPost, imageurl: imageUrl };
+  const postData = { ...currentPost, imageurl: imageUrl, createdby: userId };
 
   try {
-    await axios.post("/admin/createProduct", postData);
-    await axios.post("/seller/createProduct", {
-      ...postData,
-      createdby: sellerId,
-    });
+    // Fetch the user's role
+    const userResponse = await axios.get(`/tourist/${userId}`);
+    const userRole = userResponse.data.role;
+
+    if (userRole === 'Admin') {
+      await axios.post("/admin/createProduct", postData);
+    } else if (userRole === 'Seller') {
+      await axios.post("/seller/createProduct", postData);
+    } else {
+      setErrorMessage("User does not have permission to create a post");
+      return;
+    }
+
     setSuccessMessage("Post added successfully");
   } catch (error) {
     setErrorMessage("Failed to add post");
   }
 };
-  return (
+return (
       <Modal open={openModal} onClose={handleCloseModal}>
         <div className={styles.modalOverlay}>
           <Header />

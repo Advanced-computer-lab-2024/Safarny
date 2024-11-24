@@ -123,63 +123,87 @@ const Cart = () => {
     const rateTo = exchangeRates[toCurrency];
     return ((price / rateFrom) * rateTo).toFixed(2);
   };
-  const handleBuyButtonClick = async (product, desiredQuantity) => {
-    const convertedPrice = convertPrice(product.price, product.currency, walletCurrency);
-    const totalPrice = convertedPrice * desiredQuantity;
-  
-    console.log('Wallet:', wallet);
-    console.log('Converted Price (each):', convertedPrice);
-    console.log('Total Price:', totalPrice);
-  
-    if (wallet < totalPrice) {
-      alert('You do not have enough funds to purchase this quantity of the product.');
-      return;
-    }
-  
-    if (product.quantity < desiredQuantity) {
-      alert('Not enough stock available for the desired quantity.');
-      return;
-    }
-  
-    try {
-      console.log("User ID:", userId);
-  
-      // Update the product
-      const updatedProduct = {
-        ...product,
-        quantity: product.quantity - desiredQuantity,
-        purchasedCount: product.purchasedCount + desiredQuantity,
-      };
-  
-      await axios.put(`/admin/products/${product._id}`, updatedProduct);
-  
-      // Fetch the current user profile
-      const profileResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
-      const currentPosts = profileResponse.data.posts || [];
-      const updatedPosts = [...currentPosts, ...Array(desiredQuantity).fill(product._id)];
-  
-      // Update the user's profile with the new wallet and posts
-      await axios.put(`http://localhost:3000/tourist/${userId}`, {
-        id: userId,
-        posts: updatedPosts,
-        wallet: wallet - totalPrice,
+
+const handleBuyButtonClick = async (product, desiredQuantity) => {
+  const convertedPrice = convertPrice(product.price, product.currency, walletCurrency);
+  const totalPrice = convertedPrice * desiredQuantity;
+
+  console.log('Wallet:', wallet);
+  console.log('Converted Price (each):', convertedPrice);
+  console.log('Total Price:', totalPrice);
+
+  if (wallet < totalPrice) {
+    alert('You do not have enough funds to purchase this quantity of the product.');
+    return;
+  }
+
+  if (product.quantity < desiredQuantity) {
+    alert('Not enough stock available for the desired quantity.');
+    return;
+  }
+
+  try {
+    console.log("User ID:", userId);
+
+    // Update the product
+    const updatedProduct = {
+      ...product,
+      quantity: product.quantity - desiredQuantity,
+      purchasedCount: product.purchasedCount + desiredQuantity,
+    };
+
+    await axios.put(`/admin/products/${product._id}`, updatedProduct);
+
+    // Fetch the current user profile
+    const profileResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
+    const currentPosts = profileResponse.data.posts || [];
+    const updatedPosts = [...currentPosts, ...Array(desiredQuantity).fill(product._id)];
+
+    // Update the user's profile with the new wallet and posts
+    await axios.put(`http://localhost:3000/tourist/${userId}`, {
+      id: userId,
+      posts: updatedPosts,
+      wallet: wallet - totalPrice,
+    });
+
+    // Update local state
+    setProducts(products.map(p => (p._id === product._id ? updatedProduct : p)));
+    setWallet(wallet - totalPrice);
+
+    // Display success message
+    alert(`Successfully purchased ${desiredQuantity} ${product.details}(s)!`);
+
+    // Remove the item from the cart
+    await handleRemoveFromCart(product); // Call the function to remove from the cart
+
+    // Send notification to the seller if the product is out of stock
+    if (updatedProduct.quantity === 0) {
+      const sellerResponse = await axios.get(`/tourist/${product.createdby}`);
+      const sellerId = sellerResponse.data._id;
+      const sellerEmail = sellerResponse.data.email;
+
+      const title = `Product "${product.details}" is out of stock`;
+      const message = `Your product "${product.details}" is now out of stock.`;
+
+      await axios.post('/notification/create', {
+        title,
+        message,
+        userId: product.createdby
       });
-  
-      // Update local state
-      setProducts(products.map(p => (p._id === product._id ? updatedProduct : p)));
-      setWallet(wallet - totalPrice);
-  
-      // Display success message
-      alert(`Successfully purchased ${desiredQuantity} ${product.details}(s)!`);
-  
-      // Remove the item from the cart
-      await handleRemoveFromCart(product); // Call the function to remove from the cart
-    } catch (err) {
-      console.error('Error updating product status:', err);
-      alert('An error occurred while purchasing the product. Please try again.');
+
+      await axios.post('/email/send-email', {
+        to: sellerEmail,
+        subject: title,
+        body: message
+      });
+
+      console.log("Notification and email sent to the seller");
     }
-  };
-  
+  } catch (err) {
+    console.error('Error updating product status:', err);
+    alert('An error occurred while purchasing the product. Please try again.');
+  }
+};
   
   const handleQuantityChange = (productId, change) => {
     setDesiredQuantities((prevQuantities) => ({

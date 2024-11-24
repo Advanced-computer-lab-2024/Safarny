@@ -4,7 +4,7 @@ const AsyncHandler = require("express-async-handler");
 // Create a new notification
 const createNotification = AsyncHandler(async (req, res) => {
   const { title, message, userId } = req.body;
-
+    console.log("title:",title,"message: ", message,"user:", userId);
   if (!title || !message || !userId) {
     return res.status(400).json({ message: "All fields are required" });
   }

@@ -3,7 +3,7 @@ const Post = require("../models/Posts.js");
 const createPost = async (req, res) => {
   try {
     const { details, price, currency, quantity, imageurl, createdby } = req.body;
-
+    console.log("details:", details, "price: ", price, "currency:", currency, "quantity:", quantity, "imageurl:", imageurl, "createdby:", createdby);
     const newPost = new Post({
       details,
       price,

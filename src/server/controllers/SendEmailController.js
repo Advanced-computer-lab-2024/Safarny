@@ -110,4 +110,40 @@ const sendTouristReminderEmail = (req, res) => {
         });
 };
 
-module.exports = { sendActivityArchivedEmail, sendItineraryArchivedEmail, sendTouristReminderEmail };
+const sendEmail = (req, res) => {
+    const { to, subject, body } = req.body;
+
+    const request = mailjet
+        .post("send", { 'version': 'v3.1' })
+        .request({
+            "Messages": [
+                {
+                    "From": {
+                        "Email": "sadassemaildezznuts@gmail.com",
+                        "Name": "Your Ass"
+                    },
+                    "To": [
+                        {
+                            "Email": to,
+                            "Name": "Valued Guest"
+                        }
+                    ],
+                    "Subject": subject,
+                    "TextPart": body,
+                    "HTMLPart": `<h3>${body}</h3>`
+                }
+            ]
+        });
+
+    request
+        .then((result) => {
+            console.log(result.body);
+            res.status(200).send(result.body);
+        })
+        .catch((err) => {
+            console.log(err.statusCode);
+            res.status(err.statusCode).send({ error: err.message });
+        });
+};
+
+module.exports = { sendActivityArchivedEmail, sendItineraryArchivedEmail, sendTouristReminderEmail, sendEmail };
