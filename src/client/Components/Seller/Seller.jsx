@@ -145,6 +145,11 @@ const Admin = () => {
       setErrorMessage(`Failed to ${editingPostId ? "update" : "add"} post`);
     }
   };
+  const handleEditPost = (post) => {
+    setCurrentPost(post);
+    setEditingPostId(post._id);
+    setOpenModal(true);
+  };
   const handleArchiveToggle = async (postId, isArchived) => {
     try {
       // Update the local state first
