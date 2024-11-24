@@ -316,9 +316,9 @@ const Admin = () => {
                   width: "400px",
                 }}
             >
-              <Typography variant="h6">
-                {editingPostId ? "Edit Post" : "Add New Post"}
-              </Typography>
+              <Typography variant="h6" style={{ color: "black" }}>
+  {editingPostId ? "Edit Post:" : "Add New Post"}
+</Typography>
               <TextField
                   fullWidth
                   label="Details"
