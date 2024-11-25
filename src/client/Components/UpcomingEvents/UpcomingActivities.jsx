@@ -122,15 +122,6 @@ const handleArchiveToggle = async (ActivityId, isArchived) => {
     ));
   }
 };
-const convertPrice = (price, fromCurrency, toCurrency) => {
-    if (price == null) {
-      return 'N/A'; // Return 'N/A' or any default value if price is null
-    }
-    const rateFrom = exchangeRates[fromCurrency];
-    const rateTo = exchangeRates[toCurrency];
-    return ((price / rateFrom) * rateTo).toFixed(2);
-  };
-
   useEffect(() => {
     const fetchActivities = async () => {
       setLoading(true);

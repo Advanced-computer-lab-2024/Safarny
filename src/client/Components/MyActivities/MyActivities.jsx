@@ -79,6 +79,17 @@ const MyActivities = () => {
                         <p>Date: {new Date(activity.date).toLocaleDateString()}</p>
                         <p>Time: {activity.time}</p>
                         <p>Location: {activity.location}</p>
+                        
+                        {activity.tags && activity.tags.length > 0 && (
+                            <p>Tags: {activity.tags.map((tag) => tag.name).join(", ")}</p>
+                        )}
+
+                        {activity.category && activity.category.length > 0 && (
+                            <p>Category: {activity.category.map((cat) => cat.type).join(", ")}</p>
+                        )}
+                        <p style={{color: activity.bookingOpen ? "green" : "red"}}>
+                          {activity.bookingOpen ? "Booking: Open" : "Booking: Closed"}
+                        </p>
                        
                         
               <img className={styles.activityImage} src={activity.imageUrl} alt={activity.name} />
