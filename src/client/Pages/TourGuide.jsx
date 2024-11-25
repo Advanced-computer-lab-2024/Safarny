@@ -337,7 +337,25 @@ export default function TourGuide() {
                     ))}
                   </Select>
                 </FormControl>
-
+                {/* Booking Open Selection */}
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel id="booking-open-label">Booking Status</InputLabel>
+                  <Select
+                      labelId="booking-open-label"
+                      id="bookingOpen"
+                      value={newItinerary.bookingOpen}
+                      onChange={(e) =>
+                          setNewItinerary({
+                            ...newItinerary,
+                            bookingOpen: e.target.value,
+                          })
+                      }
+                      label="Booking Status"
+                  >
+                    <MenuItem value="active">Active</MenuItem>
+                    <MenuItem value="in-active">In-active</MenuItem>
+                  </Select>
+                </FormControl>
                 {/* Tags Select */}
                 <FormControl fullWidth variant="outlined">
                   <InputLabel id="tags-label">Tags</InputLabel>

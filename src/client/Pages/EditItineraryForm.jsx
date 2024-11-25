@@ -68,6 +68,25 @@ export default function EditItineraryForm({
               ))}
             </Select>
           </FormControl>
+            {/* Booking Open Selection */}
+            <FormControl fullWidth variant="outlined" margin="normal">
+                <InputLabel id="booking-open-label">Booking Status</InputLabel>
+                <Select
+                    labelId="booking-open-label"
+                    id="bookingOpen"
+                    value={itinerary.bookingOpen}
+                    onChange={(e) =>
+                        setItinerary({
+                            ...itinerary,
+                            bookingOpen: e.target.value,
+                        })
+                    }
+                    label="Booking Status"
+                >
+                    <MenuItem value="active">Active</MenuItem>
+                    <MenuItem value="in-active">In-active</MenuItem>
+                </Select>
+            </FormControl>
 
           {/* Tags */}
           <FormControl fullWidth variant="outlined" margin="normal">
