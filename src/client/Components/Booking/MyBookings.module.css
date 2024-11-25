@@ -19,7 +19,7 @@
   padding: 1rem;
   background-color: var(--background-color);
   color: var(--secondary-color);
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
