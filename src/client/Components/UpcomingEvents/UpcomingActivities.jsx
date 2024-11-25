@@ -371,10 +371,10 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
                               className={styles.cardButton} >
                             Copy link
                           </button>
-                          <button onClick={() => handleUpcomingActivitiesDetails(activity._id)}
+                          {/* <button onClick={() => handleUpcomingActivitiesDetails(activity._id)}
                                   className={styles.cardButton} >
                             Details
-                          </button>
+                          </button> */}
                           <button
                               onClick={() => window.location.href = `mailto:?subject=Check out this historical place&body=${window.location.origin}/UpcomingActivities/${activity._id}`}
                               className={styles.cardButton} >
