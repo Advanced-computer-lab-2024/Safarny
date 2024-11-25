@@ -136,7 +136,13 @@ const MyActivities = () => {
                         {activity.bookingOpen ? "Booking: Open" : "Booking: Closed"}
                       </p>
                       <p>Price: {convertedPrice} {selectedCurrency}</p>
-                      <Rating value={activity.averageRating} readOnly />
+                      
+                      {/* Rating label and component */}
+    <p>
+      <strong>Rating:</strong>
+      <Rating value={activity.averageRating} readOnly />
+    </p>
+
                       <img className={styles.activityImage} src={activity.imageUrl} alt={activity.name} />
                     </div>
                 );
