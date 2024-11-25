@@ -69,12 +69,6 @@ const userModel = new mongoose.Schema(
         ref: "Posts",
       },
     ],
-    bookmarkedActivities: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Activity",
-      },
-    ],
 
 
     //Advertiser

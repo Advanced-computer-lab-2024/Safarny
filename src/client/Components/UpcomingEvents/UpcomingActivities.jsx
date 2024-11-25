@@ -227,6 +227,12 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
       const profileResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
       const currentActivities = profileResponse.data.activities || [];
   
+      // Check if the activity is already in the user's activities
+      if (currentActivities.includes(activity._id)) {
+        alert(`The activity "${activity.title}" is already saved in your activities.`);
+        return; // Exit the function early
+      }
+  
       // Add the activity ID to the user's activities array
       const updatedActivities = [...currentActivities, activity._id];
   
@@ -243,6 +249,7 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
       alert('An error occurred while adding the activity. Please try again.');
     }
   };
+  
   
   
   return (
