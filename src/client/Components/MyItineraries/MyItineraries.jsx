@@ -74,7 +74,7 @@ const MyItineraries = () => {
       <Header />
       <h1 className={styles.headerTitle}>My Itineraries</h1>
       {itineraries.length > 0 ? (
-        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        <div >
           {itineraries.map(itinerary => (
             <div className={styles.itineraryCard} key={itinerary._id}>
               <h3>{itinerary.name}</h3>

@@ -117,7 +117,7 @@ const MyActivities = () => {
           </Select>
         </FormControl>
         {activities.length > 0 ? (
-            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <div >
               {activities.map(activity => {
                 const convertedPrice = convertPrice(activity.price, activity.currency, selectedCurrency);
                 return (
