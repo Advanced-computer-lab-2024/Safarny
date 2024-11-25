@@ -230,7 +230,7 @@ const Profile = () => {
               <p>Role: <strong>{userInfo.role}</strong></p>
               <p>Email: <strong>{userInfo.email}</strong></p>
               <p>Loyalty Points: <strong>{userInfo.loyaltyPoints}</strong></p>
-              <p>Wallet: <strong>{userInfo.wallet} {userInfo.walletcurrency}</strong></p>
+              <p>Wallet: <strong>{userInfo.wallet.toFixed(2)} {userInfo.walletcurrency}</strong></p>
             </div>
           </div>
           {userInfo.role === "Tourist" && userInfo.loyaltyLevel && (
