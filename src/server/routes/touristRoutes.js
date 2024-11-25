@@ -86,4 +86,6 @@ router.put("/updatewallet", usersController.updateWallet);
 router.put("/cashInPoints", usersController.cashInPoints);
 router.put("/delete_request/:id", usersController.updateProfileById);
 
+router.get("/getUsersBySavedActivity/:activityId", usersController.getUsersBySavedActivity);
+
 module.exports = router;
