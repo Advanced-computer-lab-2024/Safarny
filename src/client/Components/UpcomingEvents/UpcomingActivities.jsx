@@ -203,6 +203,10 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
     navigate(`/UpcomingActivities/${activityId}`);
   };
 
+  const GoToMyActivities  = () => {
+    navigate("/MyActivities", { state: { userId } });
+  };
+
 
   const handleActivityBook = (activityId) => {
     //use MyBookingModal.jsx to book an Activity
@@ -214,11 +218,38 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
     setIsBookingModalOpen(false);
     setSelectedActivityId(null);
   };
+
+  const handleAddActivity = async (activity) => {
+    try {
+      console.log("User ID:", userId);
+  
+      // Fetch the current user profile
+      const profileResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
+      const currentActivities = profileResponse.data.activities || [];
+  
+      // Add the activity ID to the user's activities array
+      const updatedActivities = [...currentActivities, activity._id];
+  
+      // Update the user's profile with the updated activities array
+      await axios.put(`http://localhost:3000/tourist/${userId}`, {
+        id: userId,
+        activities: updatedActivities,
+      });
+  
+      // Update local state if needed
+      alert(`Activity "${activity.title}" has been successfully added to your activities!`);
+    } catch (err) {
+      console.error('Error adding activity:', err);
+      alert('An error occurred while adding the activity. Please try again.');
+    }
+  };
+  
   
   return (
       <div className={styles.container}>
       <Header />
       {loading && <p>Loading...</p>}
+      
         <main className={styles.main}>
           <h2>Upcoming Activities</h2>
 
@@ -233,6 +264,14 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
               Sort by Rating
             </button>
           </div>
+          <div className={styles.navigationButtonContainer}>
+    <button
+      onClick={GoToMyActivities}
+      className={styles.cardButton}
+    >
+      My Activities
+    </button>
+  </div>
 
           <div className={styles.filterOptions}>
             <label htmlFor="filter">Filter by: </label>
@@ -339,6 +378,12 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
                           Book
                         </button>
                       )}
+                      <button 
+              onClick={() => handleAddActivity(activity)} 
+              className={styles.cardButton}
+            >
+              Save
+            </button>
                         </div>
 
                         <div className={styles.mapContainer}>

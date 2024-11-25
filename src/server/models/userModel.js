@@ -69,6 +69,12 @@ const userModel = new mongoose.Schema(
         ref: "Posts",
       },
     ],
+    bookmarkedActivities: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Activity",
+      },
+    ],
 
 
     //Advertiser
@@ -76,7 +82,7 @@ const userModel = new mongoose.Schema(
     CompanyLink: String,
     CompanyHotline: Number,
     //Tourist/Advertiser
-    acttivities: [
+    activities: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Activity",

@@ -72,7 +72,7 @@ import EditTransport from "./Components/Transport/EditTransport";
 import BookTransport from "./Components/Transport/BookTransport";
 import Preferences from "./Components/Preferences/Preferences";
 import MyCart from "./Components/MyCart/MyCart";
-
+import MyActivities from "./Components/MyActivities/MyActivities";
 import MyBookings from "./Components/Booking/MyBookings";
 
 // Importing new comment components
@@ -135,6 +135,8 @@ function App() {
         <Route path="/create-post" element={<CreatePost />} />
         <Route path="/UpcomingActivites" element={<UpcomingActivites />} />
         <Route path={"/terms"} element={<Terms />} />
+        <Route path={"/MyActivities"} element={<MyActivities />} />
+        
         <Route path="/UpcomingItineraries" element={<UpcomingItineraries />} />
         <Route
           path="/create-historical-place"
