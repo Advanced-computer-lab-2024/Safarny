@@ -76,7 +76,7 @@ const getAllItineraries = async (_, res) => {
 
 const getItineraryById = async (req, res) => {
   try {
-    const itinerary = await Itinerary.findById(req.params.id);
+    const itinerary = await Itinerary.findById(req.params.id).populate("tags","name").populate("activities","location");
     if (!itinerary) {
       return res.status(404).send();
     }
