@@ -59,6 +59,7 @@ export default function TourGuide() {
     availableDates: [],
     availableTimes: [],
     accessibility: true,
+    bookingOpen: "in-active",
     pickupLocation: "",
     dropoffLocation: "",
     tagNames: [],
@@ -221,8 +222,12 @@ export default function TourGuide() {
                 <Typography variant="h6">
                   Currency: {itinerary.currency}
                 </Typography>
+
                 <Typography variant="h6">
                   Accessibility: {itinerary.accessibility ? "Yes" : "No"}
+                </Typography>
+                <Typography variant="h6">
+                  Booking status: {itinerary.bookingOpen ? "active" : "in-active"}
                 </Typography>
                 <Typography variant="h6">
                   Pickup Location: {itinerary.pickupLocation}

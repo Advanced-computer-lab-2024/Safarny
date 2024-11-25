@@ -20,6 +20,7 @@ const createItinerary = async (req, res) => {
       dropoffLocation,
       tagNames,
       createdby,
+      bookingOpen
     } = req.body;
     console.log(req.body);
 
@@ -55,6 +56,7 @@ const createItinerary = async (req, res) => {
       pickupLocation,
       dropoffLocation,
       createdby,
+      bookingOpen,
       tags: tagsId,
     });
 
@@ -103,7 +105,7 @@ const updateItineraryById = async (req, res) => {
     itinerary.pickupLocation = req.body.pickupLocation || itinerary.pickupLocation;
     itinerary.dropoffLocation = req.body.dropoffLocation || itinerary.dropoffLocation;
     itinerary.createdby = req.body.createdby || itinerary.createdby;
-
+    itinerary.bookingOpen = req.body.bookingOpen || itinerary.bookingOpen;
     // Add the new rating to the ratings array
     console.log(req.body);
     if (req.body.rating) {
