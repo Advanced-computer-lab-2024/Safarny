@@ -237,7 +237,7 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
       });
   
       // Update local state if needed
-      alert(`Activity "${activity.title}" has been successfully added to your activities!`);
+      alert(`Activity at "${activity.location}" has been successfully added to your activities!`);
     } catch (err) {
       console.error('Error adding activity:', err);
       alert('An error occurred while adding the activity. Please try again.');
