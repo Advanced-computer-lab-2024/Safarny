@@ -344,15 +344,6 @@ const ProductList = () => {
   >
     Add to Cart
   </button>
-                {/* Add to Wishlist Button if tourist*/}
-                {userRole === 'Tourist' && (
-                  <button
-                    className={styles.cartButton}
-                    onClick={() => handleAddToWishlist(product._id)}
-                  >
-                    {'Add to Wishlist'}
-                  </button>
-                )}
               </div>
             </div>
           </div>
