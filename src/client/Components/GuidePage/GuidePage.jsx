@@ -27,7 +27,13 @@ const GuidePage = () => {
                                 height: 'auto'
                             }}
                         />
-                    <li>Step 3: Don't forget to enjoy ;)</li>
+                    <li>Step 1: Be respectful to the locals</li>
+                    <li>Step 1: Be respectful to the locals</li>
+                    <li>Step 1: Be respectful to the locals</li>
+                    <li>Step 1: Be respectful to the locals</li>
+                    <li>Step 1: Be respectful to the locals</li>
+                    <li>Step 1: Be respectful to the locals</li>
+                    <li>Step x: Don't forget to enjoy ;)</li>
                 </ul>
             </main>
             <Footer />
