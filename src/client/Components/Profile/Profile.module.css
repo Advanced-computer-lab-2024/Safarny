@@ -39,6 +39,11 @@
   transform: scale(1.05);
 }
 
+.guideButton:hover {
+  background-color: var(--sub-button-hover-color);
+  transform: scale(1.05);
+}
+
 .container {
   width: 96.4vw;
   display: flex;
