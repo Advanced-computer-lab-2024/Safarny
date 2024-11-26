@@ -22,6 +22,18 @@
   font-size: 0.875rem; /* Smaller font size for sub-buttons */
 }
 
+.guideButton {
+  background-color: var(--sub-button-color);
+  color: white;
+  border: none;
+  padding: var(--sub-button-padding);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  margin: 0.25rem 0; /* 5px */
+  transition: background-color 0.3s, transform 0.2s;
+  font-size: 0.875rem; /* Smaller font size for sub-buttons */
+}
+
 .subButton:hover {
   background-color: var(--sub-button-hover-color);
   transform: scale(1.05);

@@ -106,6 +106,10 @@ const Profile = () => {
     navigate("/products", { state: { userId } });
   };
 
+  const handleGuidePageClick = () => {
+    navigate("/GuidePage", { state: { userId } });
+  };
+
   const handleSellerHomeClick = () => {
     navigate("/seller", { state: { userId } });
   };
@@ -252,6 +256,9 @@ const Profile = () => {
         <button onClick={handleCashInPoints} className={styles.subButton}>
           Cash in points
         </button>
+        <button onClick={handleGuidePageClick} className={styles.guideButton}>
+          Guide Page
+        </button>
         {message && <p style={{ textAlign: 'center' }}>{message}</p>}
       </main>
   
@@ -262,6 +269,9 @@ const Profile = () => {
         <div className={styles.buttonGroup}>
           <button onClick={handleProductViewClick} className={styles.productButton}>
             View Products
+          </button>
+          <button onClick={handleGuidePageClick} className={styles.productButton}>
+            Guide Page
           </button>
           <button onClick={handleUpdateClick2} className={styles.searchButton}>
             Search

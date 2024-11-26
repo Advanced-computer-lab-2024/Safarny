@@ -1,4 +1,3 @@
-/* Make the container take up the full viewport */
 .container {
   width: 100vw;
   height: 100vh;
@@ -11,7 +10,6 @@
   overflow-y: auto;
 }
 
-/* Adjust heading and text styles */
 .container h2 {
   color: #333;
   margin-bottom: 1rem;

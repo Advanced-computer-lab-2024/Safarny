@@ -74,7 +74,8 @@ import Preferences from "./Components/Preferences/Preferences";
 import MyCart from "./Components/MyCart/MyCart";
 import MyActivities from "./Components/MyActivities/MyActivities";
 import MyBookings from "./Components/Booking/MyBookings";
-import MyItineraries from "./Components/MyItineraries/MyItineraries"
+import MyItineraries from "./Components/MyItineraries/MyItineraries";
+import GuidePage from "./Components/GuidePage/GuidePage";
 
 // Importing new comment components
 import CreateCommentForActivity from "./Components/Comments/CreateCommentForActivity";
@@ -91,6 +92,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/MyBookedHotel" element={<MyHotelBookings />} />
+        <Route path="/GuidePage" element={<GuidePage />} />
         <Route path="/BookFlight" element={<BookFlight />} />
         <Route path="/BookHotel" element={<BookingHotel />} />
         <Route path="/products" element={<ProductList />} />
