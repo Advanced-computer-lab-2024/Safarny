@@ -438,6 +438,35 @@ const getUsersBySavedActivity = AsyncHandler(async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+
+//get user by saved itenerary
+const getUsersBySavedItinerary = AsyncHandler(async (req, res) => {
+  const { itineraryId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(itineraryId)) {
+    return res.status(400).json({ message: "Invalid itinerary ID" });
+  }
+
+  try {
+    // Convert itineraryId to ObjectId using the new keyword
+    const objectId = new mongoose.Types.ObjectId(itineraryId);
+
+    // Find users who have saved the itinerary and project only _id and email
+    const users = await User.find({ itineraries: { $in: [objectId] } }, '_id email');
+
+    if (users.length === 0) {
+      return res.status(404).json({ message: "No users found with the saved itinerary" });
+    }
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error fetching users by saved itinerary:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 module.exports = {
   getUsers,
   deleteUser,
@@ -453,5 +482,6 @@ module.exports = {
   cashInPoints,
   deleteTourGuideAndIterinaries,
   deleteAdvertiserAndActivities,
-  getUsersBySavedActivity
+  getUsersBySavedActivity,
+    getUsersBySavedItinerary
 };

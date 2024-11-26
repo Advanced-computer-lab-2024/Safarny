@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import {
   Dialog,
   DialogTitle,
@@ -19,11 +20,66 @@ export default function EditItineraryForm({
   setItinerary,
   activities,
   tags,
-  handleSubmit,
 }) {
-  console.log("Tags:", tags);
-  console.log("Selected Tags:", itinerary?.tagNames);
-  console.log("Selected Activities:", itinerary?.activities);
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!itinerary) {
+      setMessage("Please select an itinerary to update.");
+      return;
+    }
+
+    // Create a copy of the itinerary object without the rating field
+    const { rating, ...payload } = itinerary;
+
+    try {
+      const response = await axios.patch(
+        `http://localhost:3000/itineraries/${itinerary._id}`,
+        payload
+      );
+      if (response.status === 200) {
+        setMessage("Itinerary updated successfully!");
+
+        // Check if the booking status is now active
+        if (itinerary.bookingOpen === "active") {
+          // Fetch the list of users who have saved this itinerary
+          const savedUsersResponse = await axios.get(
+            `http://localhost:3000/tourist/getUsersBySavedItinerary/${itinerary._id}`
+          );
+          const savedUsers = savedUsersResponse.data;
+
+          // Send a notification to each user
+          const notificationPromises = savedUsers.map((user) =>
+            axios.post('/notification/create', {
+              title: `Itinerary "${itinerary.name}" is now open for booking`,
+              message: `The itinerary "${itinerary.name}" is now open for booking.`,
+              userId: user._id,
+            })
+          );
+
+          await Promise.all(notificationPromises);
+          console.log("Notifications sent to users who saved the itinerary");
+
+          // Send an email to each user
+          const emailPromises = savedUsers.map((user) =>
+            axios.post('/email/send-email', {
+              to: user.email,
+              subject: `Itinerary "${itinerary.name}" is now open for booking`,
+              text: `The itinerary "${itinerary.name}" is now open for booking.`
+            })
+          );
+
+          await Promise.all(emailPromises);
+          console.log("Emails sent to users who saved the itinerary");
+        }
+      }
+    } catch (error) {
+      console.error("Error updating itinerary:", error);
+      setMessage("Error updating itinerary: " + error.message);
+    }
+  };
+
   return (
     <Dialog open={open} onClose={handleClose} fullWidth>
       <DialogTitle>Edit Itinerary</DialogTitle>
@@ -68,25 +124,26 @@ export default function EditItineraryForm({
               ))}
             </Select>
           </FormControl>
-            {/* Booking Open Selection */}
-            <FormControl fullWidth variant="outlined" margin="normal">
-                <InputLabel id="booking-open-label">Booking Status</InputLabel>
-                <Select
-                    labelId="booking-open-label"
-                    id="bookingOpen"
-                    value={itinerary.bookingOpen}
-                    onChange={(e) =>
-                        setItinerary({
-                            ...itinerary,
-                            bookingOpen: e.target.value,
-                        })
-                    }
-                    label="Booking Status"
-                >
-                    <MenuItem value="active">Active</MenuItem>
-                    <MenuItem value="in-active">In-active</MenuItem>
-                </Select>
-            </FormControl>
+
+          {/* Booking Open Selection */}
+          <FormControl fullWidth variant="outlined" margin="normal">
+            <InputLabel id="booking-open-label">Booking Status</InputLabel>
+            <Select
+              labelId="booking-open-label"
+              id="bookingOpen"
+              value={itinerary.bookingOpen}
+              onChange={(e) =>
+                setItinerary({
+                  ...itinerary,
+                  bookingOpen: e.target.value,
+                })
+              }
+              label="Booking Status"
+            >
+              <MenuItem value="active">Active</MenuItem>
+              <MenuItem value="in-active">In-active</MenuItem>
+            </Select>
+          </FormControl>
 
           {/* Tags */}
           <FormControl fullWidth variant="outlined" margin="normal">
@@ -189,25 +246,27 @@ export default function EditItineraryForm({
             }
             margin="normal"
           />
-            <FormControl fullWidth margin="normal">
-                <InputLabel>Currency</InputLabel>
-                <Select
-                    name="currency"
-                    value={itinerary.currency}
-                    onChange={(e) =>
-                        setItinerary({
-                            ...itinerary,
-                            currency: e.target.value,
-                        })
-                    }
-                >
-                    <MenuItem value="EGP">EGP</MenuItem>
-                    <MenuItem value="SAR">SAR</MenuItem>
-                    <MenuItem value="USD">USD</MenuItem>
-                    <MenuItem value="EUR">EUR</MenuItem>
-                    <MenuItem value="GBP">GBP</MenuItem>
-                </Select>
-            </FormControl>
+
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Currency</InputLabel>
+            <Select
+              name="currency"
+              value={itinerary.currency}
+              onChange={(e) =>
+                setItinerary({
+                  ...itinerary,
+                  currency: e.target.value,
+                })
+              }
+            >
+              <MenuItem value="EGP">EGP</MenuItem>
+              <MenuItem value="SAR">SAR</MenuItem>
+              <MenuItem value="USD">USD</MenuItem>
+              <MenuItem value="EUR">EUR</MenuItem>
+              <MenuItem value="GBP">GBP</MenuItem>
+            </Select>
+          </FormControl>
+
           {/* Available Dates */}
           <TextField
             fullWidth
