@@ -6,7 +6,7 @@ const HotelController = require("../controllers/HotelController.js");
 const commentActivity = require("../controllers/commentActivity.js");
 const commentItinerary = require("../controllers/commentItinerary.js");
 const commentTourguid = require("../controllers/commentTourguid.js");
-const { cashInPoints } = require('../controllers/usersController.js');
+const { cashInPoints } = require("../controllers/usersController.js");
 
 const {
   getAllComplaints,
@@ -23,7 +23,15 @@ const {
   cancelBooking,
 } = require("../controllers/bookingController.js");
 
-
+const {
+  checkout,
+  createOrder,
+  getAllOrders,
+  getOrderById,
+  updateOrder,
+  deleteOrder,
+  getOrdersByUserId,
+} = require("../controllers/orderController.js");
 
 const router = Router();
 /*
@@ -45,7 +53,7 @@ router.get("/getBookFlight/:touristId", flightController.getAllBookingsByid);
 router.post("/BookHotel", HotelController.createHotelBooking);
 router.get("/getBookHotel/:touristId", HotelController.getAllBookingsByid);
 router.get("/profile", usersController.getSingleUser);
-router.put('/profile/:id/cash-in-points', cashInPoints);
+router.put("/profile/:id/cash-in-points", cashInPoints);
 router.delete("/:id", usersController.deleteUser);
 router.put("/update", usersController.updateUser);
 // Route for creating a new profile
@@ -67,27 +75,48 @@ router.post("/bookings", createBooking);
 router.post("/bookings/historicalPlace", bookHistoricalPlace);
 router.get("/bookings/:touristId", getBookings);
 router.put("/bookings/:id/cancel", cancelBooking);
-router.put("/bookings/:id/cancel/historicalPlace", cancelBookingHistoricalPlace);
+router.put(
+  "/bookings/:id/cancel/historicalPlace",
+  cancelBookingHistoricalPlace
+);
 
 // Routes for Activity Comments
 router.post("/comments/activity", commentActivity.createCommentForActivity);
-router.get("/comments/activity/:activityId", commentActivity.getCommentsByActivity);
+router.get(
+  "/comments/activity/:activityId",
+  commentActivity.getCommentsByActivity
+);
 
 // Routes for Itinerary Comments
 router.post("/comments/itinerary", commentItinerary.createCommentForItinerary);
-router.get("/comments/itinerary/:itineraryId", commentItinerary.getCommentsByItinerary);
+router.get(
+  "/comments/itinerary/:itineraryId",
+  commentItinerary.getCommentsByItinerary
+);
 
 // Routes for Tour Guide Comments
 router.post("/comments/tourguide", commentTourguid.createCommentForTourGuide);
-router.get("/comments/tourguide/:tourGuideId", commentTourguid.getCommentsByTourGuide);
-
+router.get(
+  "/comments/tourguide/:tourGuideId",
+  commentTourguid.getCommentsByTourGuide
+);
 
 router.put("/updatewallet", usersController.updateWallet);
 router.put("/cashInPoints", usersController.cashInPoints);
 router.put("/delete_request/:id", usersController.updateProfileById);
 
-router.get("/getUsersBySavedActivity/:activityId", usersController.getUsersBySavedActivity);
-router.get("/getUsersBySavedItinerary/:itineraryId", usersController.getUsersBySavedItinerary);
+router.get(
+  "/getUsersBySavedActivity/:activityId",
+  usersController.getUsersBySavedActivity
+);
+router.get(
+  "/getUsersBySavedItinerary/:itineraryId",
+  usersController.getUsersBySavedItinerary
+);
+
+router.post("/order/checkout", checkout);
+router.get("/order/getAllOrders", getAllOrders);
+router.get("/order/getOrdersByUserId/:userId", getOrdersByUserId);
 
 
 module.exports = router;
