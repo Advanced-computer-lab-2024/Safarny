@@ -29,6 +29,8 @@ const UpcomingItineraries = () => {
   const location = useLocation();
   const touristId = localStorage.getItem("userId");
   const navigate = useNavigate();
+  const [wallet, setWallet] = useState(0);
+  const [walletCurrency, setWalletCurrency] = useState('EGP');
   const [userInfo, setUserInfo] = useState({
     username: "",
     email: "",
@@ -50,6 +52,21 @@ const UpcomingItineraries = () => {
     return stars;
   };
 
+  const fetchUserRole = async () => {
+    try {
+      // Replace `userId` with the actual user ID if available
+      const response = await axios.get(`http://localhost:3000/tourist/${userId}`);
+      setUserRole(response.data.role); // Store user role in state
+      const user = response.data;
+      setWallet(user.wallet);
+      setWalletCurrency(user.walletcurrency || 'EGP');
+      setSelectedCurrency(user.walletcurrency || 'EGP');
+      console.log('User role:', response.data.role); // Log user role for debugging
+    } catch (err) {
+      console.error('Error fetching user role:', err);
+    }
+  };
+
   const fetchExchangeRates = async () => {
     try {
       const response = await fetch(import.meta.env.VITE_EXCHANGE_API_URL);
@@ -58,16 +75,21 @@ const UpcomingItineraries = () => {
       }
       const data = await response.json();
       if (!data.conversion_rates) {
-        throw new Error("Invalid data format");
+        throw new Error('Invalid data format');
       }
       setExchangeRates(data.conversion_rates);
       setCurrencyCodes(Object.keys(data.conversion_rates));
+      console.log("id", userId);
     } catch (error) {
-      console.error("Error fetching exchange rates:", error);
-      setExchangeRates({ EGP: 1 });
-      setCurrencyCodes(["EGP"]);
+      console.error('Error fetching exchange rates:', error);
+      setExchangeRates({ EGP: 1 }); // Set default exchange rate
+      setCurrencyCodes(['EGP']); // Set default currency code
     }
   };
+  useEffect(() => {
+    fetchUserRole(); // Call to fetch user role
+    fetchExchangeRates();
+  }, []);
 
   const convertPrice = (price, fromCurrency, toCurrency) => {
     if (price == null) {
@@ -129,14 +151,7 @@ const handleArchiveToggle = async (ItineraryId, isArchived) => {
       )
     );
   }
-};  const fetchUserRole = async () => {
-    try {
-      const response = await axios.get(`/tourist/${userId}`);
-      setUserRole(response.data.role);
-    } catch (error) {
-      console.error("Error fetching user role:", error);
-    }
-  };
+};
 
   const fetchTags = async () => {
     try {

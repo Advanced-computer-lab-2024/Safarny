@@ -15,8 +15,13 @@ const MyItineraries = () => {
   const [itineraries, setItineraries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [exchangeRates, setExchangeRates] = useState({});
+  const [walletCurrency, setWalletCurrency] = useState('EGP');
+  const [selectedCurrency, setSelectedCurrency] = useState('EGP');
+
 
   useEffect(() => {
+
     const fetchUserItineraries = async () => {
       try {
         const response = await axios.get(`/tourist/${touristId}`);
@@ -55,12 +60,26 @@ const MyItineraries = () => {
         setLoading(false);
       }
     };
-
+    const fetchExchangeRates = async () => {
+      try {
+        const response = await axios.get(import.meta.env.VITE_EXCHANGE_API_URL);
+        setExchangeRates(response.data.conversion_rates);
+      } catch (error) {
+        console.error('Error fetching exchange rates:', error);
+      }
+    };
     if (touristId) {
       fetchUserItineraries();
+      fetchExchangeRates()
     }
   }, [touristId]);
-
+  const convertPrice = (price, fromCurrency, toCurrency) => {
+    if (fromCurrency === toCurrency) {
+      return price;
+    }
+    const rate = exchangeRates[toCurrency] / exchangeRates[fromCurrency];
+    return (price * rate).toFixed(2);
+  };
   if (loading) {
     return <p>Loading itineraries...</p>;
   }
@@ -76,58 +95,58 @@ const MyItineraries = () => {
       {itineraries.length > 0 ? (
         <div >
           {itineraries.map(itinerary => (
-            <div className={styles.itineraryCard} key={itinerary._id}>
-              <h3>{itinerary.name}</h3>
-                        <p>Duration: {itinerary.duration} hours</p>
-                        <p>Language: {itinerary.language}</p>
+              <div className={styles.itineraryCard} key={itinerary._id}>
+                <h3>{itinerary.name}</h3>
+                <p>Duration: {itinerary.duration} hours</p>
+                <p>Language: {itinerary.language}</p>
 
-                        {/*Add Price Here.
-                         <p>
-                          Price: {convertedPrice} {selectedCurrency}
-                        </p>
-                         */}
-                        
-                        <p>Available Dates: {itinerary.availableDates.join(", ")}</p>
-                        <p>Available Times: {itinerary.availableTimes.join(", ")}</p>
-                        <p>Accessibility: {itinerary.accessibility ? "Yes" : "No"}</p>
-                        <p>Pickup Location: {itinerary.pickupLocation}</p>
-                        <p>Dropoff Location: {itinerary.dropoffLocation}</p>
-                        <p>Rating: <Rating value={Math.round(itinerary.averageRating * 2) / 2} precision={0.5} readOnly /></p>
-                        {itinerary.tags && itinerary.tags.length > 0 && (
-                            <p>
-                              Tags: {itinerary.tags.map((tag) => tag.name).join(", ")}
-                            </p>
-                        )}
-                        {itinerary.activities && itinerary.activities.length > 0 && (
-                            <div>
-                              <p>Activities:</p>
-                              <ul>
-                                {itinerary.activities.map((activity) => (
-                                    <li key={activity._id}>
-                                      {activity.location} - {activity.date} at{" "}
-                                      {activity.time}
-                                      {activity.specialDiscount && (
-                                          <span>
+                {/*Add Price Here.*/}
+                <p>
+                  Price: {convertPrice(itinerary.price, itinerary.currency, selectedCurrency)} {selectedCurrency}
+                </p>
+
+
+                <p>Available Dates: {itinerary.availableDates.join(", ")}</p>
+                <p>Available Times: {itinerary.availableTimes.join(", ")}</p>
+                <p>Accessibility: {itinerary.accessibility ? "Yes" : "No"}</p>
+                <p>Pickup Location: {itinerary.pickupLocation}</p>
+                <p>Dropoff Location: {itinerary.dropoffLocation}</p>
+                <p>Rating: <Rating value={Math.round(itinerary.averageRating * 2) / 2} precision={0.5} readOnly/></p>
+                {itinerary.tags && itinerary.tags.length > 0 && (
+                    <p>
+                      Tags: {itinerary.tags.map((tag) => tag.name).join(", ")}
+                    </p>
+                )}
+                {itinerary.activities && itinerary.activities.length > 0 && (
+                    <div>
+                      <p>Activities:</p>
+                      <ul>
+                        {itinerary.activities.map((activity) => (
+                            <li key={activity._id}>
+                              {activity.location} - {activity.date} at{" "}
+                              {activity.time}
+                              {activity.specialDiscount && (
+                                  <span>
                                 {" "}
-                                            - Discount: {activity.specialDiscount}
+                                    - Discount: {activity.specialDiscount}
                               </span>
-                                      )}
-                                      {activity.price && (
-                                          <span> - Price: {activity.price}$</span>
-                                      )}
-                                    </li>
-                                ))}
-                              </ul>
-                            </div>
-                        )}
-              <img className={styles.itineraryImage} src={itinerary.imageUrl} alt={itinerary.title} />
-            </div>
+                              )}
+                              {activity.price && (
+                                  <span> - Price: {activity.price}$</span>
+                              )}
+                            </li>
+                        ))}
+                      </ul>
+                    </div>
+                )}
+                <img className={styles.itineraryImage} src={itinerary.imageUrl} alt={itinerary.title}/>
+              </div>
           ))}
         </div>
       ) : (
-        <p>No itineraries available</p>
+          <p>No itineraries available</p>
       )}
-      <Footer />
+      <Footer/>
     </div>
   );
 };
