@@ -187,7 +187,7 @@
 }
 
 .card:hover .cardTitle {
-  color: var(--primary-color);
+  color: var(--card-text-color);
 }
 
 
