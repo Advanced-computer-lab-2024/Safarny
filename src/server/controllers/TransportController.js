@@ -10,7 +10,8 @@ const createTransport = async (req, res) => {
       arrivalDate,
       arrivalTime,
       typeOfTransportation,
-      location,
+      departureLocation,
+      arrivalLocation,
       advertiserId,
     } = req.body;
 
@@ -29,7 +30,8 @@ const createTransport = async (req, res) => {
       arrivalDate,
       arrivalTime,
       typeOfTransportation,
-      location,
+      departureLocation,
+      arrivalLocation,
       advertiserId,
       advertiserName: advertiser.username,
     });
@@ -194,3 +196,4 @@ module.exports = {
   getTransportById,
   getTransportsByAdvertiserId,
 };
+

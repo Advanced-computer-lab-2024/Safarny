@@ -55,9 +55,9 @@ const BookTransport = () => {
             <li key={transport._id} className={styles.transportItem}>
               <div className={styles.transportDetails}>
                 <p>
-                  {transport.departureDate} - {transport.departureTime} to{" "}
-                  {transport.arrivalDate} - {transport.arrivalTime} (
-                  {transport.typeOfTransportation}) at {transport.location}
+                  {transport.departureDate} - {transport.departureTime} from {transport.departureLocation} to{" "}
+                  {transport.arrivalDate} - {transport.arrivalTime} at {transport.arrivalLocation} (
+                  {transport.typeOfTransportation})
                 </p>
               </div>
               <button
@@ -77,3 +77,4 @@ const BookTransport = () => {
 };
 
 export default BookTransport;
+
