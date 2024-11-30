@@ -73,7 +73,7 @@
 }
 
 .button:hover {
-  background-color: var(--primary-hover-color);
+  background-color: black; 
 }
 
 .burgerIcon {
@@ -160,6 +160,7 @@
 
 .modal h6 {
   margin-bottom: 20px;
+  color: black;
 }
 
 .imageInput {
@@ -266,4 +267,17 @@
 
 .redbutton:hover {
   background-color: darkred;
+}
+
+.bluebutton {
+  background-color: blue;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.bluebutton:hover {
+  background-color: darkblue;
 }

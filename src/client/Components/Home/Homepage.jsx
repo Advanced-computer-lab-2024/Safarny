@@ -7,7 +7,6 @@ import image3 from '/src/client/Assets/Img/image3.jpg';
 import image4 from '/src/client/Assets/Img/image4.jpg';
 import image5 from '/src/client/Assets/Img/image5.jpg';
 import image6 from '/src/client/Assets/Img/image6.jpg';
-import image7 from '/src/client/Assets/Img/image7.jpg';
 import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '/src/client/components/Footer/Footer';
 
@@ -60,26 +59,23 @@ const Homepage = () => {
             <h5 className={styles.subHeading}>Our all-in-one travel platform is designed to make your vacation planning effortless and exciting!</h5>
           </section>
           <section className={styles.features}>
-            {[image1, image2, image3, image4, image5, image6, image7].map((image, index) => (
-              <div key={index} className={styles.card}>
-                <div className={styles.cardImage}>
-                  <img src={image} alt={`Feature ${index + 1}`} className={styles.image} />
-                </div>
-                <p className={styles.cardTitle}>
-                  {[
-                    "Personalized Travel Planning",
-                    "Seamless Booking",
-                    "Smart Budgeting",
-                    "Discover Local Gems",
-                    "Real-Time Notifications",
-                    "Tour Guides Itineraries",
-                    "Exclusive Gift Shop",
-                  ][index]}
-                </p>
-              </div>
+  {[
+    { image: image1, title: "Sign In", link: "/signin" },
+    { image: image2, title: "Sign Up as a Tourist...", link: "/signup" },
+    { image: image3, title: "Sign Up as a Seller, Tour Guide, or Advertiser...", link: "/signupextra" },
+    { image: image4, title: "Upcoming Activities", link: "/UpcomingActivites" },
+    { image: image5, title: "Historical Places", link: "/historical-places" },
+    { image: image6, title: "Upcoming Itineraries", link: "/UpcomingItineraries" },
+  ].map((feature, index) => (
+    <Link to={feature.link} key={index} className={styles.card}>
+      <div className={styles.cardImage}>
+        <img src={feature.image} alt={`Feature ${index + 1}`} className={styles.image} />
+      </div>
+      <p className={styles.cardTitle}>{feature.title}</p>
+    </Link>
+  ))}
+</section>
 
-            ))}
-          </section>
         </main>
         <Footer />
       </div>

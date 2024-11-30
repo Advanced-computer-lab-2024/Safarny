@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Footer from '/src/client/components/Footer/Footer';
 import Header from '/src/client/components/Header/Header';
+import ProfileHeader from '/src/client/components/ProfileHeader/ProfileHeader';
 import styles from './ProductList.module.css';
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import StarRatings from 'react-star-ratings';

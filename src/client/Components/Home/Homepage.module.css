@@ -147,40 +147,49 @@
   color: var(--card-text-color);
   height: 15rem;
   box-sizing: border-box;
+  text-decoration: none; /* Ensures links have no underline */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .cardImage {
   width: 100%;
-  height: 50%; 
+  height: 50%;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.3s ease; /* Add smooth image zoom effect */
 }
 
-.image {
+.cardImage img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 10px;
-  display: block;
 }
 
-.cardText {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 50%;
+.card:hover .cardImage img {
+  transform: scale(1.1);
 }
 
 .cardTitle {
   margin-top: 0.5rem;
-  font-size: 1.2rem;
+  font-size: 1.0rem;
   color: var(--card-text-color);
   text-align: center;
   width: 90%;
+  transition: color 0.3s ease;
 }
+
+.card:hover .cardTitle {
+  color: var(--card-text-color);
+}
+
 
 @media (max-width: 768px) {
   
