@@ -1,5 +1,6 @@
 const express = require("express");
-const Order = require("../models/Order");
+const Order = require("../models/Order.js");
+const User = require("../models/userModel.js");
 
 const checkout = async (req, res) => {
   try {
@@ -11,6 +12,27 @@ const checkout = async (req, res) => {
       totalAmount,
       currency,
     } = req.body;
+
+    // Fetch the user's wallet balance
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // // Convert the totalAmount to the user's wallet currency if necessary
+    // const exchangeRates = await fetch(process.env.VITE_EXCHANGE_API_URL).then(res => res.json());
+    // const rateFrom = exchangeRates.conversion_rates[currency];
+    // const rateTo = exchangeRates.conversion_rates[user.walletcurrency];
+    // const convertedTotalAmount = (totalAmount / rateFrom) * rateTo;
+
+    // Check if the user has enough funds
+    if (user.wallet < totalAmount) {
+      return res.status(400).json({ error: "Insufficient funds" });
+    }
+
+    // Deduct the amount from the user's wallet
+    user.wallet -= totalAmount;
+    await user.save();
 
     const newOrder = new Order({
       userId,
@@ -134,13 +156,13 @@ const deleteOrder = async (req, res) => {
 
 const getOrdersByUserId = async (req, res) => {
   try {
-    const { userId } = req.params; // Get the userId from the route parameter
+    const { userId } = req.params;
 
     if (!userId) {
       return res.status(400).json({ error: "User ID is required" });
     }
 
-    const orders = await Order.find({ userId }); // Find orders by userId
+    const orders = await Order.find({ userId }); 
 
     if (!orders.length) {
       return res.status(404).json({ message: "No orders found for this user" });
@@ -154,6 +176,39 @@ const getOrdersByUserId = async (req, res) => {
   }
 };
 
+const cancelOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const order = await Order.findById(id);
+    switch (order.status) {
+      case "pending":
+        order.status = "cancelled";
+        // Refund the user's wallet
+        const user = await User.findById(order.userId);
+        user.wallet += order.totalAmount;
+        await user.save();
+        await order.save();
+        res.status(200).json(order);
+        break;
+      case "cancelled":
+        res.status(400).json({ error: "Order is already cancelled" });
+        break;
+      case "delivered":
+        res.status(400).json({ error: "Order is already delivered" });
+        break;
+      default:
+        res.status(400).json({ error: "Cannot cancel order" });
+    }
+  }
+  catch (err) {
+    res
+      .status(500)
+      .json({ error: "Failed to cancel order", details: err.message });
+  }
+};
+
+
+
 module.exports = {
   checkout,
   createOrder,
@@ -162,4 +217,5 @@ module.exports = {
   updateOrder,
   deleteOrder,
   getOrdersByUserId,
+  cancelOrder,
 };

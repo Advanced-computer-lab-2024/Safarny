@@ -84,6 +84,7 @@ import CreateCommentForTourGuide from "./Components/Comments/CreateCommentForTou
 import PasswordRecovery from "./Components/PasswordRecovery/PasswordRecovery";
 import Notifications from "./Components/Notifications/Notifications";
 
+import MyOrders from "./Components/MyOrder/MyOrders";
 
 function App() {
   return (
@@ -168,6 +169,7 @@ function App() {
         <Route path="/PreferencesPage" element={<Preferences />} />
         <Route path="/MyCart" element={<MyCart />} />
         <Route path="/mybookings" element={<MyBookings />} />
+        <Route path="/myorders" element={<MyOrders />} />
 
         {/* Comments routes */}
         <Route path="/create-comment-activity/:activityId?" element={<CreateCommentForActivity />} />
