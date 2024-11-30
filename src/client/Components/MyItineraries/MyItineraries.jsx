@@ -60,6 +60,16 @@ const MyItineraries = () => {
         setLoading(false);
       }
     };
+    const fetchUserRole = async () => {
+      try {
+        const response = await axios.get(`/tourist/${touristId}`);
+        const user = response.data;
+        setWalletCurrency(user.walletcurrency || 'EGP');
+        setSelectedCurrency(user.walletcurrency || 'EGP');
+      } catch (err) {
+        console.error('Error fetching user role:', err);
+      }
+    };
     const fetchExchangeRates = async () => {
       try {
         const response = await axios.get(import.meta.env.VITE_EXCHANGE_API_URL);
@@ -70,7 +80,8 @@ const MyItineraries = () => {
     };
     if (touristId) {
       fetchUserItineraries();
-      fetchExchangeRates()
+      fetchExchangeRates();
+      fetchUserRole();
     }
   }, [touristId]);
   const convertPrice = (price, fromCurrency, toCurrency) => {
