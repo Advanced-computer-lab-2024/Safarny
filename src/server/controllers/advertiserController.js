@@ -130,11 +130,31 @@ const getBoughtCountByAdvertiser = async (req, res) => {
   }
 };
 
+const getBoughtCountByActivity = async (req, res) => {
+  const { id } = req.params; // Get activity ID from request parameters
+
+  try {
+      // Find the activity by its ID and only project the `boughtby` field
+      const activity = await Activity.findById(id).select('boughtby');
+
+      if (!activity) {
+          return res.status(404).json({ message: 'Activity not found' });
+      }
+
+      // Return the length of the `boughtby` array
+      res.status(200).json({ boughtCount: activity.boughtby.length });
+  } catch (error) {
+      console.error('Error fetching bought count:', error);
+      res.status(500).json({ message: 'An error occurred', error });
+  }
+};
+
 module.exports = {
   createAdvertiser,
   getAdvertisers,
   updateAdvertiser,
   deleteAdvertiser,
   getRevenueByAdvertiser,
-  getBoughtCountByAdvertiser
+  getBoughtCountByAdvertiser,
+  getBoughtCountByActivity,
 };

@@ -133,6 +133,9 @@ const ProfileSideBar = ({ userId, userInfo }) => {
                             <button onClick={() => setShowPostButtons(!showPostButtons)} className={styles.mainButton}>
                                 Manage Products
                             </button>
+                            <button onClick={() => navigate('/sellerSales', { state: { userId } })} className={styles.mainButton}>
+                                        Sales Report
+                            </button>
                             {showPostButtons && (
                                 <div className={styles.subButtonGroup}>
                                     <button onClick={() => navigate('/create-post', { state: { userId } })} className={styles.subButton}>
@@ -141,6 +144,8 @@ const ProfileSideBar = ({ userId, userInfo }) => {
                                     <button onClick={() => navigate('/seller', { state: { userId } })} className={styles.subButton}>
                                         My Products
                                     </button>
+
+                                    
                                 </div>
                             )}
                         </div>
@@ -150,6 +155,9 @@ const ProfileSideBar = ({ userId, userInfo }) => {
                         <div className={styles.buttonGroup}>
                             <button onClick={() => setShowTransportButtons(!showTransportationsButtons)} className={styles.mainButton}>
                                 Transportation and Activities
+                            </button>
+                            <button onClick={()=>navigate("/Advertiser_Sales",{ state: { userId } })} className={styles.mainButton}>
+                                Sales Report
                             </button>
                             {showTransportationsButtons && (
                                 <div className={styles.subButtonGroup}>
@@ -172,7 +180,12 @@ const ProfileSideBar = ({ userId, userInfo }) => {
                             <button onClick={() => navigate('/tourguide', { state: { userId } })} className={styles.postButton}>
                                 Add Itinerary
                             </button>
+                            
+                            <button onClick={() => navigate('/TourGuideSales', { state: { userId } })} className={styles.postButton}>
+                                Sales Report
+                            </button>
                         </div>
+                        
                     )}
                 </div>
             )}

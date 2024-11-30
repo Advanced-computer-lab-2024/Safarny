@@ -32,6 +32,8 @@ export default function TourGuide() {
   const [tags, setTags] = useState([]);
   const [currencies, setCurrencies] = useState([]);
   const [selectedCurrency, setSelectedCurrency] = useState("");
+  const [boughtCounts, setBoughtCounts] = useState({});
+
   const [profile, setProfile] = useState({
     PrevWork: "",
     YearOfExp: 0,
@@ -81,6 +83,22 @@ export default function TourGuide() {
         );
         setItineraries(itinerariesResponse.data);
         console.log("itineraries: ", itinerariesResponse.data);
+        const counts = await Promise.all(
+          itinerariesResponse.data.map(async (itineraries) => {
+              try {
+                  const countRes = await fetch(`http://localhost:3000/tourguide/getClientsByItinerary/${itineraries._id}`);
+                  const countData = await countRes.json();
+                 
+                  return { [itineraries._id]: countData.boughtCount };
+                  
+              } catch {
+                  return { [itineraries._id]: 0 }; // Default to 0 if error occurs
+              }
+          })
+      );
+
+      const countsMap = counts.reduce((acc, count) => ({ ...acc, ...count }), {});
+      setBoughtCounts(countsMap);
 
         // Fetch activities and tags
         const activitiesResponse = await axios.get(
@@ -259,6 +277,11 @@ export default function TourGuide() {
                 <Typography variant="h6">
                   Available Times: {itinerary.availableTimes}
                 </Typography>
+               
+                <Typography variant="h6">
+                  Bought Count: {boughtCounts[itinerary._id] || 0}
+                </Typography>
+                
                 <Box mt={2}>
                   <Button
                     variant="outlined"

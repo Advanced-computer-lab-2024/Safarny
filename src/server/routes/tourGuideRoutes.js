@@ -50,5 +50,6 @@ router
 router.route("/delete_request/:id").put(usersController.updateDeleteAccount);
 
 router.put("/updaterating", tourGuideController.updateAverageRatingById);
+router.route("/getClientsByItinerary/:id").get(itineraryController.getBoughtCountByItinerary);
 
 module.exports = router;

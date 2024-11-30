@@ -333,6 +333,25 @@ const updateRating = async (req, res) => {
   }
 };
 
+const getBoughtCountByItinerary = async (req, res) => {
+  const { id } = req.params; // Get activity ID from request parameters
+
+  try {
+      // Find the activity by its ID and only project the `boughtby` field
+      const itinerary = await Itinerary.findById(id).select('boughtby');
+
+      if (!itinerary) {
+          return res.status(404).json({ message: 'itinerary not found' });
+      }
+
+      // Return the length of the `boughtby` array
+      res.status(200).json({ boughtCount: itinerary.boughtby.length });
+  } catch (error) {
+      console.error('Error fetching bought count:', error);
+      res.status(500).json({ message: 'An error occurred', error });
+  }
+};
+
 
 module.exports = {
   createItinerary,
@@ -345,5 +364,6 @@ module.exports = {
   getItinerariesFiltered,
   geItinerariesFor,
     updateRating,
-    getItineraryRevenue
+    getItineraryRevenue,
+    getBoughtCountByItinerary
 };

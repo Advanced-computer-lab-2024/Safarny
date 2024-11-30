@@ -21,20 +21,36 @@ const ReadActivities = () => {
     const [categories, setCategories] = useState({});
     const [tags, setTags] = useState({});
     const [errorMessage, setErrorMessage] = useState("");
-
+    const [boughtCounts, setBoughtCounts] = useState({});
     useEffect(() => {
         const fetchActivities = async () => {
             try {
                 const response = await fetch(`/advertiser/activities/user/${userId}`);
+
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
                 setActivities(data);
+                const counts = await Promise.all(
+                    data.map(async (activity) => {
+                        try {
+                            const countRes = await fetch(`http://localhost:3000/advertiser/getClientsByActivity/${activity._id}`);
+                            const countData = await countRes.json();
+                            return { [activity._id]: countData.boughtCount };
+                        } catch {
+                            return { [activity._id]: 0 }; // Default to 0 if error occurs
+                        }
+                    })
+                );
+
+                const countsMap = counts.reduce((acc, count) => ({ ...acc, ...count }), {});
+                setBoughtCounts(countsMap);
             } catch (error) {
                 setErrorMessage("Error fetching activities. Please try again later.");
             }
         };
+        
 
         const fetchCategories = async () => {
             try {
@@ -100,7 +116,11 @@ const ReadActivities = () => {
                                 <p className={styles.activityText}>
                                     {activity.bookingOpen ? "Booking Open" : "Booking Closed"}
                                 </p>
+                                <p className={styles.activityText}>
+                                    Purchases: {boughtCounts[activity._id] ?? "Loading..."}
+                                </p>
                             </div>
+                            
                             {activity.coordinates && activity.coordinates.lat && activity.coordinates.lng && (
                                 <MapContainer
                                     center={[activity.coordinates.lat, activity.coordinates.lng]}
