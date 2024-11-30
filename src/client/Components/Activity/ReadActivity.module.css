@@ -18,7 +18,8 @@
     padding: 2rem;
     background-color: var(--background-color);
     color: var(--text-color);
-    min-height: 100vh;
+    height: 100vh;
+    width: 95vw;
   }
   
   .header {
@@ -75,7 +76,7 @@
   }
   
   .noActivitiesMessage {
-    color: var(--secondary-color);
+    color: var(--header-color);
     font-size: 1.2rem;
     text-align: center;
     margin-top: 2rem;

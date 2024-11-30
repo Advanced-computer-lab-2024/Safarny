@@ -296,14 +296,14 @@ const ReadHistoricalPlace = () => {
                   <h2 className={styles.placeName}>
                     {place.description}
                     <br />
-                    <button
+                    {/* <button
                       onClick={() =>
                         handleReadHistoricalPlaceDetails(place._id)
                       }
                       className={styles.cardButton}
                     >
                       View Details
-                    </button>
+                    </button> */}
                     <button
                       onClick={() =>
                         navigator.clipboard.writeText(

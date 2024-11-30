@@ -133,3 +133,9 @@
     box-shadow: 0 0 10px var(--glow-color);
   }
   
+  /* Golden proceed to checkout button */
+  .proceedButton {
+    background-color: #f1c40f;
+    color: var(--header-color);
+    margin-top: 1rem;
+  }

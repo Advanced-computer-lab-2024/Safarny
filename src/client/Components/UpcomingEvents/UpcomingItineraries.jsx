@@ -28,6 +28,9 @@ const UpcomingItineraries = () => {
   const [currencyCodes, setCurrencyCodes] = useState([]);
   const location = useLocation();
   const touristId = localStorage.getItem("userId");
+  const navigate = useNavigate();
+  const [wallet, setWallet] = useState(0);
+  const [walletCurrency, setWalletCurrency] = useState('EGP');
   const [userInfo, setUserInfo] = useState({
     username: "",
     email: "",
@@ -40,13 +43,19 @@ const UpcomingItineraries = () => {
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [selectedItineraryId, setSelectedItineraryId] = useState(null);
 
-  const renderStars = (averageRating) => {
-    if (averageRating == null) return null;
-    const stars = [];
-    for (let i = 0; i < averageRating; i++) {
-      stars.push(<span key={i}>&#9733;</span>);
+  const fetchUserRole = async () => {
+    try {
+      // Replace `userId` with the actual user ID if available
+      const response = await axios.get(`http://localhost:3000/tourist/${userId}`);
+      setUserRole(response.data.role); // Store user role in state
+      const user = response.data;
+      setWallet(user.wallet);
+      setWalletCurrency(user.walletcurrency || 'EGP');
+      setSelectedCurrency(user.walletcurrency || 'EGP');
+      console.log('User role:', response.data.role); // Log user role for debugging
+    } catch (err) {
+      console.error('Error fetching user role:', err);
     }
-    return stars;
   };
 
   const fetchExchangeRates = async () => {
@@ -57,16 +66,21 @@ const UpcomingItineraries = () => {
       }
       const data = await response.json();
       if (!data.conversion_rates) {
-        throw new Error("Invalid data format");
+        throw new Error('Invalid data format');
       }
       setExchangeRates(data.conversion_rates);
       setCurrencyCodes(Object.keys(data.conversion_rates));
+      console.log("id", userId);
     } catch (error) {
-      console.error("Error fetching exchange rates:", error);
-      setExchangeRates({ EGP: 1 });
-      setCurrencyCodes(["EGP"]);
+      console.error('Error fetching exchange rates:', error);
+      setExchangeRates({ EGP: 1 }); // Set default exchange rate
+      setCurrencyCodes(['EGP']); // Set default currency code
     }
   };
+  useEffect(() => {
+    fetchUserRole(); // Call to fetch user role
+    fetchExchangeRates();
+  }, []);
 
   const convertPrice = (price, fromCurrency, toCurrency) => {
     if (price == null) {
@@ -76,6 +90,10 @@ const UpcomingItineraries = () => {
     const rateTo = exchangeRates[toCurrency] || 1;
     return ((price / rateFrom) * rateTo).toFixed(2);
   };
+  const GoToMyItineraries  = () => {
+    navigate("/MyItineraries", { state: { userId } });
+  };
+
 
 const handleArchiveToggle = async (ItineraryId, isArchived) => {
   try {
@@ -124,14 +142,7 @@ const handleArchiveToggle = async (ItineraryId, isArchived) => {
       )
     );
   }
-};  const fetchUserRole = async () => {
-    try {
-      const response = await axios.get(`/tourist/${userId}`);
-      setUserRole(response.data.role);
-    } catch (error) {
-      console.error("Error fetching user role:", error);
-    }
-  };
+};
 
   const fetchTags = async () => {
     try {
@@ -207,8 +218,37 @@ const handleArchiveToggle = async (ItineraryId, isArchived) => {
     setSelectedItineraryId(null);
   };
 
-
-
+  const handleAddItinerary = async (itinerary) => {
+    try {
+      console.log("User ID:", userId);
+  
+      // Fetch the current user profile
+      const profileResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
+      const currentItineraries = profileResponse.data.itineraries || [];
+  
+      // Check if the itinerary is already in the user's itineraries
+      if (currentItineraries.includes(itinerary._id)) {
+        alert(`The itinerary "${itinerary.title}" is already saved in your activities.`);
+        return; // Exit the function early
+      }
+  
+      // Add the itinerary ID to the user's itineraries array
+      const updatedItineraries = [...currentItineraries, itinerary._id];
+  
+      // Update the user's profile with the updated itineraries array
+      await axios.put(`http://localhost:3000/tourist/${userId}`, {
+        id: userId,
+        itineraries: updatedItineraries,
+      });
+  
+      // Update local state if needed
+      alert(`Itinerary "${itinerary.title}" has been successfully added to your activities!`);
+    } catch (err) {
+      console.error('Error adding itinerary:', err);
+      alert('An error occurred while adding the itinerary. Please try again.');
+    }
+  };
+  
   return (
       <div className={styles.container}>
         <Header />
@@ -225,6 +265,12 @@ const handleArchiveToggle = async (ItineraryId, isArchived) => {
               Sort by Rating
             </button>
           </div>
+          <button
+      onClick={GoToMyItineraries}
+      className={styles.cardButton}
+    >
+      My Itineraries
+    </button>
 
           <div className={styles.filterOptions}>
             <div className={styles.filterGroup}>
@@ -371,6 +417,14 @@ const handleArchiveToggle = async (ItineraryId, isArchived) => {
                             <button onClick={() => handleItineraryBook(itinerary._id)}>
                               Book
                             </button>
+                        )}
+                        {userRole === "Tourist" && (
+                            <button 
+                            onClick={() => handleAddItinerary(itinerary)} 
+                            className={styles.cardButton}
+                          >
+                            Save
+                          </button>
                         )}
                       </div>
                   );

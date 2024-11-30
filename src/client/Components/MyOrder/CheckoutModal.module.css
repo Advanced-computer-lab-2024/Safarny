@@ -1,0 +1,66 @@
+.modalContent {
+    padding: 24px;
+  }
+  
+  .stepIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    transition: background-color 0.3s ease;
+  }
+  
+  .stepIconActive {
+    background-color: #1976d2;
+    color: white;
+  }
+  
+  .formGroup {
+    margin-bottom: 20px;
+  }
+  
+  .summaryItem {
+    display: flex;
+    justify-content: space-between;
+  
+    margin-bottom: 8px;
+  }
+  
+  .totalPrice {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-top: 16px;
+  }
+  
+  .paymentOptions {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .finishIcon {
+    font-size: 64px;
+    color: #4caf50;
+    margin-bottom: 16px;
+  }
+  
+  @media (max-width: 600px) {
+    .modalContent {
+      padding: 16px;
+    }
+  
+    .stepIcon {
+      width: 32px;
+      height: 32px;
+    }
+  
+    .paymentOptions {
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+  
+  

@@ -410,6 +410,63 @@ const cashInPoints = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+
+//receive activityid and get all the users who have saved this activity, its saved in the user model
+
+const getUsersBySavedActivity = AsyncHandler(async (req, res) => {
+  const { activityId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(activityId)) {
+    return res.status(400).json({ message: "Invalid activity ID" });
+  }
+
+  try {
+    // Convert activityId to ObjectId using the new keyword
+    const objectId = new mongoose.Types.ObjectId(activityId);
+
+    // Find users who have saved the activity and project only _id and email
+    const users = await User.find({ activities: { $in: [objectId] } }, '_id email');
+
+    if (users.length === 0) {
+      return res.status(404).json({ message: "No users found with the saved activity" });
+    }
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error fetching users by saved activity:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+//get user by saved itenerary
+const getUsersBySavedItinerary = AsyncHandler(async (req, res) => {
+  const { itineraryId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(itineraryId)) {
+    return res.status(400).json({ message: "Invalid itinerary ID" });
+  }
+
+  try {
+    // Convert itineraryId to ObjectId using the new keyword
+    const objectId = new mongoose.Types.ObjectId(itineraryId);
+
+    // Find users who have saved the itinerary and project only _id and email
+    const users = await User.find({ itineraries: { $in: [objectId] } }, '_id email');
+
+    if (users.length === 0) {
+      return res.status(404).json({ message: "No users found with the saved itinerary" });
+    }
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error fetching users by saved itinerary:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 module.exports = {
   getUsers,
   deleteUser,
@@ -424,5 +481,7 @@ module.exports = {
   updateDeleteAccount,
   cashInPoints,
   deleteTourGuideAndIterinaries,
-  deleteAdvertiserAndActivities
+  deleteAdvertiserAndActivities,
+  getUsersBySavedActivity,
+    getUsersBySavedItinerary
 };

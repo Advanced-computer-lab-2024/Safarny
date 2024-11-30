@@ -59,6 +59,7 @@ export default function TourGuide() {
     availableDates: [],
     availableTimes: [],
     accessibility: true,
+    bookingOpen: "in-active",
     pickupLocation: "",
     dropoffLocation: "",
     tagNames: [],
@@ -221,8 +222,12 @@ export default function TourGuide() {
                 <Typography variant="h6">
                   Currency: {itinerary.currency}
                 </Typography>
+
                 <Typography variant="h6">
                   Accessibility: {itinerary.accessibility ? "Yes" : "No"}
+                </Typography>
+                <Typography variant="h6">
+                  Booking status: {itinerary.bookingOpen ? "active" : "in-active"}
                 </Typography>
                 <Typography variant="h6">
                   Pickup Location: {itinerary.pickupLocation}
@@ -332,7 +337,25 @@ export default function TourGuide() {
                     ))}
                   </Select>
                 </FormControl>
-
+                {/* Booking Open Selection */}
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel id="booking-open-label">Booking Status</InputLabel>
+                  <Select
+                      labelId="booking-open-label"
+                      id="bookingOpen"
+                      value={newItinerary.bookingOpen}
+                      onChange={(e) =>
+                          setNewItinerary({
+                            ...newItinerary,
+                            bookingOpen: e.target.value,
+                          })
+                      }
+                      label="Booking Status"
+                  >
+                    <MenuItem value="active">Active</MenuItem>
+                    <MenuItem value="in-active">In-active</MenuItem>
+                  </Select>
+                </FormControl>
                 {/* Tags Select */}
                 <FormControl fullWidth variant="outlined">
                   <InputLabel id="tags-label">Tags</InputLabel>

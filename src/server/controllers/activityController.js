@@ -126,7 +126,7 @@ const getActivities = AsyncHandler(async (req, res) => {
 
 // Get a single activity
 const getActivityById = AsyncHandler(async (req, res) => {
-  const activity = await Activity.findById(req.params.id);
+  const activity = await Activity.findById(req.params.id).populate("tags", "name").populate("category", "type");
   if (activity) {
     res.json(activity);
   } else {

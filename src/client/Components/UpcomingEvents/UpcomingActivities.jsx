@@ -227,6 +227,12 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
       const profileResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
       const currentActivities = profileResponse.data.activities || [];
   
+      // Check if the activity is already in the user's activities
+      if (currentActivities.includes(activity._id)) {
+        alert(`The activity "${activity.title}" is already saved in your activities.`);
+        return; // Exit the function early
+      }
+  
       // Add the activity ID to the user's activities array
       const updatedActivities = [...currentActivities, activity._id];
   
@@ -237,12 +243,13 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
       });
   
       // Update local state if needed
-      alert(`Activity "${activity.title}" has been successfully added to your activities!`);
+      alert(`Activity at "${activity.location}" has been successfully added to your activities!`);
     } catch (err) {
       console.error('Error adding activity:', err);
       alert('An error occurred while adding the activity. Please try again.');
     }
   };
+  
   
   
   return (
@@ -364,10 +371,10 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
                               className={styles.cardButton} >
                             Copy link
                           </button>
-                          <button onClick={() => handleUpcomingActivitiesDetails(activity._id)}
+                          {/* <button onClick={() => handleUpcomingActivitiesDetails(activity._id)}
                                   className={styles.cardButton} >
                             Details
-                          </button>
+                          </button> */}
                           <button
                               onClick={() => window.location.href = `mailto:?subject=Check out this historical place&body=${window.location.origin}/UpcomingActivities/${activity._id}`}
                               className={styles.cardButton} >
@@ -378,12 +385,15 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
                           Book
                         </button>
                       )}
-                      <button 
-              onClick={() => handleAddActivity(activity)} 
-              className={styles.cardButton}
-            >
-              Save
-            </button>
+                      
+            {userRole === "Tourist" && (
+                            <button 
+                            onClick={() => handleAddActivity(activity)} 
+                            className={styles.cardButton}
+                          >
+                            Save
+                          </button>
+                        )}
                         </div>
 
                         <div className={styles.mapContainer}>

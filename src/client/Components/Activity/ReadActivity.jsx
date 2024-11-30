@@ -73,7 +73,7 @@ const ReadActivities = () => {
         <div className={styles.container}>
             <Header />
             <h2 className={styles.header}>Activities</h2>
-            {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
+            {/* {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>} */}
             {activities.length === 0 ? (
                 <p className={styles.noActivitiesMessage}>No activities found for this user.</p>
             ) : (

@@ -93,34 +93,66 @@ const UpdateActivity = () => {
     setActivityDetails({ ...activityDetails, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!selectedActivity) {
-      setMessage("Please select an activity to update.");
-      return;
-    }
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!selectedActivity) {
+    setMessage("Please select an activity to update.");
+    return;
+  }
 
-    const payload = {
-      ...activityDetails,
-      category: activityDetails.category,
-      tags: activityDetails.tags,
-    };
-
-    try {
-      const response = await axios.put(
-        `http://localhost:3000/advertiser/${selectedActivity._id}`,
-        payload
-      );
-      if (response.status === 200) {
-        setMessage("Activity updated successfully!");
-      }
-    } catch (error) {
-      console.error("Error updating activity:", error);
-      setMessage("Error updating activity: " + error.message);
-    }
+  const payload = {
+    ...activityDetails,
+    category: activityDetails.category,
+    tags: activityDetails.tags,
   };
 
-  const LocationMap = () => {
+  try {
+    const response = await axios.put(
+      `http://localhost:3000/advertiser/${selectedActivity._id}`,
+      payload
+    );
+    if (response.status === 200) {
+      setMessage("Activity updated successfully!");
+
+      // Check if the activity is now open for booking
+      if (activityDetails.bookingOpen) {
+        // Fetch the list of users who have saved this activity
+        const savedUsersResponse = await axios.get(
+          `http://localhost:3000/tourist/getUsersBySavedActivity/${selectedActivity._id}`
+        );
+        const savedUsers = savedUsersResponse.data;
+
+        // Send a notification to each user
+        const notificationPromises = savedUsers.map((user) =>
+          axios.post('/notification/create', {
+            title: `Activity "${selectedActivity.location}" is now open for booking`,
+            message: `The activity "${selectedActivity.location}" on ${selectedActivity.date} at ${selectedActivity.time} is now open for booking.`,
+            userId: user._id,
+          })
+        );
+
+        await Promise.all(notificationPromises);
+        console.log("Notifications sent to users who saved the activity");
+
+        // Send an email to each user
+        const emailPromises = savedUsers.map((user) =>
+          axios.post('/email/send-email', {
+            to: user.email,
+            subject: `Activity "${selectedActivity.location}" is now open for booking`,
+            text: `The activity "${selectedActivity.location}" on ${selectedActivity.date} at ${selectedActivity.time} is now open for booking.`
+          })
+        );
+
+        await Promise.all(emailPromises);
+        console.log("Emails sent to users who saved the activity");
+      }
+    }
+  } catch (error) {
+    console.error("Error updating activity:", error);
+    setMessage("Error updating activity: " + error.message);
+  }
+};
+const LocationMap = () => {
     useMapEvents({
       click(e) {
         setActivityDetails({

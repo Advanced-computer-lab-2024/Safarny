@@ -79,9 +79,15 @@ body{
     color: white;
   }
   
-  p, h5 {
+  p {
     color: white;
-    margin: 0.5rem 0;
+    margin-top: 0.5rem;
+    
+  }
+
+  h5 {
+    color: white;
+    margin: 0.5rem;
     
   }
 
