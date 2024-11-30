@@ -1,4 +1,5 @@
 const Post = require("../models/Posts.js");
+const axios = require("axios"); // Ensure axios is installed: npm install axios
 
 const createPost = async (req, res) => {
   try {
@@ -35,6 +36,79 @@ const getAllPosts = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+
+// Controller to calculate total revenue
+const getTotalRevenue = async (req, res) => {
+  try {
+    // Fetch exchange rates from an external API
+    const apiUrl = "https://api.exchangerate-api.com/v4/latest/USD"; // Replace with your chosen API URL
+    const { data } = await axios.get(apiUrl);
+
+    if (!data || !data.rates) {
+      return res.status(500).json({ error: "Failed to fetch exchange rates" });
+    }
+
+    const exchangeRates = data.rates; // Get rates for all currencies
+
+    // Use aggregation to calculate total revenue dynamically in USD
+    const posts = await Post.find(); // Replace with your Post model fetch logic
+
+    // Calculate revenue for each post in USD
+    const totalRevenueUSD = posts.reduce((total, post) => {
+      const { price, currency, purchasedCount } = post;
+      const rate = exchangeRates[currency] || 1; // Use 1 if currency is missing or not found
+      const priceInUSD = price / rate; // Convert to USD
+      return total + priceInUSD * purchasedCount; // Accumulate the revenue
+    }, 0);
+
+    // Apply commission (e.g., 10%)
+    const totalRevenueWithCommission = totalRevenueUSD * 0.1;
+
+    // Return the total revenue
+    res.status(200).json({ totalRevenue: totalRevenueWithCommission });
+  } catch (error) {
+    console.error("Error calculating total revenue:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const getRevenueBySeller = async (req, res) => {
+  try {
+    const { id } = req.params; // Seller's ID passed as a route parameter
+
+    // Fetch exchange rates (assuming the same API as before)
+    const apiUrl = "https://api.exchangerate-api.com/v4/latest/USD"; // Replace with a preferred API if needed
+    const { data } = await axios.get(apiUrl);
+
+    if (!data || !data.rates) {
+      return res.status(500).json({ error: "Failed to fetch exchange rates" });
+    }
+
+    const exchangeRates = data.rates; // Get rates for all currencies
+
+    // Aggregate revenue for posts created by the seller (createdby)
+    const posts = await Post.find({ createdby: id });
+
+    // Calculate total revenue in USD
+    const totalRevenueUSD = posts.reduce((total, post) => {
+      const { price, currency, purchasedCount } = post;
+      const rate = exchangeRates[currency] || 1; // Default rate to 1 if currency is missing
+      const priceInUSD = price / rate; // Convert price to USD
+      const revenue = priceInUSD * (purchasedCount || 0); // Revenue = priceInUSD * number of purchases
+      return total + revenue; // Accumulate the revenue
+    }, 0);
+
+    // Return the total revenue
+    res.status(200).json({ totalRevenue: totalRevenueUSD });
+  } catch (error) {
+    console.error("Error calculating revenue:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}; 
+
+
+
 
 const getAllPostsBySellerId = async (req, res) => {
   try {
@@ -131,5 +205,7 @@ module.exports = {
   deletePostById,
   getAllPostsBySellerId,
   getPostById, // Export the new function
-    deletePostsByCreator
+  deletePostsByCreator,
+  getTotalRevenue,
+  getRevenueBySeller 
 };

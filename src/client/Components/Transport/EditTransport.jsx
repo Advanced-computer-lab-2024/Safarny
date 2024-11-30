@@ -18,7 +18,8 @@ const ManageTransports = () => {
     arrivalDate: "",
     arrivalTime: "",
     typeOfTransportation: "Bus",
-    location: "",
+    departureLocation: "",
+    arrivalLocation: "",
   });
 
   useEffect(() => {
@@ -52,7 +53,8 @@ const ManageTransports = () => {
       arrivalDate: transport.arrivalDate,
       arrivalTime: transport.arrivalTime,
       typeOfTransportation: transport.typeOfTransportation,
-      location: transport.location,
+      departureLocation: transport.departureLocation,
+      arrivalLocation: transport.arrivalLocation,
     });
   };
 
@@ -160,11 +162,23 @@ const ManageTransports = () => {
           </label>
 
           <label className={styles.label}>
-            Location:
+            Departure Location:
             <input
               type="text"
-              name="location"
-              value={formData.location}
+              name="departureLocation"
+              value={formData.departureLocation}
+              onChange={handleInputChange}
+              className={styles.input}
+              required
+            />
+          </label>
+
+          <label className={styles.label}>
+            Arrival Location:
+            <input
+              type="text"
+              name="arrivalLocation"
+              value={formData.arrivalLocation}
               onChange={handleInputChange}
               className={styles.input}
               required
@@ -187,9 +201,9 @@ const ManageTransports = () => {
             {transports.map((transport) => (
               <li key={transport._id} className={styles.transportItem}>
                 <p>
-                  {transport.departureDate} - {transport.departureTime} to{" "}
-                  {transport.arrivalDate} - {transport.arrivalTime} (
-                  {transport.typeOfTransportation}) at {transport.location}
+                  {transport.departureDate} - {transport.departureTime} from {transport.departureLocation} to{" "}
+                  {transport.arrivalDate} - {transport.arrivalTime} at {transport.arrivalLocation} (
+                  {transport.typeOfTransportation})
                   Number of bookings: {transport.numberOfTourists}
                 </p>
                 <button
@@ -215,3 +229,4 @@ const ManageTransports = () => {
 };
 
 export default ManageTransports;
+

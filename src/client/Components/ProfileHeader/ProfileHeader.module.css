@@ -1,0 +1,148 @@
+:root {
+    --primary-color: #ff5733;
+    --secondary-color: #1b1b1b;
+    --background-color: #f8f8f8;
+    --text-color: #ffffff;
+    --button-glow-color: rgba(255, 255, 255, 0.7);
+    --header-bg: rgba(27, 27, 27, 0.6);
+    --header-height: 70px;
+    --card-text-color: #fff;
+}
+
+.header {
+    position: sticky;
+    top: 0;
+    width: 97vw; /* Extend the header to the entire page's width */
+    background-color: rgba(27, 27, 27, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    z-index: 1000;
+    color: white;
+    margin-bottom: 2rem;
+}
+.header.translucent {
+    background-color: var(--header-bg);
+}
+.logoContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo {
+    height: 4rem;
+}
+
+.title {
+    font-size: 1.5rem;
+    color: aliceblue;
+    font-weight: bold;
+}
+
+.burgerMenu {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    display: none;
+}
+
+.nav {
+    display: flex;
+    gap: 1rem;
+}
+
+.navOpen {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.navButton {
+    color: white;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.dropdown-container {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--background-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    z-index: 10;
+}
+
+.subButtonGroup button {
+    display: block;
+    margin: 0.5rem 0;
+    width: 100%;
+}
+
+.subButtonGroup1 button {
+    display: block;
+    margin: 0.5rem 0;
+    width: 100%;
+}
+
+.subButtonGroup2 button {
+    display: block;
+    margin: 0.5rem 0;
+    width: 100%;
+}
+
+.buttonGroup {
+    margin-top: 1rem;
+}
+
+.mainButton {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    background: none;
+    transition: text-shadow 0.3s;
+    outline: none; /* Remove border on click */
+    position: relative; /* Add this line */
+
+}
+
+.mainButton:hover {
+    text-shadow: 0 0 8px var(--button-glow-color);
+    background: none; /* Ensure background remains unchanged on hover */
+}
+
+
+.subButtonGroup {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--background-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    z-index: 10;
+    outline: none; /* Remove border on click */
+
+}
+
+@media (max-width: 768px) {
+    .burgerMenu {
+        display: block;
+    }
+
+    .nav {
+        display: none;
+    }
+
+    .navOpen {
+        display: flex;
+    }
+}

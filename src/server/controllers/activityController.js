@@ -2,7 +2,7 @@ const AsyncHandler = require("express-async-handler");
 const Activity = require("../models/Activity.js");
 const ActivityCategory = require("../models/ActivityCategory.js");
 const Tag = require("../models/Tags.js");
-
+const axios = require("axios"); // Ensure axios is installed: npm install axios
 // Create an activity
 const createActivity = AsyncHandler(async (req, res) => {
   const {
@@ -83,6 +83,40 @@ const getActivitiesByUserId = async (req, res) => {
     res.status(500).json({ message: "Error fetching activities." });
   }
 };
+
+const getActivityRevenue = async (req, res) => {
+  try {
+    // Fetch exchange rates from an external API
+    const apiUrl = "https://api.exchangerate-api.com/v4/latest/USD"; // Replace with your chosen API URL
+    const { data } = await axios.get(apiUrl);
+
+    if (!data || !data.rates) {
+      return res.status(500).json({ error: "Failed to fetch exchange rates" });
+    }
+
+    const exchangeRates = data.rates; // Get rates for all currencies
+
+    // Use aggregation to calculate total revenue
+    const activities = await Activity.find(); // Replace with your Activity model fetch logic
+
+    // Convert each activity price to USD
+    const totalRevenueUSD = activities.reduce((total, activity) => {
+      const { price, currency, boughtby } = activity;
+      const rate = exchangeRates[currency] || 1; // Use 1 if currency is missing
+      const priceInUSD = price / rate; // Convert to USD
+      const count = Array.isArray(boughtby) ? boughtby.length : 0;
+      return total + priceInUSD * count;
+    }, 0);
+
+    // Return the total revenue in USD (e.g., 10% as commission)
+    const totalRevenueWithCommission = totalRevenueUSD * 0.1;
+    res.status(200).json({ totalRevenue: totalRevenueWithCommission });
+  } catch (error) {
+    console.error("Error calculating total revenue:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 
 // Get all activities
 const getActivities = AsyncHandler(async (req, res) => {
@@ -305,6 +339,8 @@ const updateRating = async (req, res) => {
 };
 
 
+
+
 module.exports = {
   createActivity,
   getActivities,
@@ -315,5 +351,6 @@ module.exports = {
   getActivitiesFiltered,
   getActivitiesSorted,
   getActivitiesByUserId, // Add this line
-  updateRating
+  updateRating,
+  getActivityRevenue
 };

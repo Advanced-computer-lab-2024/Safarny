@@ -37,6 +37,11 @@ const SideBar = () => {
           <button className={styles.button} onClick={() => navigate('/tourismgoverneradmin')}>
             Tourism Governor
           </button>
+
+          <button className={styles.button} onClick={() => navigate('/salesReport')}>
+            Sales Report
+          </button>
+
         </div>
       )}
     </div>

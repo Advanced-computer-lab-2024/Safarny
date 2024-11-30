@@ -85,6 +85,10 @@ import PasswordRecovery from "./Components/PasswordRecovery/PasswordRecovery";
 import Notifications from "./Components/Notifications/Notifications";
 
 import MyOrders from "./Components/MyOrder/MyOrders";
+import Sales from "./Components/Admin/Report/Sales";
+import AdvertiserSales from "./Components/Sales/Advertiser/advertiserSales";
+import TourGuideSales from "./Components/Sales/TourGuide/TourGuideSales";
+import SellerSales from "./Components/Sales/Seller/SellerSales";
 
 function App() {
   return (
@@ -177,6 +181,10 @@ function App() {
         <Route path="/create-comment-tourguide/:tourGuideId?" element={<CreateCommentForTourGuide />} />
         <Route path="/password-recovery" element={<PasswordRecovery />} />
         <Route path="/notifications" element={<Notifications />} />
+        <Route path="/salesReport" element={<Sales />} />
+        <Route path="/Advertiser_Sales" element={<AdvertiserSales />} />
+        <Route path="/TourGuideSales" element={<TourGuideSales />} />
+        <Route path="/sellerSales" element={<SellerSales />} />
       </Routes>
     </Router>
     //</PurchasedProductsProvider>       

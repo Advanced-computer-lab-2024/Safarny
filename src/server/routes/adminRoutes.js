@@ -8,13 +8,16 @@ const {
     deleteCategory,
 } = require("../controllers/activitycategoryController.js");
 
+const {getActivityRevenue} = require("../controllers/activityController.js");
+
 const {
     createPost,
     getAllPosts,
     updatePostById,
     getPostById,
     deletePostById,
-    deletePostsByCreator
+    deletePostsByCreator,
+    getTotalRevenue
 } = require("../controllers/postsController.js");
 
 const { addAdmin } = require("../controllers/signUpController.js");
@@ -53,6 +56,11 @@ const {
 } = require("../controllers/userComplaintsController.js");
 
 
+const {
+    getItineraryRevenue
+
+} = require("../controllers/itineraryController.js");
+
 
 /*
     1-post toursimGoverner
@@ -68,6 +76,8 @@ const {
     11-get all products sorted by rating
 */
 
+router.get("/getActivitiesRevenue", getActivityRevenue);   
+router.get("/getItinerarayRevenue", getItineraryRevenue);   
 router.get("/getUsers", getUsers);   
 router.delete("/deleteUser/:id", deleteUser);
 router.put("/updateUser/:id", updateUser);   
@@ -124,6 +134,7 @@ router.put("/category/:id", updateCategory);
 router.delete("/category/:id", deleteCategory);
 
 router.get("/complaints", getAllComplaints);
+router.get("/getAllRevenue", getTotalRevenue);
 router.put("/complaints/:id", updateComplaintById);
 router.delete("/deleteByCreator/:creatorId", deletePostsByCreator);
 router.delete("/deleteTourGuide/:id", deleteTourGuideAndIterinaries);

@@ -16,6 +16,8 @@ const {
     getCategories,
   } = require("../controllers/activitycategoryController.js");
   
+  const advertiserController = require("../controllers/advertiserController.js");
+
   
   
   ;
@@ -38,4 +40,8 @@ const {
   
   router.route("/addCategory").post(addCategoryToActivity);
   router.route("/delete_request/:id").put(usersController.updateDeleteAccount);
+  router.route("/getRevenueByAdvertiser/:id").get(advertiserController.getRevenueByAdvertiser);
+  router.route("/getClientsByActivity/:id").get(advertiserController.getBoughtCountByActivity);
+  router.route("/getnumofclients_activity/:id").get(advertiserController.getBoughtCountByAdvertiser);
+
 module.exports = router;
