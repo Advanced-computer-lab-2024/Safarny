@@ -6,11 +6,13 @@ const {
   getAllPosts,
   updatePostById,
   getAllPostsBySellerId,
-  deletePostsByCreator
+  deletePostsByCreator,
+  getRevenueBySeller
 } = require("../controllers/postsController.js");
 const {
   updateDeleteAccount
 } = require("../controllers/usersController.js");
+
 /*
     1-post product
     2-edit product
@@ -20,6 +22,8 @@ const {
     6-get all products by price
     7-get all products sorted by rating    
 */
+
+router.get("/getTotalRevenueByseller/:id", getRevenueBySeller);
 
 router.post("/createProduct", createPost);
 

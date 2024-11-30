@@ -1,6 +1,7 @@
 const Itinerary = require("../models/Itinerary.js");
 const Tag = require("../models/Tags.js");
 const User = require("../models/userModel.js");
+const axios = require("axios"); // Ensure axios is installed: npm install axios
 
 const createItinerary = async (req, res) => {
   try {
@@ -202,6 +203,45 @@ const getItinerariesSorted = async (req, res) => {
   }
 };
 
+
+const getItineraryRevenue = async (req, res) => {
+  try {
+    // Fetch exchange rates from an external API
+    const apiUrl = "https://api.exchangerate-api.com/v4/latest/USD"; // Replace with your preferred API
+    const { data } = await axios.get(apiUrl);
+
+    if (!data || !data.rates) {
+      return res.status(500).json({ error: "Failed to fetch exchange rates" });
+    }
+
+    const exchangeRates = data.rates; // Get rates for all currencies
+
+    // Fetch all itineraries
+    const itineraries = await Itinerary.find();
+
+    // Calculate revenue for each itinerary in USD
+    const totalRevenueUSD = itineraries.reduce((total, itinerary) => {
+      const { price, currency, boughtby } = itinerary;
+      const rate = exchangeRates[currency] || 1; // Use 1 if currency is missing or not found
+      const priceInUSD = price / rate; // Convert price to USD
+      const revenue = priceInUSD * (boughtby?.length || 0); // Revenue = priceInUSD * number of buyers
+      return total + revenue; // Accumulate the revenue
+    }, 0);
+
+    // Apply commission (e.g., 10%)
+    const totalRevenueWithCommission = totalRevenueUSD * 0.1;
+
+    // Return the total revenue
+    res.status(200).json({ totalRevenue: totalRevenueWithCommission });
+  } catch (error) {
+    console.error("Error calculating itinerary revenue:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
+
+
 const getItinerariesFiltered = async (req, res) => {
   const { price, currency, date, tags, language } = req.query;
 
@@ -254,6 +294,7 @@ const getItinerariesFiltered = async (req, res) => {
   }
 };
 
+
 const geItinerariesFor = async (req, res) => {
   const itineraries = await Itinerary.find({
     createdby: req.params.tourguideId,
@@ -301,5 +342,6 @@ module.exports = {
   getItinerariesSorted,
   getItinerariesFiltered,
   geItinerariesFor,
-    updateRating
+    updateRating,
+    getItineraryRevenue
 };

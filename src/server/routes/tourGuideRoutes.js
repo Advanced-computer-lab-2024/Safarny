@@ -14,7 +14,8 @@ const tourGuideController = require("../controllers/tourGuideController.js");
     2-get/edit this TourGuide details
     3-CRUD on Itinerary
 */
-
+router.route("/getItineraryClients/:id").get(tourGuideController.getBoughtCountByTourGuide);
+router.route("/getItineraryRevenueByTourGuide/:id").get(tourGuideController.getItineraryRevenueByTourGuide);
 
 router.route("/get-my-tourguide-itineraries/:tourguideId").get(itineraryController.geItinerariesFor);
 
