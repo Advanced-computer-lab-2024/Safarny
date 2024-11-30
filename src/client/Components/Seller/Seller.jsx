@@ -15,7 +15,7 @@ import { storage } from "/src/server/config/Firebase";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Footer from "/src/client/components/Footer/Footer";
 import Header from "/src/client/components/Header/Header";
-//import styles from './Seller.module.css';
+import styles from './Seller.module.css';
 import { Rating } from "@mui/material";
 
 const Admin = () => {
@@ -190,19 +190,18 @@ const Admin = () => {
   });
 
   return (
-      <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-        <Header style={{ position: 'relative' }} />
-
-        <div style={{ flex: 1, display: "flex" }}>
-          <div style={{ marginLeft: "250px", padding: "20px" }}>
-            <div
+      <div className={styles.container}>
+        <Header />
+        <div>
+          <div className={styles.searchContainer}>
+            {/* <div
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
                   marginBottom: "20px",
                 }}
             >
-            </div>
+            </div> */}
 
             {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 
@@ -378,5 +377,5 @@ const Admin = () => {
       </div>
   );
 };
-//github is an idiot
+
 export default Admin;
