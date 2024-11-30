@@ -160,7 +160,7 @@ const ProfileHeader = ({ userId, userInfo }) => {
                     Homepage
                 </button>
 
-                <div className={styles.buttonGroup}>
+                <div className={styles.mainButton}>
                     <button onClick={() => navigate('/products', { state: { userId } })} className={styles.mainButton}>
                         View Products
                     </button>
