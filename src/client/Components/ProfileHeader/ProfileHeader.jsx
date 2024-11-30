@@ -153,10 +153,10 @@ const ProfileHeader = ({ userId, userInfo }) => {
                 ☰
             </button>
             <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
-                <button onClick={handleBackClick} className={styles.navButton}>
+                <button onClick={handleBackClick} className={styles.mainButton}>
                     Back
                 </button>
-                <button onClick={() => navigate('/')} className={styles.navButton}>
+                <button onClick={() => navigate('/')} className={styles.mainButton}>
                     Homepage
                 </button>
 
