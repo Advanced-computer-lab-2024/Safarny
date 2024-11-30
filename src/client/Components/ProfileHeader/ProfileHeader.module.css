@@ -1,0 +1,111 @@
+.header {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background-color: rgba(27, 27, 27, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    z-index: 1000;
+    color: white;
+    margin-bottom: 2rem;
+}
+
+.logoContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo {
+    height: 4rem;
+}
+
+.title {
+    font-size: 1.5rem;
+    color: aliceblue;
+    font-weight: bold;
+}
+
+.burgerMenu {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    display: none;
+}
+
+.nav {
+    display: flex;
+    gap: 1rem;
+}
+
+.navOpen {
+    display: flex;
+    flex-direction: column;
+}
+
+.navButton {
+    color: white;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.dropdown-container {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--background-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    z-index: 10;
+}
+
+.subButtonGroup button {
+    display: block;
+    margin: 0.5rem 0;
+    width: 100%;
+}
+
+.buttonGroup {
+    margin-top: 1rem;
+}
+
+.mainButton {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    text-align: left;
+    font-size: 1rem;
+}
+
+.subButtonGroup {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--background-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    z-index: 10;
+}
+
+@media (max-width: 768px) {
+    .burgerMenu {
+        display: block;
+    }
+
+    .nav {
+        display: none;
+    }
+
+    .navOpen {
+        display: flex;
+    }
+}
