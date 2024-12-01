@@ -21,6 +21,7 @@
     font-size: var(--heading-font-size);
     margin-bottom: 1rem;
     text-align: center;
+    color: black;
   }
   
   .stat {
