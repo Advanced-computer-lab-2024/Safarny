@@ -231,6 +231,13 @@ const Profile = () => {
             )}
             <div className={styles.userInfo}>
               <h1>Welcome, {userInfo.username}!</h1>
+              {userInfo.photo && (
+                  <img
+                      src={userInfo.photo}
+                      alt="Profile"
+                      className={styles.profileImage}
+                  />
+              )}
               <h5>Your account details:</h5>
               <p>Role: <strong>{userInfo.role}</strong></p>
               <p>Email: <strong>{userInfo.email}</strong></p>
