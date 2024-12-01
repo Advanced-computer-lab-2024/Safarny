@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
+import Footer from '/src/client/Components/Footer/Footer';
+import Header from '/src/client/Components/Header/Header';
+import styles from './SellerSales.module.css';
 
 const SellerSales = () => {
     const location = useLocation(); // useLocation to get userId
@@ -28,9 +31,11 @@ const SellerSales = () => {
     }, [userId]);
 
     return (
-        <div>
-            <h2>Seller Sales</h2>
-            <p>Total Merchandise Revenue: {revenue}$ </p>
+        <div className={styles.container}>
+            <Header />
+            <h2 className={styles.heading}>Seller Sales</h2>
+            <p className={styles.stat}>Total Merchandise Revenue: {revenue}$</p>
+            <Footer />
         </div>
     );
 };
