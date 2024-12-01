@@ -62,6 +62,14 @@ const {
 } = require("../controllers/itineraryController.js");
 
 
+const {
+    createPromoCode,
+    getPromoCodeById,
+    updatePromoCode,
+    getAllPromoCodes,
+  } = require("../controllers/PromoCodeController.js");
+
+
 /*
     1-post toursimGoverner
     2-delete user
@@ -75,6 +83,25 @@ const {
     10-get all products by price
     11-get all products sorted by rating
 */
+
+
+
+//const router = express.Router();
+
+// Route for creating a promo code
+router.post("/promocodes", createPromoCode);
+
+// Route for getting all promo codes
+router.get("/promocodes", getAllPromoCodes);
+
+// Route for getting a promo code by ID
+router.get("/promocodes/:id", getPromoCodeById);
+
+// Route for updating a promo code by ID
+router.put("/promocodes/:id", updatePromoCode);
+
+//module.exports = router;
+
 
 router.get("/getActivitiesRevenue", getActivityRevenue);   
 router.get("/getItinerarayRevenue", getItineraryRevenue);   
