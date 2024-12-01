@@ -1,6 +1,7 @@
 const Itinerary = require("../models/Itinerary.js");
 const Tag = require("../models/Tags.js");
 const User = require("../models/userModel.js");
+const Booking = require("../models/Booking.js");
 const axios = require("axios"); // Ensure axios is installed: npm install axios
 
 const createItinerary = async (req, res) => {
@@ -353,6 +354,58 @@ const getBoughtCountByItinerary = async (req, res) => {
 };
 
 
+const getTouristsByItineraryAndDate = async (req, res) => {
+  try {
+    const { id } = req.params; // Tour Guide ID
+    const { month, year } = req.query; // Optional month and year filters
+
+    // Step 1: Match itineraries created by the tour guide
+    const itineraries = await Itinerary.find({ createdby: id }).select("_id");
+    const itineraryIds = itineraries.map((itinerary) => itinerary._id);
+
+    // Step 2: Build dynamic match conditions
+    const matchConditions = {
+      itinerary: { $in: itineraryIds },
+      status: { $in: ["confirmed", "active"] }, // Only include confirmed or active bookings
+    };
+
+    if (month || year) {
+      matchConditions.$expr = {
+        $and: [],
+      };
+
+      if (month) {
+        matchConditions.$expr.$and.push({
+          $eq: [{ $month: { $dateFromString: { dateString: "$bookingDate" } } }, parseInt(month)],
+        });
+      }
+      if (year) {
+        matchConditions.$expr.$and.push({
+          $eq: [{ $year: { $dateFromString: { dateString: "$bookingDate" } } }, parseInt(year)],
+        });
+      }
+    }
+
+    // Step 3: Aggregate bookings
+    const result = await Booking.aggregate([
+      { $match: matchConditions }, // Match based on dynamic conditions
+      {
+        $group: {
+          _id: "$itinerary", // Group by itinerary
+          totalTourists: { $sum: 1 }, // Count the number of tourists
+        },
+      },
+    ]);
+
+    res.status(200).json(result); // Return the result
+  } catch (error) {
+    console.error("Error filtering by itinerary and date:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
+
 module.exports = {
   createItinerary,
   getAllItineraries,
@@ -365,5 +418,6 @@ module.exports = {
   geItinerariesFor,
     updateRating,
     getItineraryRevenue,
-    getBoughtCountByItinerary
+    getBoughtCountByItinerary,
+    getTouristsByItineraryAndDate
 };

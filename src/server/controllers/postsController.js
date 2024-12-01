@@ -100,7 +100,7 @@ const getRevenueBySeller = async (req, res) => {
     }, 0);
 
     // Return the total revenue
-    res.status(200).json({ totalRevenue: totalRevenueUSD });
+    res.status(200).json({ totalRevenue: totalRevenueUSD*0.9 });
   } catch (error) {
     console.error("Error calculating revenue:", error.message);
     res.status(500).json({ error: "Internal server error" });

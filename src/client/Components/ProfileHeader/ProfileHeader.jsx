@@ -115,6 +115,9 @@ const ProfileHeader = ({ userId, userInfo }) => {
                     >
                         Transportation and Activities
                     </button>
+                    <button onClick={()=>navigate("/Advertiser_Sales",{ state: { userId } })} className={styles.mainButton}>
+                                Sales Report
+                            </button>
                     {showTransportationsButtons && (
                         <div className={styles.subButtonGroup}>
                             <button onClick={() => navigate('/AdvertiserMain', { state: { userId } })}>
@@ -126,6 +129,7 @@ const ProfileHeader = ({ userId, userInfo }) => {
                             <button onClick={() => navigate('/transportss/edit-transport', { state: { userId } })}>
                                 Edit & Delete Transport
                             </button>
+                            
                         </div>
                     )}
                 </>
@@ -134,9 +138,14 @@ const ProfileHeader = ({ userId, userInfo }) => {
 
         if (userInfo.role === 'TourGuide') {
             return (
+                <>
                 <button onClick={() => navigate('/tourguide', { state: { userId } })} className={styles.mainButton}>
                     Add Itinerary
                 </button>
+                <button onClick={()=>navigate("/TourGuideSales",{ state: { userId } })} className={styles.mainButton}>
+                Sales Report
+                </button>
+                </>
             );
         }
 

@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken"); // Ensure you have imported jwt
 const dotenv = require("dotenv");
 const axios = require("axios"); // Ensure axios is installed: npm install axios
 const Activity = require("../models/Activity.js");
+const Booking = require("../models/Booking.js");
 dotenv.config();
 
 const createAdvertiser = async (req, res) => {
@@ -86,12 +87,60 @@ const getRevenueByAdvertiser = async (req, res) => {
     }, 0);
 
     // Return the total revenue
-    res.status(200).json({ totalRevenue: totalRevenueUSD });
+    res.status(200).json({ totalRevenue: totalRevenueUSD*0.9 });
   } catch (error) {
     console.error("Error calculating revenue:", error.message);
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+const getTouristsByActivityAndDate = async (req, res) => {
+  try {
+    const { advertiserId } = req.params; // Advertiser ID
+    const { month, year } = req.query; // Optional month and year filters
+
+    // Step 1: Match activities created by the advertiser
+    const activities = await Activity.find({ createdby: advertiserId }).select("_id");
+    const activityIds = activities.map((activity) => activity._id);
+
+    // Step 2: Build dynamic match conditions
+    const matchConditions = {
+      activity: { $in: activityIds },
+      status: { $in: ["confirmed", "active"] }, // Only include confirmed or active bookings
+    };
+
+    if (month || year) {
+      matchConditions.$expr = {
+        $and: [],
+      };
+
+      if (month) {
+        matchConditions.$expr.$and.push({ $eq: [{ $month: { $dateFromString: { dateString: "$bookingDate" } } }, parseInt(month)] });
+      }
+      if (year) {
+        matchConditions.$expr.$and.push({ $eq: [{ $year: { $dateFromString: { dateString: "$bookingDate" } } }, parseInt(year)] });
+      }
+    }
+
+    // Step 3: Aggregate bookings
+    const result = await Booking.aggregate([
+      { $match: matchConditions }, // Match based on dynamic conditions
+      {
+        $group: {
+          _id: "$activity", // Group by activity
+          totalTourists: { $sum: 1 }, // Count the number of tourists
+        },
+      },
+    ]);
+
+    res.status(200).json(result); // Return the result
+  } catch (error) {
+    console.error("Error filtering by activity and date:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
 
 const getBoughtCountByAdvertiser = async (req, res) => {
   try {
@@ -157,4 +206,5 @@ module.exports = {
   getRevenueByAdvertiser,
   getBoughtCountByAdvertiser,
   getBoughtCountByActivity,
+  getTouristsByActivityAndDate,
 };

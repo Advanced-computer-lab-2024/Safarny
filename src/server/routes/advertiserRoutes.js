@@ -43,5 +43,7 @@ const {
   router.route("/getRevenueByAdvertiser/:id").get(advertiserController.getRevenueByAdvertiser);
   router.route("/getClientsByActivity/:id").get(advertiserController.getBoughtCountByActivity);
   router.route("/getnumofclients_activity/:id").get(advertiserController.getBoughtCountByAdvertiser);
+  router.get("/report/:advertiserId", advertiserController.getTouristsByActivityAndDate);
+
 
 module.exports = router;
