@@ -12,7 +12,7 @@
 .header {
     position: sticky;
     top: 0;
-    width: 97vw; /* Extend the header to the entire page's width */
+    width: 97vw;
     background-color: rgba(27, 27, 27, 0.9);
     display: flex;
     align-items: center;

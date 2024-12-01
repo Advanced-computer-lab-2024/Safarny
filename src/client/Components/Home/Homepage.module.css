@@ -19,6 +19,8 @@
   flex-direction: column;
   align-items: center;
   width: 100vw;
+  position: relative;
+  top: 8rem;
 }
 
 .header {
@@ -33,6 +35,7 @@
   padding: 1rem 2rem;
   z-index: 1000;
   transition: background-color 0.3s;
+  margin-bottom: 4rem !important;
 }
 
 .header.translucent {
