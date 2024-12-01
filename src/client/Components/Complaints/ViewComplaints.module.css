@@ -10,16 +10,6 @@
   --container-bg-color: #dcdbdb;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  background-color: var(--container-bg-color); /* Set full-page background to white */
-  color: var(--text-color); /* Black text */
-  font-family: Arial, sans-serif;
-  height: 100%;
-  width: 100%;
-}
-
 .container {
   padding: var(--container-spacing);
   background-color: var(--container-bg-color);
