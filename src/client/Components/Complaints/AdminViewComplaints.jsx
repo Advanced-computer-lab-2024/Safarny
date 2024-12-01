@@ -157,9 +157,10 @@ const AdminViewComplaints = () => {
             {filteredComplaints.length === 0 ? (
     <p className={styles.noComplaints}>No complaints found.</p>
 ) : (
-    <div className={styles.complaintsContainer}>
-        {filteredComplaints.map((complaint) => (
-            <div key={complaint._id} className={styles.complaintItem}>
+    <ul className={styles.complaintsList}>
+    {filteredComplaints.map((complaint) => (
+        <li key={complaint._id} className={styles.complaintItem}>
+            <div className={styles.complaint}>
                 <h3 className={styles.title}>{complaint.title}</h3>
                 <p className={styles.body}>{complaint.body}</p>
                 <p className={styles.status}>Status: {complaint.status}</p>
@@ -208,8 +209,9 @@ const AdminViewComplaints = () => {
                     )}
                 </div>
             </div>
-        ))}
-    </div>
+        </li>
+    ))}
+</ul>
 )}
             <Footer />
             <Modal
