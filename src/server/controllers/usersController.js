@@ -210,6 +210,7 @@ const updateProfileById = AsyncHandler(async (req, res) => {
       activityCategories: req.body.activityCategories,
       Status: req.body.Status,
       loyaltyPoints: req.body.loyaltyPoints, // Added support for loyalty points
+      addresses: req.body.addresses, // Added addresses field
     };
 
     // Remove undefined fields from updateData
@@ -485,3 +486,4 @@ module.exports = {
   getUsersBySavedActivity,
     getUsersBySavedItinerary
 };
+

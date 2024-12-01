@@ -27,7 +27,8 @@ const UpdateProfile = () => {
     CompanyHotline: '',
     CompanyName: '', // Update to CompanyName
     sellerName: '',
-    description: ''
+    description: '',
+    addresses: [], // Added addresses state
   });
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -64,7 +65,8 @@ const UpdateProfile = () => {
     try {
       const response = await axios.put(`http://localhost:3000/tourist/${userId}`, {
         ...userInfo,
-        id: userId // Include userId in the request body
+        id: userId, // Include userId in the request body
+        addresses: userInfo.addresses // Include addresses in the request
       });
       setSuccessMessage(response.data.message);
       setErrorMessage('');
@@ -128,7 +130,7 @@ const UpdateProfile = () => {
             </label>
           </>
         );
-        
+
 
       case 'Advertiser':
         return (
@@ -260,6 +262,42 @@ const UpdateProfile = () => {
                           required
                       />
                     </label>
+                    <label>
+                      Addresses:
+                      <div className="flex flex-col space-y-2">
+                        {userInfo.addresses.map((address, index) => (
+                          <div key={index} className="flex items-center space-x-2">
+                            <input
+                              type="text"
+                              value={address}
+                              onChange={(e) => {
+                                const newAddresses = [...userInfo.addresses];
+                                newAddresses[index] = e.target.value;
+                                setUserInfo({ ...userInfo, addresses: newAddresses });
+                              }}
+                              className="flex-grow"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newAddresses = userInfo.addresses.filter((_, i) => i !== index);
+                                setUserInfo({ ...userInfo, addresses: newAddresses });
+                              }}
+                              className="text-red-500"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        ))}
+                        <button
+                          type="button"
+                          onClick={() => setUserInfo({ ...userInfo, addresses: [...userInfo.addresses, ''] })}
+                          className="text-blue-500"
+                        >
+                          Add Address
+                        </button>
+                      </div>
+                    </label>
                   </>
               )}
               <label>
@@ -300,3 +338,4 @@ const UpdateProfile = () => {
 };
 
 export default UpdateProfile;
+
