@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
+import Footer from '/src/client/Components/Footer/Footer';
+import Header from '/src/client/Components/Header/Header';
+import styles from "./AdvertiserSales.module.css";
 
 const AdvertiserSales = () => {
-    const location = useLocation(); // useLocation to get userId
-    const { userId } = location.state || {}; // Extract userId from location.state
+    const location = useLocation();
+    const { userId } = location.state || {};
     const [revenue, setRevenue] = useState(0);
     const [boughtCount, setBoughtCount] = useState(0);
     const [month, setMonth] = useState('');
@@ -26,7 +29,7 @@ const AdvertiserSales = () => {
         { label: 'December', value: '12' }
     ];
 
-    const years = [2020,2021,2022,2023, 2024, 2025, 2026]; // Example years, adjust based on your data range
+    const years = [2020, 2021, 2022, 2023, 2024, 2025, 2026];
 
     const getRevenueByAdvertiser = async (id) => {
         try {
@@ -53,9 +56,7 @@ const AdvertiserSales = () => {
             const response = await fetch(`http://localhost:3000/advertiser/report/${id}?month=${month}&year=${year}`);
             const data = await response.json();
             const sumOfTourists = data.reduce((total, activity) => total + activity.totalTourists, 0);
-            console.log("Total tourists:", sumOfTourists);
-            setTotalTourists(sumOfTourists); // Set the sum of totalTourists
-
+            setTotalTourists(sumOfTourists);
         } catch (error) {
             console.error("Error fetching tourists:", error);
         }
@@ -83,14 +84,17 @@ const AdvertiserSales = () => {
     };
 
     return (
-        <div>
-            <h2>Advertiser Sales</h2>
-            <p>Total Client Number for all activities: {boughtCount}</p>
-            <p>Total Revenue: {revenue}$ </p>
-
-            {/* Dropdowns for Month and Year */}
-            <div>
-                <select value={month} onChange={(e) => setMonth(e.target.value)}>
+        <div className={styles.container}>
+            <Header />
+            <h2 className={styles.heading}>Advertiser Sales</h2>
+            <p className={styles.stat}>Total Client Number for all activities: {boughtCount}</p>
+            <p className={styles.stat}>Total Revenue: {revenue}$</p>
+            <div className={styles.formGroup}>
+                <select
+                    className={styles.select}
+                    value={month}
+                    onChange={(e) => setMonth(e.target.value)}
+                >
                     <option value="">Select Month</option>
                     {months.map((month) => (
                         <option key={month.value} value={month.value}>
@@ -98,8 +102,11 @@ const AdvertiserSales = () => {
                         </option>
                     ))}
                 </select>
-
-                <select value={year} onChange={(e) => setYear(e.target.value)}>
+                <select
+                    className={styles.select}
+                    value={year}
+                    onChange={(e) => setYear(e.target.value)}
+                >
                     <option value="">Select Year</option>
                     {years.map((year) => (
                         <option key={year} value={year}>
@@ -107,12 +114,14 @@ const AdvertiserSales = () => {
                         </option>
                     ))}
                 </select>
-
-                <button onClick={handleSubmit}>Submit</button>
+                <button className={styles.button} onClick={handleSubmit}>
+                    Submit
+                </button>
             </div>
 
             <p>Total Tourists: {totalTourists}</p> {/* Display the sum of tourists */}
             <p>Filtered Revenue {filteredRevenue}</p>
+            <Footer />
         </div>
     );
 };
