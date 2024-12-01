@@ -155,48 +155,62 @@ const AdminViewComplaints = () => {
                 </select>
             </div>
             {filteredComplaints.length === 0 ? (
-                <p className={styles.noComplaints}>No complaints found.</p>
-            ) : (
-                <ul className={styles.complaintsList}>
-                    {filteredComplaints.map((complaint) => (
-                        <li key={complaint._id} className={styles.complaintItem}>
-                            <div className={styles.complaint}>
-                                <h3 className={styles.title}>{complaint.title}</h3>
-                                <p className={styles.body}>{complaint.body}</p>
-                                <p className={styles.status}>Status: {complaint.status}</p>
-                                <p className={styles.date}>Date: {new Date(complaint.date).toLocaleString()}</p>
-                                <button onClick={() => handleEditClick(complaint)} className={styles.editButton}>Edit</button>
-                                <div className={styles.commentsSection}>
-                                    <h4>Comments:</h4>
-                                    {complaint.comments.length > 0 ? (
-                                        complaint.comments.map((comment, index) => (
-                                            <div key={index} className={styles.comment}>
-                                                {editingComment && editingComment.complaintId === complaint._id && editingComment.commentIndex === index ? (
-                                                    <div className={styles.editComment}>
-                                                        <textarea
-                                                            value={editCommentText}
-                                                            onChange={handleEditCommentChange}
-                                                            className={styles.commentEditInput}
-                                                        />
-                                                        <button onClick={handleEditCommentSubmit} className={styles.saveCommentButton}>Save</button>
-                                                    </div>
-                                                ) : (
-                                                    <div className={styles.commentText}>
-                                                        <p>{comment}</p>
-                                                        <button onClick={() => handleEditCommentClick(complaint._id, index, comment)} className={styles.editCommentButton}>Edit</button>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <p>No comments available.</p>
-                                    )}
-                                </div>
+    <p className={styles.noComplaints}>No complaints found.</p>
+) : (
+    <div className={styles.complaintsContainer}>
+        {filteredComplaints.map((complaint) => (
+            <div key={complaint._id} className={styles.complaintItem}>
+                <h3 className={styles.title}>{complaint.title}</h3>
+                <p className={styles.body}>{complaint.body}</p>
+                <p className={styles.status}>Status: {complaint.status}</p>
+                <p className={styles.date}>Date: {new Date(complaint.date).toLocaleString()}</p>
+                <button onClick={() => handleEditClick(complaint)} className={styles.editButton}>
+                    Edit
+                </button>
+                <div className={styles.commentsSection}>
+                    <h4>Comments:</h4>
+                    {complaint.comments.length > 0 ? (
+                        complaint.comments.map((comment, index) => (
+                            <div key={index} className={styles.comment}>
+                                {editingComment &&
+                                editingComment.complaintId === complaint._id &&
+                                editingComment.commentIndex === index ? (
+                                    <div className={styles.editComment}>
+                                        <textarea
+                                            value={editCommentText}
+                                            onChange={handleEditCommentChange}
+                                            className={styles.commentEditInput}
+                                        />
+                                        <button
+                                            onClick={handleEditCommentSubmit}
+                                            className={styles.saveCommentButton}
+                                        >
+                                            Save
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className={styles.commentText}>
+                                        <p>{comment}</p>
+                                        <button
+                                            onClick={() =>
+                                                handleEditCommentClick(complaint._id, index, comment)
+                                            }
+                                            className={styles.editCommentButton}
+                                        >
+                                            Edit
+                                        </button>
+                                    </div>
+                                )}
                             </div>
-                        </li>
-                    ))}
-                </ul>
-            )}
+                        ))
+                    ) : (
+                        <p>No comments available.</p>
+                    )}
+                </div>
+            </div>
+        ))}
+    </div>
+)}
             <Footer />
             <Modal
                 isOpen={!!editingComplaint}
