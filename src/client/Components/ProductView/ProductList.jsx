@@ -71,7 +71,7 @@ const ProductList = () => {
           const sellerData = await Promise.all(sellerPromises);
 
           const sellersMap = sellerData.reduce((acc, seller) => {
-            acc[seller._id] = seller.name;
+            acc[seller._id] = seller.sellerName;
             return acc;
           }, {});
 
@@ -205,7 +205,7 @@ const ProductList = () => {
   });
 
   const sortedProducts = sortByRating
-      ? [...filteredProducts].sort((a, b) => b.rating - a.rating)
+      ? [...filteredProducts].sort((a, b) => b.averageRating - a.averageRating)
       : filteredProducts;
 
   if (loading) {
