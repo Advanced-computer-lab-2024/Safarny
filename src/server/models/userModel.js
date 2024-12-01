@@ -29,6 +29,10 @@ const userModel = new mongoose.Schema(
     DOB: Date,
     age: Number,
     mobile: String,
+    addresses: {
+      type: [String],
+      default: []
+    },
     loyaltyPoints: { type: Number, default: 0 },
     loyaltyLevel: {
       type: String,
@@ -139,3 +143,4 @@ userModel.pre("save", function (next) {
 
 const User = mongoose.model("User", userModel);
 module.exports = User;
+

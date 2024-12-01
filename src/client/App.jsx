@@ -83,6 +83,8 @@ import CreateCommentForItinerary from "./Components/Comments/CreateCommentForIti
 import CreateCommentForTourGuide from "./Components/Comments/CreateCommentForTourGuide";
 import PasswordRecovery from "./Components/PasswordRecovery/PasswordRecovery";
 import Notifications from "./Components/Notifications/Notifications";
+
+import MyOrders from "./Components/MyOrder/MyOrders";
 import Sales from "./Components/Admin/Report/Sales";
 import AdvertiserSales from "./Components/Sales/Advertiser/advertiserSales";
 import TourGuideSales from "./Components/Sales/TourGuide/TourGuideSales";
@@ -171,6 +173,7 @@ function App() {
         <Route path="/PreferencesPage" element={<Preferences />} />
         <Route path="/MyCart" element={<MyCart />} />
         <Route path="/mybookings" element={<MyBookings />} />
+        <Route path="/myorders" element={<MyOrders />} />
 
         {/* Comments routes */}
         <Route path="/create-comment-activity/:activityId?" element={<CreateCommentForActivity />} />

@@ -265,7 +265,9 @@ const Cart = () => {
 
   const totalPrice2 = cartItems.reduce(
     (sum, item) =>
-      sum + parseFloat(convertPrice(item.price, item.currency, walletCurrency)),
+      sum +
+      parseFloat(convertPrice(item.price, item.currency, walletCurrency)) *
+        (desiredQuantities[item._id] || 1),
     0
   );
 
@@ -273,12 +275,14 @@ const Cart = () => {
     <div className={styles.container}>
       <Header />
       <h1 className={styles.headerTitle}>My Cart</h1>
-      <button
-        className={styles.proceedButton}
-        onClick={() => setShowCheckoutModal(true)}
-      >
-        Proceed to checkout
-      </button>
+      {cartItems.length > 0 && (
+        <button
+          className={styles.proceedButton}
+          onClick={() => setShowCheckoutModal(true)}
+        >
+          Proceed to checkout
+        </button>
+      )}
 
       {showCheckoutModal && (
         <CheckoutModal

@@ -23,7 +23,11 @@ const transportSchema = new mongoose.Schema({
     enum: ['Bus', 'Car', 'Train', 'Boat'],
     required: true
   },
-  location: {
+  departureLocation: {
+    type: String,
+    required: true
+  },
+  arrivalLocation: {
     type: String,
     required: true
   },
@@ -50,3 +54,4 @@ const transportSchema = new mongoose.Schema({
 const Transport = mongoose.model('Transport', transportSchema);
 
 module.exports = Transport;
+

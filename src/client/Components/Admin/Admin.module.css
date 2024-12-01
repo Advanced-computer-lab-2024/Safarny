@@ -21,6 +21,7 @@
   min-width: 100vw;
   background-color: var(--background-color);
   color: var(--primary-color);
+  position: absolute;
 }
 
 .header {

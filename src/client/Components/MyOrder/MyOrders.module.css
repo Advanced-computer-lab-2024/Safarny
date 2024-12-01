@@ -1,0 +1,31 @@
+.container {
+    padding: 20px;
+  }
+  
+  .itemsList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .pending {
+    background-color: #ffd700;
+  }
+  
+  .confirmed {
+    background-color: #87ceeb;
+  }
+  
+  .shipped {
+    background-color: #ffa500;
+  }
+  
+  .delivered {
+    background-color: #90ee90;
+  }
+  
+  .cancelled {
+    background-color: #ff6347;
+  }
+  
+  

@@ -89,6 +89,9 @@ const ProfileSideBar = ({ userId, userInfo }) => {
                                     <button onClick={() => navigate('/mybookings', { state: { userId } })} className={styles.subButton}>
                                         My Bookings
                                     </button>
+                                    <button onClick={() => navigate('/myorders', { state: { userId } })} className={styles.subButton}>
+                                        My Orders
+                                    </button>
                                     <button onClick={() => navigate('/PreferencesPage', { state: { userId } })} className={styles.subButton}>
                                         Select Your Preferences
                                     </button>

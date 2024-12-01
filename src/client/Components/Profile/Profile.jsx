@@ -219,18 +219,25 @@ const Profile = () => {
   return (
     <div className={styles.container}>
       <ProfileHeader userId={userId} userInfo={userInfo} />
-      <button className={styles.notificationButton} onClick={handleNotification}>
-        <FaBell />
-      </button>
       <main className={styles.main}>
         {/* <ProfileSideBar userId={userId} userInfo={userInfo} /> */}
         <section className={styles.intro}>
+          <button className={styles.notificationButton} onClick={handleNotification}>
+            <FaBell/>
+          </button>
           <div className={styles.profileHeader}>
             {userInfo.image && (
-              <img src={userInfo.image} alt="Profile" className={styles.profileImage} />
+                <img src={userInfo.image} alt="Profile" className={styles.profileImage}/>
             )}
             <div className={styles.userInfo}>
               <h1>Welcome, {userInfo.username}!</h1>
+              {userInfo.photo && (
+                  <img
+                      src={userInfo.photo}
+                      alt="Profile"
+                      className={styles.profileImage}
+                  />
+              )}
               <h5>Your account details:</h5>
               <p>Role: <strong>{userInfo.role}</strong></p>
               <p>Email: <strong>{userInfo.email}</strong></p>
@@ -239,18 +246,18 @@ const Profile = () => {
             </div>
           </div>
           {userInfo.role === "Tourist" && userInfo.loyaltyLevel && (
-            <div className={styles.loyaltyBadge}>
-              <p>Badge: </p>
-              {userInfo.loyaltyLevel === "level 1" && (
-                <img src="src/client/Assets/Img/rank1.jpg" alt="Rank 1 Badge" className={styles.rankBadge} />
-              )}
-              {userInfo.loyaltyLevel === "level 2" && (
-                <img src="src/client/Assets/Img/rank2.jpg" alt="Rank 2 Badge" className={styles.rankBadge} />
-              )}
-              {userInfo.loyaltyLevel === "level 3" && (
-                <img src="src/client/Assets/Img/rank3.jpg" alt="Rank 3 Badge" className={styles.rankBadge} />
-              )}
-            </div>
+              <div className={styles.loyaltyBadge}>
+                <p>Badge: </p>
+                {userInfo.loyaltyLevel === "level 1" && (
+                    <img src="src/client/Assets/Img/rank1.jpg" alt="Rank 1 Badge" className={styles.rankBadge}/>
+                )}
+                {userInfo.loyaltyLevel === "level 2" && (
+                    <img src="src/client/Assets/Img/rank2.jpg" alt="Rank 2 Badge" className={styles.rankBadge}/>
+                )}
+                {userInfo.loyaltyLevel === "level 3" && (
+                    <img src="src/client/Assets/Img/rank3.jpg" alt="Rank 3 Badge" className={styles.rankBadge}/>
+                )}
+              </div>
           )}
         </section>
 

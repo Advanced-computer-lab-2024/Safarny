@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Dialog,
@@ -27,6 +27,7 @@ import {
   ThumbUp,
 } from "@mui/icons-material";
 import styles from "./CheckoutModal.module.css";
+import axios from "axios";
 
 export default function CheckoutModal({
   cartItems,
@@ -43,10 +44,11 @@ export default function CheckoutModal({
   const [activeStep, setActiveStep] = useState(0);
   const [stepValidation, setStepValidation] = useState([
     false,
-    false,
+    true,
     true,
     true,
   ]);
+  const [clickedSumit, setClickedSumit] = useState(false);
 
   const handleValidationChange = (stepIndex, isValid) => {
     setStepValidation((prev) => {
@@ -102,17 +104,25 @@ export default function CheckoutModal({
         </Stepper>
         <div className={styles.formGroup}>
           {activeStep === 0 && (
-            <DeliveryStep onValidationChange={handleValidationChange} />
+            <DeliveryStep
+              onValidationChange={handleValidationChange}
+              handleDeliveryChange={handleDeliveryChange}
+            />
           )}
           {activeStep === 1 && (
             <ConfirmationStep
               cartItems={cartItems}
               totalPrice={totalPrice}
               currency={currency}
+              desiredQuantities={desiredQuantities}
             />
           )}
           {activeStep === 2 && (
-            <PaymentStep onValidationChange={handleValidationChange} />
+            <PaymentStep
+              onValidationChange={handleValidationChange}
+              userId={userId}
+              handlePaymentChange={handlePaymentChange}
+            />
           )}
           {activeStep === 3 && (
             <FinishStep
@@ -120,9 +130,12 @@ export default function CheckoutModal({
               deliveryAddress={deliveryAddress}
               paymentMethod={paymentMethod}
               totalPrice={totalPrice}
-              currency={cartItems[0]?.currency}
+              currency={currency}
               userId={userId}
               onSuccess={handleClose}
+              desiredQuantities={desiredQuantities}
+              clickedSumit={clickedSumit}
+              setClickedSumit={setClickedSumit}
             />
           )}{" "}
         </div>
@@ -143,7 +156,7 @@ export default function CheckoutModal({
   );
 }
 
-function DeliveryStep({ onValidationChange }) {
+function DeliveryStep({ onValidationChange, handleDeliveryChange }) {
   const [formValues, setFormValues] = useState({
     address: "",
     city: "",
@@ -159,6 +172,7 @@ function DeliveryStep({ onValidationChange }) {
 
   const handleInputChange = (field, value) => {
     setFormValues((prev) => ({ ...prev, [field]: value }));
+    handleDeliveryChange(field, value);
   };
 
   return (
@@ -194,7 +208,12 @@ function DeliveryStep({ onValidationChange }) {
   );
 }
 
-function ConfirmationStep({ cartItems, totalPrice, currency }) {
+function ConfirmationStep({
+  cartItems,
+  totalPrice,
+  currency,
+  desiredQuantities,
+}) {
   return (
     <div>
       <Typography variant="h6" gutterBottom>
@@ -204,7 +223,7 @@ function ConfirmationStep({ cartItems, totalPrice, currency }) {
         {cartItems.map((item) => (
           <ListItem key={item._id} className={styles.summaryItem}>
             {item.details} - {desiredQuantities[item._id] || 1} x {item.price}{" "}
-            {currency}
+            {item.currency}
           </ListItem>
         ))}
         <ListItem className={`${styles.summaryItem} ${styles.totalPrice}`}>
@@ -218,7 +237,7 @@ function ConfirmationStep({ cartItems, totalPrice, currency }) {
   );
 }
 
-function PaymentStep({ onValidationChange }) {
+function PaymentStep({ onValidationChange, handlePaymentChange }) {
   const [formValues, setFormValues] = useState({
     paymentMethod: "credit_card",
     cardNumber: "",
@@ -226,17 +245,32 @@ function PaymentStep({ onValidationChange }) {
     cvv: "",
   });
 
-  useEffect(() => {
-    const isValid =
-      formValues.paymentMethod === "paypal" ||
-      (formValues.cardNumber.trim() !== "" &&
+  // Helper function to determine validity
+  const validateForm = () => {
+    return (
+      formValues.paymentMethod === "cash_on_delivery" ||
+      formValues.paymentMethod === "wallet" ||
+      (formValues.paymentMethod === "credit_card" &&
+        formValues.cardNumber.trim() !== "" &&
         formValues.expiry.trim() !== "" &&
-        formValues.cvv.trim() !== "");
-    onValidationChange(2, isValid);
-  }, [formValues, onValidationChange]);
+        formValues.cvv.trim() !== "")
+    );
+  };
+
+  // useEffect(() => {
+  //   const isValid = validateForm();
+  //   if (typeof onValidationChange === "function") {
+  //     onValidationChange(2, isValid); // Avoid recursion by ensuring `onValidationChange` is not modifying state indirectly
+  //   }
+  // }, [formValues, onValidationChange]); // Ensure dependencies are accurate and minimal
+
+  useEffect(() => {
+    handlePaymentChange(formValues.paymentMethod);
+  }, [formValues]);
 
   const handleInputChange = (field, value) => {
     setFormValues((prev) => ({ ...prev, [field]: value }));
+    handlePaymentChange(formValues.paymentMethod);
   };
 
   return (
@@ -253,7 +287,12 @@ function PaymentStep({ onValidationChange }) {
             control={<Radio />}
             label="Credit Card"
           />
-          <FormControlLabel value="paypal" control={<Radio />} label="PayPal" />
+          <FormControlLabel
+            value="cash_on_delivery"
+            control={<Radio />}
+            label="Cash on Delivery"
+          />
+          <FormControlLabel value="wallet" control={<Radio />} label="Wallet" />
         </RadioGroup>
       </FormControl>
       {formValues.paymentMethod === "credit_card" && (
@@ -286,6 +325,11 @@ function PaymentStep({ onValidationChange }) {
           </div>
         </>
       )}
+      {formValues.paymentMethod === "wallet" && (
+        <Box fontStyle="italic" fontSize={14}>
+          Wallet payment will be deducted from your account balance.
+        </Box>
+      )}
     </form>
   );
 }
@@ -297,13 +341,18 @@ function FinishStep({
   totalPrice,
   currency,
   userId,
-  desiredQuantities,
   onSuccess,
+  desiredQuantities,
+  clickedSumit,
+  setClickedSumit,
 }) {
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleOrderSubmit = async () => {
+    setClickedSumit(true);
     try {
       const response = await axios.post(
-        "http://localhost:8000/tourist/order/checkout",
+        "http://localhost:3000/tourist/order/checkout",
         {
           userId,
           items: cartItems.map((item) => ({
@@ -323,26 +372,50 @@ function FinishStep({
       console.log("Order saved successfully:", response.data);
       if (onSuccess) onSuccess();
     } catch (error) {
-      console.error(
-        "Error saving order:",
-        error.response?.data || error.message
-      );
+      if (
+        error.response?.status === 400 &&
+        error.response?.data === "Insufficient funds" &&
+        paymentMethod === "wallet"
+      ) {
+        setErrorMessage("Insufficient funds for this order.");
+      } else {
+        console.error(
+          "Error saving order:",
+          error.response?.data || error.message
+        );
+      }
     }
   };
 
+  const handleMyOrdersClick = () => {
+    navigate("/MyOrders", { state: { userId } });
+  };
+
   return (
-    <div style={{ textAlign: "center" }}>
+    <div>
       <ThumbUp className={styles.finishIcon} />
-      <Typography variant="h5" gutterBottom>
-        Thank you for your order!
-      </Typography>
-      <Typography variant="subtitle1">
-        Your order has been placed successfully. You will receive a confirmation
-        email shortly.
-      </Typography>
-      <Button variant="contained" onClick={handleOrderSubmit}>
-        Submit Order
-      </Button>
+      <Typography>Thank you for your order!</Typography>
+      {clickedSumit && (
+        <Typography variant="subtitle1">
+          Your order has been placed successfully. Check your Orders !
+        </Typography>
+      )}
+      {clickedSumit && (
+        <Button variant="contained" onClick={handleMyOrdersClick}>
+          My Orders
+        </Button>
+      )}
+
+      {errorMessage && (
+        <Typography variant="body1" color="error">
+          {errorMessage}
+        </Typography>
+      )}
+      {!clickedSumit && (
+        <Button variant="contained" onClick={handleOrderSubmit}>
+          Submit Order
+        </Button>
+      )}
     </div>
   );
 }

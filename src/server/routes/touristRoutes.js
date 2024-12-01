@@ -31,6 +31,7 @@ const {
   updateOrder,
   deleteOrder,
   getOrdersByUserId,
+  cancelOrder,
 } = require("../controllers/orderController.js");
 
 const router = Router();
@@ -117,6 +118,7 @@ router.get(
 router.post("/order/checkout", checkout);
 router.get("/order/getAllOrders", getAllOrders);
 router.get("/order/getOrdersByUserId/:userId", getOrdersByUserId);
+router.put("/order/cancel/:id", cancelOrder);
 
 
 module.exports = router;

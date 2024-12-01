@@ -30,19 +30,23 @@ const ProfileHeader = ({ userId, userInfo }) => {
                     </button>
                     {showBookingsButtons && (
                         <div className={styles.subButtonGroup}>
-                            <button onClick={() => navigate('/BookFlight', { state: { userId } })}>
+                            <button onClick={() => navigate('/BookFlight', {state: {userId}})}>
                                 Book A Flight
                             </button>
-                            <button onClick={() => navigate('/BookHotel', { state: { userId } })}>
+                            <button onClick={() => navigate('/BookHotel', {state: {userId}})}>
                                 Book A Hotel
                             </button>
-                            <button onClick={() => navigate('/transportss/book-transport', { state: { userId } })}>
+                            <button onClick={() => navigate('/transportss/book-transport', {state: {userId}})}>
                                 Book Transport
                             </button>
-                            <button onClick={() => navigate('/mybookings', { state: { userId } })}>
+                            <button onClick={() => navigate('/mybookings', {state: {userId}})}>
                                 My Bookings
                             </button>
-                            <button onClick={() => navigate('/PreferencesPage', { state: { userId } })}>
+                            <button onClick={() => navigate('/myorders', {state: {userId}})}
+                                    className={styles.subButton}>
+                                My Orders
+                            </button>
+                            <button onClick={() => navigate('/PreferencesPage', {state: {userId}})}>
                                 Select Your Preferences
                             </button>
                         </div>
@@ -162,14 +166,14 @@ const ProfileHeader = ({ userId, userInfo }) => {
                 ☰
             </button>
             <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
-                <button onClick={handleBackClick} className={styles.navButton}>
+                <button onClick={handleBackClick} className={styles.mainButton}>
                     Back
                 </button>
-                <button onClick={() => navigate('/')} className={styles.navButton}>
+                <button onClick={() => navigate('/')} className={styles.mainButton}>
                     Homepage
                 </button>
 
-                <div className={styles.buttonGroup}>
+                <div className={styles.mainButton}>
                     <button onClick={() => navigate('/products', { state: { userId } })} className={styles.mainButton}>
                         View Products
                     </button>

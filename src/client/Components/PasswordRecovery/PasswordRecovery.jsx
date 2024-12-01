@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styles from './PasswordRecovery.module.css';
+import Footer from '/src/client/Components/Footer/Footer';
+import Header from '../Header/Header';
 
 const PasswordRecovery = () => {
   const [step, setStep] = useState('email');
@@ -70,74 +72,77 @@ const PasswordRecovery = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.card}>
-        <h2 className={styles.title}>Password Recovery</h2>
-        <p className={styles.description}>Reset your password in three easy steps</p>
-        {message && <div className={styles.message}>{message}</div>}
-        {step === 'email' && (
-          <form onSubmit={handleEmailSubmit} className={styles.form}>
-            <div className={styles.inputGroup}>
-              <label htmlFor="email" className={styles.label}>Email</label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className={styles.input}
-              />
-            </div>
-            <button type="submit" className={styles.button}>Send OTP</button>
-          </form>
-        )}
-        {step === 'otp' && (
-          <form onSubmit={handleOtpSubmit} className={styles.form}>
-            <div className={styles.inputGroup}>
-              <label htmlFor="otp" className={styles.label}>Enter OTP</label>
-              <input
-                id="otp"
-                type="text"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                required
-                className={styles.input}
-              />
-            </div>
-            <button type="submit" className={styles.button}>Verify OTP</button>
-          </form>
-        )}
-        {step === 'password' && (
-          <form onSubmit={handlePasswordSubmit} className={styles.form}>
-            <div className={styles.inputGroup}>
-              <label htmlFor="newPassword" className={styles.label}>New Password</label>
-              <input
-                id="newPassword"
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                required
-                className={styles.input}
-              />
-            </div>
-            <div className={styles.inputGroup}>
-              <label htmlFor="confirmPassword" className={styles.label}>Confirm Password</label>
-              <input
-                id="confirmPassword"
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                className={styles.input}
-              />
-            </div>
-            <button type="submit" className={styles.button}>Reset Password</button>
-          </form>
-        )}
-      </div>
+    <div className={styles.pageContainer}>
+      <Header />
+      <main className={styles.mainContainer}>
+        <div className={styles.card}>
+          <h2 className={styles.title}>Password Recovery</h2>
+          <p className={styles.description}>Reset your password in three easy steps</p>
+          {message && <div className={styles.message}>{message}</div>}
+          {step === 'email' && (
+            <form onSubmit={handleEmailSubmit} className={styles.form}>
+              <div className={styles.inputGroup}>
+                <label htmlFor="email" className={styles.label}>Email</label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className={styles.input}
+                />
+              </div>
+              <button type="submit" className={styles.button}>Send OTP</button>
+            </form>
+          )}
+          {step === 'otp' && (
+            <form onSubmit={handleOtpSubmit} className={styles.form}>
+              <div className={styles.inputGroup}>
+                <label htmlFor="otp" className={styles.label}>Enter OTP</label>
+                <input
+                  id="otp"
+                  type="text"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  required
+                  className={styles.input}
+                />
+              </div>
+              <button type="submit" className={styles.button}>Verify OTP</button>
+            </form>
+          )}
+          {step === 'password' && (
+            <form onSubmit={handlePasswordSubmit} className={styles.form}>
+              <div className={styles.inputGroup}>
+                <label htmlFor="newPassword" className={styles.label}>New Password</label>
+                <input
+                  id="newPassword"
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                  className={styles.input}
+                />
+              </div>
+              <div className={styles.inputGroup}>
+                <label htmlFor="confirmPassword" className={styles.label}>Confirm Password</label>
+                <input
+                  id="confirmPassword"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  className={styles.input}
+                />
+              </div>
+              <button type="submit" className={styles.button}>Reset Password</button>
+            </form>
+          )}
+        </div>
+      </main>
+      <Footer />
     </div>
   );
 };
 
 export default PasswordRecovery;
-

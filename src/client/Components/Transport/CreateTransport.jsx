@@ -16,7 +16,8 @@ const CreateTransport = () => {
     arrivalDate: "",
     arrivalTime: "",  
     typeOfTransportation: "Bus",
-    location: "",
+    departureLocation: "",
+    arrivalLocation: "",
   });
 
   const handleInputChange = (e) => {
@@ -96,6 +97,30 @@ const CreateTransport = () => {
           </label>
 
           <label className={styles.label}>
+            Departure Location:
+            <input
+              type="text"
+              name="departureLocation"
+              value={transportData.departureLocation}
+              onChange={handleInputChange}
+              required
+              className={styles.input}
+            />
+          </label>
+
+          <label className={styles.label}>
+            Arrival Location:
+            <input
+              type="text"
+              name="arrivalLocation"
+              value={transportData.arrivalLocation}
+              onChange={handleInputChange}
+              required
+              className={styles.input}
+            />
+          </label>
+
+          <label className={styles.label}>
             Type of Transportation:
             <select
               name="typeOfTransportation"
@@ -111,18 +136,6 @@ const CreateTransport = () => {
             </select>
           </label>
 
-          <label className={styles.label}>
-            Location:
-            <input
-              type="text"
-              name="location"
-              value={transportData.location}
-              onChange={handleInputChange}
-              required
-              className={styles.input}
-            />
-          </label>
-
           <button type="submit" className={styles.button}>Create Transport</button>
         </form>
       </div>
@@ -132,3 +145,4 @@ const CreateTransport = () => {
 };
 
 export default CreateTransport;
+
