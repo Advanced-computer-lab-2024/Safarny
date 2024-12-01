@@ -10,7 +10,7 @@ const AdvertiserSales = () => {
     const [month, setMonth] = useState('');
     const [year, setYear] = useState('');
     const [totalTourists, setTotalTourists] = useState(0); // To store the sum of totalTourists
-
+    const [filteredRevenue,setFilteredRevenue] = useState(0);
     const months = [
         { label: 'January', value: '1' },
         { label: 'February', value: '2' },
@@ -61,6 +61,12 @@ const AdvertiserSales = () => {
         }
     };
 
+    const filteredRevenueByAdvertiser = async (id, month, year) => {
+        const response = await fetch(`http://localhost:3000/advertiser/reportsales/${id}?month=${month}&year=${year}`);
+        const data = await response.json();
+        setFilteredRevenue(data.totalRevenue);
+    };
+
     // useEffect to trigger data fetching
     useEffect(() => {
         if (userId) {
@@ -72,6 +78,7 @@ const AdvertiserSales = () => {
     const handleSubmit = () => {
         if (userId && (month || year)) {
             getTouristsByActivityAndDate(userId, month, year);
+            filteredRevenueByAdvertiser(userId, month, year);
         }
     };
 
@@ -105,6 +112,7 @@ const AdvertiserSales = () => {
             </div>
 
             <p>Total Tourists: {totalTourists}</p> {/* Display the sum of tourists */}
+            <p>Filtered Revenue {filteredRevenue}</p>
         </div>
     );
 };

@@ -10,6 +10,7 @@ const TourGuideSales = () => {
     const [month, setMonth] = useState('');
     const [year, setYear] = useState('');
     const [totalTourists, setTotalTourists] = useState(0); // To store the sum of totalTourists
+    const [filteredRevenue,setFilteredRevenue] = useState(0);
 
     const months = [
         { label: 'January', value: '1' },
@@ -59,6 +60,16 @@ const TourGuideSales = () => {
         }
     };
 
+    const filteredRevenueByTourGuide = async (id, month, year) => {
+        try {
+            const response = await fetch(`http://localhost:3000/tourguide/reportsales/${id}?month=${month}&year=${year}`);
+            const data = await response.json();
+            setFilteredRevenue(data.totalRevenue);
+        } catch (error) {
+            console.error("Error fetching tourists:", error);
+        }
+    };
+
     // useEffect to trigger data fetching
     useEffect(() => {
         if (userId) {
@@ -70,6 +81,7 @@ const TourGuideSales = () => {
     const handleSubmit = () => {
         if (userId && (month || year)) {
             getTouristsByTourGuideAndDate(userId, month, year);
+            filteredRevenueByTourGuide(userId, month, year);
         }
     };
 
@@ -103,6 +115,7 @@ const TourGuideSales = () => {
             </div>
 
             <p>Total Tourists: {totalTourists}</p> {/* Display the sum of tourists */}
+            <p>Filtered Revenue {filteredRevenue}</p>
         </div>
     );
 };

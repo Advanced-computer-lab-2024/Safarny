@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const Activity = require("../models/Activity.js");
 const axios = require("axios"); // Ensure axios is installed: npm install axios
 const Itinerary = require("../models/Itinerary.js");
-
+const Booking = require("../models/Booking.js");
 dotenv.config();
 
 const createTourGuide = async (req, res) => {
@@ -233,6 +233,95 @@ const getBoughtCountByTourGuide = async (req, res) => {
   }
 };
 
+const filteredRevenueByTourGuide = async (req, res) => {
+  try {
+    const { id } = req.params; // TourGuide ID
+    const { month, year } = req.query; // Optional month and year filters
+
+    // Step 1: Fetch exchange rates
+    const apiUrl = "https://api.exchangerate-api.com/v4/latest/USD";
+    const { data } = await axios.get(apiUrl);
+
+    if (!data || !data.rates) {
+      return res.status(500).json({ error: "Failed to fetch exchange rates" });
+    }
+
+    const exchangeRates = data.rates;
+
+    // Step 2: Find itineraries managed by the TourGuide
+    const itineraries = await Itinerary.find({ createdby: id }).select("_id price currency");
+    const itineraryIds = itineraries.map((itinerary) => itinerary._id);
+
+    if (itineraryIds.length === 0) {
+      return res.status(200).json({ totalRevenue: 0 }); // No itineraries found
+    }
+
+    // Step 3: Match bookings for the TourGuide's itineraries
+    const matchConditions = {
+      itinerary: { $in: itineraryIds },
+      status: { $in: ["confirmed", "active"] },
+    };
+
+    if (month || year) {
+      matchConditions.$expr = {
+        $and: [],
+      };
+
+      if (month) {
+        matchConditions.$expr.$and.push({
+          $eq: [{ $month: { $dateFromString: { dateString: "$bookingDate" } } }, parseInt(month)],
+        });
+      }
+      if (year) {
+        matchConditions.$expr.$and.push({
+          $eq: [{ $year: { $dateFromString: { dateString: "$bookingDate" } } }, parseInt(year)],
+        });
+      }
+    }
+
+    // Step 4: Aggregate bookings and calculate revenue
+    const bookings = await Booking.aggregate([
+      { 
+        $match: matchConditions // Match conditions for filtering bookings
+      },
+      {
+        $lookup: {
+          from: "itineraries", // Join with the Itinerary collection
+          localField: "itinerary", // Field in Booking referencing Itinerary
+          foreignField: "_id", // Field in Itinerary being referenced
+          as: "itineraryDetails",
+        },
+      },
+      { 
+        $unwind: "$itineraryDetails" // Flatten the joined data
+      },
+      {
+        $group: {
+          _id: "$itineraryDetails.currency", // Group by currency
+          totalRevenue: { $sum: { $multiply: ["$itineraryDetails.price", 1] } }, // Sum the price fields
+        },
+      },
+    ]);
+    
+
+    // Step 5: Convert to USD
+    let totalRevenueUSD = 0;
+    bookings.forEach((booking) => {
+      const { _id: currency, totalRevenue } = booking;
+      const exchangeRate = exchangeRates[currency] || 1;
+      const convertedRevenue = totalRevenue / exchangeRate;
+      totalRevenueUSD += convertedRevenue;
+    });
+
+    // Return the total revenue
+    res.status(200).json({ totalRevenue: totalRevenueUSD * 0.9 }); // Apply 10% deduction
+  } catch (error) {
+    console.error("Error calculating revenue for tour guide:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
 module.exports = {
   createTourGuide,
   getTourGuides,
@@ -241,5 +330,6 @@ module.exports = {
   updateAverageRatingById,
   getActivityRevenueByTourGuide,
   getItineraryRevenueByTourGuide,
-  getBoughtCountByTourGuide
+  getBoughtCountByTourGuide,
+  filteredRevenueByTourGuide
 };

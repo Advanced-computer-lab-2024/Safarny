@@ -198,6 +198,89 @@ const getBoughtCountByActivity = async (req, res) => {
   }
 };
 
+const filteredRevenueByAdvertiser = async (req, res) => {
+  try {
+    const { id } = req.params; // Advertiser ID
+    const { month, year } = req.query; // Optional month and year filters
+
+    // Step 1: Fetch exchange rates
+    const apiUrl = "https://api.exchangerate-api.com/v4/latest/USD"; // Replace with a preferred API if needed
+    const { data } = await axios.get(apiUrl);
+
+    if (!data || !data.rates) {
+      return res.status(500).json({ error: "Failed to fetch exchange rates" });
+    }
+
+    const exchangeRates = data.rates; // Exchange rates mapping (e.g., { EGP: 30, EUR: 0.92 })
+
+    // Step 2: Match activities created by the advertiser
+    const activities = await Activity.find({ createdby: id }).select("_id price currency");
+    const activityIds = activities.map((activity) => activity._id);
+
+    // Step 3: Build dynamic match conditions for bookings
+    const matchConditions = {
+      activity: { $in: activityIds }, // Bookings for advertiser's activities
+      status: { $in: ["confirmed", "active"] }, // Only include confirmed bookings
+    };
+
+    if (month || year) {
+      matchConditions.$expr = {
+        $and: [],
+      };
+
+      if (month) {
+        matchConditions.$expr.$and.push({
+          $eq: [{ $month: { $dateFromString: { dateString: "$bookingDate" } } }, parseInt(month)],
+        });
+      }
+      if (year) {
+        matchConditions.$expr.$and.push({
+          $eq: [{ $year: { $dateFromString: { dateString: "$bookingDate" } } }, parseInt(year)],
+        });
+      }
+    }
+
+    // Step 4: Aggregate bookings and calculate revenue in original currency
+    const bookings = await Booking.aggregate([
+      { $match: matchConditions }, // Match based on conditions
+      {
+        $lookup: {
+          from: "activities", // Join with Activity collection
+          localField: "activity",
+          foreignField: "_id",
+          as: "activityDetails",
+        },
+      },
+      { $unwind: "$activityDetails" }, // Flatten the joined data
+      {
+        $group: {
+          _id: "$activityDetails.currency", // Group by currency
+          totalRevenue: { $sum: { $multiply: ["$activityDetails.price", 1] } }, // Revenue in original currency
+        },
+      },
+    ]);
+
+    // Step 5: Convert total revenue for each currency into USD
+    let totalRevenueUSD = 0;
+    bookings.forEach((booking) => {
+      const { _id: currency, totalRevenue } = booking; // currency and revenue in that currency
+      const exchangeRate = exchangeRates[currency] || 1; // Default rate to 1 if missing
+      const convertedRevenue = totalRevenue / exchangeRate; // Convert to USD
+      totalRevenueUSD += convertedRevenue; // Accumulate converted revenue
+    });
+
+    // Return the total revenue
+    res.status(200).json({ totalRevenue: totalRevenueUSD * 0.9 }); // Apply 10% deduction
+  } catch (error) {
+    console.error("Error calculating revenue:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
+
+
+
 module.exports = {
   createAdvertiser,
   getAdvertisers,
@@ -207,4 +290,5 @@ module.exports = {
   getBoughtCountByAdvertiser,
   getBoughtCountByActivity,
   getTouristsByActivityAndDate,
+  filteredRevenueByAdvertiser,
 };
