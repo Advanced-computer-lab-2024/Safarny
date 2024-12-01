@@ -72,16 +72,8 @@ const TourGuideSales = () => {
         }
     };
 
-    const filteredRevenueByTourGuide = async (id, month, year) => {
-        try {
-            const response = await fetch(`http://localhost:3000/tourguide/reportsales/${id}?month=${month}&year=${year}`);
-            const data = await response.json();
-            setFilteredRevenue(data.totalRevenue);
-        } catch (error) {
-            console.error("Error fetching tourists:", error);
-        }
-    };
-
+    // useEffect to trigger data fetching
+    
     useEffect(() => {
         if (userId) {
             getRevenueByTourGuide(userId);
@@ -127,6 +119,7 @@ const TourGuideSales = () => {
 
             <p>Total Tourists: {totalTourists}</p> {/* Display the sum of tourists */}
             <p>Filtered Revenue {filteredRevenue}</p>
+            <Footer />
         </div>
     );
 };
