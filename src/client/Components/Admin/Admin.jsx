@@ -41,6 +41,15 @@ const Admin = () => {
   const [openModal, setOpenModal] = useState(false);
   const [posts, setPosts] = useState([]);
   const [currentPost, setCurrentPost] = useState({ details: '', price: '', currency: '', quantity: '', imageurl: '' });
+  const [promoCodeModalOpen, setPromoCodeModalOpen] = useState(false); 
+  const [promoCodeData, setPromoCodeData] = useState({
+    discountPercentage: '',
+    activated: true,
+    createdBy: userId || '', // Set current user ID
+    code: '',
+    expiryDate: '',
+  });
+  
   const [editingPostId, setEditingPostId] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
@@ -144,11 +153,32 @@ const Admin = () => {
     setOpenModal(true);
   };
 
+  const handleOpenPromoCodeModal = () => {
+    setPromoCodeData({
+      discountPercentage: '',
+      activated: true,
+      createdBy: userId || '', // Set the current user's ID as the creator
+      code: '',
+      expiryDate: '',
+    });
+    setPromoCodeModalOpen(true); // Open the promo code modal
+};
+
+const handleClosePromoCodeModal = () => {
+    setPromoCodeModalOpen(false); // Close the promo code modal
+    setErrorMessage(''); // Clear any existing error messages
+};
+  
+
   const handleCloseModal = () => {
     setOpenModal(false);
     setErrorMessage('');
     setSelectedImage(null);
   };
+
+  
+  
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -236,7 +266,28 @@ const Admin = () => {
   const handleUpcomingActivitiesClick = () => {
     navigate("/UpcomingActivites", { state: { userId } });
   };
-
+  const handleSubmitPromoCode = async () => {
+    const promoCodeDataToSubmit = { ...promoCodeData };
+  
+    console.log('Submitting promo code data:', promoCodeDataToSubmit);
+  
+    try {
+      await axios.post('/admin/promocodes', promoCodeDataToSubmit);
+  
+      // Display a success alert
+     
+  
+      //fetchPromoCodes(); // Refresh the list of promo codes (if needed)
+      handleClosePromoCodeModal();
+      alert('Promo code successfully added!');
+    } catch (error) {
+      console.error('Error submitting promo code:', error);
+      setErrorMessage('Failed to add promo code');
+    }
+  };
+  
+  
+  
 
   const handleArchiveToggle = async (postId, isArchived) => {
     try {
@@ -287,6 +338,8 @@ const Admin = () => {
             <button onClick={handleBackClick} className={styles.button}>Back</button>
             <Link to="/" className={styles.button}>Log out</Link>
             <button onClick={handleOpenModal} className={styles.button}>Add Post</button>
+            <button onClick={handleOpenPromoCodeModal} className={styles.button}>
+            Add PromoCode</button>
             <button onClick={() => setSelectedSection('tags')} className={styles.button}>Manage Tags</button>
             <button onClick={() => setSelectedSection('ActivityCategory')} className={styles.button}>Manage Categories</button>
             <Link to="/adminaddgovernor"  className={styles.button}>Add Governor</Link>
@@ -418,6 +471,58 @@ const Admin = () => {
         {selectedSection === 'tags' && <Tags />}
         {selectedSection === 'ActivityCategory' && <ActivityCategory />}
       </div>
+      <Modal open={promoCodeModalOpen} onClose={handleClosePromoCodeModal}>
+      <div className={styles.modalOverlay}>
+        <div className={styles.modal}>
+          <button className={styles.closeButton} onClick={handleClosePromoCodeModal}>X</button>
+          <Typography variant="h6">Add Promo Code</Typography>
+          
+          <TextField
+            fullWidth
+            label="Promo Code"
+            name="code"
+            value={promoCodeData.code}
+            onChange={(e) => setPromoCodeData({ ...promoCodeData, code: e.target.value })}
+            margin="normal"
+          />
+
+          <TextField
+            fullWidth
+            label="Discount Percentage"
+            name="discountPercentage"
+            type="number"
+            value={promoCodeData.discountPercentage}
+            onChange={(e) => setPromoCodeData({ ...promoCodeData, discountPercentage: e.target.value })}
+            margin="normal"
+          />
+
+          <TextField
+            fullWidth
+            label="Expiry Date"
+            name="expiryDate"
+            type="date"
+            value={promoCodeData.expiryDate}
+            onChange={(e) => setPromoCodeData({ ...promoCodeData, expiryDate: e.target.value })}
+            margin="normal"
+          />
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={promoCodeData.activated}
+                onChange={(e) => setPromoCodeData({ ...promoCodeData, activated: e.target.checked })}
+                color="primary"
+              />
+            }
+            label="Activate"
+            className={styles.checkbox}
+          />
+
+          <button className={styles.button} onClick={handleSubmitPromoCode}>Submit</button>
+          {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
+        </div>
+      </div>
+    </Modal>
 
       <Modal open={openModal} onClose={handleCloseModal}>
         <div className={styles.modalOverlay}>
