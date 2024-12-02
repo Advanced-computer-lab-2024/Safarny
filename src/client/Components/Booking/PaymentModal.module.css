@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,7 +12,7 @@
 }
 
 .modalContent {
-  width: 400px; /* Small size for the modal */
+  width: 400px; 
   padding: 20px;
   background-color: #121212;
   border-radius: 8px;
@@ -51,7 +51,6 @@
   color: white;
 }
 
-/* MyBookingModal.module.css */
 input[type="date"] {
   color: black;
 }
@@ -60,8 +59,8 @@ input[type="date"] {
   color: white;
 }
 
-/* MyBookingModal.module.css */
+
 input[type="time"] {
   background-color: white;
-  color: black; /* Ensure text is visible */
+  color: black; 
 }
