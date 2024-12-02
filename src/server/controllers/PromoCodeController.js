@@ -1,5 +1,5 @@
 const PromoCode = require("../models/PromoCode.js");
-const axios = require("axios"); // Ensure axios is installed: npm install axios
+const axios = require("axios");
 
 
 const createPromoCode = async (req, res) => {
