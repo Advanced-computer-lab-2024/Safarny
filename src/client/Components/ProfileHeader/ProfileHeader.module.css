@@ -12,7 +12,7 @@
 .header {
     position: sticky;
     top: 0;
-    width: 97vw;
+    width: 100.5%;
     background-color: rgba(27, 27, 27, 0.9);
     display: flex;
     align-items: center;
