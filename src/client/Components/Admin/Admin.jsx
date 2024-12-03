@@ -154,7 +154,7 @@ const Admin = () => {
 
   const fetchUserCounts = async () => {
     try {
-      const response = await axios.get('/admin/getUserCounts');
+      const response = await axios.get('/Admin/getUserCounts');
       setTotalUsers(response.data.totalUsers);
       setUsersThisMonth(response.data.usersThisMonth);
       setLoading(false); // Data fetched, set loading to false
@@ -169,7 +169,7 @@ const Admin = () => {
 
 
 
-  console.log(fetchUserCounts);
+  // console.log(fetchUserCounts);
 
 
 
