@@ -511,13 +511,56 @@ const handleClosePromoCodeModal = () => {
         {selectedSection === 'tags' && <Tags />}
         {selectedSection === 'ActivityCategory' && <ActivityCategory />}
       </div>
-  
+
       <Modal open={promoCodeModalOpen} onClose={handleClosePromoCodeModal}>
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
             <button className={styles.closeButton} onClick={handleClosePromoCodeModal}>X</button>
             <Typography variant="h6">Add Promo Code</Typography>
-            {/* Form for Promo Code */}
+
+            <TextField
+                fullWidth
+                label="Promo Code"
+                name="code"
+                value={promoCodeData.code}
+                onChange={(e) => setPromoCodeData({ ...promoCodeData, code: e.target.value })}
+                margin="normal"
+            />
+
+            <TextField
+                fullWidth
+                label="Discount Percentage"
+                name="discountPercentage"
+                type="number"
+                value={promoCodeData.discountPercentage}
+                onChange={(e) => setPromoCodeData({ ...promoCodeData, discountPercentage: e.target.value })}
+                margin="normal"
+            />
+
+            <TextField
+                fullWidth
+                label="Expiry Date"
+                name="expiryDate"
+                type="date"
+                value={promoCodeData.expiryDate}
+                onChange={(e) => setPromoCodeData({ ...promoCodeData, expiryDate: e.target.value })}
+                margin="normal"
+            />
+
+            <FormControlLabel
+                control={
+                  <Checkbox
+                      checked={promoCodeData.activated}
+                      onChange={(e) => setPromoCodeData({ ...promoCodeData, activated: e.target.checked })}
+                      color="primary"
+                  />
+                }
+                label="Activate"
+                className={styles.checkbox}
+            />
+
+            <button className={styles.button} onClick={handleSubmitPromoCode}>Submit</button>
+            {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
           </div>
         </div>
       </Modal>
