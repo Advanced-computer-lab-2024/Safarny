@@ -34,7 +34,8 @@ const {
     updateAcceptedStatus,
     updateDeleteAccount,
     deleteTourGuideAndIterinaries,
-    deleteAdvertiserAndActivities
+    deleteAdvertiserAndActivities,
+    getUserCounts
 } = require("../controllers/usersController.js");
 
 const { addGovernor } = require("../controllers/addgovernorController.js");
@@ -166,4 +167,7 @@ router.put("/complaints/:id", updateComplaintById);
 router.delete("/deleteByCreator/:creatorId", deletePostsByCreator);
 router.delete("/deleteTourGuide/:id", deleteTourGuideAndIterinaries);
 router.delete("/deleteAdvertiser/:id", deleteAdvertiserAndActivities);
+
+router.get("/userCounts", getUserCounts); // This will fetch total users and users this month
+
 module.exports = router;

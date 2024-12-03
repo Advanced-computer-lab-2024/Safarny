@@ -467,6 +467,29 @@ const getUsersBySavedItinerary = AsyncHandler(async (req, res) => {
   }
 });
 
+const getUserCounts = AsyncHandler(async (req, res) => {
+  try {
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    // Count all users
+    const totalUsersCount = await User.countDocuments();
+
+    // Count users created this month
+    const usersThisMonthCount = await User.countDocuments({
+      createdAt: { $gte: startOfMonth },
+    });
+
+    res.status(200).json({
+      totalUsers: totalUsersCount,
+      usersThisMonth: usersThisMonthCount,
+    });
+  } catch (error) {
+    console.error("Error fetching user counts:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 module.exports = {
   getUsers,
@@ -484,6 +507,7 @@ module.exports = {
   deleteTourGuideAndIterinaries,
   deleteAdvertiserAndActivities,
   getUsersBySavedActivity,
-    getUsersBySavedItinerary
+    getUsersBySavedItinerary,
+    getUserCounts
 };
 

@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 
 const userModel = new mongoose.Schema(
   {
-    //Default (Admin/ToursimGovernor/...)
+    // Default (Admin/TourismGovernor/...)
     username: { type: String, required: true, unique: true },
     email: { type: String, unique: true },
     password: { type: String, required: true },
 
-    //Role
+    // Role
     role: {
       type: String,
       enum: [
@@ -21,17 +21,17 @@ const userModel = new mongoose.Schema(
       required: true,
     },
 
-    //Tourist
+    // Tourist
     nationality: String,
     employed: String,
-    wallet: { type: Number, default: 0},
+    wallet: { type: Number, default: 0 },
     walletcurrency: { type: String, default: "USD" },
     DOB: Date,
     age: Number,
     mobile: String,
     addresses: {
       type: [String],
-      default: []
+      default: [],
     },
     loyaltyPoints: { type: Number, default: 0 },
     loyaltyLevel: {
@@ -40,24 +40,24 @@ const userModel = new mongoose.Schema(
       default: "none",
     },
 
-    //TourGuide
+    // TourGuide
     YearOfExp: Number,
     PrevWork: String,
-      delete_request: { type: Boolean, default: false },
-    //Tourist/TourGuide
+    delete_request: { type: Boolean, default: false },
+    // Tourist/TourGuide
     itineraries: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Itinerary",
       },
     ],
-      rating: {
-            type: [Number], // Array of numbers
-            default: [], // Default to an array with a single rating of 5
-        },
-      averageRating: { type: Number, default: 5 }, // Default average rating to 5
+    rating: {
+      type: [Number], // Array of numbers
+      default: [], // Default to an array with a single rating of 5
+    },
+    averageRating: { type: Number, default: 5 }, // Default average rating to 5
 
-    //Seller
+    // Seller
     description: String,
     sellerName: String,
     posts: [
@@ -74,12 +74,11 @@ const userModel = new mongoose.Schema(
       },
     ],
 
-
-    //Advertiser
+    // Advertiser
     CompanyName: String,
     CompanyLink: String,
     CompanyHotline: Number,
-    //Tourist/Advertiser
+    // Tourist/Advertiser
     activities: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -87,7 +86,7 @@ const userModel = new mongoose.Schema(
       },
     ],
 
-    //TourismGovernor
+    // TourismGovernor
     historicalPlaces: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -95,7 +94,7 @@ const userModel = new mongoose.Schema(
       },
     ],
 
-    //TourismGovernor/Admin
+    // TourismGovernor/Admin
     tags: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -103,14 +102,14 @@ const userModel = new mongoose.Schema(
       },
     ],
 
-    //Admin
+    // Admin
     activityCategories: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "ActivityCategory",
       },
     ],
-    //firebase storage photo url
+    // firebase storage photo URL
     photo: String,
 
     Status: {
@@ -120,6 +119,7 @@ const userModel = new mongoose.Schema(
   },
   {
     collection: "User",
+    timestamps: true, // Enable timestamps (createdAt and updatedAt)
   }
 );
 
@@ -143,4 +143,3 @@ userModel.pre("save", function (next) {
 
 const User = mongoose.model("User", userModel);
 module.exports = User;
-
