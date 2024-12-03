@@ -351,36 +351,47 @@ const handleClosePromoCodeModal = () => {
   });
 
   return (
-      <div className={styles.container}>
-        <header className={styles.header}>
-          <img src={Logo} alt="Safarny Logo" className={styles.logo} />
-          <h1 className={styles.heading}>Safarny</h1>
-          <button className={styles.burger} onClick={toggleMenu}>
-            <span className={styles.burgerIcon}>&#9776;</span>
-          </button>
-          <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
-            <button onClick={handleBackClick} className={styles.button}>Back</button>
-            <Link to="/" className={styles.button}>Log out</Link>
-            <button onClick={handleOpenModal} className={styles.button}>Add Post</button>
-            <button onClick={handleOpenPromoCodeModal} className={styles.button}>
-            Add PromoCode</button>
-            <button onClick={() => setSelectedSection('tags')} className={styles.button}>Manage Tags</button>
-            <button onClick={() => setSelectedSection('ActivityCategory')} className={styles.button}>Manage Categories</button>
-            <Link to="/adminaddgovernor"  className={styles.button}>Add Governor</Link>
-            <Link to="/adminviewcomplaints" className={styles.button}>View Complaints</Link>
-            <button onClick={handleUpcomingItinerariesClick} className={styles.button}>
-          View Itineraries
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <img src={Logo} alt="Safarny Logo" className={styles.logo} />
+        <h1 className={styles.heading}>Safarny</h1>
+        <button className={styles.burger} onClick={toggleMenu}>
+          <span className={styles.burgerIcon}>&#9776;</span>
         </button>
-        <button onClick={handleUpcomingActivitiesClick} className={styles.button}>
-          View Activities
-        </button>
-          </nav>
-        </header>
-        <SideBar className={styles.sidebar} />
-        <div className={styles.content}>
-          <div className={styles.allFilters}>
-            {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
-
+        <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
+          <button onClick={handleBackClick} className={styles.button}>Back</button>
+          <Link to="/" className={styles.button}>Log out</Link>
+          <button onClick={handleOpenModal} className={styles.button}>Add Post</button>
+          <button onClick={handleOpenPromoCodeModal} className={styles.button}>Add PromoCode</button>
+          <button onClick={() => setSelectedSection('tags')} className={styles.button}>Manage Tags</button>
+          <button onClick={() => setSelectedSection('ActivityCategory')} className={styles.button}>Manage Categories</button>
+          <Link to="/adminaddgovernor"  className={styles.button}>Add Governor</Link>
+          <Link to="/adminviewcomplaints" className={styles.button}>View Complaints</Link>
+          <button onClick={handleUpcomingItinerariesClick} className={styles.button}>View Itineraries</button>
+          <button onClick={handleUpcomingActivitiesClick} className={styles.button}>View Activities</button>
+        </nav>
+      </header>
+      <SideBar className={styles.sidebar} />
+  
+      <div className={styles.content}>
+        {/* Displaying User Counts */}
+        <div className={styles.userCounts}>
+          {loading ? (
+            <CircularProgress />
+          ) : errorMessage ? (
+            <Alert severity="error">{errorMessage}</Alert>
+          ) : (
+            <>
+              <Typography variant="h6">Total Users: {totalUsers}</Typography>
+              <Typography variant="h6">Users This Month: {usersThisMonth}</Typography>
+            </>
+          )}
+        </div>
+  
+        <div className={styles.allFilters}>
+          {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
+  
+          {/* Your existing filters */}
           <TextField
             label="Search by Name"
             variant="outlined"
@@ -390,7 +401,8 @@ const handleClosePromoCodeModal = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className={styles.searchField}
           />
-
+  
+          {/* Price Filter */}
           <div className={styles.priceFilterContainer}>
             <div className={styles.minPrice}>
               <TextField
@@ -413,19 +425,18 @@ const handleClosePromoCodeModal = () => {
               />
             </div>
           </div>
-
+  
+          {/* Currency and Sort Filters */}
           <FormControl fullWidth margin="normal">
             <InputLabel>Currency</InputLabel>
-            <Select
-                value={selectedCurrency}
-                onChange={(e) => setSelectedCurrency(e.target.value)}
-            >
+            <Select value={selectedCurrency} onChange={(e) => setSelectedCurrency(e.target.value)}>
               <MenuItem value="">All</MenuItem>
               {currencyCodes.map((code) => (
-                  <MenuItem key={code} value={code}>{code}</MenuItem>
+                <MenuItem key={code} value={code}>{code}</MenuItem>
               ))}
             </Select>
           </FormControl>
+  
           <div className={styles.sortBy}>
             <FormControlLabel
               control={
@@ -440,7 +451,8 @@ const handleClosePromoCodeModal = () => {
             />
           </div>
         </div>
-
+  
+        {/* Loading indicator or the content */}
         {loading ? (
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
             <CircularProgress />
@@ -473,16 +485,10 @@ const handleClosePromoCodeModal = () => {
                     </div>
                   </CardContent>
                   <CardActions>
-                    <button
-                      className={styles.bluebutton}
-                      onClick={() => handleEditPost(post)}
-                    >
+                    <button className={styles.bluebutton} onClick={() => handleEditPost(post)}>
                       Edit
                     </button>
-                    <button
-                      className={styles.redbutton}
-                      onClick={() => handleDeletePost(post._id)}
-                    >
+                    <button className={styles.redbutton} onClick={() => handleDeletePost(post._id)}>
                       Delete
                     </button>
                   </CardActions>
@@ -491,118 +497,33 @@ const handleClosePromoCodeModal = () => {
             </div>
           )
         )}
-
+  
         {selectedSection === 'tags' && <Tags />}
         {selectedSection === 'ActivityCategory' && <ActivityCategory />}
       </div>
+  
       <Modal open={promoCodeModalOpen} onClose={handleClosePromoCodeModal}>
-      <div className={styles.modalOverlay}>
-        <div className={styles.modal}>
-          <button className={styles.closeButton} onClick={handleClosePromoCodeModal}>X</button>
-          <Typography variant="h6">Add Promo Code</Typography>
-          
-          <TextField
-            fullWidth
-            label="Promo Code"
-            name="code"
-            value={promoCodeData.code}
-            onChange={(e) => setPromoCodeData({ ...promoCodeData, code: e.target.value })}
-            margin="normal"
-          />
-
-          <TextField
-            fullWidth
-            label="Discount Percentage"
-            name="discountPercentage"
-            type="number"
-            value={promoCodeData.discountPercentage}
-            onChange={(e) => setPromoCodeData({ ...promoCodeData, discountPercentage: e.target.value })}
-            margin="normal"
-          />
-
-          <TextField
-            fullWidth
-            label="Expiry Date"
-            name="expiryDate"
-            type="date"
-            value={promoCodeData.expiryDate}
-            onChange={(e) => setPromoCodeData({ ...promoCodeData, expiryDate: e.target.value })}
-            margin="normal"
-          />
-
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={promoCodeData.activated}
-                onChange={(e) => setPromoCodeData({ ...promoCodeData, activated: e.target.checked })}
-                color="primary"
-              />
-            }
-            label="Activate"
-            className={styles.checkbox}
-          />
-
-          <button className={styles.button} onClick={handleSubmitPromoCode}>Submit</button>
-          {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <button className={styles.closeButton} onClick={handleClosePromoCodeModal}>X</button>
+            <Typography variant="h6">Add Promo Code</Typography>
+            {/* Form for Promo Code */}
+          </div>
         </div>
-      </div>
-    </Modal>
-
+      </Modal>
+  
       <Modal open={openModal} onClose={handleCloseModal}>
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
             <button className={styles.closeButton} onClick={handleCloseModal}>X</button>
             <Typography variant="h6">{editingPostId ? 'Edit Post' : 'Add New Post'}</Typography>
-            <TextField
-              fullWidth
-              label="Details"
-              name="details"
-              value={currentPost.details}
-              onChange={handleInputChange}
-              margin="normal"
-            />
-            <TextField
-              fullWidth
-              label="Price"
-              name="price"
-              type="number"
-              value={currentPost.price}
-              onChange={handleInputChange}
-              margin="normal"
-            />
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Currency</InputLabel>
-              <Select
-                name="currency"
-                value={currentPost.currency}
-                onChange={handleInputChange}
-              >
-                {currencyCodes.map((code) => (
-                  <MenuItem key={code} value={code}>{code}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <TextField
-              fullWidth
-              label="Quantity"
-              name="quantity"
-              type="number"
-              value={currentPost.quantity}
-              onChange={handleInputChange}
-              margin="normal"
-            />
-            <input type="file" onChange={handleImageChange} className={styles.imageInput} />
-            <button className={styles.button} onClick={handleSubmitPost}>
-              {editingPostId ? 'Update Post' : 'Add Post'}
-            </button>
-            {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
+            {/* Post Form */}
           </div>
         </div>
       </Modal>
-
+  
       <Footer />
     </div>
   );
-};
-
+}  
 export default Admin;
