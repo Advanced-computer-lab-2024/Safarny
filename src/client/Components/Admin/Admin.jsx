@@ -63,6 +63,10 @@ const Admin = () => {
   const [maxPrice, setMaxPrice] = useState('');
   const [sortBy, setSortBy] = useState('');
   const [selectedCurrency, setSelectedCurrency] = useState(''); // Add selectedCurrency state
+ 
+  // total number of users
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [usersThisMonth, setUsersThisMonth] = useState(0);
 
   //header items
   const [menuOpen, setMenuOpen] = useState(false);
@@ -146,6 +150,26 @@ const Admin = () => {
       setLoading(false); // Set loading to false after posts are fetched
     }
   };
+
+  const fetchUserCounts = async () => {
+    try {
+      const response = await axios.get('/admin/getUserCounts');
+      setTotalUsers(response.data.totalUsers);
+      setUsersThisMonth(response.data.usersThisMonth);
+      setLoading(false); // Data fetched, set loading to false
+    } catch (error) {
+      console.error('Error fetching user counts:', error);
+      setErrorMessage('Failed to fetch user counts');
+      setLoading(false); // Even if error occurs, stop loading
+    }
+  };
+
+  useEffect(() => {
+    fetchUserCounts();
+  }, []);
+
+
+
 
   const handleOpenModal = () => {
     setCurrentPost({ details: '', price: '', currency: '', quantity: '', imageurl: '' });
