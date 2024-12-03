@@ -521,13 +521,55 @@ const handleClosePromoCodeModal = () => {
           </div>
         </div>
       </Modal>
-  
+
       <Modal open={openModal} onClose={handleCloseModal}>
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
             <button className={styles.closeButton} onClick={handleCloseModal}>X</button>
             <Typography variant="h6">{editingPostId ? 'Edit Post' : 'Add New Post'}</Typography>
-            {/* Post Form */}
+            <TextField
+                fullWidth
+                label="Details"
+                name="details"
+                value={currentPost.details}
+                onChange={handleInputChange}
+                margin="normal"
+            />
+            <TextField
+                fullWidth
+                label="Price"
+                name="price"
+                type="number"
+                value={currentPost.price}
+                onChange={handleInputChange}
+                margin="normal"
+            />
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Currency</InputLabel>
+              <Select
+                  name="currency"
+                  value={currentPost.currency}
+                  onChange={handleInputChange}
+              >
+                {currencyCodes.map((code) => (
+                    <MenuItem key={code} value={code}>{code}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
+                fullWidth
+                label="Quantity"
+                name="quantity"
+                type="number"
+                value={currentPost.quantity}
+                onChange={handleInputChange}
+                margin="normal"
+            />
+            <input type="file" onChange={handleImageChange} className={styles.imageInput} />
+            <button className={styles.button} onClick={handleSubmitPost}>
+              {editingPostId ? 'Update Post' : 'Add Post'}
+            </button>
+            {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
           </div>
         </div>
       </Modal>
