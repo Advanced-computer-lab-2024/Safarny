@@ -11,6 +11,15 @@
     --glow-color: #958efa;
 }
 
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25rem;
+    width: 25%;
+    text-align: center;
+}
+
 .container {
     font-family: 'Arial', sans-serif;
     color: var(--text-color);
