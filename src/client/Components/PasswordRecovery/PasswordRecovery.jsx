@@ -77,7 +77,6 @@ const PasswordRecovery = () => {
       <main className={styles.mainContainer}>
         <div className={styles.card}>
           <h2 className={styles.title}>Password Recovery</h2>
-          <p className={styles.description}>Reset your password in three easy steps</p>
           {message && <div className={styles.message}>{message}</div>}
           {step === 'email' && (
             <form onSubmit={handleEmailSubmit} className={styles.form}>
