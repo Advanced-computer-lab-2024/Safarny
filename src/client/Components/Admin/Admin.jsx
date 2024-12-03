@@ -151,6 +151,7 @@ const Admin = () => {
     }
   };
 
+
   const fetchUserCounts = async () => {
     try {
       const response = await axios.get('/admin/getUserCounts');
@@ -164,9 +165,18 @@ const Admin = () => {
     }
   };
 
-  useEffect(() => {
-    fetchUserCounts();
-  }, []);
+
+
+
+
+  console.log(fetchUserCounts);
+
+
+
+
+  // useEffect(() => {
+  //   fetchUserCounts();
+  // }, []);
 
 
 
