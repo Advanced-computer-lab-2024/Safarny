@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Navbar, Nav, Button, Collapse, Dropdown, DropdownButton, DropdownItem } from 'react-bootstrap';
+import { Navbar, Nav, Button, Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { FaSearch, FaCog, FaArrowLeft } from 'react-icons/fa'; // Font Awesome Icons
 import Logo from '/src/client/Assets/Img/logo.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ProfileHeader.css';
@@ -8,10 +9,6 @@ import './ProfileHeader.css';
 const ProfileHeader = ({ userId, userInfo }) => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [showBookingsButtons, setShowBookingsButtons] = useState(false);
-  const [showComplaintsButtons, setShowComplaintsButtons] = useState(false);
-  const [showTransportButtons, setShowTransportButtons] = useState(false);
-  const [showPostButtons, setShowPostButtons] = useState(false);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const handleBackClick = () => navigate(-1);
@@ -20,25 +17,61 @@ const ProfileHeader = ({ userId, userInfo }) => {
     if (userInfo.role === 'Tourist') {
       return (
         <>
-          <DropdownButton variant="outline-light" title="View & Book Services" className="mb-2">
-            <Dropdown.Item onClick={() => navigate('/BookFlight', { state: { userId } })}>Book A Flight</Dropdown.Item>
-            <Dropdown.Item onClick={() => navigate('/BookHotel', { state: { userId } })}>Book A Hotel</Dropdown.Item>
-            <Dropdown.Item onClick={() => navigate('/transportss/book-transport', { state: { userId } })}>Book Transport</Dropdown.Item>
-            <Dropdown.Item onClick={() => navigate('/mybookings', { state: { userId } })}>My Bookings</Dropdown.Item>
-            <Dropdown.Item onClick={() => navigate('/myorders', { state: { userId } })}>My Orders</Dropdown.Item>
-            <Dropdown.Item onClick={() => navigate('/PreferencesPage', { state: { userId } })}>Select Your Preferences</Dropdown.Item>
-          </DropdownButton>
-
-          <DropdownButton variant="outline-light" title="Manage Complaints" className="mb-2">
-            <Dropdown.Item onClick={() => navigate('/createcomplaints', { state: { userId } })}>Create Complaint</Dropdown.Item>
-            <Dropdown.Item onClick={() => navigate('/viewcomplaints', { state: { userId } })}>View Complaints</Dropdown.Item>
-          </DropdownButton>
-
-          <DropdownButton variant="outline-light" title="View Upcoming Events" className="mb-2">
-            <Dropdown.Item onClick={() => navigate('/UpcomingActivites', { state: { userId } })}>Upcoming Activities</Dropdown.Item>
-            <Dropdown.Item onClick={() => navigate('/UpcomingItineraries', { state: { userId } })}>Upcoming Itineraries</Dropdown.Item>
-            <Dropdown.Item onClick={() => navigate('/historical-places', { state: { userId } })}>Upcoming Historical Places</Dropdown.Item>
-          </DropdownButton>
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>Book a Flight</Tooltip>}>
+            <Button variant="outline-light" onClick={() => navigate('/BookFlight', { state: { userId } })}>
+              ✈️
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>Book a Hotel</Tooltip>}>
+            <Button variant="outline-light" onClick={() => navigate('/BookHotel', { state: { userId } })}>
+              🏨
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>Book Trasnportation</Tooltip>}>
+            <Button variant="outline-light" onClick={() => navigate('/transportss/book-transport', { state: { userId } })}>
+              🚗
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>My Bookings</Tooltip>}>
+            <Button variant="outline-light" onClick={() => navigate('/mybookings', { state: { userId } })}>
+              📖
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>My Orders</Tooltip>}>
+            <Button variant="outline-light" onClick={() => navigate('/myorders', { state: { userId } })}>
+              ✔️
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>My Preferences</Tooltip>}>
+            <Button variant="outline-light" onClick={() => navigate('/PreferencesPage', { state: { userId } })}>
+              🪪
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>Create a Complaint</Tooltip>}>
+            <Button variant="outline-light" onClick={() => navigate('/createcomplaints', { state: { userId } })}>
+              💢
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>View my Complaints</Tooltip>}>
+            <Button variant="outline-light" onClick={() => navigate('/viewcomplaints', { state: { userId } })}>
+              👀
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>View Upcoming Activities</Tooltip>}>
+            <Button variant="outline-light" onClick={() => navigate('/UpcomingActivites', { state: { userId } })}>
+              🏃
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>View Available Itineraries</Tooltip>}>
+            <Button variant="outline-light" onClick={() => navigate('/UpcomingItineraries', { state: { userId } })}>
+              📰
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>View Historical Places</Tooltip>}>
+            <Button variant="outline-light" onClick={() => navigate('/historical-places', { state: { userId } })}>
+              🏰
+            </Button>
+          </OverlayTrigger>
         </>
       );
     }
@@ -46,10 +79,16 @@ const ProfileHeader = ({ userId, userInfo }) => {
     if (userInfo.role === 'Seller') {
       return (
         <>
-          <DropdownButton variant="outline-light" title="Manage Products" className="mb-2">
-            <Dropdown.Item onClick={() => navigate('/create-post', { state: { userId } })}>Add Product</Dropdown.Item>
-            <Dropdown.Item onClick={() => navigate('/seller', { state: { userId } })}>My Products</Dropdown.Item>
-          </DropdownButton>
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>Manage Products</Tooltip>}>
+            <Button variant="outline-light" onClick={() => navigate('/seller', { state: { userId } })}>
+              🛒
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>Add Product</Tooltip>}>
+            <Button variant="outline-light" onClick={() => navigate('/create-post', { state: { userId } })}>
+              🪛
+            </Button>
+          </OverlayTrigger>
         </>
       );
     }
@@ -57,12 +96,26 @@ const ProfileHeader = ({ userId, userInfo }) => {
     if (userInfo.role === 'Advertiser') {
       return (
         <>
-          <DropdownButton variant="outline-light" title="Transportation and Activities" className="mb-2">
-            <Dropdown.Item onClick={() => navigate('/AdvertiserMain', { state: { userId } })}>Activity</Dropdown.Item>
-            <Dropdown.Item onClick={() => navigate('/transportss/create-transport', { state: { userId } })}>Create Transport</Dropdown.Item>
-            <Dropdown.Item onClick={() => navigate('/transportss/edit-transport', { state: { userId } })}>Edit & Delete Transport</Dropdown.Item>
-          </DropdownButton>
-          <Button variant="outline-light" onClick={() => navigate('/Advertiser_Sales', { state: { userId } })}>Sales Report</Button>
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>View Sales Report</Tooltip>}>
+            <Button variant="outline-light" onClick={() => navigate('/Advertiser_Sales', { state: { userId } })}>
+              📊
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>Activity</Tooltip>}>
+            <Button variant="outline-light" onClick={() => navigate('/AdvertiserMain', { state: { userId } })}>
+              🚣
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>Create Transport</Tooltip>}>
+            <Button variant="outline-light" onClick={() => navigate('/transportss/create-transport', { state: { userId } })}>
+              🚘
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>Manage Transport</Tooltip>}>
+            <Button variant="outline-light" onClick={() => navigate('/transportss/edit-transport', { state: { userId } })}>
+              ⛭🚘
+            </Button>
+          </OverlayTrigger>
         </>
       );
     }
@@ -70,9 +123,27 @@ const ProfileHeader = ({ userId, userInfo }) => {
     if (userInfo.role === 'TourGuide') {
       return (
         <>
-          <Button variant="outline-light" onClick={() => navigate('/tourguide', { state: { userId } })}>Add Itinerary</Button>
-          <Button variant="outline-light" onClick={() => navigate("/TourGuideSales", { state: { userId } })}>Sales Report</Button>
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>Add Itinerary</Tooltip>}>
+            <Button variant="outline-light" onClick={() => navigate('/tourguide', { state: { userId } })}>
+              🗺️
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>Sales Report</Tooltip>}>
+            <Button variant="outline-light" onClick={() => navigate('/TourGuideSales', { state: { userId } })}>
+              📊
+            </Button>
+          </OverlayTrigger>
         </>
+      );
+    }
+
+    if (userInfo.role === 'TourismGovernor') {
+      return (
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>Create Historical Tag</Tooltip>}>
+            <Button variant="outline-light" onClick={() => navigate('/historical-tags', { state: { userId } })}>
+              📜
+            </Button>
+          </OverlayTrigger>
       );
     }
 
@@ -80,22 +151,41 @@ const ProfileHeader = ({ userId, userInfo }) => {
   };
 
   return (
-    <Navbar expand="lg" className="navbar-dark bg-dark sticky-top shadow-lg">
-      <div className="container-fluid">
+    <Navbar expand="lg" className="navbar-dark bg-dark shadow-lg">
+      <div className="container">
         <Navbar.Brand href="/" className="d-flex align-items-center">
           <img src={Logo} alt="Logo" className="logo" />
-          <h1 className="text-light ms-2 mb-0">Safarny</h1>
+          <span className="text-light ms-2">Safarny</span>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarNav" onClick={toggleMenu} />
         <Navbar.Collapse id="navbarNav" className={`justify-content-end ${menuOpen ? 'show' : ''}`}>
           <Nav className="gap-3">
-            <Button variant="outline-light" onClick={handleBackClick}>Back</Button>
-            <Button variant="outline-light" onClick={() => navigate('/')}>Homepage</Button>
-            <Button variant="outline-light" onClick={() => navigate('/products', { state: { userId } })}>Products</Button>
-            <Button variant="outline-light" onClick={() => navigate('/Search')}>Search</Button>
-            <Button variant="outline-light" onClick={() => { localStorage.setItem('userId', userId); window.location.href = '/UpdateProfile'; }}>
-              Update
-            </Button>
+            <OverlayTrigger placement="bottom" overlay={<Tooltip>Back</Tooltip>}>
+              <Button variant="outline-light" onClick={handleBackClick}>
+                <FaArrowLeft />
+              </Button>
+            </OverlayTrigger>
+            <OverlayTrigger placement="bottom" overlay={<Tooltip>Products</Tooltip>}>
+              <Button variant="outline-light" onClick={() => navigate('/products', { state: { userId } })}>
+                🛍️
+              </Button>
+            </OverlayTrigger>
+            <OverlayTrigger placement="bottom" overlay={<Tooltip>Search</Tooltip>}>
+              <Button variant="outline-light" onClick={() => navigate('/Search')}>
+                <FaSearch />
+              </Button>
+            </OverlayTrigger>
+            <OverlayTrigger placement="bottom" overlay={<Tooltip>Update Profile</Tooltip>}>
+              <Button
+                variant="outline-light"
+                onClick={() => {
+                  localStorage.setItem('userId', userId);
+                  window.location.href = '/UpdateProfile';
+                }}
+              >
+                <FaCog />
+              </Button>
+            </OverlayTrigger>
             {renderRoleSpecificButtons()}
           </Nav>
         </Navbar.Collapse>

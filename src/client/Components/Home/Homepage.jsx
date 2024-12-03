@@ -36,6 +36,7 @@ const Homepage = () => {
   return (
     <>
       <header className={styles.header}>
+        <div className={styles.headerContainer}>
         <div className={styles.logoContainer}>
           <img src={Logo} alt="Safarny Logo" className={styles.logo} />
           <h1 className={styles.title}>Safarny</h1>
@@ -48,6 +49,7 @@ const Homepage = () => {
           <Link to="/signup" className={styles.button}>Sign Up</Link>
           <Link to="/signupextra" className={styles.button}>Sign Up Extra</Link>
         </nav>
+        </div>
       </header>
       <div className={styles.container}>
         <main className={styles.main}>
