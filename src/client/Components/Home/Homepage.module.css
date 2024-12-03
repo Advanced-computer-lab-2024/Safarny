@@ -28,15 +28,22 @@
   justify-content: space-between;
   align-items: center;
   position: fixed;
-  /* gap: 60rem; */
   top: 0;
   width: 100%;
-  height: var(--header-height);
+  height: 12%;
   background-color: var(--header-bg);
   padding: 1rem 2rem;
   z-index: 1000;
   transition: background-color 0.3s;
   margin-bottom: 4rem !important;
+}
+
+.headerContainer{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  /* gap: 15rem; */
 }
 
 .header.translucent {
@@ -45,13 +52,13 @@
 
 .logoContainer {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
 }
 
 .logo {
-  height: 5rem;
+  height: 7rem;
   align-self: center;
   margin-right: 0.8rem;
   margin-left: -1rem;
@@ -61,7 +68,7 @@
 .title {
   color: white;
   align-self: center;
-  font-size: 1rem;
+  font-size: 1.25rem;
   margin-right: -2rem;
 }
 
@@ -79,7 +86,7 @@
   display: flex;
   justify-self: flex-end;
   gap: 0.5rem;
-  width: 60%;
+  width: 20%;
   transition: transform 0.3s ease-in-out;
 }
 
@@ -98,7 +105,7 @@
 .button {
   color: white;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 0.75rem;
   padding: 0.5rem 1rem;
   border: none;
   background: none;
@@ -142,13 +149,13 @@
   justify-content: center;
   gap: 1.5rem;
   padding: 2rem;
-  max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
 }
 
 .card {
-  flex: 1 1 calc(25% - 1.5rem);
-  max-width: calc(25% - 1.5rem);
+  flex: 1 1 calc(30% - 1rem);
+  max-width: calc(30% - 1rem);
   background-color: rgba(0, 0, 0, 0.5);
   padding: 1rem;
   border-radius: 10px;
