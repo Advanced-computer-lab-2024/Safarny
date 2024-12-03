@@ -37,8 +37,8 @@ const Homepage = () => {
     <>
       <header className={styles.header}>
         <div className={styles.logoContainer}>
-          <h1 className={styles.title}>Safarny</h1>
           <img src={Logo} alt="Safarny Logo" className={styles.logo} />
+          <h1 className={styles.title}>Safarny</h1>
         </div>
         <button className={styles.burgerMenu} onClick={toggleMenu}>
           ☰
@@ -47,9 +47,6 @@ const Homepage = () => {
           <Link to="/signin" className={styles.button}>Sign In</Link>
           <Link to="/signup" className={styles.button}>Sign Up</Link>
           <Link to="/signupextra" className={styles.button}>Sign Up Extra</Link>
-          <Link to="/UpcomingActivites" className={styles.button}>Upcoming Activities</Link>
-          <Link to="/historical-places" className={styles.button}>Upcoming Historical Places</Link>
-          <Link to="/UpcomingItineraries" className={styles.button}>Upcoming Itineraries</Link>
         </nav>
       </header>
       <div className={styles.container}>
@@ -60,9 +57,9 @@ const Homepage = () => {
           </section>
           <section className={styles.features}>
   {[
-    { image: image1, title: "Sign In", link: "/signin" },
-    { image: image2, title: "Sign Up as a Tourist...", link: "/signup" },
-    { image: image3, title: "Sign Up as a Seller, Tour Guide, or Advertiser...", link: "/signupextra" },
+    // { image: image1, title: "Sign In", link: "/signin" },
+    // { image: image2, title: "Sign Up as a Tourist...", link: "/signup" },
+    // { image: image3, title: "Sign Up as a Seller, Tour Guide, or Advertiser...", link: "/signupextra" },
     { image: image4, title: "Upcoming Activities", link: "/UpcomingActivites" },
     { image: image5, title: "Historical Places", link: "/historical-places" },
     { image: image6, title: "Upcoming Itineraries", link: "/UpcomingItineraries" },
