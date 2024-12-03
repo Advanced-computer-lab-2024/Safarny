@@ -511,23 +511,108 @@ const handleClosePromoCodeModal = () => {
         {selectedSection === 'tags' && <Tags />}
         {selectedSection === 'ActivityCategory' && <ActivityCategory />}
       </div>
-  
+
       <Modal open={promoCodeModalOpen} onClose={handleClosePromoCodeModal}>
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
             <button className={styles.closeButton} onClick={handleClosePromoCodeModal}>X</button>
             <Typography variant="h6">Add Promo Code</Typography>
-            {/* Form for Promo Code */}
+
+            <TextField
+                fullWidth
+                label="Promo Code"
+                name="code"
+                value={promoCodeData.code}
+                onChange={(e) => setPromoCodeData({ ...promoCodeData, code: e.target.value })}
+                margin="normal"
+            />
+
+            <TextField
+                fullWidth
+                label="Discount Percentage"
+                name="discountPercentage"
+                type="number"
+                value={promoCodeData.discountPercentage}
+                onChange={(e) => setPromoCodeData({ ...promoCodeData, discountPercentage: e.target.value })}
+                margin="normal"
+            />
+
+            <TextField
+                fullWidth
+                label="Expiry Date"
+                name="expiryDate"
+                type="date"
+                value={promoCodeData.expiryDate}
+                onChange={(e) => setPromoCodeData({ ...promoCodeData, expiryDate: e.target.value })}
+                margin="normal"
+            />
+
+            <FormControlLabel
+                control={
+                  <Checkbox
+                      checked={promoCodeData.activated}
+                      onChange={(e) => setPromoCodeData({ ...promoCodeData, activated: e.target.checked })}
+                      color="primary"
+                  />
+                }
+                label="Activate"
+                className={styles.checkbox}
+            />
+
+            <button className={styles.button} onClick={handleSubmitPromoCode}>Submit</button>
+            {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
           </div>
         </div>
       </Modal>
-  
+
       <Modal open={openModal} onClose={handleCloseModal}>
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
             <button className={styles.closeButton} onClick={handleCloseModal}>X</button>
             <Typography variant="h6">{editingPostId ? 'Edit Post' : 'Add New Post'}</Typography>
-            {/* Post Form */}
+            <TextField
+                fullWidth
+                label="Details"
+                name="details"
+                value={currentPost.details}
+                onChange={handleInputChange}
+                margin="normal"
+            />
+            <TextField
+                fullWidth
+                label="Price"
+                name="price"
+                type="number"
+                value={currentPost.price}
+                onChange={handleInputChange}
+                margin="normal"
+            />
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Currency</InputLabel>
+              <Select
+                  name="currency"
+                  value={currentPost.currency}
+                  onChange={handleInputChange}
+              >
+                {currencyCodes.map((code) => (
+                    <MenuItem key={code} value={code}>{code}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
+                fullWidth
+                label="Quantity"
+                name="quantity"
+                type="number"
+                value={currentPost.quantity}
+                onChange={handleInputChange}
+                margin="normal"
+            />
+            <input type="file" onChange={handleImageChange} className={styles.imageInput} />
+            <button className={styles.button} onClick={handleSubmitPost}>
+              {editingPostId ? 'Update Post' : 'Add Post'}
+            </button>
+            {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
           </div>
         </div>
       </Modal>
