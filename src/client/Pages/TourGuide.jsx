@@ -245,7 +245,7 @@ export default function TourGuide() {
                   Accessibility: {itinerary.accessibility ? "Yes" : "No"}
                 </Typography>
                 <Typography variant="h6">
-                  Booking status: {itinerary.bookingOpen ? "active" : "in-active"}
+                  Booking status: {itinerary.bookingOpen === "active" ? "active" : "in-active"}
                 </Typography>
                 <Typography variant="h6">
                   Pickup Location: {itinerary.pickupLocation}
@@ -306,17 +306,6 @@ export default function TourGuide() {
       )}
       {tabValue === 1 && (
         <Card>
-          {selectedItinerary && (
-            <EditItineraryForm
-              open={isEditModalOpen}
-              handleClose={() => setEditModalOpen(false)}
-              itinerary={selectedItinerary}
-              setItinerary={setSelectedItinerary}
-              activities={activities}
-              tags={tags}
-              handleSubmit={handleUpdateItinerary}
-            />
-          )}
           <CardActions>
             <form onSubmit={handleCreateItinerary} style={{ width: "100%" }}>
               <Typography variant="h6" gutterBottom>
@@ -656,6 +645,17 @@ export default function TourGuide() {
             </form>
           </CardActions>
         </Card>
+      )}
+      {selectedItinerary && (
+          <EditItineraryForm
+              open={isEditModalOpen}
+              handleClose={() => setEditModalOpen(false)}
+              itinerary={selectedItinerary}
+              setItinerary={setSelectedItinerary}
+              activities={activities}
+              tags={tags}
+              handleSubmit={handleUpdateItinerary}
+          />
       )}
       <Footer />
     </div>
