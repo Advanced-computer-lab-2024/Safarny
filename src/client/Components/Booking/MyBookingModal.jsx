@@ -37,6 +37,30 @@ const MyBookingModal = ({
           bookingData
         );
       }
+      
+      // After successful booking, send receipt email
+      if (response && response.data) {
+        try {
+          const emailData = {
+            bookingId: response.data._id,
+            touristName: response.data.tourist.username,
+            touristEmail: response.data.tourist.email,
+            itemName: response.data[bookingType]?.name || response.data[bookingType]?.location,
+            price: response.data[bookingType]?.price,
+            currency: response.data[bookingType]?.currency || 'EGP',
+            bookingDate: bookingData.bookingDate,
+            type: bookingType.charAt(0).toUpperCase() + bookingType.slice(1),
+            pointsEarned: response.data.pointsEarned || 0
+          };
+
+          await axios.post('http://localhost:3000/tourist/bookings/send-receipt', emailData);
+          console.log('Receipt email sent successfully');
+        } catch (error) {
+          console.error('Error sending receipt email:', error);
+          // Don't throw error here as booking was successful
+        }
+      }
+
       console.log("Booking created:", response.data);
       onRequestClose();
       navigate("/mybookings", { state: { userId } });

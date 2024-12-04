@@ -34,6 +34,8 @@ const {
   cancelOrder,
 } = require("../controllers/orderController.js");
 
+const { sendReceiptEmail } = require('../controllers/SendEmailController');
+
 const router = Router();
 /*
     1-get/edit this Tourist details
@@ -120,5 +122,14 @@ router.get("/order/getAllOrders", getAllOrders);
 router.get("/order/getOrdersByUserId/:userId", getOrdersByUserId);
 router.put("/order/cancel/:id", cancelOrder);
 
+router.post('/bookings/send-receipt', async (req, res) => {
+  try {
+    await sendReceiptEmail(req.body);
+    res.status(200).json({ message: 'Receipt email sent successfully' });
+  } catch (error) {
+    console.error('Error sending receipt email:', error);
+    res.status(500).json({ message: 'Error sending receipt email' });
+  }
+});
 
 module.exports = router;
