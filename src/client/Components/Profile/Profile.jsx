@@ -133,7 +133,7 @@ const Profile = () => {
           <div className="row g-0">
             <div className="col-md-4 text-center p-4 bg-primary text-white">
               <img
-                src={userInfo.image || "https://via.placeholder.com/150"}
+                src={userInfo.photo || "https://via.placeholder.com/150"}
                 alt="Profile"
                 className={`rounded-circle img-fluid mb-3 ${styles.profileImage}`}
                 style={{ maxWidth: "150px" }}
