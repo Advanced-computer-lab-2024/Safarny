@@ -98,99 +98,8 @@ const Profile = () => {
     }
   };
 
-  const handleUpdateClick = () => {
-    localStorage.setItem("userId", userId);
-    window.location.href = "/UpdateProfile";
-  };
-
-  const handleProductViewClick = () => {
-    navigate("/products", { state: { userId } });
-  };
-
   const handleGuidePageClick = () => {
     navigate("/GuidePage", { state: { userId } });
-  };
-
-  const handleSellerHomeClick = () => {
-    navigate("/seller", { state: { userId } });
-  };
-
-  const handlePostClick = () => {
-    navigate("/create-post", { state: { userId } });
-  };
-
-  const handleAddActivity = () => {
-    localStorage.setItem("userId", userId);
-    navigate("/AdvertiserMain");
-  };
-
-  const handleCreateHistoricalPlaceClick = () => {
-    navigate("/create-historical-place", { state: { userId } });
-  };
-
-  const handleBookFlight = () => {
-    navigate("/BookFlight", { state: { userId } });
-  };
-
-  const handleBookHotel = () => {
-    navigate("/BookHotel", { state: { userId } });
-  };
-
-  const handleUpdateClick2 = () => {
-    navigate("/Search");
-  };
-
-  const handleUpcomingActivitiesClick = () => {
-    navigate("/UpcomingActivites", { state: { userId } });
-  };
-
-  const handleUpcomingItinerariesClick = () => {
-    navigate("/UpcomingItineraries", { state: { userId } });
-  };
-
-  const handleViewHistoricalPlacesClick = () => {
-    navigate("/historical-places", { state: { userId } });
-  };
-
-  const handleCreateHistoricalTagClick = () => {
-    navigate("/historical-tags");
-  };
-
-  const handleAddItinerary = () => {
-    navigate("/tourguide", { state: { userId } });
-  };
-
-  const handleCreateComplaint = () => {
-    navigate("/createcomplaints", { state: { userId } });
-  };
-
-  const handleViewComplaints = () => {
-    navigate("/viewcomplaints", { state: { userId } });
-  };
-
-  const handelWishList = () => {
-    navigate("/wishlist", { state: { userId } });
-  };
-
-  // Advertiser-specific transport buttons
-  const handleCreateTransportClick = () => {
-    navigate("/transportss/create-transport", { state: { userId } });
-  };
-
-  const handleEditTransportClick = () => {
-    navigate("/transportss/edit-transport", { state: { userId } });
-  };
-
-  const handlebookTransportClick = () => {
-    navigate("/transportss/book-transport", { state: { userId } });
-  };
-
-  const handleMyBookingsClick = () => {
-    navigate("/mybookings", { state: { userId } });
-  };
-
-  const handleMyPreferencesClick = () => {
-    navigate("/PreferencesPage", { state: { userId } });
   };
 
   const handleDelete = async () => {
@@ -219,56 +128,69 @@ const Profile = () => {
   return (
     <div className={styles.container}>
       <ProfileHeader userId={userId} userInfo={userInfo} />
-      <main className={styles.main}>
-        {/* <ProfileSideBar userId={userId} userInfo={userInfo} /> */}
-        <section className={styles.intro}>
-          <button className={styles.notificationButton} onClick={handleNotification}>
-            <FaBell/>
-          </button>
-          <div className={styles.profileHeader}>
-            {userInfo.image && (
-                <img src={userInfo.image} alt="Profile" className={styles.profileImage}/>
-            )}
-            <div className={styles.userInfo}>
-              <h1>Welcome, {userInfo.username}!</h1>
-              {userInfo.photo && (
-                  <img
-                      src={userInfo.photo}
-                      alt="Profile"
-                      className={styles.profileImage}
-                  />
-              )}
-              <h5>Your account details:</h5>
-              <p>Role: <strong>{userInfo.role}</strong></p>
-              <p>Email: <strong>{userInfo.email}</strong></p>
-              <p>Loyalty Points: <strong>{userInfo.loyaltyPoints}</strong></p>
-              <p>Wallet: <strong>{userInfo.wallet.toFixed(2)} {userInfo.walletcurrency}</strong></p>
+      <div className={`container ${styles.profileContainer} my-5`}>
+        <div className="card shadow-lg">
+          <div className="row g-0">
+            <div className="col-md-4 text-center p-4 bg-primary text-white">
+              <img
+                src={userInfo.image || "https://via.placeholder.com/150"}
+                alt="Profile"
+                className={`rounded-circle img-fluid mb-3 ${styles.profileImage}`}
+                style={{ maxWidth: "150px" }}
+              />
+              <h4 className="fw-bold">{userInfo.username}</h4>
+              <p>{userInfo.email}</p>
+              <button className={`${styles.notificationIcon} text-white`} onClick={handleNotification} title="Notifications">
+                <FaBell />
+              </button>
+            </div>
+
+            <div className="col-md-8">
+              <div className="card-body">
+                <h5 className="card-title text-primary">
+                  Welcome, {userInfo.username}!
+                </h5>
+                <p className="card-text">
+                  <strong>Role:</strong> {userInfo.role}
+                </p>
+                <p className="card-text">
+                  <strong>Loyalty Points:</strong> {userInfo.loyaltyPoints}
+                </p>
+                <p className="card-text">
+                  <strong>Wallet:</strong> {userInfo.wallet.toFixed(2)}{" "}
+                  {userInfo.walletcurrency}
+                </p>
+                {userInfo.role === "Tourist" && userInfo.loyaltyLevel && (
+                  <div>
+                    <strong>Badge:</strong>{" "}
+                    <img
+                      src={`/src/client/Assets/Img/rank${userInfo.loyaltyLevel}.jpg`}
+                      alt="Loyalty Badge"
+                      className="img-fluid"
+                      style={{ maxWidth: "50px" }}
+                    />
+                  </div>
+                )}
+                <div className="mt-4">
+                  <button
+                    onClick={handleCashInPoints}
+                    className={`btn btn-success me-2 ${styles.cashInButton}`}
+                  >
+                    Cash in Points
+                  </button>
+                  <button
+                    onClick={() => navigate("/GuidePage")}
+                    className="btn btn-primary"
+                  >
+                    Guide Page
+                  </button>
+                </div>
+                {message && <p className="text-success mt-3">{message}</p>}
+              </div>
             </div>
           </div>
-          {userInfo.role === "Tourist" && userInfo.loyaltyLevel && (
-              <div className={styles.loyaltyBadge}>
-                <p>Badge: </p>
-                {userInfo.loyaltyLevel === "level 1" && (
-                    <img src="src/client/Assets/Img/rank1.jpg" alt="Rank 1 Badge" className={styles.rankBadge}/>
-                )}
-                {userInfo.loyaltyLevel === "level 2" && (
-                    <img src="src/client/Assets/Img/rank2.jpg" alt="Rank 2 Badge" className={styles.rankBadge}/>
-                )}
-                {userInfo.loyaltyLevel === "level 3" && (
-                    <img src="src/client/Assets/Img/rank3.jpg" alt="Rank 3 Badge" className={styles.rankBadge}/>
-                )}
-              </div>
-          )}
-        </section>
-
-        <button onClick={handleCashInPoints} className={styles.subButton}>
-          Cash in points
-        </button>
-        <button onClick={handleGuidePageClick} className={styles.guideButton}>
-          Guide Page
-        </button>
-        {message && <p style={{ textAlign: 'center' }}>{message}</p>}
-      </main>
+        </div>
+      </div>
       <Footer />
     </div>
   );
