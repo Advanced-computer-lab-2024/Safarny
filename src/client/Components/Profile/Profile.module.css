@@ -1,13 +1,9 @@
 :root {
-  --primary-color: #0073b1;
-  --secondary-color: #005582;
-  --sub-button-color: #4a90e2;
-  --sub-button-hover-color: #357ab8;
-  --background-color: #dcdbdb;
-  --text-color: #333;
-  --button-padding: 0.75rem 1.5rem;
-  --sub-button-padding: 0.5rem 1rem;
-  --border-radius: 0.5rem;
+  --card-background: #ffffff;
+  --card-accent: #0056d2;
+  --background-gradient-start: #f0f4ff;
+  --background-gradient-end: #e4ecff;
+  --text-color: #333333;
 }
 
 .subButton {
@@ -45,17 +41,26 @@
 }
 
 .container {
+  height: 100%;
+  background: linear-gradient(135deg, var(--background-gradient-start), var(--background-gradient-end));
   width: 100vw;
   display: flex;
-  align-items: center;
   flex-direction: column;
-  margin: 0;
-  padding: 1.25rem;
-  background-color: var(--background-color);
-  /* border-radius: var(--border-radius); */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
   position: relative;
-  top: 0rem;
+  overflow: hidden;
+}
+
+.container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, var(--background-pattern-color) 1px, transparent 1px);
+  background-size: 50px 50px;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .main {
@@ -188,4 +193,53 @@ p {
   color: #444;
   margin: 0.3125rem 0;
   width: 75%;
+}
+
+.btn-success {
+  background-color: var(--primary-color);
+  border: none;
+  transition: transform 0.2s ease-in-out;
+}
+
+.btn-success:hover {
+  transform: scale(1.05);
+}
+
+.card {
+  border-radius: var(--border-radius);
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+.profileContainer {
+  margin-top: 20px;
+}
+
+.profileImage {
+  max-width: 150px;
+  height: auto;
+}
+
+.notificationIcon {
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.notificationIcon:hover {
+  transform: scale(1.1);
+}
+
+.cashInButton {
+  background-color: var(--primary-color);
+  border: none;
+  transition: transform 0.2s ease-in-out;
+}
+
+.cashInButton:hover {
+  transform: scale(1.05);
 }
