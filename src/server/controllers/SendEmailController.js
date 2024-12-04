@@ -146,4 +146,69 @@ const sendEmail = (req, res) => {
         });
 };
 
-module.exports = { sendActivityArchivedEmail, sendItineraryArchivedEmail, sendTouristReminderEmail, sendEmail };
+const sendReceiptEmail = async (bookingDetails) => {
+  const {
+    bookingId,
+    touristName,
+    touristEmail,
+    itemName,
+    price,
+    currency,
+    bookingDate,
+    type,
+    pointsEarned
+  } = bookingDetails;
+
+  const htmlContent = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <h2 style="color: #333;">Booking Confirmation Receipt</h2>
+      <p>Dear ${touristName},</p>
+      <p>Thank you for your booking! Here are your booking details:</p>
+      
+      <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0;">
+        <p><strong>Booking Reference:</strong> ${bookingId}</p>
+        <p><strong>Type:</strong> ${type}</p>
+        <p><strong>${type} Name:</strong> ${itemName}</p>
+        <p><strong>Booking Date:</strong> ${new Date(bookingDate).toLocaleDateString()}</p>
+        <p><strong>Amount Paid:</strong> ${price} ${currency}</p>
+        <p><strong>Loyalty Points Earned:</strong> ${pointsEarned}</p>
+      </div>
+      
+      <p>We hope you enjoy your experience!</p>
+      <p>Best regards,<br>Your Tourism App Team</p>
+    </div>
+  `;
+
+  const request = mailjet
+    .post("send", { 'version': 'v3.1' })
+    .request({
+      "Messages": [
+        {
+          "From": {
+            "Email": "sadassemaildezznuts@gmail.com",
+            "Name": "Your Tourism App"
+          },
+          "To": [
+            {
+              "Email": touristEmail,
+              "Name": touristName
+            }
+          ],
+          "Subject": `Booking Confirmation - ${itemName}`,
+          "TextPart": `Booking confirmation for ${itemName}`,
+          "HTMLPart": htmlContent
+        }
+      ]
+    });
+
+  try {
+    const result = await request;
+    console.log('Receipt email sent successfully');
+    return true;
+  } catch (error) {
+    console.error('Error sending receipt email:', error);
+    throw error;
+  }
+};
+
+module.exports = { sendActivityArchivedEmail, sendItineraryArchivedEmail, sendTouristReminderEmail, sendEmail, sendReceiptEmail };

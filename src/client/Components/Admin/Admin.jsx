@@ -41,7 +41,7 @@ const Admin = () => {
   const [openModal, setOpenModal] = useState(false);
   const [posts, setPosts] = useState([]);
   const [currentPost, setCurrentPost] = useState({ details: '', price: '', currency: '', quantity: '', imageurl: '' });
-  const [promoCodeModalOpen, setPromoCodeModalOpen] = useState(false); 
+  const [promoCodeModalOpen, setPromoCodeModalOpen] = useState(false);
   const [promoCodeData, setPromoCodeData] = useState({
     discountPercentage: '',
     activated: true,
@@ -49,7 +49,7 @@ const Admin = () => {
     code: '',
     expiryDate: '',
   });
-  
+
   const [editingPostId, setEditingPostId] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
@@ -63,7 +63,7 @@ const Admin = () => {
   const [maxPrice, setMaxPrice] = useState('');
   const [sortBy, setSortBy] = useState('');
   const [selectedCurrency, setSelectedCurrency] = useState(''); // Add selectedCurrency state
- 
+
   // total number of users
   const [totalUsers, setTotalUsers] = useState(0);
   const [usersThisMonth, setUsersThisMonth] = useState(0);
@@ -154,7 +154,7 @@ const Admin = () => {
 
   const fetchUserCounts = async () => {
     try {
-      const response = await axios.get('/Admin/getUserCounts');
+      const response = await axios.get('/admin/userCounts');
       setTotalUsers(response.data.totalUsers);
       setUsersThisMonth(response.data.usersThisMonth);
       setLoading(false); // Data fetched, set loading to false
@@ -174,9 +174,9 @@ const Admin = () => {
 
 
 
-  // useEffect(() => {
-  //   fetchUserCounts();
-  // }, []);
+  useEffect(() => {
+    fetchUserCounts();
+  }, []);
 
 
 
@@ -196,13 +196,13 @@ const Admin = () => {
       expiryDate: '',
     });
     setPromoCodeModalOpen(true); // Open the promo code modal
-};
+  };
 
-const handleClosePromoCodeModal = () => {
+  const handleClosePromoCodeModal = () => {
     setPromoCodeModalOpen(false); // Close the promo code modal
     setErrorMessage(''); // Clear any existing error messages
-};
-  
+  };
+
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -210,9 +210,9 @@ const handleClosePromoCodeModal = () => {
     setSelectedImage(null);
   };
 
-  
-  
-  
+
+
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -302,15 +302,15 @@ const handleClosePromoCodeModal = () => {
   };
   const handleSubmitPromoCode = async () => {
     const promoCodeDataToSubmit = { ...promoCodeData };
-  
+
     console.log('Submitting promo code data:', promoCodeDataToSubmit);
-  
+
     try {
       await axios.post('/admin/promocodes', promoCodeDataToSubmit);
-  
+
       // Display a success alert
-     
-  
+
+
       //fetchPromoCodes(); // Refresh the list of promo codes (if needed)
       handleClosePromoCodeModal();
       alert('Promo code successfully added!');
@@ -319,9 +319,9 @@ const handleClosePromoCodeModal = () => {
       setErrorMessage('Failed to add promo code');
     }
   };
-  
-  
-  
+
+
+
 
   const handleArchiveToggle = async (postId, isArchived) => {
     try {
@@ -375,14 +375,14 @@ const handleClosePromoCodeModal = () => {
           <button onClick={handleOpenPromoCodeModal} className={styles.button}>Add PromoCode</button>
           <button onClick={() => setSelectedSection('tags')} className={styles.button}>Manage Tags</button>
           <button onClick={() => setSelectedSection('ActivityCategory')} className={styles.button}>Manage Categories</button>
-          <Link to="/adminaddgovernor"  className={styles.button}>Add Governor</Link>
+          <Link to="/adminaddgovernor" className={styles.button}>Add Governor</Link>
           <Link to="/adminviewcomplaints" className={styles.button}>View Complaints</Link>
           <button onClick={handleUpcomingItinerariesClick} className={styles.button}>View Itineraries</button>
           <button onClick={handleUpcomingActivitiesClick} className={styles.button}>View Activities</button>
         </nav>
       </header>
       <SideBar className={styles.sidebar} />
-  
+
       <div className={styles.content}>
         {/* Displaying User Counts */}
         <div className={styles.userCounts}>
@@ -397,10 +397,10 @@ const handleClosePromoCodeModal = () => {
             </>
           )}
         </div>
-  
+
         <div className={styles.allFilters}>
           {errorMessage && <Alert severity="error" className={styles.errorAlert}>{errorMessage}</Alert>}
-  
+
           {/* Your existing filters */}
           <TextField
             label="Search by Name"
@@ -411,7 +411,7 @@ const handleClosePromoCodeModal = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className={styles.searchField}
           />
-  
+
           {/* Price Filter */}
           <div className={styles.priceFilterContainer}>
             <div className={styles.minPrice}>
@@ -435,7 +435,7 @@ const handleClosePromoCodeModal = () => {
               />
             </div>
           </div>
-  
+
           {/* Currency and Sort Filters */}
           <FormControl fullWidth margin="normal">
             <InputLabel>Currency</InputLabel>
@@ -446,7 +446,7 @@ const handleClosePromoCodeModal = () => {
               ))}
             </Select>
           </FormControl>
-  
+
           <div className={styles.sortBy}>
             <FormControlLabel
               control={
@@ -461,7 +461,7 @@ const handleClosePromoCodeModal = () => {
             />
           </div>
         </div>
-  
+
         {/* Loading indicator or the content */}
         {loading ? (
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -507,7 +507,7 @@ const handleClosePromoCodeModal = () => {
             </div>
           )
         )}
-  
+
         {selectedSection === 'tags' && <Tags />}
         {selectedSection === 'ActivityCategory' && <ActivityCategory />}
       </div>
@@ -519,44 +519,44 @@ const handleClosePromoCodeModal = () => {
             <Typography variant="h6">Add Promo Code</Typography>
 
             <TextField
-                fullWidth
-                label="Promo Code"
-                name="code"
-                value={promoCodeData.code}
-                onChange={(e) => setPromoCodeData({ ...promoCodeData, code: e.target.value })}
-                margin="normal"
+              fullWidth
+              label="Promo Code"
+              name="code"
+              value={promoCodeData.code}
+              onChange={(e) => setPromoCodeData({ ...promoCodeData, code: e.target.value })}
+              margin="normal"
             />
 
             <TextField
-                fullWidth
-                label="Discount Percentage"
-                name="discountPercentage"
-                type="number"
-                value={promoCodeData.discountPercentage}
-                onChange={(e) => setPromoCodeData({ ...promoCodeData, discountPercentage: e.target.value })}
-                margin="normal"
+              fullWidth
+              label="Discount Percentage"
+              name="discountPercentage"
+              type="number"
+              value={promoCodeData.discountPercentage}
+              onChange={(e) => setPromoCodeData({ ...promoCodeData, discountPercentage: e.target.value })}
+              margin="normal"
             />
 
             <TextField
-                fullWidth
-                label="Expiry Date"
-                name="expiryDate"
-                type="date"
-                value={promoCodeData.expiryDate}
-                onChange={(e) => setPromoCodeData({ ...promoCodeData, expiryDate: e.target.value })}
-                margin="normal"
+              fullWidth
+              label="Expiry Date"
+              name="expiryDate"
+              type="date"
+              value={promoCodeData.expiryDate}
+              onChange={(e) => setPromoCodeData({ ...promoCodeData, expiryDate: e.target.value })}
+              margin="normal"
             />
 
             <FormControlLabel
-                control={
-                  <Checkbox
-                      checked={promoCodeData.activated}
-                      onChange={(e) => setPromoCodeData({ ...promoCodeData, activated: e.target.checked })}
-                      color="primary"
-                  />
-                }
-                label="Activate"
-                className={styles.checkbox}
+              control={
+                <Checkbox
+                  checked={promoCodeData.activated}
+                  onChange={(e) => setPromoCodeData({ ...promoCodeData, activated: e.target.checked })}
+                  color="primary"
+                />
+              }
+              label="Activate"
+              className={styles.checkbox}
             />
 
             <button className={styles.button} onClick={handleSubmitPromoCode}>Submit</button>
@@ -571,42 +571,42 @@ const handleClosePromoCodeModal = () => {
             <button className={styles.closeButton} onClick={handleCloseModal}>X</button>
             <Typography variant="h6">{editingPostId ? 'Edit Post' : 'Add New Post'}</Typography>
             <TextField
-                fullWidth
-                label="Details"
-                name="details"
-                value={currentPost.details}
-                onChange={handleInputChange}
-                margin="normal"
+              fullWidth
+              label="Details"
+              name="details"
+              value={currentPost.details}
+              onChange={handleInputChange}
+              margin="normal"
             />
             <TextField
-                fullWidth
-                label="Price"
-                name="price"
-                type="number"
-                value={currentPost.price}
-                onChange={handleInputChange}
-                margin="normal"
+              fullWidth
+              label="Price"
+              name="price"
+              type="number"
+              value={currentPost.price}
+              onChange={handleInputChange}
+              margin="normal"
             />
             <FormControl fullWidth margin="normal">
               <InputLabel>Currency</InputLabel>
               <Select
-                  name="currency"
-                  value={currentPost.currency}
-                  onChange={handleInputChange}
+                name="currency"
+                value={currentPost.currency}
+                onChange={handleInputChange}
               >
                 {currencyCodes.map((code) => (
-                    <MenuItem key={code} value={code}>{code}</MenuItem>
+                  <MenuItem key={code} value={code}>{code}</MenuItem>
                 ))}
               </Select>
             </FormControl>
             <TextField
-                fullWidth
-                label="Quantity"
-                name="quantity"
-                type="number"
-                value={currentPost.quantity}
-                onChange={handleInputChange}
-                margin="normal"
+              fullWidth
+              label="Quantity"
+              name="quantity"
+              type="number"
+              value={currentPost.quantity}
+              onChange={handleInputChange}
+              margin="normal"
             />
             <input type="file" onChange={handleImageChange} className={styles.imageInput} />
             <button className={styles.button} onClick={handleSubmitPost}>
@@ -616,9 +616,9 @@ const handleClosePromoCodeModal = () => {
           </div>
         </div>
       </Modal>
-  
+
       <Footer />
     </div>
   );
-}  
+}
 export default Admin;

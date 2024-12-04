@@ -4,6 +4,7 @@ const Itinerary = require("../models/Itinerary.js");
 const Activity = require("../models/Activity.js");
 const User = require("../models/userModel.js");
 const HistoricalPlace = require("../models/historicalplaces.js");
+const { sendReceiptEmail } = require('./SendEmailController');
 
 const createBooking = async (req, res) => {
   const { itinerary, activity, tourist, bookingDate } = req.body;
@@ -171,7 +172,30 @@ const createBooking = async (req, res) => {
   await foundTourist.save();
   await newBooking.save();
 
-  res.status(201).json(newBooking);
+  try {
+    // After successful booking and points calculation
+    const bookingDetails = {
+      bookingId: newBooking._id,
+      touristName: foundTourist.username,
+      touristEmail: foundTourist.email,
+      bookingDate,
+      type: itinerary ? 'Itinerary' : 'Activity',
+      itemName: itinerary ? foundItinerary.name : foundActivity.location,
+      price: itinerary ? foundItinerary.price : foundActivity.price,
+      currency: itinerary ? 
+        (foundItinerary.currency || 'EGP') : 
+        (foundActivity.currency || 'EGP'),
+      pointsEarned: pointsEarned
+    };
+
+    // Send receipt email
+    await sendReceiptEmail(bookingDetails);
+
+    res.status(201).json(newBooking);
+  } catch (error) {
+    console.error('Error in booking creation:', error);
+    res.status(500).json({ message: 'Error creating booking', error: error.message });
+  }
 };
 
 // make function to book a historical place
