@@ -138,7 +138,7 @@ const createBooking = async (req, res) => {
   // if it was an activity, add the activity to the tourist's activities and add the tourist to the activity's tourists
 
   if (activity !== undefined && activity !== null) {
-    foundTourist.acttivities.push(activity);
+    foundTourist.activities.push(activity);
     foundActivity.boughtby.push(tourist);
     await foundActivity.save();
   }
