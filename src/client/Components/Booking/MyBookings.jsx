@@ -26,6 +26,8 @@ const MyBookings = () => {
     const savedRatings = localStorage.getItem("submittedTourGuideRatings");
     return savedRatings ? JSON.parse(savedRatings) : {};
   });
+  const [showUpcoming, setShowUpcoming] = useState(false);
+  const [showPast, setShowPast] = useState(false);
 
   const fetchBookings = async () => {
   try {
@@ -287,6 +289,35 @@ const sendReminderNotification = async (userId) => {
     console.error('Error sending notification:', error);
   }
 };
+
+const filterUpcomingBookings = () => {
+  setShowUpcoming(true);
+  setShowPast(false);
+};
+
+const filterPastBookings = () => {
+  setShowPast(true);
+  setShowUpcoming(false);
+};
+
+const isUpcoming = (date) => {
+  return new Date(date) > new Date();
+};
+
+const isPast = (date) => {
+  return new Date(date) < new Date();
+};
+
+const filteredBookings = bookings.filter(booking => {
+  if (showUpcoming) {
+    return isUpcoming(booking.bookingDate);
+  }
+  if (showPast) {
+    return isPast(booking.bookingDate);
+  }
+  return true; // Show all if no filter is applied
+});
+
   useEffect(() => {
     if (userId) {
       fetchBookings();
@@ -301,6 +332,21 @@ const sendReminderNotification = async (userId) => {
       <Header />
       <h1>My Bookings</h1>
 
+      <div className={styles.filterButtons}>
+        <button 
+          onClick={filterUpcomingBookings}
+          className={`${styles.filterButton} ${showUpcoming ? styles.active : ''}`}
+        >
+          View Upcoming Bookings
+        </button>
+        <button 
+          onClick={filterPastBookings}
+          className={`${styles.filterButton} ${showPast ? styles.active : ''}`}
+        >
+          View Past Bookings
+        </button>
+      </div>
+
       {loading ? (
         <div className={styles.loadingContainer}>
           <CircularProgress />
@@ -309,7 +355,7 @@ const sendReminderNotification = async (userId) => {
         <p className={styles.noBookingsText}>No bookings found.</p>
       ) : (
         <ul className={styles.bookingList}>
-          {bookings.map((booking) => {
+          {filteredBookings.map((booking) => {
             const bookingType = booking.itinerary
               ? "itinerary"
               : booking.activity
