@@ -139,6 +139,7 @@ export default function CheckoutModal({
             />
           )}{" "}
         </div>
+        <button onClick={onClose}>Close</button>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleBack} disabled={activeStep === 0}>
