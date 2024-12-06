@@ -40,7 +40,7 @@
 }
 
 .heading{
-  color: var(--header-color);
+  color: var(--text-color);
 }
 
 .header.translucent {
@@ -83,15 +83,11 @@
 }
 
 .sidebar {
-  width: 250px;
-  position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
-  background-color: var(--sidebar-background-color);
-  color: var(--sidebar-text-color);
-  overflow-y: auto;
-  z-index: 10;
+  z-index: 1000;
+  transition: transform 0.3s ease-in-out;
 }
 
 .content {
