@@ -139,20 +139,22 @@ export default function CheckoutModal({
             />
           )}{" "}
         </div>
-        <button onClick={onClose}>Close</button>
+        <div className={styles.buttonContainer}>
+          <Button onClick={handleClose}>Close</Button>
+          <div className={styles.navigationButtons}>
+            <Button onClick={handleBack} disabled={activeStep === 0}>
+              Back
+            </Button>
+            <Button
+              onClick={activeStep === steps.length - 1 ? handleClose : handleNext}
+              variant="contained"
+              disabled={!stepValidation[activeStep]}
+            >
+              {activeStep === steps.length - 1 ? "Finish" : "Next"}
+            </Button>
+          </div>
+        </div>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleBack} disabled={activeStep === 0}>
-          Back
-        </Button>
-        <Button
-          onClick={activeStep === steps.length - 1 ? handleClose : handleNext}
-          variant="contained"
-          disabled={!stepValidation[activeStep]}
-        >
-          {activeStep === steps.length - 1 ? "Finish" : "Next"}
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 }
