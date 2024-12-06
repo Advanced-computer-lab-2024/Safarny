@@ -352,7 +352,7 @@ const filteredBookings = bookings.filter(booking => {
           <CircularProgress />
         </div>
       ) : bookings.length === 0 ? (
-        <p className={styles.noBookingsText}>No bookings found.</p>
+        <p className={styles.noBookingsText} style={{ color: 'white' }}>No bookings found.</p>
       ) : (
         <ul className={styles.bookingList}>
           {filteredBookings.map((booking) => {
@@ -376,7 +376,7 @@ const filteredBookings = bookings.filter(booking => {
 
             return (
               <li key={booking._id} className={styles.bookingCard}>
-                <div className={styles.bookingDetails}>
+                <div className={styles.bookingDetails} style={{ color: 'white' }}>
                   <p>Booking Date: {booking.bookingDate}</p>
                   {booking.itinerary && <p>Itinerary: {booking.itinerary.name}</p>}
 
