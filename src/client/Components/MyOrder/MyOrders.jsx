@@ -86,103 +86,82 @@ export default function MyOrders() {
   return (
     <div className={styles.container}>
       <Header />
-      <Typography variant="h4" gutterBottom>
-        My Orders
-      </Typography>
-      {orders.length > 0 ? (
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Order ID</TableCell>
-                <TableCell>Date</TableCell>
-                <TableCell>Total Amount</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Items</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {orders.map((order) => (
-                <React.Fragment key={order._id}>
-                  <TableRow>
-                    <TableCell>{order._id}</TableCell>
-                    <TableCell>{formatDate(order.createdAt)}</TableCell>
-                    <TableCell>{`${order.totalAmount} ${order.currency}`}</TableCell>
-                    <TableCell>
-                      <Chip
-                        icon={statusIcons[order.status]}
-                        label={
-                          order.status.charAt(0).toUpperCase() +
-                          order.status.slice(1)
-                        }
-                        className={styles[order.status]}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <ul className={styles.itemsList}>
-                        {order.items.map((item, index) => (
-                          <li
-                            key={index}
-                          >{`${item.name} (x${item.quantity})`}</li>
-                        ))}
-                      </ul>
-                    </TableCell>
-                    <TableCell>
-                      {order.status === "pending" && (
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => handleCancelOrder(order._id)}
-                        >
-                          Cancel Order
-                        </Button>
+      <div className={styles.contentContainer}>
+        <h1 className={styles.headerTitle}>My Orders</h1>
+        {orders.length > 0 ? (
+          <div className={styles.orderList}>
+            {orders.map((order) => (
+              <div key={order._id} className={styles.orderCard}>
+                <div className={styles.orderDetails}>
+                  <h2>Order ID: {order._id}</h2>
+                  <p>Date: {formatDate(order.createdAt)}</p>
+                  <p>Total Amount: {`${order.totalAmount} ${order.currency}`}</p>
+                  <div className={styles.statusContainer}>
+                    <Chip
+                      icon={statusIcons[order.status]}
+                      label={order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                      className={styles[order.status]}
+                    />
+                  </div>
+                  
+                  <div className={styles.itemsSection}>
+                    <h3>Items</h3>
+                    <ul className={styles.itemsList}>
+                      {order.items.map((item, index) => (
+                        <li key={index}>{`${item.name} (x${item.quantity})`}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className={styles.actionsContainer}>
+                    {order.status === "pending" && (
+                      <button
+                        className={styles.cancelButton}
+                        onClick={() => handleCancelOrder(order._id)}
+                      >
+                        Cancel Order
+                      </button>
+                    )}
+                    <button
+                      className={styles.detailsButton}
+                      onClick={() => toggleExpand(order._id)}
+                    >
+                      {expandedOrderId === order._id ? (
+                        <>
+                          <ExpandLess /> Hide Details
+                        </>
+                      ) : (
+                        <>
+                          <ExpandMore /> Show Details
+                        </>
                       )}
-                      <Button
-                        variant="text"
-                        onClick={() => toggleExpand(order._id)}
-                      >
-                        {expandedOrderId === order._id ? (
-                          <ExpandLess />
-                        ) : (
-                          <ExpandMore />
-                        )}
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell colSpan={6}>
-                      <Collapse
-                        in={expandedOrderId === order._id}
-                        timeout="auto"
-                        unmountOnExit
-                      >
-                        <div className={styles.details}>
-                          <Typography variant="h6">Order Details:</Typography>
-                          <Typography>
-                            <strong>Delivery Address:</strong>{" "}
-                            {`${order.deliveryAddress.address}, ${order.deliveryAddress.city}, ${order.deliveryAddress.postcode}`}
-                          </Typography>
-                          <Typography>
-                            <strong>Payment Method:</strong>{" "}
-                            {order.paymentMethod
-                              .replace("_", " ")
-                              .toUpperCase()}
-                          </Typography>
-                        </div>
-                      </Collapse>
-                    </TableCell>
-                  </TableRow>
-                </React.Fragment>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      ) : (
-        <Typography variant="h6" gutterBottom>
-          No orders to display.
-        </Typography>
-      )}
+                    </button>
+                  </div>
+
+                  <Collapse in={expandedOrderId === order._id} timeout="auto" unmountOnExit>
+                    <div className={styles.expandedDetails}>
+                      <h3>Order Details</h3>
+                      <p>
+                        <strong>Delivery Address:</strong>{" "}
+                        {`${order.deliveryAddress.address}, ${order.deliveryAddress.city}, ${order.deliveryAddress.postcode}`}
+                      </p>
+                      <p>
+                        <strong>Payment Method:</strong>{" "}
+                        {order.paymentMethod.replace("_", " ").toUpperCase()}
+                      </p>
+                    </div>
+                  </Collapse>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className={styles.productCard}>
+            <h2>No orders found</h2>
+            <p>Place some orders to get started!</p>
+          </div>
+        )}
+      </div>
       <Footer />
     </div>
   );
