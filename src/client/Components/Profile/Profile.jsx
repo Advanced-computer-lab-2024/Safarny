@@ -204,7 +204,7 @@ const Profile = () => {
                   </button>
                   <button
                     onClick={() => navigate("/GuidePage")}
-                    className="btn btn-primary"
+                    className="btn btn-dark"
                   >
                     Guide Page
                   </button>
