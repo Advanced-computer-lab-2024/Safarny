@@ -453,10 +453,9 @@ const SignUpExtra = () => {
         className={styles.modal}
         overlayClassName={styles.overlay}
       >
-        <div className={styles.container}>
-          <Header />
-          <main style={{ flexGrow: 1 }}>
-            <h2 className={styles.heading2}>Terms and Conditions</h2>
+        <div className={styles.modalContent}>
+          <h2>Terms and Conditions</h2>
+          <div className={styles.modalBody}>
             <p>Please read the following terms and conditions carefully:</p>
             <ul>
               <li>Your use of this site signifies your acceptance of our terms.</li>
@@ -464,12 +463,10 @@ const SignUpExtra = () => {
               <li>Unauthorized access or misuse of our services is strictly prohibited.</li>
               <li>We reserve the right to modify these terms at any time without notice.</li>
             </ul>
-            <p>Thank you for using our platform responsibly.</p>
-            <button onClick={closeModal} className={styles.backButton}>
-              Back
-            </button>
-          </main>
-          <Footer />
+          </div>
+          <button onClick={closeModal} className={styles.modalButton}>
+            Close
+          </button>
         </div>
       </Modal>
 
