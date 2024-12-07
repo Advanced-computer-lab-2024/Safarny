@@ -348,6 +348,4 @@ We would like to thank the following people and resources:
   - Special thanks to all the online resources and tutorials that helped us build this project.
 
 ### License
-Include the project license, for example, Apache 2.0, and mention any licensed tools or services used, such as Stripe.
-
-You can further customize each section with specific details related to your project.
+The project is licensed under the GNU General Public License v3.0.
