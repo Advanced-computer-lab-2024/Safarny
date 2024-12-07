@@ -66,50 +66,57 @@ const SignIn = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.pageWrapper}>
       <Header />
+      
+      <div className={styles.container}>
+        <div className={styles.formContainer}>
+          <h1 className={styles.heading}>Welcome Back</h1>
+          
+          {success && <div className={styles.alert + " " + styles.success}>Sign in successful!</div>}
+          {error && <div className={styles.alert + " " + styles.error}>{error}</div>}
 
-      <div className={styles.formContainer}>
-        <h2 className={styles.heading}>Sign In</h2>
+          <form onSubmit={handleSubmit} className={styles.form}>
+            <div className={styles.inputGroup}>
+              <label htmlFor="email" className={styles.label}>Email</label>
+              <input
+                type="email"
+                id="email"
+                className={styles.input}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="Enter your email"
+              />
+            </div>
 
-        {/* Show success or error messages */}
-        {success && <p className={styles.successMessage}>Sign in successful!</p>}
-        {error && <p className={styles.errorMessage}>{error}</p>}
+            <div className={styles.inputGroup}>
+              <label htmlFor="password" className={styles.label}>Password</label>
+              <input
+                type="password"
+                id="password"
+                className={styles.input}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="Enter your password"
+              />
+            </div>
 
-        {/* Form structure with state handlers */}
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <label className={styles.label}>
-            Email:
-            <input
-              className={styles.input}
-              type="email"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </label>
-          <label className={styles.label}>
-            Password:
-            <input
-              className={styles.input}
-              type="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </label>
+            <button type="submit" className={styles.submitButton}>
+              Sign In
+            </button>
 
-          <button type="submit" className={styles.button}>
-            Sign In
-          </button>
-
-          {/* Forget Password Button */}
-          <Link to="/password-recovery" className={styles.forgetPassword}>
-            Forget Password
-          </Link>
-        </form>
+            <div className={styles.links}>
+              <Link to="/password-recovery" className={styles.forgotPassword}>
+                Forgot Password?
+              </Link>
+              <Link to="/signup" className={styles.createAccount}>
+                Create an account
+              </Link>
+            </div>
+          </form>
+        </div>
       </div>
 
       <Footer />

@@ -1,146 +1,471 @@
 :root {
-    --primary-color: #1a1a1a;
-    --secondary-color: #333;
-    --background-color: #dcdbdb;
-    --text-color: #121212;
-    --header-color: white;
-    --header-height: 4rem;
-    --border-radius: 1rem;
-    --card-background: #2a2a2a;
-    --card-hover: #444;
-    --glow-color: #958efa;
+  --primary-color: #1a1a1a;
+  --secondary-color: #333;
+  --background-color: #dcdbdb;
+  --text-color: #616161;
+  --heading-color: white;
+  --header-color: white;
+  --form-background: #2a2a2a;
+  --border-radius: 1rem;
+  --small-text-color: white;
+  --accent-color: #958efa;
+  --success-color: #2ed573;
+  --warning-color: #ffa502;
+  --danger-color: #ff4757;
+}
+
+.pageWrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background-color);
+  width: 100vw;
+}
+
+.pageHeader {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  color: var(--primary-color);
+}
+
+.pageHeader h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.pageHeader p {
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+/* Enhanced Control Panel */
+.controlPanel {
+  background-color: var(--form-background);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top Actions Row */
+.actionsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Sort Section */
+.sortSection {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.sortSection h4 {
+  color: var(--heading-color);
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.controlButton {
+  padding: 0.75rem 1.25rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--heading-color);
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.controlButton:hover,
+.controlButton.active {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+/* Filter Grid */
+.filterControls {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.filterGroup {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 1.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.filterGroup label {
+  color: var(--heading-color);
+  margin-bottom: 0.75rem;
+  display: block;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+/* Action Buttons - Now with visible text */
+.mainActions {
+  display: flex;
+  gap: 1rem;
+}
+
+.bookButton, 
+.saveButton {
+  min-width: 140px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.bookButton {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+}
+
+.bookButton:disabled {
+  background-color: rgba(149, 142, 250, 0.3);
+  cursor: not-allowed;
+}
+
+.saveButton {
+  background-color: transparent;
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+}
+
+/* Share buttons with text */
+.shareActions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.iconButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  color: var(--heading-color);
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.iconButton span {
+  display: inline-block;
+}
+
+/* Currency selector */
+.currencySelect {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  color: var(--heading-color) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 0.5rem !important;
+}
+
+/* Filter inputs */
+.filterInputs {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.rangeFilter,
+.dateFilter,
+.categoryFilter {
+  margin-bottom: 1rem;
+}
+
+.categoryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.categoryOption {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--heading-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .filterControls {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .filterControls {
+    grid-template-columns: 1fr;
   }
   
-body{
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
-.activityItem {
-  background-color: #000000; /* White background for each box */
-  border: 1px solid #ccc; /* Light gray border */
-  border-radius: 8px; /* Rounded corners */
-  padding: 15px; /* Inner padding */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
-  position: relative; /* Set position relative for absolute children */
-}
-
-.mapContainer {
-  height: 200px; /* Adjust height as needed */
-  width: 100%; /* Full width */
-  border-radius: 5px; /* Optional: Rounded corners */
-  overflow: hidden; /* Optional: Prevent overflow */
-}
-
-  .container {
-    font-family: 'Arial', sans-serif;
-    color: var(--text-color);
-    background-color: var(--background-color);
-    padding: 0 2rem;
-    display: flex;
+  .actionsRow {
     flex-direction: column;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    width: 100%;
+    gap: 1rem;
+    align-items: stretch;
   }
   
-  .button {
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    background-color: var(--secondary-color);
-    color: var(--header-color);
-    border-radius: 0.5rem;
-    transition: background-color 0.3s;
-    margin-right: 0.5rem;
-  }
-  
-  .button:hover {
-    background-color: lighten(var(--header-color), 10%);
-  }
-  
-  .main {
-    padding: 2rem 0;
-    display: flex;
+  .sortSection {
     flex-direction: column;
-    align-items: center;
-    background-color: rgba(108, 106, 106, 0.8);
-    border-radius: 1rem;
-    margin-top: 2rem;
-    width: 75%;
-    margin-bottom: 50px;
+    align-items: stretch;
   }
-  
-  .intro {
-    text-align: center;
-  }
-  
-  h1 {
-    color: white;
-  }
-  
-  p {
-    color: white;
-    margin-top: 0.5rem;
-    
-  }
-
-  h5 {
-    color: white;
-    margin: 0.5rem;
-    
-  }
-
-  .filters{
-    color: black;
-  }
-
-  .activityList {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 20px;
-    width: 100%;
-  }
-  
-  .activityItem {
-    background-color: #000000;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    margin: auto;
-    padding: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: calc(30% - 2rem);
-    min-width: 18.75rem;
-  }
-  
-  .activityItem h3 {
-    margin: 0 0 10px;
-  }
-  
-  .activityItem p {
-    margin: 5px 0;
-  }
-
-  .cardButton{
-    background-color: rgb(57, 57, 57);
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
-    margin-top: 0.5rem;
-    border-radius: var(--border-radius);
-    color: white;
-    padding: 0.5rem;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
 }
 
-.buttonContainers{
+/* Activity Cards */
+.activityCard {
+  background-color: var(--form-background);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.activityCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+}
+
+.cardHeader {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cardHeader h3 {
+  color: var(--heading-color);
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.cardBody {
+  padding: 1.5rem;
+}
+
+.mainInfo {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
-.cardButton:hover {
-    background-color: var(--card-hover);
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--heading-color);
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.priceSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.price {
+  color: var(--accent-color);
+  font-size: 1.25rem;
+}
+
+.discount {
+  color: var(--success-color);
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+}
+
+.bookingStatus {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.bookingStatus[data-status="true"] {
+  background-color: rgba(46, 213, 115, 0.1);
+  color: var(--success-color);
+}
+
+.bookingStatus[data-status="false"] {
+  background-color: rgba(255, 71, 87, 0.1);
+  color: var(--danger-color);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.tag {
+  background-color: rgba(149, 142, 250, 0.1);
+  color: var(--accent-color);
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.9rem;
+}
+
+.categoryTag {
+  background-color: rgba(255, 165, 2, 0.1);
+  color: var(--warning-color);
+}
+
+.mapWrapper {
+  height: 200px;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.map {
+  height: 100%;
+  width: 100%;
+}
+
+.cardActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.adminControl {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.flagLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--danger-color);
+  cursor: pointer;
+}
+
+/* Control Panel Layout */
+.controlPanel {
+  background-color: var(--form-background);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Move My Activities to bottom */
+.navigationSection {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Consistent Button Styling */
+.primaryButton,
+.bookButton,
+.saveButton,
+.iconButton {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  min-width: 120px;
+  height: 40px;
+}
+
+.primaryButton {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+}
+
+.bookButton {
+  background-color: #2ed573; /* Success green */
+  color: white;
+  border: none;
+}
+
+.saveButton {
+  background-color: #ffa502; /* Warm orange */
+  color: white;
+  border: none;
+}
+
+.iconButton {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  min-width: auto;
+  padding: 0.75rem 1.25rem;
+}
+
+/* Card Actions */
+.cardActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Hover effects */
+.primaryButton:hover,
+.bookButton:hover,
+.saveButton:hover,
+.iconButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Disabled state */
+.bookButton:disabled {
+  background-color: rgba(46, 213, 115, 0.5);
+  cursor: not-allowed;
 }

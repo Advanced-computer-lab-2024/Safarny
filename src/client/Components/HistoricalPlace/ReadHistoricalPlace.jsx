@@ -4,17 +4,9 @@ import axios from "axios";
 import Footer from "/src/client/components/Footer/Footer";
 import Header from "/src/client/components/Header/Header";
 import styles from "./ReadHistoricalPlace.module.css";
-// import styles1 from "/src/client/components/Home/Homepage.module.css";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
-import {
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  CircularProgress,
-} from "@mui/material";
-import "./loadingContainer.css";
-import MyBookingModal from "/src/client/Components/Booking/MyBookingModal" ;
+import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import MyBookingModal from "/src/client/Components/Booking/MyBookingModal";
 
 const ReadHistoricalPlace = () => {
   const [places, setPlaces] = useState([]);
@@ -190,201 +182,170 @@ const ReadHistoricalPlace = () => {
 
   if (loading) {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100%",
-          marginLeft: "675px",
-        }}
-      >
-        <span style={{ marginRight: "10px" }}>
-          Loading Historical places...
-        </span>
-        <CircularProgress />
+      <div className="d-flex justify-content-center align-items-center min-vh-100">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
       </div>
     );
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return <div className="alert alert-danger m-4">{error}</div>;
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.pageWrapper}>
       <Header />
-      <div className={styles.contentContainer}>
-        <h1>Historical Places</h1>
+      
+      <div className="container py-5">
+        <h1 className="text-center mb-5">Historical Places</h1>
 
-        {/* Search Input */}
-        <input
-          type="text"
-          placeholder="Search by description..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className={styles.searchInput}
-        />
+        {/* Filter Section */}
+        <div className={`${styles.filterSection} row g-3 mb-4`}>
+          <div className="col-md-4">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search by description..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          
+          <div className="col-md-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Filter by opening hours..."
+              value={openingHoursFilter}
+              onChange={(e) => setOpeningHoursFilter(e.target.value)}
+            />
+          </div>
+          
+          <div className="col-md-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Filter by tag..."
+              value={tagFilter}
+              onChange={(e) => setTagFilter(e.target.value)}
+            />
+          </div>
 
-        {/* Opening Hours Filter */}
-        <div className={styles.openingHoursFilter}>
-          <label>Filter by opening hours:</label>
-          <input
-            type="text"
-            placeholder="e.g. 12:00 - 5:00"
-            value={openingHoursFilter}
-            onChange={(e) => setOpeningHoursFilter(e.target.value)}
-            className={styles.openingHoursInput}
-          />
-        </div>
-
-        {/* Tag Filter */}
-        <div className={styles.tagFilter}>
-          <label>Filter by tag:</label>
-          <input
-            type="text"
-            placeholder="e.g., historical"
-            value={tagFilter}
-            onChange={(e) => setTagFilter(e.target.value)}
-            className={styles.tagInput}
-          />
-        </div>
-        {/* Currency Selector */}
-        <div className={styles.currencySelector}>
-          <FormControl fullWidth margin="normal">
-            <InputLabel>
-              <h4>Currency</h4>
-            </InputLabel>
-            <br></br>
-            <Select
+          <div className="col-md-2">
+            <select
+              className="form-select"
               value={selectedCurrency}
               onChange={(e) => setSelectedCurrency(e.target.value)}
             >
               {currencyCodes.map((code) => (
-                <MenuItem key={code} value={code}>
-                  {code}
-                </MenuItem>
+                <option key={code} value={code}>{code}</option>
               ))}
-            </Select>
-          </FormControl>
+            </select>
+          </div>
         </div>
 
-        {/* Filter by Governor Button */}
+        {/* Governor Filter Button */}
         {userInfo.role === "TourismGovernor" && (
-          <button
-            onClick={handleFilterByGovernor}
-            className={styles.filterButton}
-          >
-            {filterByGovernor ? "Show All Places" : "Show My Places"}
-          </button>
+          <div className="text-center mb-4">
+            <button
+              onClick={handleFilterByGovernor}
+              className="btn btn-outline-light"
+            >
+              {filterByGovernor ? "Show All Places" : "Show My Places"}
+            </button>
+          </div>
         )}
 
+        {/* Places Grid */}
         {filteredPlaces.length > 0 ? (
-          <div className={styles.cardsContainer}>
+          <div className="row g-4">
             {filteredPlaces.map((place) => {
-              const hasCoordinates =
-                place.coordinates &&
-                place.coordinates.lat !== undefined &&
-                place.coordinates.lng !== undefined;
-              const convertedPrice = convertPrice(
-                place.ticketPrices,
-                place.currency,
-                selectedCurrency
-              );
+              const hasCoordinates = place.coordinates?.lat !== undefined && place.coordinates?.lng !== undefined;
+              const convertedPrice = convertPrice(place.ticketPrices, place.currency, selectedCurrency);
+              
               return (
-                <div className={styles.placeCard} key={place._id}>
-                  <h2 className={styles.placeName}>
-                    {place.description}
-                    <br />
-                    {/* <button
-                      onClick={() =>
-                        handleReadHistoricalPlaceDetails(place._id)
-                      }
-                      className={styles.cardButton}
-                    >
-                      View Details
-                    </button> */}
-                    <button
-                      onClick={() =>
-                        navigator.clipboard.writeText(
-                          `${window.location.origin}/historical-place/${place._id}`
-                        )
-                      }
-                      className={styles.cardButton}
-                    >
-                      Copy link
-                    </button>
-                    <button
-                      onClick={() =>
-                        (window.location.href = `mailto:?subject=Check out this historical place&body=${window.location.origin}/historical-place/${place._id}`)
-                      }
-                      className={styles.cardButton}
-                    >
-                      Email
-                    </button>
-                  </h2>
-                  <p>Opening Hours: {place.openingHours}</p>
-                  <p>Description: {place.description}</p>
-                  <p>
-                    Ticket Price: {convertedPrice} {selectedCurrency}
-                  </p>
-                  {place.tags && place.tags.length > 0 ? (
-                    <p>Tags: {place.tags.map((tag) => tag.name).join(", ")}</p>
-                  ) : (
-                    <p>No tags available</p>
-                  )}
-                  {place.pictures && place.pictures.length > 0 && (
-                    <img
-                      className={styles.placeImage}
-                      src={place.pictures[0]}
-                      alt={place.description}
-                    />
-                  )}
-                  {/* Map Container */}
-                  <div className={styles.mapContainer}>
-                    {hasCoordinates ? (
-                      <MapContainer
-                        center={[place.coordinates.lat, place.coordinates.lng]}
-                        zoom={13}
-                        style={{ height: "100%", width: "100%" }}
-                      >
-                        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                        <Marker
-                          position={[
-                            place.coordinates.lat,
-                            place.coordinates.lng,
-                          ]}
-                        />
-                      </MapContainer>
-                    ) : (
-                      <p>Coordinates not available</p>
+                <div className="col-lg-6 col-xl-4" key={place._id}>
+                  <div className={`card h-100 ${styles.placeCard}`}>
+                    {place.pictures?.[0] && (
+                      <img
+                        src={place.pictures[0]}
+                        className="card-img-top"
+                        alt={place.description}
+                        style={{ height: "200px", objectFit: "cover" }}
+                      />
                     )}
+                    
+                    <div className="card-body">
+                      <h5 className="card-title">{place.description}</h5>
+                      <div className={`${styles.cardDetails} mb-3`}>
+                        <p className="mb-2"><strong>Opening Hours:</strong> {place.openingHours}</p>
+                        <p className="mb-2"><strong>Price:</strong> {convertedPrice} {selectedCurrency}</p>
+                        <p className="mb-2"><strong>Tags:</strong> {place.tags?.map(tag => tag.name).join(", ") || "No tags"}</p>
+                      </div>
+
+                      {hasCoordinates && (
+                        <div className={`${styles.mapWrapper} mb-3`}>
+                          <MapContainer
+                            center={[place.coordinates.lat, place.coordinates.lng]}
+                            zoom={13}
+                            style={{ height: "200px", width: "100%" }}
+                          >
+                            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                            <Marker position={[place.coordinates.lat, place.coordinates.lng]} />
+                          </MapContainer>
+                        </div>
+                      )}
+
+                      <div className="d-flex gap-2 flex-wrap">
+                        <button
+                          onClick={() => handleReadHistoricalPlaceDetails(place._id)}
+                          className="btn btn-primary btn-sm"
+                        >
+                          View Details
+                        </button>
+                        <button
+                          onClick={() => navigator.clipboard.writeText(`${window.location.origin}/historical-place/${place._id}`)}
+                          className="btn btn-outline-secondary btn-sm"
+                        >
+                          Copy Link
+                        </button>
+                        <button
+                          onClick={() => window.location.href = `mailto:?subject=Check out this historical place&body=${window.location.origin}/historical-place/${place._id}`}
+                          className="btn btn-outline-secondary btn-sm"
+                        >
+                          Share via Email
+                        </button>
+                        
+                        {userInfo.role === "TourismGovernor" && (
+                          <>
+                            <button
+                              onClick={() => handleUpdateHistoricalPlace(place._id)}
+                              className="btn btn-warning btn-sm"
+                            >
+                              Update
+                            </button>
+                            <button
+                              onClick={() => handleDeleteHistoricalPlace(place._id)}
+                              className="btn btn-danger btn-sm"
+                            >
+                              Delete
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  {/* Update and Delete Buttons */}
-                  {userInfo.role === "TourismGovernor" && (
-                    <>
-                      <button
-                        onClick={() => handleUpdateHistoricalPlace(place._id)}
-                        className={styles.updateButton}
-                      >
-                        Update
-                      </button>
-                      <button
-                        onClick={() => handleDeleteHistoricalPlace(place._id)}
-                        className={styles.deleteButton}
-                      >
-                        Delete
-                      </button>
-                    </>
-                  )}
                 </div>
               );
             })}
           </div>
         ) : (
-          <p>No historical places available</p>
+          <div className="alert alert-info">No historical places available</div>
         )}
       </div>
+
       <Footer />
 
       {isBookingModalOpen && (

@@ -2,166 +2,123 @@
     --primary-color: #1a1a1a;
     --secondary-color: #333;
     --background-color: #dcdbdb;
-    --text-color: #121212;
+    --text-color: #616161;
+    --heading-color: white;
     --header-color: white;
-    --header-height: 4rem;
+    --form-background: #2a2a2a;
     --border-radius: 1rem;
-    --card-background: #2a2a2a;
-    --card-hover: #444;
-    --glow-color: #958efa;
+    --small-text-color: white;
 }
 
-.container {
-    font-family: 'Arial', sans-serif;
-    color: var(--text-color);
-    background-color: var(--background-color);
-    padding: 1rem 2rem;
+.pageWrapper {
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    position: relative;
-    width: 95vw;
-    height: 100%;
-}
-
-.contentContainer {
-    background-color: rgba(108, 106, 106, 0.8);
-    color: var(--text-color);
-    padding: 2rem;
-    border-radius: var(--border-radius);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 80%;
-    /* max-width: 70%; */
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.button {
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    background-color: var(--secondary-color);
-    color: var(--header-color);
-    border-radius: 0.5rem;
-    transition: background-color 0.3s;
-}
-
-.button:hover {
-    background-color: lighten(var(--header-color), 10%);
-}
-
-h1 {
-    color: var(--primary-color);
-    margin: 2rem 0;
-}
-
-.searchInput, .openingHoursInput, .tagInput {
-    width: 100%;
-    max-width: 400px;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: var(--border-radius);
-    margin: 1rem 0;
     background-color: var(--background-color);
-    color: var(--text-color);
-}
-
-.currencySelector {
-    margin-bottom: 1rem;
-    width: 100%;
-    max-width: 400px;
-}
-
-.filterButton, .updateButton, .deleteButton, .viewButton, .copyButton, .emailButton {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.filterButton {
-    background-color: var(--primary-color);
-    color: var(--header-color);
-}
-
-.filterButton:hover {
-    background-color: var(--card-hover);
-}
-
-.cardsContainer{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 95vw;
+    width: 100vw;
 }
 
 .placeCard {
-    background-color: var(--card-background);
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: none;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    background-color: var(--form-background);
+    color: var(--heading-color);
     border-radius: var(--border-radius);
-    padding: 1rem;
-    margin: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s, background-color 0.3s;
-    width: calc(25% - 2rem); /* 3 cards per row with spacing */
+    height: auto !important;
+    min-height: 600px;
 }
 
 .placeCard:hover {
-    transform: scale(1.02);
-    background-color: var(--card-hover);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
 }
 
-.placeName {
-    color: white;
-    margin: 0 0 10px;
+.placeCard .card-title {
+    color: var(--heading-color);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
 }
 
-.placeImage {
-    width: 100%;
-    height: auto;
-    border-radius: var(--border-radius);
-    margin-top: 0.5rem;
+.placeCard .card-img-top {
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+    height: 250px;
+    object-fit: cover;
 }
 
-.updateButton {
-    background-color: #4CAF50; /* Green */
-    color: white;
+.cardDetails {
+    padding: 1rem 0;
+    color: var(--heading-color);
 }
 
-.updateButton:hover {
-    background-color: #45a049; /* Darker green */
-}
-
-.deleteButton {
-    background-color: #f44336; /* Red */
-    color: white;
-}
-
-.deleteButton:hover {
-    background-color: #d32f2f; /* Darker red */
-}
-
-.mapContainer {
-    height: 200px; /* Adjust height as needed */
-    width: 100%; /* Full width */
-    border-radius: var(--border-radius);
-    overflow: hidden; /* Prevent overflow */
-}
-
-.cardButton{
-    background-color: rgb(57, 57, 57);
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
-    margin-top: 0.5rem;
-    border-radius: var(--border-radius);
-    color: white;
-    padding: 0.5rem;
+.cardDetails p {
+    margin-bottom: 0.8rem;
     font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
+    opacity: 0.9;
 }
 
-.cardButton:hover {
-    background-color: var(--card-hover);
+.cardDetails strong {
+    opacity: 1;
+    color: var(--heading-color);
+}
+
+.mapWrapper {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 1rem 0;
+}
+
+/* Button styling */
+.placeCard button {
+    margin: 0.25rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.placeCard button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Filter section styling */
+.filterSection {
+    background-color: var(--form-background);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 2rem;
+}
+
+.filterSection input,
+.filterSection select {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--heading-color);
+    padding: 0.75rem;
+}
+
+.filterSection input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .placeCard {
+        min-height: 650px;
+    }
+}
+
+@media (max-width: 992px) {
+    .placeCard {
+        min-height: 600px;
+    }
+}
+
+@media (max-width: 768px) {
+    .placeCard {
+        min-height: auto;
+        margin-bottom: 2rem;
+    }
 }

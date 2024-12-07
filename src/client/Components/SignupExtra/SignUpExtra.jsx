@@ -5,7 +5,7 @@ import Footer from "/src/client/Components/Footer/Footer";
 import Header from "/src/client/Components/Header/Header";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../server/config/Firebase"; // Adjust the path as necessary
-import styles from "/src/client/Components/Signup/SignUp.module.css"; // Import your signup styles
+import styles from "/src/client/Components/SignupExtra/SignUpExtra.module.css"; // Import your signup styles
 import { uploadBytes } from 'firebase/storage';
 import Modal from 'react-modal';
 
@@ -188,220 +188,274 @@ const SignUpExtra = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.pageWrapper}>
       <Header />
-      <div className={styles.formContainer}>
-        <h2 style={{color: 'white', fontWeight: 'bold'}}>Sign Up Extra</h2>
-        {success && <p className={styles.successMessage}>Sign up successful!</p>}
-        {error && <p className={styles.errorMessage}>{error}</p>}
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <label className={styles.label}>
-            Username:
-            <input className={styles.input}
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-            />
-          </label>
-          <label className={styles.label}>
-            Password:
-            <input className={styles.input}
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-            />
-          </label>
-          <label className={styles.label}>
-            Email:
-            <input className={styles.input}
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-            />
-          </label>
-          <label className={styles.label}>
-            Nationality:
-            <select className={styles.input}
-                value={nationality}
-                onChange={handleCountryChange}
-                required
-            >
-              <option value="">Select Country of Origin</option>
-              {countries.map((country) => (
-                  <option key={country} value={country}>{country}</option>
-              ))}
-            </select>
-          </label>
-          <label className={styles.label}>
-            I am a:
-            <select className={styles.input}
-                value={userType}
-                onChange={(e) => handleUserTypeChange(e.target.value)}
-                required
-            >
-              <option value="">Select Role</option>
-              <option value="TourGuide">Tour Guide</option>
-              <option value="Advertiser">Advertiser</option>
-              <option value="Seller">Seller</option>
-            </select>
-          </label>
-
-          {userType && (
-              <label className={styles.label}>
-                Upload Image:
-                <input type="file" accept="image/*" onChange={handleImageUpload} required/>
-              </label>
-          )}
-
-          {userType == "TourGuide" && (
-              <label className={styles.label}>
-                Upload Id File:
-                <input type="file" accept="pdf" onChange={handleFileChange(setIdFile)} required/>
-              </label>
-          )}
-
-          {userType == "TourGuide" && (
-              <label className={styles.label}>
-                Upload Certificate:
-                <input type="file" accept="pdf" onChange={handleFileChange(setCertificateFile)} required/>
-              </label>
-          )}
-
-          {(userType == "Advertiser" || userType == "Seller") && (
-              <label className={styles.label}>
-                Upload Id File:
-                <input type="file" accept="pdf" onChange={handleFileChange(setIdFile)} required/>
-              </label>
-          )}
-
-          {(userType == "Advertiser" || userType == "Seller") && (
-              <label className={styles.label}>
-                Upload Tax Registration Card:
-                <input type="file" accept="pdf" onChange={handleFileChange(setTaxCardFile)} required/>
-              </label>
-          )}
-
-          {textBoxes[0] && (
-              <>
-                <label className={styles.label}>
-                  Website link:
-                  <input className={styles.input}
-                      type="url"
-                      value={websiteLink}
-                      onChange={(e) => setWebsiteLink(e.target.value)}
-                      required
-                  />
-                </label>
-                <label className={styles.label}>
-                  Hotline:
-                  <input className={styles.input}
-                      type="tel"
-                      value={hotline}
-                      onChange={(e) => setHotline(e.target.value)}
-                      required
-                  />
-                </label>
-                <label className={styles.label}>
-                  Company profile:
-                  <textarea
-                      value={companyProfile}
-                      onChange={(e) => setCompanyProfile(e.target.value)}
-                      required
-                  />
-                </label>
-              </>
-          )}
-
-          {textBoxes[1] && (
-              <>
-                <label className={styles.label}>
-                  Seller name:
-                  <input className={styles.input}
+      <div className="container-fluid">
+        <div className="row justify-content-center">
+          <div className="col-12 col-md-8 col-lg-6">
+            <div className={styles.formContainer}>
+              <h2 className={`${styles.heading} text-center mb-4`}>Sign Up Extra</h2>
+              {success && <div className={`${styles.successMessage} alert alert-success`}>Sign up successful!</div>}
+              {error && <div className={`${styles.errorMessage} alert alert-danger`}>{error}</div>}
+              
+              <form onSubmit={handleSubmit} className={styles.form}>
+                <div className="mb-3">
+                  <label className={`${styles.label} form-label`}>
+                    Username:
+                    <input className={`${styles.input} form-control`}
                       type="text"
-                      value={sellerName}
-                      onChange={(e) => setSellerName(e.target.value)}
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                       required
-                  />
-                </label>
-                <label className={styles.label}>
-                  Description:
-                  <textarea
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      required
-                  />
-                </label>
-              </>
-          )}
+                    />
+                  </label>
+                </div>
 
-          {textBoxes[2] && (
-              <>
-                <label className={styles.label}>
-                  Mobile number:
-                  <input className={styles.input}
-                      type="tel"
-                      value={mobileNumber}
-                      onChange={(e) => setMobileNumber(e.target.value)}
+                <div className="mb-3">
+                  <label className={`${styles.label} form-label`}>
+                    Password:
+                    <input className={`${styles.input} form-control`}
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       required
-                  />
-                </label>
-                <label className={styles.label}>
-                  Years of experience:
-                  <input className={styles.input}
-                      type="number"
-                      value={experience}
-                      onChange={(e) => setExperience(e.target.value)}
-                      required
-                  />
-                </label>
-                <label className={styles.label}>
-                  Previous work (if exists):
-                  <textarea
-                      value={previousWork}
-                      onChange={(e) => setPreviousWork(e.target.value)}
-                  />
-                </label>
-              </>
-          )}
+                    />
+                  </label>
+                </div>
 
-          {/* Terms and Conditions */}
-          <div className={styles.terms}>
-            <input className={styles.input}
-                type="checkbox"
-                id="terms"
-                checked={termsAccepted}
-                onChange={(e) => setTermsAccepted(e.target.checked)}
-                required
-            />
-            <label htmlFor="terms">
-              I agree to the following terms and conditions:
-            </label>
-            <span onClick={openModal}
-                  style={{cursor: 'pointer', color: 'blue', textDecoration: 'underline'}}>
+                <div className="mb-3">
+                  <label className={`${styles.label} form-label`}>
+                    Email:
+                    <input className={`${styles.input} form-control`}
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </label>
+                </div>
+
+                <div className="mb-3">
+                  <label className={`${styles.label} form-label`}>
+                    Nationality:
+                    <select className={`${styles.input} form-select`}
+                      value={nationality}
+                      onChange={handleCountryChange}
+                      required
+                    >
+                      <option value="">Select Country of Origin</option>
+                      {countries.map((country) => (
+                          <option key={country} value={country}>{country}</option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+
+                <div className="mb-3">
+                  <label className={`${styles.label} form-label`}>
+                    I am a:
+                    <select className={`${styles.input} form-select`}
+                      value={userType}
+                      onChange={(e) => handleUserTypeChange(e.target.value)}
+                      required
+                    >
+                      <option value="">Select Role</option>
+                      <option value="TourGuide">Tour Guide</option>
+                      <option value="Advertiser">Advertiser</option>
+                      <option value="Seller">Seller</option>
+                    </select>
+                  </label>
+                </div>
+
+                {userType && (
+                    <div className="mb-3">
+                      <label className={`${styles.label} form-label`}>
+                        Upload Image:
+                        <input type="file" accept="image/*" onChange={handleImageUpload} className="form-control" required/>
+                      </label>
+                    </div>
+                )}
+
+                {userType == "TourGuide" && (
+                    <div className="mb-3">
+                      <label className={`${styles.label} form-label`}>
+                        Upload Id File:
+                        <input type="file" accept="pdf" onChange={handleFileChange(setIdFile)} className="form-control" required/>
+                      </label>
+                    </div>
+                )}
+
+                {userType == "TourGuide" && (
+                    <div className="mb-3">
+                      <label className={`${styles.label} form-label`}>
+                        Upload Certificate:
+                        <input type="file" accept="pdf" onChange={handleFileChange(setCertificateFile)} className="form-control" required/>
+                      </label>
+                    </div>
+                )}
+
+                {(userType == "Advertiser" || userType == "Seller") && (
+                    <div className="mb-3">
+                      <label className={`${styles.label} form-label`}>
+                        Upload Id File:
+                        <input type="file" accept="pdf" onChange={handleFileChange(setIdFile)} className="form-control" required/>
+                      </label>
+                    </div>
+                )}
+
+                {(userType == "Advertiser" || userType == "Seller") && (
+                    <div className="mb-3">
+                      <label className={`${styles.label} form-label`}>
+                        Upload Tax Registration Card:
+                        <input type="file" accept="pdf" onChange={handleFileChange(setTaxCardFile)} className="form-control" required/>
+                      </label>
+                    </div>
+                )}
+
+                {textBoxes[0] && (
+                    <>
+                      <div className="mb-3">
+                        <label className={`${styles.label} form-label`}>
+                          Website link:
+                          <input className={`${styles.input} form-control`}
+                            type="url"
+                            value={websiteLink}
+                            onChange={(e) => setWebsiteLink(e.target.value)}
+                            required
+                          />
+                        </label>
+                      </div>
+
+                      <div className="mb-3">
+                        <label className={`${styles.label} form-label`}>
+                          Hotline:
+                          <input className={`${styles.input} form-control`}
+                            type="tel"
+                            value={hotline}
+                            onChange={(e) => setHotline(e.target.value)}
+                            required
+                          />
+                        </label>
+                      </div>
+
+                      <div className="mb-3">
+                        <label className={`${styles.label} form-label`}>
+                          Company profile:
+                          <textarea
+                            className={`${styles.input} form-control`}
+                            value={companyProfile}
+                            onChange={(e) => setCompanyProfile(e.target.value)}
+                            required
+                          />
+                        </label>
+                      </div>
+                    </>
+                )}
+
+                {textBoxes[1] && (
+                    <>
+                      <div className="mb-3">
+                        <label className={`${styles.label} form-label`}>
+                          Seller name:
+                          <input className={`${styles.input} form-control`}
+                            type="text"
+                            value={sellerName}
+                            onChange={(e) => setSellerName(e.target.value)}
+                            required
+                          />
+                        </label>
+                      </div>
+
+                      <div className="mb-3">
+                        <label className={`${styles.label} form-label`}>
+                          Description:
+                          <textarea
+                            className={`${styles.input} form-control`}
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            required
+                          />
+                        </label>
+                      </div>
+                    </>
+                )}
+
+                {textBoxes[2] && (
+                    <>
+                      <div className="mb-3">
+                        <label className={`${styles.label} form-label`}>
+                          Mobile number:
+                          <input className={`${styles.input} form-control`}
+                            type="tel"
+                            value={mobileNumber}
+                            onChange={(e) => setMobileNumber(e.target.value)}
+                            required
+                          />
+                        </label>
+                      </div>
+
+                      <div className="mb-3">
+                        <label className={`${styles.label} form-label`}>
+                          Years of experience:
+                          <input className={`${styles.input} form-control`}
+                            type="number"
+                            value={experience}
+                            onChange={(e) => setExperience(e.target.value)}
+                            required
+                          />
+                        </label>
+                      </div>
+
+                      <div className="mb-3">
+                        <label className={`${styles.label} form-label`}>
+                          Previous work (if exists):
+                          <textarea
+                            className={`${styles.input} form-control`}
+                            value={previousWork}
+                            onChange={(e) => setPreviousWork(e.target.value)}
+                          />
+                        </label>
+                      </div>
+                    </>
+                )}
+
+                <div className="mb-3">
+                  <div className="form-check">
+                    <input className="form-check-input"
+                      type="checkbox"
+                      id="terms"
+                      checked={termsAccepted}
+                      onChange={(e) => setTermsAccepted(e.target.checked)}
+                      required
+                    />
+                    <label className="form-check-label" htmlFor="terms">
+                      I agree to the terms and conditions
+                    </label>
+                  </div>
+                  <span onClick={openModal} className="text-primary" style={{cursor: 'pointer'}}>
                     Click here for the terms and conditions.
                   </span>
-          </div>
+                </div>
 
-          <button type="submit" className={styles.button}>
-            Sign Up
-          </button>
-        </form>
+                <button type="submit" className="btn btn-primary w-100">
+                  Sign Up
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
-      <Footer/>
+
       <Modal
-          isOpen={isModalOpen}
-          onRequestClose={closeModal}
-          contentLabel="Terms and Conditions"
-          className={styles.modal}
-          overlayClassName={styles.overlay}
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Terms and Conditions"
+        className={styles.modal}
+        overlayClassName={styles.overlay}
       >
-        <div className={styles.container}>
-          <Header />
-          <main style={{ flexGrow: 1 }}>
-            <h2 className={styles.heading2}>Terms and Conditions</h2>
+        <div className={styles.modalContent}>
+          <h2>Terms and Conditions</h2>
+          <div className={styles.modalBody}>
             <p>Please read the following terms and conditions carefully:</p>
             <ul>
               <li>Your use of this site signifies your acceptance of our terms.</li>
@@ -409,15 +463,14 @@ const SignUpExtra = () => {
               <li>Unauthorized access or misuse of our services is strictly prohibited.</li>
               <li>We reserve the right to modify these terms at any time without notice.</li>
             </ul>
-            <p>Thank you for using our platform responsibly.</p>
-            {/* Add Back Button */}
-            <button onClick={closeModal} className={styles.backButton}>
-              Back
-            </button>
-          </main>
-          <Footer />
+          </div>
+          <button onClick={closeModal} className={styles.modalButton}>
+            Close
+          </button>
         </div>
       </Modal>
+
+      <Footer/>
     </div>
   );
 };

@@ -253,179 +253,304 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
   
   
   return (
-      <div className={styles.container}>
+    <div className={styles.pageWrapper}>
       <Header />
-      {loading && <p>Loading...</p>}
       
-        <main className={styles.main}>
-          <h2>Upcoming Activities</h2>
+      <div className="container py-4">
+        <div className={styles.pageHeader}>
+          <h1>Upcoming Activities</h1>
+          {/* <p>Discover exciting activities and experiences</p> */}
+        </div>
 
-          <div className={styles.sortOptions}>
-            <button onClick={() => setSortCriteria("date")} className={styles.cardButton}>
-              Sort by Date
-            </button>
-            <button onClick={() => setSortCriteria("price")} className={styles.cardButton}>
-              Sort by Price
-            </button>
-            <button onClick={() => setSortCriteria("averageRating")} className={styles.cardButton}>
-              Sort by Rating
-            </button>
-          </div>
-          <div className={styles.navigationButtonContainer}>
-    <button
-      onClick={GoToMyActivities}
-      className={styles.cardButton}
-    >
-      My Activities
-    </button>
-  </div>
-
-          <div className={styles.filterOptions}>
-            <label htmlFor="filter">Filter by: </label>
-            <select id="filter" onChange={(e) => setFilterCriteria(e.target.value)} className={styles.filters}>
-              <option value="">None</option>
-              <option value="budget">Budget</option>
-              <option value="date">Date</option>
-              <option value="category">Category</option>
-              <option value="averageRating">Rating</option>
-            </select>
+        <div className={styles.controlPanel}>
+          {/* Sort Options */}
+          <div className={styles.sortSection}>
+            <h4><i className="fas fa-sort me-2"></i>Sort By</h4>
+            <div className={styles.buttonGroup}>
+              <button onClick={() => setSortCriteria("date")} className={styles.controlButton}>
+                <i className="fas fa-calendar me-2"></i>Date
+              </button>
+              <button onClick={() => setSortCriteria("price")} className={styles.controlButton}>
+                <i className="fas fa-tag me-2"></i>Price
+              </button>
+              <button onClick={() => setSortCriteria("averageRating")} className={styles.controlButton}>
+                <i className="fas fa-star me-2"></i>Rating
+              </button>
+            </div>
           </div>
 
-          <div className={styles.currencySelector}>
-            <FormControl fullWidth margin="normal">
-              <InputLabel><h4>Currency</h4></InputLabel>
-              <br></br>
-              <Select value={selectedCurrency} onChange={(e) => setSelectedCurrency(e.target.value)}>
-                {currencyCodes.map(code => (
-                    <MenuItem key={code} value={code}>{code}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+          {/* Navigation Button */}
+          <div className={styles.navigationSection}>
+            <button onClick={GoToMyActivities} className={styles.primaryButton}>
+              <i className="fas fa-bookmark me-2"></i>My Activities
+            </button>
           </div>
 
-          {filterCriteria === "budget" && (
-              <div className={styles.filterInput}>
-                <label>Budget range: {budget[0]}$ - {budget[1]}$</label>
-                <input type="range" min="0" max="1000" value={budget[0]} onChange={(e) => setBudget([+e.target.value, budget[1]])} />
-                <input type="range" min="0" max="1000" value={budget[1]} onChange={(e) => setBudget([budget[0], +e.target.value])} />
+          {/* Filter Section */}
+          <div className={styles.filterSection}>
+            <div className="row g-4">
+              <div className="col-md-4">
+                <div className={styles.filterGroup}>
+                  <div className={styles.filterIcon}>
+                    <i className="fas fa-filter"></i>
+                  </div>
+                  <label>Filter by</label>
+                  <select 
+                    onChange={(e) => setFilterCriteria(e.target.value)} 
+                    className="form-select"
+                  >
+                    <option value="">None</option>
+                    <option value="budget">Budget</option>
+                    <option value="date">Date</option>
+                    <option value="category">Category</option>
+                    <option value="averageRating">Rating</option>
+                  </select>
+                </div>
               </div>
-          )}
 
-          {filterCriteria === "date" && (
-              <div className={styles.filterInput}>
-                <label>Select Date Range: </label>
-                <input type="date" onChange={(e) => setDateRange(e.target.value)} />
+              <div className="col-md-4">
+                <div className={styles.filterGroup}>
+                  <div className={styles.filterIcon}>
+                    <i className="fas fa-coins"></i>
+                  </div>
+                  <label>Currency</label>
+                  <Select 
+                    value={selectedCurrency} 
+                    onChange={(e) => setSelectedCurrency(e.target.value)}
+                    className={styles.currencySelect}
+                  >
+                    {currencyCodes.map(code => (
+                      <MenuItem key={code} value={code}>{code}</MenuItem>
+                    ))}
+                  </Select>
+                </div>
               </div>
-          )}
+            </div>
 
-          {filterCriteria === "category" && availableCategories.length > 0 && (
-              <div className={styles.filterInput}>
-                <label>Select Categories:</label>
-                {availableCategories.map((category) => (
-                    <div key={category._id}>
-                      <input type="checkbox" value={category.type} onChange={() => handleCategoryChange(category.type)} />
-                      {category.type}
+            {/* Dynamic Filter Inputs */}
+            {filterCriteria && (
+              <div className={`${styles.filterInputs} mt-4`}>
+                {filterCriteria === "budget" && (
+                  <div className={styles.rangeFilter}>
+                    <label>Budget range: {budget[0]}$ - {budget[1]}$</label>
+                    <div className={styles.rangeInputs}>
+                      <input 
+                        type="range" 
+                        min="0" 
+                        max="1000" 
+                        value={budget[0]} 
+                        onChange={(e) => setBudget([+e.target.value, budget[1]])} 
+                      />
+                      <input 
+                        type="range" 
+                        min="0" 
+                        max="1000" 
+                        value={budget[1]} 
+                        onChange={(e) => setBudget([budget[0], +e.target.value])} 
+                      />
                     </div>
-                ))}
-              </div>
-          )}
+                  </div>
+                )}
 
-          {filterCriteria === "averageRating" && (
-              <div className={styles.filterInput}>
-                <label>Rating: {averageRating} </label>
-                <input type="range" min="0" max="5" value={averageRating} onChange={(e) => setAverageRating(e.target.value)} />
-              </div>
-          )}
+                {filterCriteria === "date" && (
+                  <div className={styles.dateFilter}>
+                    <label>Select Date Range</label>
+                    <input 
+                      type="date" 
+                      className="form-control" 
+                      onChange={(e) => setDateRange(e.target.value)} 
+                    />
+                  </div>
+                )}
 
-          <section className={styles.activityList}>
-            {activities.length === 0 ? (
-                <p>No upcoming activities found.</p>
-            ) : (
-                activities.map((activity) => {
-                  const convertedPrice = convertPrice(activity.price, activity.currency, selectedCurrency);
-                  return (
-                      <div key={activity._id} className={styles.activityItem}>
-                        <h3>{activity.name}</h3>
-                        <p>Date: {new Date(activity.date).toLocaleDateString()}</p>
-                        <p>Time: {activity.time}</p>
-                        <p>Location: {activity.location}</p>
-                        <p>Price: {convertedPrice} {selectedCurrency}</p>
-                        <p>Rating: {renderStars(activity.averageRating)}</p>
-                        {activity.specialDiscount && (
-                            <p>Discount: {activity.specialDiscount}</p>
-                        )}
-
-                        {activity.tags && activity.tags.length > 0 && (
-                            <p>Tags: {activity.tags.map((tag) => tag.name).join(", ")}</p>
-                        )}
-
-                        {activity.category && activity.category.length > 0 && (
-                            <p>Category: {activity.category.map((cat) => cat.type).join(", ")}</p>
-                        )}
-                        <p style={{color: activity.bookingOpen ? "green" : "red"}}>
-                          {activity.bookingOpen ? "Booking: Open" : "Booking: Closed"}
-                        </p>
-                        <div className={styles.buttonContainers}>
-                          <button
-                              onClick={() => navigator.clipboard.writeText(`${window.location.origin}/UpcomingActivities/${activity._id}`)}
-                              className={styles.cardButton} >
-                            Copy link
-                          </button>
-                          {/* <button onClick={() => handleUpcomingActivitiesDetails(activity._id)}
-                                  className={styles.cardButton} >
-                            Details
-                          </button> */}
-                          <button
-                              onClick={() => window.location.href = `mailto:?subject=Check out this historical place&body=${window.location.origin}/UpcomingActivities/${activity._id}`}
-                              className={styles.cardButton} >
-                            Email
-                          </button>
-                          {userId && (
-                        <button onClick={() => handleActivityBook(activity._id)} className={styles.cardButton}>
-                          Book
-                        </button>
-                      )}
-                      
-            {userRole === "Tourist" && (
-                            <button 
-                            onClick={() => handleAddActivity(activity)} 
-                            className={styles.cardButton}
-                          >
-                            Save
-                          </button>
-                        )}
+                {filterCriteria === "category" && (
+                  <div className={styles.categoryFilter}>
+                    <label>Categories</label>
+                    <div className={styles.categoryGrid}>
+                      {availableCategories.map((category) => (
+                        <div key={category._id} className={styles.categoryOption}>
+                          <input 
+                            type="checkbox" 
+                            id={category.type}
+                            value={category.type} 
+                            onChange={() => handleCategoryChange(category.type)} 
+                          />
+                          <label htmlFor={category.type}>{category.type}</label>
                         </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
-                        <div className={styles.mapContainer}>
-                          <MapContainer center={[activity.coordinates.lat || 51.505, activity.coordinates.lng || -0.09]}
-                                        zoom={13} style={{height: "100%", width: "100%"}}>
-                            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-                            {activity.coordinates.lat && activity.coordinates.lng && (
-                                <Marker position={[activity.coordinates.lat, activity.coordinates.lng]}/>
-                            )}
-                          </MapContainer>
-                        </div>
-
-                        {/* Admin-only Checkbox */}
-                        {userRole === "Admin" && (
-                            <div className={styles.adminCheckbox}>
-                              <label>
-                                <input
-                                    type="checkbox"
-                                    checked={activity.archived}
-                                    onChange={(e) => handleArchiveToggle(activity._id, e.target.checked)}
-                                />
-                                Flag (inappropriate)
-                              </label>
-                            </div>
-                        )}
-                      </div>
-                  );
-                })
+                {filterCriteria === "averageRating" && (
+                  <div className={styles.ratingFilter}>
+                    <label>Minimum Rating: {averageRating}</label>
+                    <input 
+                      type="range" 
+                      min="0" 
+                      max="5" 
+                      value={averageRating} 
+                      onChange={(e) => setAverageRating(e.target.value)} 
+                    />
+                  </div>
+                )}
+              </div>
             )}
-          </section>
-        </main>
-        {isBookingModalOpen && (
+          </div>
+        </div>
+
+        {/* Activities Grid */}
+        <div className="row g-4 mt-4">
+          {loading ? (
+            <div className="col-12 text-center">
+              <CircularProgress />
+            </div>
+          ) : activities.length === 0 ? (
+            <div className="col-12">
+              <div className={styles.noResults}>
+                <i className="fas fa-search me-2"></i>
+                No activities found
+              </div>
+            </div>
+          ) : (
+            activities.map((activity) => {
+              const convertedPrice = convertPrice(activity.price, activity.currency, selectedCurrency);
+              return (
+                <div className="col-lg-6 col-xl-4" key={activity._id}>
+                  <div className={styles.activityCard}>
+                    <div className={styles.cardHeader}>
+                      <h3>{activity.name}</h3>
+                      <div className={styles.rating}>
+                        {renderStars(activity.averageRating)}
+                      </div>
+                    </div>
+
+                    <div className={styles.cardBody}>
+                      <div className={styles.mainInfo}>
+                        <div className={styles.infoItem}>
+                          <i className="fas fa-calendar me-2"></i>
+                          <span>{new Date(activity.date).toLocaleDateString()}</span>
+                        </div>
+                        <div className={styles.infoItem}>
+                          <i className="fas fa-clock me-2"></i>
+                          <span>{activity.time}</span>
+                        </div>
+                        <div className={styles.infoItem}>
+                          <i className="fas fa-map-marker-alt me-2"></i>
+                          <span>{activity.location}</span>
+                        </div>
+                      </div>
+
+                      <div className={styles.priceSection}>
+                        <div className={styles.price}>
+                          <strong>{convertedPrice} {selectedCurrency}</strong>
+                          {activity.specialDiscount && (
+                            <span className={styles.discount}>
+                              {activity.specialDiscount} OFF
+                            </span>
+                          )}
+                        </div>
+                        <div className={styles.bookingStatus} data-status={activity.bookingOpen}>
+                          {activity.bookingOpen ? "Booking Open" : "Booking Closed"}
+                        </div>
+                      </div>
+
+                      {(activity.tags || activity.category) && (
+                        <div className={styles.tags}>
+                          {activity.tags && activity.tags.map((tag) => (
+                            <span key={tag._id} className={styles.tag}>
+                              {tag.name}
+                            </span>
+                          ))}
+                          {activity.category && activity.category.map((cat) => (
+                            <span key={cat._id} className={`${styles.tag} ${styles.categoryTag}`}>
+                              {cat.type}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      <div className={styles.mapWrapper}>
+                        <MapContainer 
+                          center={[activity.coordinates.lat || 51.505, activity.coordinates.lng || -0.09]}
+                          zoom={13} 
+                          className={styles.map}
+                        >
+                          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
+                          {activity.coordinates.lat && activity.coordinates.lng && (
+                            <Marker position={[activity.coordinates.lat, activity.coordinates.lng]}/>
+                          )}
+                        </MapContainer>
+                      </div>
+
+                      <div className={styles.cardActions}>
+                        <div className={styles.shareActions}>
+                          <button
+                            onClick={() => navigator.clipboard.writeText(`${window.location.origin}/UpcomingActivities/${activity._id}`)}
+                            className={styles.iconButton}
+                            title="Copy Link"
+                          >
+                            Copy Link
+                            <i className="fas fa-link"></i>
+                          </button>
+                          <button
+                            onClick={() => window.location.href = `mailto:?subject=Check out this activity&body=${window.location.origin}/UpcomingActivities/${activity._id}`}
+                            className={styles.iconButton}
+                            title="Share via Email"
+                          >
+                            Share via Email
+                            <i className="fas fa-envelope"></i>
+                          </button>
+                        </div>
+
+                        <div className={styles.mainActions}>
+                          {userId && (
+                            <button 
+                              onClick={() => handleActivityBook(activity._id)}
+                              className={styles.bookButton}
+                              disabled={!activity.bookingOpen}
+                            >
+                              <i className="fas fa-ticket-alt me-2"></i>
+                              Book Now
+                            </button>
+                          )}
+                          
+                          {userRole === "Tourist" && (
+                            <button 
+                              onClick={() => handleAddActivity(activity)}
+                              className={styles.saveButton}
+                            >
+                              <i className="fas fa-heart me-2"></i>
+                              Save
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {userRole === "Admin" && (
+                        <div className={styles.adminControl}>
+                          <label className={styles.flagLabel}>
+                            <input
+                              type="checkbox"
+                              checked={activity.archived}
+                              onChange={(e) => handleArchiveToggle(activity._id, e.target.checked)}
+                            />
+                            <span>Flag as inappropriate</span>
+                          </label>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+      </div>
+
+      <Footer />
+
+      {isBookingModalOpen && (
         <MyBookingModal
           userId={userId}
           isOpen={isBookingModalOpen}
@@ -434,8 +559,7 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
           bookingId={selectedActivityId}
         />
       )}
-        <Footer />
-      </div>
+    </div>
   );
 };
 
