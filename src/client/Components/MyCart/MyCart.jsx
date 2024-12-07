@@ -230,7 +230,7 @@ const Cart = () => {
     }));
   };
 
-  const handleRemoveFromCart = async (product) => {
+  const handleRemoveFromCart = async (product, clearAll = false) => {
     try {
       console.log("User ID: ", userId);
       // Fetch the user's current cart
@@ -249,9 +249,15 @@ const Cart = () => {
       });
 
       // Update the state locally to reflect the removal
-      setCartItems(cartItems.filter((item) => item._id !== product._id));
+      setCartItems(clearAll ? [] : cartItems.filter((item) => item._id !== product._id));
     } catch (err) {
       console.error("Error removing product from cart:", err);
+    }
+  };
+
+  const handleClearCart = async () => {
+    for (const item of cartItems) {
+      await handleRemoveFromCart(item, true);
     }
   };
 
@@ -292,6 +298,7 @@ const Cart = () => {
                 currency={walletCurrency}
                 userId={userId}
                 desiredQuantities={desiredQuantities}
+                handleClearCart={handleClearCart} 
             />
         )}
 

@@ -187,152 +187,228 @@ const UpdateProfile = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.pageWrapper}>
       <Header />
 
-      <main className={styles.main}>
-        <h2>Update Your Profile</h2>
+      <div className="container py-5">
+        <div className={styles.profileCard}>
+          <div className={styles.cardHeader}>
+            <h2>Update Your Profile</h2>
+            {/* <p>Manage your personal information and account settings</p> */}
+          </div>
 
-        {loading ? (
-          <p>Loading...</p> // Display loading indicator
-        ) : (
-          <>
-            {successMessage && <p className={styles.successMessage}>{successMessage}</p>}
-            {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
+          {loading ? (
+            <div className={styles.loadingState}>
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          ) : (
+            <>
+              {successMessage && (
+                <div className={`alert alert-success ${styles.alertCustom}`}>
+                  {successMessage}
+                </div>
+              )}
+              {errorMessage && (
+                <div className={`alert alert-danger ${styles.alertCustom}`}>
+                  {errorMessage}
+                </div>
+              )}
 
-            <form onSubmit={handleSubmit} className={styles.form}>
-              <label>
-                Email:
-                <input
-                  type="email"
-                  value={userInfo.email}
-                  onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
-                  required
-                />
-              </label>
-              <label>
-                Password:
-                <input
-                  type="password"
-                  value={userInfo.password}
-                  onChange={(e) => setUserInfo({ ...userInfo, password: e.target.value })}
-                  required
-                />
-              </label>
-              {userInfo.role !== 'TourismGovernor' && (
-                  <>
-                    <label>
-                      Nationality:
-                      <select
-                          value={userInfo.nationality}
-                          onChange={(e) => setUserInfo({...userInfo, nationality: e.target.value})}
-                          required
-                      >
-                        <option value="">Select Nationality</option>
-                        {getCountryOptions()}
-                      </select>
-                    </label>
-                    <label>
-                      Mobile:
-                      <input
-                          type="tel"
-                          value={userInfo.mobile}
-                          onChange={(e) => setUserInfo({...userInfo, mobile: e.target.value})}
-                          required
-                      />
-                    </label>
-                    <label>
-                      Employed:
-                      <select
-                          value={userInfo.employed}
-                          onChange={(e) => setUserInfo({...userInfo, employed: e.target.value})}
-                          required
-                      >
-                        <option value="">Select</option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                      </select>
-                    </label>
-                    <label>
-                      Age:
-                      <input
-                          type="number"
-                          value={userInfo.age}
-                          onChange={(e) => setUserInfo({...userInfo, age: e.target.value})}
-                          required
-                      />
-                    </label>
-                    <label>
-                      Addresses:
-                      <div className="flex flex-col space-y-2">
+              <form onSubmit={handleSubmit} className={styles.updateForm}>
+                <div className="row g-4">
+                  {/* Basic Information Section */}
+                  <div className="col-12">
+                    <div className={styles.formSection}>
+                      {/* <h3 className={styles.formHeading}>Basic Information</h3> */}
+                      <div className="row g-3">
+                        <div className="col-md-6">
+                          <div className={styles.formGroup}>
+                            <label>Email</label>
+                            <input
+                              type="email"
+                              className="form-control"
+                              value={userInfo.email}
+                              onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="col-md-6">
+                          <div className={styles.formGroup}>
+                            <label>Password</label>
+                            <input
+                              type="password"
+                              className="form-control"
+                              value={userInfo.password}
+                              onChange={(e) => setUserInfo({ ...userInfo, password: e.target.value })}
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Personal Details Section */}
+                  {userInfo.role !== 'TourismGovernor' && (
+                    <div className="col-12">
+                      <div className={styles.formSection}>
+                        {/* <h3>Personal Details</h3> */}
+                        <div className="row g-3">
+                          <div className="col-md-6">
+                            <div className={styles.formGroup}>
+                              <label>Nationality</label>
+                              <select
+                                className="form-select"
+                                value={userInfo.nationality}
+                                onChange={(e) => setUserInfo({ ...userInfo, nationality: e.target.value })}
+                                required
+                              >
+                                <option value="">Select Nationality</option>
+                                {getCountryOptions()}
+                              </select>
+                            </div>
+                          </div>
+                          <div className="col-md-6">
+                            <div className={styles.formGroup}>
+                              <label>Mobile</label>
+                              <input
+                                type="tel"
+                                className="form-control"
+                                value={userInfo.mobile}
+                                onChange={(e) => setUserInfo({ ...userInfo, mobile: e.target.value })}
+                                required
+                              />
+                            </div>
+                          </div>
+                          <div className="col-md-6">
+                            <div className={styles.formGroup}>
+                              <label>Employment Status</label>
+                              <select
+                                className="form-select"
+                                value={userInfo.employed}
+                                onChange={(e) => setUserInfo({ ...userInfo, employed: e.target.value })}
+                                required
+                              >
+                                <option value="">Select Status</option>
+                                <option value="Yes">Employed</option>
+                                <option value="No">Unemployed</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div className="col-md-6">
+                            <div className={styles.formGroup}>
+                              <label>Age</label>
+                              <input
+                                type="number"
+                                className="form-control"
+                                value={userInfo.age}
+                                onChange={(e) => setUserInfo({ ...userInfo, age: e.target.value })}
+                                required
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Addresses Section */}
+                  <div className="col-12">
+                    <div className={styles.formSection}>
+                      {/* <h3>Addresses</h3> */}
+                      <div className={styles.addressList}>
                         {userInfo.addresses.map((address, index) => (
-                          <div key={index} className="flex items-center space-x-2">
+                          <div key={index} className={styles.addressItem}>
                             <input
                               type="text"
+                              className="form-control"
                               value={address}
                               onChange={(e) => {
                                 const newAddresses = [...userInfo.addresses];
                                 newAddresses[index] = e.target.value;
                                 setUserInfo({ ...userInfo, addresses: newAddresses });
                               }}
-                              className="flex-grow"
                             />
                             <button
                               type="button"
+                              className={styles.removeButton}
                               onClick={() => {
                                 const newAddresses = userInfo.addresses.filter((_, i) => i !== index);
                                 setUserInfo({ ...userInfo, addresses: newAddresses });
                               }}
-                              className="text-red-500"
                             >
-                              Remove
+                              X
+                              <i className="fas fa-times"></i>
                             </button>
                           </div>
                         ))}
                         <button
                           type="button"
+                          className={styles.addButton}
                           onClick={() => setUserInfo({ ...userInfo, addresses: [...userInfo.addresses, ''] })}
-                          className="text-blue-500"
                         >
+                          <i className="fas fa-plus me-2"></i>
                           Add Address
                         </button>
                       </div>
-                    </label>
-                  </>
-              )}
-              <label>
-                Role:
-                <input
-                    type="text"
-                    value={userInfo.role}
-                    onChange={(e) => setUserInfo({...userInfo, role: e.target.value})}
-                    readOnly
+                    </div>
+                  </div>
 
-                />
-              </label>
-              <label>
-                Username:
-                <input
-                    type="text"
-                    value={userInfo.username}
-                    
-                    readOnly
-                    
-                />
-              </label>
+                  {/* Account Information */}
+                  <div className="col-12">
+                    <div className={styles.formSection}>
+                      {/* <h3>Account Information</h3> */}
+                      <div className="row g-3">
+                        <div className="col-md-6">
+                          <div className={styles.formGroup}>
+                            <label>Role</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={userInfo.role}
+                              readOnly
+                            />
+                          </div>
+                        </div>
+                        <div className="col-md-6">
+                          <div className={styles.formGroup}>
+                            <label>Username</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={userInfo.username}
+                              readOnly
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-              {/* Render role-specific fields */}
-              {renderRoleSpecificFields(userInfo.role, userInfo)}
+                  {/* Role Specific Fields */}
+                  <div className="col-12">
+                    <div className={styles.formSection}>
+                      {renderRoleSpecificFields(userInfo.role, userInfo)}
+                    </div>
+                  </div>
 
-              <button type="submit" className={`${styles.button} ${styles.greenButton}`}>
-                Update Profile
-              </button>
-            </form>
-          </>
-        )}
-      </main>
+                  {/* Submit Button */}
+                  <div className="col-12">
+                    <button type="submit" className={styles.submitButton}>
+                      Update Profile
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </>
+          )}
+        </div>
+      </div>
 
-      <Footer/>
+      <Footer />
     </div>
   );
 };
