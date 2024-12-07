@@ -50,7 +50,27 @@ npm run dev
 ```
 
 ### API References
+### API References
 List all the API routes used in the project with a brief description of each.
+
+- `/admin`: Admin related operations
+- `/advertiser`: Advertiser related operations
+- `/guest`: Guest related operations
+- `/tourist`: Tourist related operations
+- `/tourguide`: Tour guide related operations
+- `/seller`: Seller related operations
+- `/toursimgovernor`: Tourism governor related operations
+- `/activities`: Activities related operations
+- `/transport`: Transport related operations
+- `/itineraries`: Itineraries related operations
+- `/preferences`: Preferences related operations
+- `/wishlist`: Wish list related operations
+- `/categories`: Activity categories related operations
+- `/historicalplaces`: Historical places related operations
+- `/email`: Email related operations
+- `/notification`: Notification related operations
+- `/api/auth`: Authentication related operations
+- `/promocodes`: Promo code related operations
 
 ### Tests
 Mention the testing framework used (e.g., Postman, Jest) and provide examples of tests.
