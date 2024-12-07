@@ -74,6 +74,10 @@
   width: 90%;
 }
 
+.modalContent h2 {
+  color: black;
+}
+
 .overlay {
   position: fixed;
   top: 0;
@@ -129,4 +133,17 @@ select.input {
 
 .form-check-label {
   color: var(--heading-color);
+}
+
+.modalButton {
+  background-color: black;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modalButton:hover {
+  background-color: #333;  /* slightly lighter black for hover effect */
 }
