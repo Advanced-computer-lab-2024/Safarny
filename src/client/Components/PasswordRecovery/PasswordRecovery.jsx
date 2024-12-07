@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import styles from './PasswordRecovery.module.css';
 import Footer from '/src/client/Components/Footer/Footer';
 import Header from '../Header/Header';
+import { useNavigate } from 'react-router-dom';  // Add this import at the top
+
 
 const PasswordRecovery = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState('email');
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
@@ -63,6 +66,7 @@ const PasswordRecovery = () => {
       });
       if (response.ok) {
         setMessage('Password reset successfully');
+        navigate('/signin');
       } else {
         setMessage('Failed to reset password. Please try again.');
       }
