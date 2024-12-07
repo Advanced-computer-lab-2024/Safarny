@@ -49,7 +49,10 @@ export default function CheckoutModal({
   const [deliveryAddress, setDeliveryAddress] = useState({});
   const [paymentMethod, setPaymentMethod] = useState("credit_card");
   const [open, setOpen] = useState(true);
+  const [promoCode, setPromoCode] = useState(""); // State for promo code
+  //const [totalPrice, setTotalPrice] = useState("");
   const [activeStep, setActiveStep] = useState(0);
+  const [error, setError] = useState("");
   const [stepValidation, setStepValidation] = useState([
     false,
     true,
@@ -66,6 +69,32 @@ export default function CheckoutModal({
     });
   };
 
+  const handleApplyPromoCode = async () => {
+    try {
+      // Call the backend to check if the promo code exists
+      const response = await axios.get(`/admin/promocodes/${promoCode}`);
+  
+      // If promo code exists, apply the discount
+      if (response.data) {
+        const discountPercentage = response.data.discountPercentage;
+        const discountedPrice = totalPrice - (totalPrice * discountPercentage) / 100;
+        
+        // Update the total price after applying the discount
+        setTotalPrice(discountedPrice); // Correctly update the state
+        setError(""); // Clear any previous errors
+      } else {
+        // If promo code doesn't exist, display an alert
+        alert("Promo code not found.");
+        setError("Promo code not found."); // Optionally set error state
+      }
+    } catch (err) {
+      // Handle error if promo code is not valid
+      alert("Invalid Promo Code or Promo Code expired.");
+      setError("Invalid Promo Code or Promo Code expired.");
+      console.log(err);
+    }
+  };
+  
   const handleClose = () => {
     setOpen(false);
     if (onClose) onClose();
@@ -125,6 +154,9 @@ export default function CheckoutModal({
               totalPrice={totalPrice}
               currency={currency}
               desiredQuantities={desiredQuantities}
+              promoCode={promoCode}
+              setPromoCode={setPromoCode}
+              handleApplyPromoCode={handleApplyPromoCode}
             />
           )}
           {activeStep === 2 && (
@@ -216,6 +248,8 @@ function DeliveryStep({
     });
   };
 
+  
+  
   const handleSaveNewAddress = async () => {
     if (!newAddress.trim()) {
       alert("Please enter an address");
@@ -349,6 +383,9 @@ function ConfirmationStep({
   totalPrice,
   currency,
   desiredQuantities,
+  promoCode,
+  setPromoCode,
+  handleApplyPromoCode,
 }) {
   return (
     <div>
@@ -362,6 +399,25 @@ function ConfirmationStep({
             {item.currency}
           </ListItem>
         ))}
+        {/* Promo Code Text Field */}
+        <ListItem className={styles.summaryItem}>
+      <TextField
+        label="Promo Code"
+        variant="outlined"
+        value={promoCode}
+        onChange={(e) => setPromoCode(e.target.value)}
+        fullWidth
+      />
+      <Button
+        variant="contained"
+        onClick={handleApplyPromoCode}
+        disabled={!promoCode.trim()}
+        className={styles.buttonContainer} // Make sure this is defined in your styles
+      >
+        Apply
+      </Button>
+    </ListItem>
+
         <ListItem className={`${styles.summaryItem} ${styles.totalPrice}`}>
           <ListItemText primary="Total" />
           <Typography variant="subtitle1">
@@ -369,6 +425,7 @@ function ConfirmationStep({
           </Typography>
         </ListItem>
       </List>
+      
     </div>
   );
 }
