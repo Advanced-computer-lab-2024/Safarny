@@ -43,6 +43,7 @@ Provide screenshots or a video demonstrating how the system looks and works.
 - Advanced search and filter options for activities, itineraries, and historical places
 - Notification and email services for updates and reminders
 - Authentication and security features for user accounts
+- Seamless Product Purchasing for convience
 - Promo code management for discounts and offers
   
 ### Code Examples
