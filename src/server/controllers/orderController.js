@@ -25,14 +25,14 @@ const checkout = async (req, res) => {
     // const rateTo = exchangeRates.conversion_rates[user.walletcurrency];
     // const convertedTotalAmount = (totalAmount / rateFrom) * rateTo;
 
-    // Check if the user has enough funds
-    if (user.wallet < totalAmount) {
-      return res.status(400).json({ error: "Insufficient funds" });
+    if (paymentMethod === "wallet") {
+      if (user.wallet < totalAmount) {
+        return res.status(400).json({ error: "Insufficient funds" });
+      }
+      user.wallet -= totalAmount;
+      await user.save();
     }
 
-    // Deduct the amount from the user's wallet
-    user.wallet -= totalAmount;
-    await user.save();
 
     const newOrder = new Order({
       userId,
@@ -162,7 +162,7 @@ const getOrdersByUserId = async (req, res) => {
       return res.status(400).json({ error: "User ID is required" });
     }
 
-    const orders = await Order.find({ userId }); 
+    const orders = await Order.find({ userId });
 
     if (!orders.length) {
       return res.status(404).json({ message: "No orders found for this user" });
@@ -199,15 +199,12 @@ const cancelOrder = async (req, res) => {
       default:
         res.status(400).json({ error: "Cannot cancel order" });
     }
-  }
-  catch (err) {
+  } catch (err) {
     res
       .status(500)
       .json({ error: "Failed to cancel order", details: err.message });
   }
 };
-
-
 
 module.exports = {
   checkout,
