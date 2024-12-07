@@ -71,74 +71,133 @@ const PasswordRecovery = () => {
     }
   };
 
-  return (
-    <div className={styles.pageContainer}>
-      <Header />
-      <main className={styles.mainContainer}>
-        <div className={styles.card}>
-          <h2 className={styles.title}>Password Recovery</h2>
-          {message && <div className={styles.message}>{message}</div>}
-          {step === 'email' && (
-            <form onSubmit={handleEmailSubmit} className={styles.form}>
-              <div className={styles.inputGroup}>
-                <label htmlFor="email" className={styles.label}>Email</label>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className={styles.input}
-                />
-              </div>
-              <button type="submit" className={styles.button}>Send OTP</button>
-            </form>
-          )}
-          {step === 'otp' && (
-            <form onSubmit={handleOtpSubmit} className={styles.form}>
-              <div className={styles.inputGroup}>
-                <label htmlFor="otp" className={styles.label}>Enter OTP</label>
-                <input
-                  id="otp"
-                  type="text"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  required
-                  className={styles.input}
-                />
-              </div>
-              <button type="submit" className={styles.button}>Verify OTP</button>
-            </form>
-          )}
-          {step === 'password' && (
-            <form onSubmit={handlePasswordSubmit} className={styles.form}>
-              <div className={styles.inputGroup}>
-                <label htmlFor="newPassword" className={styles.label}>New Password</label>
-                <input
-                  id="newPassword"
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  required
-                  className={styles.input}
-                />
-              </div>
-              <div className={styles.inputGroup}>
-                <label htmlFor="confirmPassword" className={styles.label}>Confirm Password</label>
-                <input
-                  id="confirmPassword"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                  className={styles.input}
-                />
-              </div>
-              <button type="submit" className={styles.button}>Reset Password</button>
-            </form>
-          )}
+  const renderStepIndicator = () => {
+    return (
+      <div className={styles.stepIndicator}>
+        <div className={`${styles.step} ${step === 'email' ? styles.active : ''} ${step === 'otp' || step === 'password' ? styles.completed : ''}`}>
+          <div className={styles.stepNumber}>1</div>
+          <span>Email</span>
         </div>
-      </main>
+        <div className={`${styles.step} ${step === 'otp' ? styles.active : ''} ${step === 'password' ? styles.completed : ''}`}>
+          <div className={styles.stepNumber}>2</div>
+          <span>Verify</span>
+        </div>
+        <div className={`${styles.step} ${step === 'password' ? styles.active : ''}`}>
+          <div className={styles.stepNumber}>3</div>
+          <span>Reset</span>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className={styles.pageWrapper}>
+      <Header />
+      <div className="container">
+        <div className={styles.recoveryCard}>
+          <div className={styles.cardHeader}>
+            <h2>Password Recovery</h2>
+            <p style={{color: 'white'}}>Follow the steps to reset your password</p>
+          </div>
+
+          {renderStepIndicator()}
+
+          {message && (
+            <div className={`alert ${message.includes('success') ? 'alert-success' : 'alert-info'} ${styles.alertCustom}`}>
+              {message}
+            </div>
+          )}
+
+          <div className={styles.formContainer}>
+            {step === 'email' && (
+              <form onSubmit={handleEmailSubmit} className={styles.form}>
+                <div className={styles.formGroup}>
+                  <label htmlFor="email">Email Address</label>
+                  <div className={styles.inputWithIcon}>
+                    <i className="fas fa-envelope"></i>
+                    <input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      placeholder="Enter your email"
+                      className="form-control"
+                    />
+                  </div>
+                </div>
+                <button type="submit" className={styles.submitButton}>
+                  <i className="fas fa-paper-plane me-2"></i>
+                  Send Recovery Code
+                </button>
+              </form>
+            )}
+
+            {step === 'otp' && (
+              <form onSubmit={handleOtpSubmit} className={styles.form}>
+                <div className={styles.formGroup}>
+                  <label htmlFor="otp">Verification Code</label>
+                  <div className={styles.inputWithIcon}>
+                    <i className="fas fa-key"></i>
+                    <input
+                      id="otp"
+                      type="text"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      required
+                      placeholder="Enter the code sent to your email"
+                      className="form-control"
+                    />
+                  </div>
+                </div>
+                <button type="submit" className={styles.submitButton}>
+                  <i className="fas fa-check-circle me-2"></i>
+                  Verify Code
+                </button>
+              </form>
+            )}
+
+            {step === 'password' && (
+              <form onSubmit={handlePasswordSubmit} className={styles.form}>
+                <div className={styles.formGroup}>
+                  <label htmlFor="newPassword">New Password</label>
+                  <div className={styles.inputWithIcon}>
+                    <i className="fas fa-lock"></i>
+                    <input
+                      id="newPassword"
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      required
+                      placeholder="Enter new password"
+                      className="form-control"
+                    />
+                  </div>
+                </div>
+                <div className={styles.formGroup}>
+                  <label htmlFor="confirmPassword">Confirm Password</label>
+                  <div className={styles.inputWithIcon}>
+                    <i className="fas fa-lock"></i>
+                    <input
+                      id="confirmPassword"
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                      placeholder="Confirm new password"
+                      className="form-control"
+                    />
+                  </div>
+                </div>
+                <button type="submit" className={styles.submitButton}>
+                  <i className="fas fa-save me-2"></i>
+                  Reset Password
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      </div>
       <Footer />
     </div>
   );
