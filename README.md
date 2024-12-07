@@ -322,13 +322,13 @@ We would like to thank the following people and resources:
 
 - **Project Contributors**
   - [tareksherif64](https://github.com/tareksherif64) - Tarek Sherif
-  - [seif495](https://github.com/seif495) - Seif
+  - [seif495](https://github.com/seif495) - Seifeldin Moheb
   - [youssef20031](https://github.com/youssef20031) - Youssef Maged
   - [NirvanaKhaled](https://github.com/NirvanaKhaled) - Nirvana Khaled
   - [1Oomar](https://github.com/1Oomar) - Omar Elshazly
-  - [Odyjo](https://github.com/Odyjo)
+  - [Odyjo](https://github.com/Odyjo) - Ahmed Sameh
   - [Elbasha3omarr](https://github.com/Elbasha3omarr) - Omar Walid
-  - [AhmedV100](https://github.com/AhmedV100)
+  - [AhmedV100](https://github.com/AhmedV100) - Ahmed Mohamed
   - [MrKaiba](https://github.com/MrKaiba) - Mohamed Youssef
 
 - **External Libraries and Frameworks**
