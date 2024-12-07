@@ -250,199 +250,307 @@ const handleArchiveToggle = async (ItineraryId, isArchived) => {
   };
   
   return (
-      <div className={styles.container}>
-        <Header />
-        <main className={styles.main}>
-          <h2>Upcoming Itineraries</h2>
+    <div className={styles.pageWrapper}>
+      <Header />
+      
+      <div className="container py-4">
+        <div className={styles.pageHeader}>
+          <h1>Upcoming Itineraries</h1>
+          {/* <p>Discover amazing travel experiences curated just for you</p> */}
+        </div>
 
-          <div className={styles.sortOptions}>
-            <button onClick={() => setSortCriteria("date")}>Sort by Date</button>
-            <button onClick={() => setSortCriteria("price")}>Sort by Price</button>
-            <button onClick={() => setSortCriteria("duration")}>
-              Sort by Duration
-            </button>
-            <button onClick={() => setSortCriteria("averageRating")}>
-              Sort by Rating
-            </button>
-          </div>
-          <button
-      onClick={GoToMyItineraries}
-      className={styles.cardButton}
-    >
-      My Itineraries
-    </button>
+        {/* Enhanced Filter Section */}
+        <div className={styles.filterSection}>
+          <div className="row g-4">
+            <div className="col-md-3">
+              <div className={styles.filterGroup}>
+                <div className={styles.filterIcon}>
+                  <i className="fas fa-sort"></i>
+                </div>
+                <label>Sort By</label>
+                <select
+                  className="form-select"
+                  value={sortCriteria}
+                  onChange={(e) => setSortCriteria(e.target.value)}
+                >
+                  <option value="date">Date</option>
+                  <option value="price">Price</option>
+                  <option value="averageRating">Rating</option>
+                </select>
+              </div>
+            </div>
 
-          <div className={styles.filterOptions}>
-            <div className={styles.filterGroup}>
-              <label>Budget: </label>
-              <input
+            <div className="col-md-3">
+              <div className={styles.filterGroup}>
+                <div className={styles.filterIcon}>
+                  <i className="fas fa-coins"></i>
+                </div>
+                <label>Budget</label>
+                <input
                   type="number"
+                  className="form-control"
                   value={budget}
                   onChange={(e) => setBudget(e.target.value)}
-                  placeholder="Budget"
-              />
+                  placeholder="Enter maximum budget"
+                />
+              </div>
             </div>
 
-            <div className={styles.filterGroup}>
-              <label>Date: </label>
-              <input
+            <div className="col-md-3">
+              <div className={styles.filterGroup}>
+                <div className={styles.filterIcon}>
+                  <i className="fas fa-calendar"></i>
+                </div>
+                <label>Date</label>
+                <input
                   type="date"
+                  className="form-control"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-              />
+                />
+              </div>
             </div>
 
-            <div className={styles.filterGroup}>
-              <label>Preferences: </label>
-              <select
+            <div className="col-md-3">
+              <div className={styles.filterGroup}>
+                <div className={styles.filterIcon}>
+                  <i className="fas fa-language"></i>
+                </div>
+                <label>Language</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  placeholder="Preferred language"
+                />
+              </div>
+            </div>
+
+            <div className="col-md-9">
+              <div className={styles.filterGroup}>
+                <div className={styles.filterIcon}>
+                  <i className="fas fa-tags"></i>
+                </div>
+                <label>Preferences</label>
+                <select
+                  className="form-select"
                   multiple
                   value={preferences}
                   onChange={(e) => {
-                    const selectedOptions = Array.from(
-                        e.target.selectedOptions
-                    ).map((option) => option.value);
+                    const selectedOptions = Array.from(e.target.selectedOptions).map(
+                      (option) => option.value
+                    );
                     setPreferences(selectedOptions);
                   }}
-              >
-                {availableTags.length > 0 ? (
-                    availableTags.map((tag) => (
-                        <option key={tag._id} value={tag.name}>
-                          {tag.name}
-                        </option>
-                    ))
-                ) : (
-                    <option disabled>Loading tags...</option>
-                )}
-              </select>
+                >
+                  {availableTags.map((tag) => (
+                    <option key={tag._id} value={tag.name}>
+                      {tag.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
-            <div className={styles.filterGroup}>
-              <label>Language: </label>
-              <input
-                  type="text"
-                  value={language}
-                  onChange={(e) => setLanguage(e.target.value)}
-                  placeholder="Language"
-              />
-            </div>
-
-            <div className={styles.currencySelector}>
-              <FormControl fullWidth margin="normal">
-                <InputLabel>
-                  <h3>Currency</h3>
-                </InputLabel>
-                <br></br>
-                <Select
-                    value={selectedCurrency}
-                    onChange={(e) => setSelectedCurrency(e.target.value)}
+            <div className="col-md-3">
+              <div className={styles.filterGroup}>
+                <div className={styles.filterIcon}>
+                  <i className="fas fa-money-bill-wave"></i>
+                </div>
+                <label>Currency</label>
+                <select
+                  className="form-select"
+                  value={selectedCurrency}
+                  onChange={(e) => setSelectedCurrency(e.target.value)}
                 >
                   {currencyCodes.map((code) => (
-                      <MenuItem key={code} value={code}>
-                        {code}
-                      </MenuItem>
+                    <option key={code} value={code}>{code}</option>
                   ))}
-                </Select>
-              </FormControl>
+                </select>
+              </div>
             </div>
 
-            <button onClick={handleFilterClick}>Apply Filters</button>
+            <div className="col-12">
+              <button 
+                onClick={handleFilterClick}
+                className={styles.filterButton}
+              >
+                <i className="fas fa-filter me-2"></i>
+                Apply Filters
+              </button>
+            </div>
           </div>
+        </div>
 
-          <section className={styles.itineraryList}>
-            {itineraries.length === 0 ? (
-                <p>No upcoming itineraries found.</p>
-            ) : (
-                itineraries.map((itinerary) => {
-                  const convertedPrice = convertPrice(
-                      itinerary.price,
-                      itinerary.currency,
-                      selectedCurrency
-                  );
-                  return (
-                      <div key={itinerary._id} className={styles.itineraryItem}>
-                        <h3>{itinerary.name}</h3>
-                        <p>Duration: {itinerary.duration} hours</p>
-                        <p>Language: {itinerary.language}</p>
-                        <p>
-                          Price: {convertedPrice} {selectedCurrency}
-                        </p>
-                        <p>Available Dates: {itinerary.availableDates.join(", ")}</p>
-                        <p>Available Times: {itinerary.availableTimes.join(", ")}</p>
-                        <p>Accessibility: {itinerary.accessibility ? "Yes" : "No"}</p>
-                        <p>Pickup Location: {itinerary.pickupLocation}</p>
-                        <p>Dropoff Location: {itinerary.dropoffLocation}</p>
-                        <p>Rating: <Rating value={Math.round(itinerary.averageRating * 2) / 2} precision={0.5} readOnly /></p>
-                        {itinerary.tags && itinerary.tags.length > 0 && (
-                            <p>
-                              Tags: {itinerary.tags.map((tag) => tag.name).join(", ")}
-                            </p>
-                        )}
-                        {itinerary.activities && itinerary.activities.length > 0 && (
-                            <div>
-                              <p>Activities:</p>
-                              <ul>
-                                {itinerary.activities.map((activity) => (
-                                    <li key={activity._id}>
-                                      {activity.location} - {activity.date} at{" "}
-                                      {activity.time}
-                                      {activity.specialDiscount && (
-                                          <span>
-                                {" "}
-                                            - Discount: {activity.specialDiscount}
-                              </span>
-                                      )}
-                                      {activity.price && (
-                                          <span> - Price: {activity.price}$</span>
-                                      )}
-                                    </li>
-                                ))}
-                              </ul>
-                            </div>
-                        )}
-                        {userRole === "Admin" && (
-                            <div className={styles.adminCheckbox}>
-                              <label>
-                                <input
-                                    type="checkbox"
-                                    checked={itinerary.archived}
-                                    onChange={(e) =>
-                                        handleArchiveToggle(itinerary._id, e.target.checked)
-                                    }
-                                />
-                                Flag (inappropriate)
-                              </label>
-                            </div>
-                        )}
+        {/* Itineraries Grid */}
+        <div className="row g-4 mt-4">
+          {loading ? (
+            <div className={styles.loadingContainer}>
+              <CircularProgress />
+              <p>Loading amazing itineraries...</p>
+            </div>
+          ) : itineraries.length === 0 ? (
+            <div className={styles.noResults}>
+              <i className="fas fa-search fa-3x mb-3"></i>
+              <h3>No itineraries found</h3>
+              <p>Try adjusting your filters for more results</p>
+            </div>
+          ) : (
+            itineraries.map((itinerary) => (
+              <div className="col-lg-6 col-xl-4" key={itinerary._id}>
+                <div className={styles.placeCard}>
+                  <div className={styles.cardHeader}>
+                    <h3>{itinerary.name}</h3>
+                    <Rating 
+                      value={Math.round(itinerary.averageRating * 2) / 2} 
+                      precision={0.5} 
+                      readOnly 
+                      className={styles.rating}
+                    />
+                  </div>
+
+                  <div className={styles.cardContent}>
+                    <div className={styles.mainInfo}>
+                      <div className={styles.infoItem}>
+                        <i className="fas fa-clock"></i>
+                        <span>{itinerary.duration} hours</span>
+                      </div>
+                      <div className={styles.infoItem}>
+                        <i className="fas fa-language"></i>
+                        <span>{itinerary.language}</span>
+                      </div>
+                      <div className={styles.infoItem}>
+                        <i className="fas fa-tag"></i>
+                        <span>{convertPrice(itinerary.price, itinerary.currency, selectedCurrency)} {selectedCurrency}</span>
+                      </div>
+                    </div>
+
+                    <div className={styles.detailsAccordion}>
+                      <div className={styles.accordionItem}>
+                        <h4>
+                          <i className="fas fa-calendar-alt me-2"></i>
+                          Available Dates & Times
+                        </h4>
+                        <div className={styles.dates}>
+                          {itinerary.availableDates.join(", ")}
+                        </div>
+                        <div className={styles.times}>
+                          {itinerary.availableTimes.join(", ")}
+                        </div>
+                      </div>
+
+                      <div className={styles.accordionItem}>
+                        <h4>
+                          <i className="fas fa-map-marker-alt me-2"></i>
+                          Locations
+                        </h4>
+                        <p><strong>Pickup:</strong> {itinerary.pickupLocation}</p>
+                        <p><strong>Dropoff:</strong> {itinerary.dropoffLocation}</p>
+                      </div>
+
+                      {itinerary.activities && itinerary.activities.length > 0 && (
+                        <div className={styles.accordionItem}>
+                          <h4>
+                            <i className="fas fa-list-alt me-2"></i>
+                            Activities
+                          </h4>
+                          <ul className={styles.activitiesList}>
+                            {itinerary.activities.map((activity) => (
+                              <li key={activity._id}>
+                                <div className={styles.activityHeader}>
+                                  <span>{activity.location}</span>
+                                  <span className={styles.activityTime}>
+                                    {activity.date} at {activity.time}
+                                  </span>
+                                </div>
+                                {(activity.specialDiscount || activity.price) && (
+                                  <div className={styles.activityPricing}>
+                                    {activity.specialDiscount && (
+                                      <span className={styles.discount}>
+                                        {activity.specialDiscount} OFF
+                                      </span>
+                                    )}
+                                    {activity.price && (
+                                      <span className={styles.price}>
+                                        {activity.price}$
+                                      </span>
+                                    )}
+                                  </div>
+                                )}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {itinerary.tags && itinerary.tags.length > 0 && (
+                        <div className={styles.tags}>
+                          {itinerary.tags.map((tag) => (
+                            <span key={tag._id} className={styles.tag}>
+                              {tag.name}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className={styles.cardActions}>
+                      {userRole === "Admin" && (
+                        <div className={styles.adminControl}>
+                          <label className={styles.flagLabel}>
+                            <input
+                              type="checkbox"
+                              checked={itinerary.archived}
+                              onChange={(e) => handleArchiveToggle(itinerary._id, e.target.checked)}
+                            />
+                            <span>Flag as inappropriate</span>
+                          </label>
+                        </div>
+                      )}
+                      
+                      <div className={styles.actionButtons}>
                         {userId && (
-                            <button onClick={() => handleItineraryBook(itinerary._id)}>
-                              Book
-                            </button>
-                        )}
-                        {userRole === "Tourist" && (
-                            <button 
-                            onClick={() => handleAddItinerary(itinerary)} 
-                            className={styles.cardButton}
+                          <button 
+                            onClick={() => handleItineraryBook(itinerary._id)}
+                            className={styles.bookButton}
                           >
+                            <i className="fas fa-bookmark me-2"></i>
+                            Book Now
+                          </button>
+                        )}
+                        
+                        {userRole === "Tourist" && (
+                          <button 
+                            onClick={() => handleAddItinerary(itinerary)}
+                            className={styles.saveButton}
+                          >
+                            <i className="fas fa-heart me-2"></i>
                             Save
                           </button>
                         )}
                       </div>
-                  );
-                })
-            )}
-          </section>
-        </main>
-        <Footer />
-        {isBookingModalOpen && (
-            <MyBookingModal
-                userId={userId}
-                isOpen={isBookingModalOpen}
-                onRequestClose={closeBookingModal}
-                bookingType="itinerary"
-                bookingId={selectedItineraryId}
-            />
-        )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
       </div>
+
+      <Footer />
+
+      {isBookingModalOpen && (
+        <MyBookingModal
+          userId={userId}
+          isOpen={isBookingModalOpen}
+          onRequestClose={closeBookingModal}
+          bookingType="itinerary"
+          bookingId={selectedItineraryId}
+        />
+      )}
+    </div>
   );
 };
 
