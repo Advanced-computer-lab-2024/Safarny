@@ -13,7 +13,7 @@ Node Versions:
 
 ### How to Report a Vulnerability
 
-If you discover a vulnerability in this project, please report it by emailing us at [security@safarny.com](mailto:security@safarny.com) with the details of the vulnerability. Include the following information to help us understand and address the issue:
+If you discover a vulnerability in this project, please report it by emailing us at [seifmoh495@gmail.com](mailto:seifmoh495@gmail.com) with the details of the vulnerability. Include the following information to help us understand and address the issue:
 
 - A description of the vulnerability
 - Steps to reproduce the vulnerability
