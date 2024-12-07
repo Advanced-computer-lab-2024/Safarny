@@ -320,9 +320,15 @@ We welcome contributions to the Safarny project! Here's how you can help:
 We would like to thank the following people and resources:
 
 - **Project Contributors**
-  - [Your Name] - Project Lead
-  - [Contributor Name] - Developer
-  - [Contributor Name] - Designer
+  - [tareksherif64](https://github.com/tareksherif64) - Tarek Sherif
+  - [seif495](https://github.com/seif495) - Seif
+  - [youssef20031](https://github.com/youssef20031) - Youssef Maged
+  - [NirvanaKhaled](https://github.com/NirvanaKhaled) - Nirvana Khaled
+  - [1Oomar](https://github.com/1Oomar) - Omar Elshazly
+  - [Odyjo](https://github.com/Odyjo)
+  - [Elbasha3omarr](https://github.com/Elbasha3omarr) - Omar Walid
+  - [AhmedV100](https://github.com/AhmedV100)
+  - [MrKaiba](https://github.com/MrKaiba) - Mohamed Youssef
 
 - **External Libraries and Frameworks**
   - [React](https://reactjs.org/)
