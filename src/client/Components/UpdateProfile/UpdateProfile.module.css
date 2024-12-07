@@ -1,83 +1,297 @@
 :root {
-  --primary-color: #1a1a1a;
-  --secondary-color: #333;
-  --background-color: #dcdbdb;
-  --text-color: #121212;
-  --header-color: white;
-  --header-height: 4rem;
-  --border-radius: 1rem;
-  --card-background: #2a2a2a;
-  --card-hover: #444;
-  --glow-color: #958efa;
+  --primary-color: #333333;
+  --secondary-color: #666666;
+  --background-color: #1a1a1a;
+  --text-color: #333333;
+  --heading-color: #222222;
+  --form-background: #ffffff;
+  --input-background: #ffffff;
+  --border-radius: 0.5rem;
+  --accent-color: #958efa;
+  --success-color: #2ed573;
+  --warning-color: #ffa502;
+  --danger-color: #ff4757;
 }
 
-body {
+.pageWrapper {
+  min-height: 100vh;
+  background-color: var(--background-color);
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profileCard {
   width: 100%;
-  height: 100%;
+  max-width: 1200px;
+  margin: 2rem auto;
+  background-color: var(--form-background);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 2.5rem;
+}
+
+.updateForm {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cardHeader {
+  text-align: center;
+  margin-bottom: 3rem;
   position: relative;
 }
 
-.container {
-  font-family: 'Arial', sans-serif;
-  color: var(--text-color);
-  background-color: var(--background-color);
-  padding: 0 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.cardHeader::after {
+  content: '';
   position: absolute;
-  top: 0;
+  bottom: -1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background-color: var(--accent-color);
+}
+
+.cardHeader h2 {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--heading-color);
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.5px;
+}
+
+.cardHeader p {
+  color: var(--text-color);
+  font-size: 1.1rem;
+}
+
+.formSection {
+  background-color: #f8f9fa;
+  color: var(--text-color);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.formSection:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.formSection h3 {
+  color: var(--heading-color);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-align: left;
   width: 100%;
 }
 
-.button {
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  background-color: var(--secondary-color);
-  color: var(--header-color);
-  border-radius: 0.5rem;
-  transition: background-color 0.3s;
-  margin-right: 0.5rem;
+.formSection h3::before {
+  content: '';
+  width: 4px;
+  height: 20px;
+  background-color: var(--accent-color);
+  border-radius: 2px;
 }
 
-.button:hover {
-  background-color: #444; /* Adjusted to static color for compatibility */
+.formHeading {
+  color: #333333;
 }
 
-.smallButton {
-  padding: 0.3rem 0.6rem;
-  margin-top: 0.5rem;
-  background-color: var(--secondary-color);
-  color: var(--header-color);
-  border: none;
-  border-radius: 0.3rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
+.formGroup {
+  margin-bottom: 1.5rem;
+  text-align: left;
 }
 
-.main {
-  padding: 2rem 0;
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+/* Input Styling */
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius);
+  transition: all 0.2s ease;
+  font-size: 1rem;
+  color: var(--text-color);
+  background-color: var(--input-background);
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+  outline: none;
+}
+
+.formGroup input::placeholder {
+  color: var(--secondary-color);
+}
+
+/* Address List Styling */
+.addressList {
   display: flex;
   flex-direction: column;
+  gap: 1rem;
   align-items: center;
-  background-color: rgba(107, 106, 108, 0.8);
-  border-radius: 1rem;
-  margin-top: 2rem;
-  width: 75%;
-  margin-bottom: 50px;
+  width: 100%;
 }
 
-input[type="email"],
-input[type="tel"],
-input[type="password"],
-input[type="text"],
-select {
+.addressItem {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
   width: 100%;
-  padding: 0.5rem;
-  margin-top: 0.3rem;
-  margin-bottom: 1rem;
+  max-width: 600px;
+}
+
+.removeButton {
+  background-color: transparent;
+  color: var(--danger-color);
+  border: 1px solid var(--danger-color);
+  width: 32px;
+  height: 32px;
   border-radius: var(--border-radius);
-  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.removeButton:hover {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+.addButton {
   background-color: white;
-  color: black;
+  color: var(--accent-color);
+  border: 1px solid var(--accent-color);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  margin-top: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.addButton:hover {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+/* Submit Button */
+.submitButton {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  font-size: 1.1rem;
+  width: 100%;
+  max-width: 300px;
+  margin: 2rem auto 0;
+  display: block;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.submitButton:hover {
+  background-color: #357abd;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+}
+
+/* Alert Styling */
+.alertCustom {
+  border-radius: var(--border-radius);
+  padding: 1rem 1.5rem;
+  margin-bottom: 2rem;
+  font-weight: 500;
+  text-align: center;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Loading State */
+.loadingState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+/* Read-only Input Styling */
+input[readonly] {
+  background-color: #f5f5f5;
+  color: var(--secondary-color);
+  cursor: not-allowed;
+}
+
+/* Role-specific Fields Styling */
+.roleFields {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.roleFields textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Override any potential conflicting styles */
+.formSection * {
+  color: var(--text-color);
+}
+
+.formSection h3,
+.cardHeader h2 {
+  color: var(--heading-color) !important;
+}
+
+@media (max-width: 768px) {
+  .profileCard {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+
+  .cardHeader h2 {
+    font-size: 1.8rem;
+  }
+
+  .formSection {
+    padding: 1.5rem;
+  }
 }
