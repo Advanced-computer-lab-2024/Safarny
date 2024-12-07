@@ -43,6 +43,7 @@ Provide screenshots or a video demonstrating how the system looks and works.
 - Advanced search and filter options for activities, itineraries, and historical places
 - Notification and email services for updates and reminders
 - Authentication and security features for user accounts
+- Seamless Product Purchasing for convience
 - Promo code management for discounts and offers
   
 ### Code Examples
@@ -321,14 +322,15 @@ We would like to thank the following people and resources:
 
 - **Project Contributors**
   - [tareksherif64](https://github.com/tareksherif64) - Tarek Sherif
-  - [seif495](https://github.com/seif495) - Seif
+  - [seif495](https://github.com/seif495) - Seifeldin Moheb
   - [youssef20031](https://github.com/youssef20031) - Youssef Maged
   - [NirvanaKhaled](https://github.com/NirvanaKhaled) - Nirvana Khaled
   - [1Oomar](https://github.com/1Oomar) - Omar Elshazly
-  - [Odyjo](https://github.com/Odyjo)
+  - [Odyjo](https://github.com/Odyjo) - Ahmed Sameh
   - [Elbasha3omarr](https://github.com/Elbasha3omarr) - Omar Walid
-  - [AhmedV100](https://github.com/AhmedV100)
+  - [AhmedV100](https://github.com/AhmedV100) - Ahmed Mohamed
   - [MrKaiba](https://github.com/MrKaiba) - Mohamed Youssef
+  - [MostafaVT](https://github.com/MostafaVT) - Mostafa Ahmed
 
 - **External Libraries and Frameworks**
   - [React](https://reactjs.org/)
