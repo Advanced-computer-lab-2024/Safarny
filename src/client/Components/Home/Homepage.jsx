@@ -52,6 +52,7 @@ const Homepage = () => {
           </button>
 
           <div className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
+            <Link to="/GuidePageGuest" className={styles.button}>Guide Page</Link>
             <Link to="/signin" className={styles.button}>Sign In</Link>
             <Link to="/signup" className={styles.button}>Sign Up</Link>
             <Link to="/signupextra" className={styles.button}>Sign Up Extra</Link>
