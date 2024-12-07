@@ -33,6 +33,15 @@ const checkout = async (req, res) => {
       await user.save();
     }
 
+    console.log("items ", items);
+    console.log("user.posts ", user.posts);
+
+    //add the items's id to the user's posts array and check if the item is already in the array
+    for (const item of items) {
+        console.log("item ", item.productId);
+        user.posts.push(item.productId);
+    }
+    await user.save();
 
     const newOrder = new Order({
       userId,

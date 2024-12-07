@@ -36,6 +36,7 @@ export default function CheckoutModal({
   currency,
   userId,
   desiredQuantities,
+  handleClearCart,
 }) {
   const steps = ["Delivery", "Confirmation", "Payment", "Finish"];
   const [deliveryAddress, setDeliveryAddress] = useState({});
@@ -136,8 +137,9 @@ export default function CheckoutModal({
               desiredQuantities={desiredQuantities}
               clickedSumit={clickedSumit}
               setClickedSumit={setClickedSumit}
+              handleClearCart={handleClearCart}
             />
-          )}{" "}
+          )}
         </div>
         <div className={styles.buttonContainer}>
           <Button onClick={handleClose}>Close</Button>
@@ -146,7 +148,9 @@ export default function CheckoutModal({
               Back
             </Button>
             <Button
-              onClick={activeStep === steps.length - 1 ? handleClose : handleNext}
+              onClick={
+                activeStep === steps.length - 1 ? handleClose : handleNext
+              }
               variant="contained"
               disabled={!stepValidation[activeStep]}
             >
@@ -348,6 +352,7 @@ function FinishStep({
   desiredQuantities,
   clickedSumit,
   setClickedSumit,
+  handleClearCart,
 }) {
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -373,6 +378,9 @@ function FinishStep({
       );
 
       console.log("Order saved successfully:", response.data);
+
+      await handleClearCart();
+
       if (onSuccess) onSuccess();
     } catch (error) {
       if (
