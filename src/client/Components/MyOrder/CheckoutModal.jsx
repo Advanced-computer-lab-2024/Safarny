@@ -30,6 +30,11 @@ import {
 } from "@mui/icons-material";
 import styles from "./CheckoutModal.module.css";
 import axios from "axios";
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+
+// Initialize Stripe (put this outside your component)
+const stripePromise = loadStripe('your_publishable_key'); // Replace with your Stripe publishable key
 
 export default function CheckoutModal({
   cartItems,
@@ -364,36 +369,10 @@ function ConfirmationStep({
   );
 }
 
-function PaymentStep({ onValidationChange, handlePaymentChange }) {
+function PaymentStep({ onValidationChange, userId, handlePaymentChange }) {
   const [formValues, setFormValues] = useState({
     paymentMethod: "credit_card",
-    cardNumber: "",
-    expiry: "",
-    cvv: "",
   });
-
-  // Helper function to determine validity
-  const validateForm = () => {
-    return (
-      formValues.paymentMethod === "cash_on_delivery" ||
-      formValues.paymentMethod === "wallet" ||
-      (formValues.paymentMethod === "credit_card" &&
-        formValues.cardNumber.trim() !== "" &&
-        formValues.expiry.trim() !== "" &&
-        formValues.cvv.trim() !== "")
-    );
-  };
-
-  // useEffect(() => {
-  //   const isValid = validateForm();
-  //   if (typeof onValidationChange === "function") {
-  //     onValidationChange(2, isValid); // Avoid recursion by ensuring `onValidationChange` is not modifying state indirectly
-  //   }
-  // }, [formValues, onValidationChange]); // Ensure dependencies are accurate and minimal
-
-  useEffect(() => {
-    handlePaymentChange(formValues.paymentMethod);
-  }, [formValues]);
 
   const handleInputChange = (field, value) => {
     setFormValues((prev) => ({ ...prev, [field]: value }));
@@ -419,45 +398,65 @@ function PaymentStep({ onValidationChange, handlePaymentChange }) {
             control={<Radio />}
             label="Cash on Delivery"
           />
-          <FormControlLabel value="wallet" control={<Radio />} label="Wallet" />
+          <FormControlLabel 
+            value="wallet" 
+            control={<Radio />} 
+            label="Wallet" 
+          />
         </RadioGroup>
       </FormControl>
+
       {formValues.paymentMethod === "credit_card" && (
-        <>
-          <TextField
-            id="card-number"
-            label="Card Number"
-            variant="outlined"
-            fullWidth
-            value={formValues.cardNumber}
-            onChange={(e) => handleInputChange("cardNumber", e.target.value)}
-            className={styles.formGroup}
-          />
-          <div className={styles.formGroup}>
-            <TextField
-              id="expiry"
-              label="Expiry Date"
-              variant="outlined"
-              placeholder="MM/YY"
-              value={formValues.expiry}
-              onChange={(e) => handleInputChange("expiry", e.target.value)}
-            />
-            <TextField
-              id="cvv"
-              label="CVV"
-              variant="outlined"
-              value={formValues.cvv}
-              onChange={(e) => handleInputChange("cvv", e.target.value)}
-            />
-          </div>
-        </>
+        <Elements stripe={stripePromise}>
+          <CreditCardForm onValidationChange={onValidationChange} />
+        </Elements>
       )}
+
       {formValues.paymentMethod === "wallet" && (
         <Box fontStyle="italic" fontSize={14}>
           Wallet payment will be deducted from your account balance.
         </Box>
       )}
     </form>
+  );
+}
+
+function CreditCardForm({ onValidationChange }) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Update validation state whenever the card element changes
+    if (elements) {
+      const card = elements.getElement(CardElement);
+      card.on('change', (event) => {
+        onValidationChange(2, event.complete);
+        setError(event.error ? event.error.message : null);
+      });
+    }
+  }, [elements, onValidationChange]);
+
+  return (
+    <div className={styles.creditCardForm}>
+      <CardElement
+        options={{
+          style: {
+            base: {
+              fontSize: '16px',
+              color: '#424770',
+              '::placeholder': {
+                color: '#aab7c4',
+              },
+            },
+            invalid: {
+              color: '#9e2146',
+            },
+          },
+        }}
+      />
+      {error && <div className={styles.errorMessage}>{error}</div>}
+    </div>
   );
 }
 

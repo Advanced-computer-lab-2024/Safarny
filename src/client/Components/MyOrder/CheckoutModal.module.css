@@ -74,6 +74,7 @@
     transform: scale(0);
     opacity: 0;
   }
+
   to {
     transform: scale(1);
     opacity: 1;
@@ -109,8 +110,11 @@
 
 .buttonContainer {
   display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #e1e4e8;
 }
 
 .buttonContainer button {
@@ -131,5 +135,17 @@
 .buttonContainer button[variant="contained"]:hover {
   background-color: var(--button-hover);
 }
-  
-  
+
+.creditCardForm {
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background-color: #fff;
+  margin-top: 16px;
+}
+
+.errorMessage {
+  color: #9e2146;
+  font-size: 14px;
+  margin-top: 8px;
+}
