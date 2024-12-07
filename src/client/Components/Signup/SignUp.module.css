@@ -193,3 +193,31 @@
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.75);
 }
+
+select.input {
+  color: var(--heading-color) !important;
+  background-color: var(--form-background) !important;
+}
+
+select.input option {
+  background-color: var(--form-background);
+  color: var(--heading-color);
+  padding: 1rem;
+}
+
+select.input option:checked {
+  background-color: var(--primary-color);
+  color: var(--heading-color);
+}
+
+select.input option:hover {
+  background-color: var(--primary-color);
+}
+
+select.input {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  padding-right: 2.5rem;
+}
