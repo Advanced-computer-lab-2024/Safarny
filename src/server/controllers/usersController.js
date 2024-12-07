@@ -182,7 +182,7 @@ const updateProfileById = AsyncHandler(async (req, res) => {
     if (!id) {
       return res.status(400).json({ error: "User ID is required" });
     }
-    console.log("Wallet", req.body.wallet);
+
     const updateData = {
       username: req.body.username,
       email: req.body.email,
@@ -209,30 +209,31 @@ const updateProfileById = AsyncHandler(async (req, res) => {
       tags: req.body.tags,
       activityCategories: req.body.activityCategories,
       Status: req.body.Status,
-      loyaltyPoints: req.body.loyaltyPoints, // Added support for loyalty points
-      addresses: req.body.addresses, // Added addresses field
+      loyaltyPoints: req.body.loyaltyPoints,
+      addresses: req.body.addresses,
+      preferencestags: req.body.preferencestags,
     };
 
     // Remove undefined fields from updateData
     Object.keys(updateData).forEach(key => updateData[key] === undefined && delete updateData[key]);
 
-    //console.log("Update Data:", updateData); // Log the update data for debugging
+    console.log("Update Data:", updateData); // Debug log
 
     const user = await userModel.findOneAndUpdate(
-        { _id: id },
-        updateData,
-        { new: true, runValidators: true }
+      { _id: id },
+      updateData,
+      { new: true, runValidators: true }
     );
 
     if (user) {
-      console.log("User updated successfully:", user); // Log the updated user for debugging
+      console.log("User updated successfully:", user); // Debug log
       res.status(200).json({ message: "Profile updated successfully", user });
     } else {
-      console.log("User not found with ID:", id); // Log if user not found
+      console.log("User not found with ID:", id);
       res.status(404).json({ error: "User not found" });
     }
   } catch (error) {
-    console.error("Error updating user:", error); // Log the error for debugging
+    console.error("Error updating user:", error);
     res.status(400).json({ error: "An error occurred while updating the user" });
   }
 });

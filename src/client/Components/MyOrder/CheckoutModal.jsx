@@ -34,7 +34,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
 // Initialize Stripe (put this outside your component)
-const stripePromise = loadStripe('your_publishable_key'); // Replace with your Stripe publishable key
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY); // Replace with your Stripe publishable key
 
 export default function CheckoutModal({
   cartItems,

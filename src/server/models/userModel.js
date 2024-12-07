@@ -116,6 +116,12 @@ const userModel = new mongoose.Schema(
       type: String,
       default: "Not Accepted",
     },
+
+    // Add this new field for preference tags
+    preferencestags: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Tags'
+    }],
   },
   {
     collection: "User",

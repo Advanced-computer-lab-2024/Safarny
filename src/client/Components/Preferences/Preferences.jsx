@@ -10,54 +10,68 @@ const Preferences = () => {
   const { userId } = location.state;
   const touristId = userId;
 
-  const [preferences, setPreferences] = useState({
-    historicAreas: [],
-    beaches: [],
-    familyFriendly: [],
-    shopping: [],
-    budget: []
-  });
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Predefined options
-  const historicAreaOptions = ["Museums", "Ancient Ruins", "Castles", "Historic Monuments"];
-  const beachOptions = ["Sandy Beach", "Rocky Beach", "Quiet Beach", "No Beach"];
-  const shoppingOptions = ["Local Markets", "Luxury Stores", "Shopping Malls", "Souvenir Shops"];
-  const familyFriendlyOptions = ["yes", "no"];
-  const budgetOptions = ["low", "medium", "high"];
+  const [tags, setTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
 
   useEffect(() => {
-    const fetchPreferences = async () => {
+    const fetchData = async() => {
       try {
-        console.log('Fetching preferences for touristId:', touristId); // Log the touristId for debugging
-
-        const response = await axios.get(`http://localhost:3000/preferences/${touristId}`);
-        setPreferences(response.data.preferences);
+        setLoading(true);
+        // Fetch tags
+        const tagsResponse = await axios.get('http://localhost:3000/admin/tag');
+        console.log('Available tags:', tagsResponse.data); // Debug log
+        setTags(tagsResponse.data);
+        
+        // Fetch user to get selected tags
+        const userResponse = await axios.get(`http://localhost:3000/tourist/${touristId}`);
+        console.log('User data:', userResponse.data); // Debug log
+        
+        if (userResponse.data.preferencestags) {
+          setSelectedTags(userResponse.data.preferencestags);
+        }
       } catch (error) {
-        setError('Error fetching preferences');
-        console.error('Error fetching preferences:', error.response ? error.response.data : error.message);
+        console.error('Fetch error:', error); // Debug log
+        setError('Error fetching data');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPreferences();
+    fetchData();
   }, [touristId]);
-
-  const handleChange = (category, value) => {
-    setPreferences({ ...preferences, [category]: value });
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.put(`/preferences/${touristId}`, { preferences });
-      alert('Preferences updated successfully!');
+      console.log('Sending selected tags:', selectedTags); // Debug log
+      
+      // Update user's preferred tags
+      const response = await axios.put(`http://localhost:3000/tourist/${touristId}`, { 
+        preferencestags: selectedTags 
+      });
+      
+      console.log('Update response:', response.data); // Debug log
+      
+      if (response.data) {
+        alert('Tags updated successfully!');
+      }
     } catch (error) {
-      alert('Error updating preferences');
+      console.error('Update error:', error.response?.data || error); // Debug log
+      alert('Error updating tags');
     }
+  };
+
+  const handleTagSelection = (tagId) => {
+    console.log('Toggling tag:', tagId); // Debug log
+    setSelectedTags(prev => {
+      const newSelected = prev.includes(tagId)
+        ? prev.filter(id => id !== tagId)
+        : [...prev, tagId];
+      console.log('New selected tags:', newSelected); // Debug log
+      return newSelected;
+    });
   };
 
   if (loading) return <p>Loading...</p>;
@@ -68,110 +82,42 @@ const Preferences = () => {
       <Header />
       <div className={styles.content}>
         <h2>Preferences</h2>
-        <p>These preferences will help you find the perfect travel experience.</p>
-      <h2 className={styles.heading}>Edit Preferences</h2>
-      <form onSubmit={handleSubmit} className={styles.form}>
-  
-        {/* Historic Areas (multiple selection) */}
-        <div className={styles.section}>
-          <h3 className={styles.sectionHeading}>Historic Areas</h3>
-          {historicAreaOptions.map((option) => (
-            <label key={option} className={styles.label}>
-              <input
-                type="checkbox"
-                checked={preferences.historicAreas.includes(option)}
-                onChange={() => {
-                  const selected = preferences.historicAreas.includes(option)
-                    ? preferences.historicAreas.filter(item => item !== option)
-                    : [...preferences.historicAreas, option];
-                  handleChange('historicAreas', selected);
-                }}
-                className={styles.checkbox}
-              />
-              {option}
-            </label>
-          ))}
+        <p>Select your preferred tags to help us personalize your experience.</p>
+        
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.section}>
+            <h3 className={styles.sectionHeading}>Preferred Tags</h3>
+            <div className={styles.tagsContainer}>
+              {tags.map((tag) => (
+                <label key={tag._id} className={styles.label}>
+                  <input
+                    type="checkbox"
+                    checked={selectedTags.includes(tag._id)}
+                    onChange={() => handleTagSelection(tag._id)}
+                    className={styles.checkbox}
+                  />
+                  {tag.name}
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <button type="submit" className={styles.button}>Save Tags</button>
+        </form>
+
+        <div className={styles.selectedTags}>
+          <h3>Currently Selected Tags:</h3>
+          <div>
+            {selectedTags.map(tagId => {
+              const tag = tags.find(t => t._id === tagId);
+              return tag ? <span key={tagId} className={styles.tag}>{tag.name}</span> : null;
+            })}
+          </div>
         </div>
-  
-        {/* Beaches (multiple selection) */}
-        <div className={styles.section}>
-          <h3 className={styles.sectionHeading}>Beaches</h3>
-          {beachOptions.map((option) => (
-            <label key={option} className={styles.label}>
-              <input
-                type="checkbox"
-                checked={preferences.beaches.includes(option)}
-                onChange={() => {
-                  const selected = preferences.beaches.includes(option)
-                    ? preferences.beaches.filter(item => item !== option)
-                    : [...preferences.beaches, option];
-                  handleChange('beaches', selected);
-                }}
-                className={styles.checkbox}
-              />
-              {option}
-            </label>
-          ))}
-        </div>
-  
-        {/* Shopping (multiple selection) */}
-        <div className={styles.section}>
-          <h3 className={styles.sectionHeading}>Shopping</h3>
-          {shoppingOptions.map((option) => (
-            <label key={option} className={styles.label}>
-              <input
-                type="checkbox"
-                checked={preferences.shopping.includes(option)}
-                onChange={() => {
-                  const selected = preferences.shopping.includes(option)
-                    ? preferences.shopping.filter(item => item !== option)
-                    : [...preferences.shopping, option];
-                  handleChange('shopping', selected);
-                }}
-                className={styles.checkbox}
-              />
-              {option}
-            </label>
-          ))}
-        </div>
-  
-        {/* Family Friendly (single selection) */}
-        <div className={styles.section}>
-          <h3 className={styles.sectionHeading}>Family Friendly</h3>
-          <select
-            value={preferences.familyFriendly[0] || ''}
-            onChange={(e) => handleChange('familyFriendly', [e.target.value])}
-            className={styles.select}
-          >
-            <option value="">Select</option>
-            {familyFriendlyOptions.map((option) => (
-              <option key={option} value={option}>{option}</option>
-            ))}
-          </select>
-        </div>
-  
-        {/* Budget (single selection) */}
-        <div className={styles.section}>
-          <h3 className={styles.sectionHeading}>Budget</h3>
-          <select
-            value={preferences.budget[0] || ''}
-            onChange={(e) => handleChange('budget', [e.target.value])}
-            className={styles.select}
-          >
-            <option value="">Select</option>
-            {budgetOptions.map((option) => (
-              <option key={option} value={option}>{option}</option>
-            ))}
-          </select>
-        </div>
-  
-        <button type="submit" className={styles.button}>Save Preferences</button>
-      </form>
       </div>
       <Footer />
     </div>
   );
-  
 };
 
 export default Preferences;
