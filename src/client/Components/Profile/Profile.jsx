@@ -31,48 +31,54 @@ const Profile = () => {
   const audioRef = useRef(null);
 
   useEffect(() => {
-  const fetchUserData = async () => {
-    try {
-      const response = await fetch(`/tourist/profile?id=${userId}`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch user data");
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`/tourist/profile?id=${userId}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+        const { password, __v, _id, imageurl, ...userData } = await response.json();
+        setUserInfo({ ...userData, image: imageurl });
+
+        if ((userData.username === 'Nirvanaa' || userData.username === 'nirvana' || userData.username === 'Nirvana' || userData.username === 'Nirvana1') && !audioRef.current) {
+          audioRef.current = new Audio(soundFile);
+          audioRef.current.play();
+        }
+
+        // Check if today is the user's birthday
+        const today = new Date();
+        const userBirthday = new Date(userData.birthday);
+        if (today.getMonth() === userBirthday.getMonth() && today.getDate() === userBirthday.getDate()) {
+          // Fetch promo codes
+          const promoResponse = await fetch('/promocodes/promocodes');
+          if (!promoResponse.ok) {
+            throw new Error("Failed to fetch promo codes");
+          }
+          const promoCodes = await promoResponse.json();
+
+          // Select a random promo code
+          const randomPromoCode = promoCodes[Math.floor(Math.random() * promoCodes.length)];
+
+          // Send notification
+          await axios.post('/notification/create', {
+            title: 'Promo Code',
+            userId,
+            message: `You have received a promo code: ${randomPromoCode.code}`
+          });
+
+          // Send email
+          await axios.post('/email/send-email', {
+            to: userData.email,
+            subject: 'Your Promo Code',
+            text: `Congratulations! You have received a promo code: ${randomPromoCode.code}`
+          });
+        }
+
+      } catch (error) {
+        console.error("Error fetching user data:", error);
       }
-      const { password, __v, _id, imageurl, ...userData } = await response.json();
-      setUserInfo({ ...userData, image: imageurl });
-      if ((userData.username === 'Nirvanaa' || userData.username === 'nirvana' || userData.username === 'Nirvana' || userData.username === 'Nirvana1') && !audioRef.current) {
-        audioRef.current = new Audio(soundFile);
-        audioRef.current.play();
-      }
-
-      // Fetch promo codes
-      const promoResponse = await fetch('/promocodes/promocodes');
-      if (!promoResponse.ok) {
-        throw new Error("Failed to fetch promo codes");
-      }
-      const promoCodes = await promoResponse.json();
-
-      // Select a random promo code
-      const randomPromoCode = promoCodes[Math.floor(Math.random() * promoCodes.length)];
-
-      // Send notification
-      await axios.post('/notification/create', {
-        title: 'Promo Code',
-        userId,
-        message: `You have received a promo code: ${randomPromoCode.code}`
-      });
-
-      // Send email
-      await axios.post('/email/send-email', {
-        to: userData.email,
-        subject: 'Your Promo Code',
-        text: `Congratulations! You have received a promo code: ${randomPromoCode.code}`
-      });
-
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
-  fetchUserData();
+    };
+    fetchUserData();
 
     return () => {
       if (audioRef.current) {
@@ -81,7 +87,6 @@ const Profile = () => {
       }
     };
   }, [userId]);
-
   const handleCashInPoints = async () => {
     try {
       if (userInfo.loyaltyPoints === 0) {
