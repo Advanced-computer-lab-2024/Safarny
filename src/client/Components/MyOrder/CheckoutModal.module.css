@@ -109,11 +109,8 @@
 
 .buttonContainer {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px solid #e1e4e8;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
 .buttonContainer button {
