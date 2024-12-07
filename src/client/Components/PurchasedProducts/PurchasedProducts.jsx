@@ -5,6 +5,7 @@ import Footer from '/src/client/components/Footer/Footer';
 import Header from '/src/client/components/Header/Header';
 import styles from './PurchasedProducts.module.css';
 import StarRatings from 'react-star-ratings';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const PurchasedProducts = () => {
   const location = useLocation();
@@ -236,59 +237,67 @@ const PurchasedProducts = () => {
   }
 
   return (
-      <div className={styles.container}>
+    <div className={styles.pageContainer}>
+      <div className={styles.headerWrapper}>
         <Header />
-        <h1 className={styles.headerTitle}>Purchased Products</h1>
+      </div>
+      <main className={styles.mainContent}>
+        <h1 className="text-center mb-4">Purchased Products</h1>
         {products.length > 0 ? (
-            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-              {products.map(product => {
-                const convertedPrice = convertPrice(product.price, product.currency, selectedCurrency);
-                const averageRating = product.rating.length > 0 ? (product.rating.reduce((acc, val) => acc + val, 0) / product.rating.length).toFixed(1) : 0;
-                return (
-                    <div className={styles.productCard} key={product._id}>
-                      <h2 className={styles.productDetails}>{product.details}</h2>
-                      <p>Price: {convertedPrice} {selectedCurrency}</p>
-                      <p>Purchased Quantity: {product.count}</p> {/* Display the count */}
-                      <p>Quantity: {product.quantity}</p>
-                      <div className={styles.ratingContainer}>
-                        <StarRatings
-                            rating={Math.round(averageRating * 2) / 2}
-                            starRatedColor="gold"
-                            numberOfStars={5}
-                            starDimension="20px"
-                            starSpacing="2px"
-                            name='rating'
-                        />
-                        <p>{averageRating} out of 5</p>
+          <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {products.map(product => {
+              const convertedPrice = convertPrice(product.price, product.currency, selectedCurrency);
+              const averageRating = product.rating.length > 0 ? (product.rating.reduce((acc, val) => acc + val, 0) / product.rating.length).toFixed(1) : 0;
+              return (
+                <div className="col" key={product._id}>
+                  <div className="card h-100 shadow-sm">
+                    <img className="card-img-top" src={product.imageurl} alt={product.details} style={{ height: '200px', objectFit: 'cover' }} />
+                    <div className="card-body">
+                      <h5 className="card-title">{product.details}</h5>
+                      <div className="d-flex justify-content-between align-items-center mb-2">
+                        <span className="fw-bold">{convertedPrice} {selectedCurrency}</span>
+                        <span className="badge bg-secondary">Qty: {product.count}</span>
                       </div>
-                      <div className={styles.reviewsSection}>
-                        <h3>Reviews:</h3>
-                        {product.reviews && product.reviews.length > 0 ? (
-                            <ul>
+                      
+                      <div className="mb-3">
+                        <StarRatings
+                          rating={Math.round(averageRating * 2) / 2}
+                          starRatedColor="gold"
+                          numberOfStars={5}
+                          starDimension="20px"
+                          starSpacing="2px"
+                          name='rating'
+                        />
+                        <small className="ms-2">({averageRating} / 5)</small>
+                      </div>
+
+                      <div className="mb-3">
+                        <h6>Reviews:</h6>
+                        <div className="reviews-scroll" style={{ maxHeight: '100px', overflowY: 'auto' }}>
+                          {product.reviews && product.reviews.length > 0 ? (
+                            <ul className="list-unstyled">
                               {product.reviews.map((review, index) => (
-                                  <li key={index}>{review}</li>
+                                <li key={index} className="small mb-1">{review}</li>
                               ))}
                             </ul>
-                        ) : (
-                            <p>No reviews available</p>
-                        )}
+                          ) : (
+                            <p className="small text-muted">No reviews available</p>
+                          )}
+                        </div>
                       </div>
-                      <img className={styles.productImage} src={product.imageurl} alt={product.details} />
 
                       <textarea
-                          placeholder="Write your review..."
-                          value={tempReviews[product._id] || ''}
-                          onChange={(e) => handleTempReviewChange(product._id, e.target.value)}
-                          className={styles.reviewInput}
+                        className="form-control mb-2"
+                        placeholder="Write your review..."
+                        value={tempReviews[product._id] || ''}
+                        onChange={(e) => handleTempReviewChange(product._id, e.target.value)}
+                        rows="3"
                       />
-                      <button onClick={() => handleSubmitReview(product._id)} className={styles.button}>
-                        Submit Review
-                      </button>
 
                       <select
-                          value={ratings[product._id] || 0}
-                          onChange={(e) => handleRatingChange(product._id, Number(e.target.value))}
-                          className={styles.ratingSelect}
+                        className="form-select mb-2"
+                        value={ratings[product._id] || 0}
+                        onChange={(e) => handleRatingChange(product._id, Number(e.target.value))}
                       >
                         <option value={0}>Rate this product</option>
                         <option value={1}>1</option>
@@ -297,18 +306,29 @@ const PurchasedProducts = () => {
                         <option value={4}>4</option>
                         <option value={5}>5</option>
                       </select>
-                      <button onClick={() => handleSubmitRating(product._id)} className={styles.button}>
-                        Submit Rating
-                      </button>
+
+                      <div className="d-grid gap-2">
+                        <button onClick={() => handleSubmitReview(product._id)} className="btn btn-primary">
+                          Submit Review
+                        </button>
+                        <button onClick={() => handleSubmitRating(product._id)} className="btn btn-outline-primary">
+                          Submit Rating
+                        </button>
+                      </div>
                     </div>
-                );
-              })}
-            </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         ) : (
-            <p>No purchased products available</p>
+          <div className="alert alert-info text-center">No purchased products available</div>
         )}
+      </main>
+      <div className={styles.footerWrapper}>
         <Footer />
       </div>
+    </div>
   );
 };
 
