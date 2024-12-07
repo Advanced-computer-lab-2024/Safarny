@@ -236,7 +236,7 @@ List all the API routes used in the project with a brief description of each.
 - `/promocodes`: Promo code related operations
 
 ### Tests
-Mention the testing framework used (e.g., Postman, Jest) and provide examples of tests.
+Postman
 
 ### How to Use
 To use the Safarny project, follow these steps:
