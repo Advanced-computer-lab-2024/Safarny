@@ -13,14 +13,10 @@
   background-image: url('/src/client/Assets/Img/ocean.jpg');
   background-size: cover;
   background-position: center;
-  text-align: center;
-  padding: 2rem 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  background-attachment: fixed; /* Optional: adds parallax effect */
+  min-height: 100vh;
   width: 100vw;
   position: relative;
-  top: 0;
 }
 
 .header {
@@ -136,11 +132,17 @@
   color: white;
   font-size: 2.5rem;
   margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Add shadow for better readability */
+  position: relative;
 }
 
 .subHeading {
-  color: #cccccc;
+  color: #ffffff; /* Brighter color instead of #cccccc */
   font-size: 1.25rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent background */
+  padding: 1rem;
+  border-radius: 8px;
 }
 
 .features {
@@ -154,52 +156,81 @@
 }
 
 .card {
-  flex: 1 1 calc(30% - 1rem);
-  max-width: calc(30% - 1rem);
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 1rem;
-  border-radius: 10px;
+  position: relative;
+  height: 300px;
+  border-radius: 15px;
   overflow: hidden;
-  color: var(--card-text-color);
-  height: 15rem;
-  box-sizing: border-box;
-  text-decoration: none; /* Ensures links have no underline */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.cardInner {
+  position: relative;
+  height: 100%;
 }
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }
 
 .cardImage {
+  height: 100%;
   width: 100%;
-  height: 50%;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s ease; /* Add smooth image zoom effect */
 }
 
 .cardImage img {
-  width: 100%;
   height: 100%;
+  width: 100%;
   object-fit: cover;
-  border-radius: 10px;
+  transition: transform 0.5s ease;
+}
+
+.cardOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transform: translateY(20%);
+  transition: transform 0.3s ease;
 }
 
 .card:hover .cardImage img {
   transform: scale(1.1);
 }
 
+.card:hover .cardOverlay {
+  transform: translateY(0);
+}
+
+.card:hover .cardArrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
 .cardTitle {
-  margin-top: 0.5rem;
-  font-size: 1.0rem;
-  color: var(--card-text-color);
-  text-align: center;
-  width: 90%;
-  transition: color 0.3s ease;
+  color: white;
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.cardArrow {
+  color: white;
+  font-size: 1.5rem;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.3s ease;
 }
 
 .card:hover .cardTitle {
@@ -215,11 +246,19 @@
   }
 
   .card {
-    flex: 1 1 calc(100% - 2rem);
-    max-width: 100%;
-    height: auto;
+    height: 250px;
   }
 
+  .cardOverlay {
+    transform: translateY(0);
+  }
+
+
+  .cardArrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  
   .cardImage {
     height: 8rem;
   }
