@@ -7,8 +7,7 @@ Safarny
 Describe the motivation behind building this project. What problem does it solve? Why is it important?
 
 ### Build Status
-Include the current build status of the project. If it's passing all tests, mention it. Use badges if available.
-
+![Node.js CI](https://github.com/Advanced-computer-lab-2024/Safarny/actions/workflows/node.js.yml/badge.svg)
 ### Code Style
 Mention the code style guidelines followed in the project, e.g., Standard, Airbnb.
 
