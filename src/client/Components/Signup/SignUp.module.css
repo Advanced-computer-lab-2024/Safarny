@@ -2,167 +2,186 @@
   --primary-color: #1a1a1a;
   --secondary-color: #333;
   --background-color: #dcdbdb;
-  --text-color: #000000;
+  --text-color: #616161;
+  --heading-color: white;
   --header-color: white;
   --form-background: #2a2a2a;
   --border-radius: 1rem;
-  --small-text-color: #000000;
+  --small-text-color: white;
+}
+
+.pageWrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background-color);
+  width: 100vw;
 }
 
 .container {
+  flex: 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh; 
-  width: 100vw;
-  background-color: var(--background-color);
+  padding: 2rem;
 }
 
 .formContainer {
   background-color: var(--form-background);
-  padding: 2rem;
+  padding: 3rem;
   border-radius: var(--border-radius);
-  position: relative;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  max-width: 37.5rem; 
   width: 100%;
-  margin: auto;  
+  max-width: 450px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-.heading{
+.heading {
   color: var(--heading-color);
-  font-size: 2.5rem;
+  font-size: 2rem;
+  font-weight: 600;
   margin-bottom: 2rem;
-}
-
-.heading2{
-  color: var(--secondary-color);
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
+  text-align: center;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  width: 95%;
+  gap: 1.5rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .label {
+  color: var(--heading-color);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.input {
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--heading-color);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.submitButton {
+  background-color: var(--primary-color);
+  color: var(--heading-color);
+  padding: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.submitButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.links {
   display: flex;
-  flex-direction: column;
-  color: white; /* Ensure the label text is black */
+  justify-content: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.createAccount {
+  color: var(--heading-color);
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+.createAccount:hover {
+  opacity: 0.8;
+}
+
+.alert {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
   text-align: center;
 }
 
-label input {
-  color: black; /* Ensure the input text is black as well */
+.success {
+  background-color: rgba(46, 213, 115, 0.1);
+  color: #2ed573;
 }
 
-label .react-datepicker-wrapper {
-  color: black; /* Make sure the wrapper text (if any) is black */
+.error {
+  background-color: rgba(255, 71, 87, 0.1);
+  color: #ff4757;
 }
 
-.logo {
-  height: 8rem;
-  margin-right: 1rem;
-  position: absolute;
-  left: 4rem;
-}
-
-.input{
-    padding: 1rem;
-    border: 1px solid #ccc;
-    color: var(--secondary-color);
-    background-color: white;
-    border-radius: 0.5rem;
-    width: 100%;
-  }
-
-button {
-  padding: 1rem 2rem;
-  background-color: var(--primary-color);
-  color: var(--header-color);
-  border: none;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  background-color: lighten(var(--primary-color), 10%);
-}
-
-/* Updated styling for Terms and Conditions */
 .terms {
-  background-color: #1a1a1a;
-  padding: 1.5rem;
-  border-radius: 0.5rem;
-  margin-top: 1rem;
-  color: white;
-}
-
-.terms input[type="checkbox"] {
-  margin-right: 0.5rem;
-}
-
-.terms label {
-  font-weight: bold;
-  color: #d3d3d3;
-  margin-bottom: 0.5rem;
-}
-
-/* Add this to SignUp CSS */
-.termsText {
-  background-color: #333;
+  background-color: rgba(255, 255, 255, 0.05);
   padding: 1rem;
   border-radius: 0.5rem;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  color: black; /* Changed text color to black */
 }
 
-.termsText p {
-  margin-bottom: 0.5rem;
-  font-weight: bold;
-  color: black; /* Ensures the paragraphs are also black */
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--heading-color);
 }
 
-.termsText ul li {
-  margin-bottom: 0.5rem;
-  color: black; /* Ensure list items are black */
+.termsText {
+  margin-top: 0.5rem;
 }
 
-.termsText ul {
-  list-style-type: disc;
-  padding-left: 1.5rem;
+.termsText span {
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .modal {
-  position: absolute;
-  top: 50%; /* Centered vertically */
-  left: 0%; /* Centered horizontally */
-  transform: translate(-50%, -50%);
   background: white;
-  padding: 10px; /* Minimal padding for compactness */
-  border-radius: 10px;
-  max-width: 200px; /* Smaller width for pop-up size */
-  width: 0%; /* Slightly flexible width */
-  z-index: 2000; /* Above header */
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  width: 90%;
+  max-width: 600px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-li {
-  color: black;
+.modalContent {
+  color: var(--primary-color);
 }
 
-.backButton {
-  background-color: black;
+.modalBody {
+  margin: 1rem 0;
+}
+
+.modalButton {
+  background-color: var(--primary-color);
   color: white;
+  padding: 0.5rem 1rem;
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
+  border-radius: 0.5rem;
   cursor: pointer;
 }
 
@@ -173,22 +192,4 @@ li {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.75);
-  z-index: 1999; /* Just below the modal */
-}
-
-
-/* Full screen for Terms and Conditions page */
-.termsPage {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: var(--background-color);
-  padding: 1rem;
-}
-
-/* SignUp.module.css */
-.label {
-  margin-left: 20px; /* Adjust the value as needed */
 }
