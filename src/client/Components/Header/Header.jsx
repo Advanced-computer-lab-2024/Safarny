@@ -28,22 +28,22 @@ const Header = () => {
   return (
     <nav className="navbar navbar-light fixed-top">
       <div className="container-fluid">
-        <div 
-          className="navbar-brand d-flex align-items-center" 
-          role="button" 
+        <div
+          className="navbar-brand d-flex align-items-center"
+          role="button"
           onClick={() => navigate('/')}
           style={{ cursor: 'pointer' }}
         >
-          <img 
-            src={Logo} 
-            alt="Safarny Logo" 
-            height="50" 
-            className="me-2" 
+          <img
+            src={Logo}
+            alt="Safarny Logo"
+            height="50"
+            className="me-2"
           />
           <span className='text-light'>Safarny</span>
         </div>
-        <button 
-          className="btn btn-outline-secondary" 
+        <button
+          className="btn btn-outline-secondary"
           onClick={handleBackClick}
         >
           Back
