@@ -330,6 +330,7 @@ We would like to thank the following people and resources:
   - [Elbasha3omarr](https://github.com/Elbasha3omarr) - Omar Walid
   - [AhmedV100](https://github.com/AhmedV100) - Ahmed Mohamed
   - [MrKaiba](https://github.com/MrKaiba) - Mohamed Youssef
+  - [MostafaVT](https://github.com/MostafaVT) - Mostafa Ahmed
 
 - **External Libraries and Frameworks**
   - [React](https://reactjs.org/)
