@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-// import styles from './BookingForm.module.css';
-import { Button, Modal } from '@mui/material';
+import { Modal } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
-import styles from "./BookFlight.module.css";
+import { FaPlane, FaSearch, FaCalendar, FaUsers } from 'react-icons/fa';
+import styles from './BookFlight.module.css';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 const BookingForm = () => {
   const [formData, setFormData] = useState({
     originLocationCode: '',
     destinationLocationCode: '',
-    departureDate: '',
-    returnDate: '',
+    departureDate: null,
+    returnDate: null,
     adults: '',
     children: '',
     infants: '',
@@ -77,32 +79,66 @@ const BookingForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    fetchAccessToken();
-    const url = `https://test.api.amadeus.com/v2/shopping/flight-offers`;
-
-    const params = {
-      originLocationCode: formData.originLocationCode,
-      destinationLocationCode: formData.destinationLocationCode,
-      departureDate: formData.departureDate,
-      returnDate: formData.returnDate || undefined,
-      adults: formData.adults,
-      children: formData.children || undefined,
-      infants: formData.infants || undefined,
-      travelClass: formData.travelClass,
-      nonStop: formData.nonStop,
-      maxPrice: formData.maxPrice || undefined,
-    };
 
     try {
-      const response = await axios.get(url, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-        params,
-      });
-      setResults(response.data.data);
+        // First ensure we have a token
+        if (!accessToken) {
+            await fetchAccessToken();
+        }
+
+        // Format dates to YYYY-MM-DD
+        const formatDate = (date) => {
+            if (!date) return undefined;
+            return date.toISOString().split('T')[0];
+        };
+
+        const params = {
+            originLocationCode: formData.originLocationCode.toUpperCase(),
+            destinationLocationCode: formData.destinationLocationCode.toUpperCase(),
+            departureDate: formatDate(formData.departureDate),
+            returnDate: formatDate(formData.returnDate),
+            adults: parseInt(formData.adults) || 1,
+            children: parseInt(formData.children) || undefined,
+            infants: parseInt(formData.infants) || undefined,
+            travelClass: formData.travelClass,
+            nonStop: formData.nonStop,
+            currencyCode: 'USD', // Add currency code
+            max: 250 // Limit results
+        };
+
+        // Remove undefined values
+        Object.keys(params).forEach(key => 
+            params[key] === undefined && delete params[key]
+        );
+
+        console.log('Request params:', params); // Debug log
+
+        const url = 'https://test.api.amadeus.com/v2/shopping/flight-offers';
+        
+        const response = await axios.get(url, {
+            headers: { 
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            params: params
+        });
+
+        console.log('API Response:', response.data); // Debug log
+        setResults(response.data.data);
     } catch (error) {
-      console.error('Error fetching flight offers:', error);
+        console.error('Error details:', {
+            message: error.message,
+            response: error.response?.data,
+            status: error.response?.status
+        });
+        // Handle specific error cases
+        if (error.response?.status === 401) {
+            // Token expired, fetch new token and retry
+            await fetchAccessToken();
+            // You might want to retry the request here
+        }
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
   };
 
@@ -144,81 +180,315 @@ const BookingForm = () => {
     navigate('/MyBookedFlights', { state: { bookedBy } });
   }
 
+  const handleDateChange = (date, name) => {
+    setFormData(prev => ({
+      ...prev,
+      [name]: date
+    }));
+  };
+
   return (
-    <div className={styles.container}>
+    <div className={`${styles.pageWrapper} min-vh-100 d-flex flex-column`}>
       <Header />
-      <div className={styles.bookingFormContainer}>
-        <div className={styles.searchSection}>
-          <h2>Find Your Flight</h2>
-          <form onSubmit={handleSubmit} className={styles.searchForm}>
-            <input type="text" name="originLocationCode" placeholder="Origin" value={formData.originLocationCode}
-              onChange={handleChange} required />
-            <input type="text" name="destinationLocationCode" placeholder="Destination"
-              value={formData.destinationLocationCode} onChange={handleChange} required />
-            <input type="date" name="departureDate" value={formData.departureDate} onChange={handleChange} required />
-            <input type="date" name="returnDate" value={formData.returnDate} onChange={handleChange} />
-            <input type="number" name="adults" placeholder="Adults" value={formData.adults} onChange={handleChange}
-              min="1" required />
-            <input type="number" name="children" placeholder="Children" value={formData.children} onChange={handleChange}
-              min="0" />
-            <input type="number" name="infants" placeholder="Infants" value={formData.infants} onChange={handleChange}
-              min="0" />
-            <select name="travelClass" value={formData.travelClass} onChange={handleChange}>
-              <option value="ECONOMY">Economy</option>
-              <option value="PREMIUM_ECONOMY">Premium Economy</option>
-              <option value="BUSINESS">Business</option>
-              <option value="FIRST">First</option>
-            </select>
-            <label style={{ color: 'black' }}>
-              Non-Stop:
-              <input type="checkbox" name="nonStop" checked={formData.nonStop} onChange={handleChange} />
-            </label>
-            <input type="number" name="maxPrice" placeholder="Max Price" value={formData.maxPrice}
-              onChange={handleChange} />
-            <button type="submit">Search Flights</button>
-          </form>
-        </div>
-        <a href="#" className={styles.buttonLink} onClick={handleViewMyBookings}>
-          View My Bookings
-        </a>
+      
+      <main className="flex-grow-1">
+        {/* <div className={styles.heroSection}> */}
+          <div className="container text-center text-white">
+            <h1 className="display-4 mb-3">Find Your Perfect Flight</h1>
+            {/* <p className="lead mb-0">Search through thousands of flights worldwide</p> */}
+          </div>
+        {/* </div> */}
 
-        <div className={styles.resultsSection}>
-          {loading && <p>Loading...</p>}
-          {results.length > 0 && (
-            <div className={styles.resultsSection}>
-              <h3>Flight Offers</h3>
-              {results.map((offer) => (
-                <div key={offer.id} className={styles.flightOffer}>
-                  <p><strong>Price:</strong> {offer.price.total} {offer.price.currency}</p>
-                  <p><strong>Departure:</strong> {offer.itineraries[0].segments[0].departure.at}</p>
-                  <p><strong>Arrival:</strong> {offer.itineraries[0].segments.slice(-1)[0].arrival.at}</p>
-                  <p><strong>Airline:</strong> {offer.itineraries[0].segments[0].carrierCode}</p>
-                  <button onClick={() => handleOfferClick(offer)}>Book Now</button>
+        <div className="container py-4">
+          <div className="row">
+            {/* Search Form */}
+            <div className="col-lg-4 mb-4">
+              <div className={`${styles.searchSection} card shadow-sm`}>
+                <div className="card-body">
+                  <h5 className="card-title mb-4">
+                    <FaSearch className="me-2" />
+                    Search Flights
+                  </h5>
+                  <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                      <label className="form-label">Origin</label>
+                      <div className="input-group">
+                        <span className="input-group-text">
+                          <FaPlane />
+                        </span>
+                        <input
+                          type="text"
+                          name="originLocationCode"
+                          className="form-control"
+                          placeholder="e.g., JFK"
+                          value={formData.originLocationCode}
+                          onChange={handleChange}
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label">Destination</label>
+                      <div className="input-group">
+                        <span className="input-group-text">
+                          <FaPlane />
+                        </span>
+                        <input
+                          type="text"
+                          name="destinationLocationCode"
+                          className="form-control"
+                          placeholder="e.g., LAX"
+                          value={formData.destinationLocationCode}
+                          onChange={handleChange}
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="row mb-3">
+                      <div className="col-6">
+                        <label className="form-label">Departure</label>
+                        <div className={`input-group ${styles.datePickerContainer}`}>
+                          <span className="input-group-text">
+                            <FaCalendar />
+                          </span>
+                          <DatePicker
+                            selected={formData.departureDate}
+                            onChange={(date) => handleDateChange(date, 'departureDate')}
+                            className="form-control"
+                            dateFormat="yyyy-MM-dd"
+                            minDate={new Date()}
+                            placeholderText="Select departure"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div className="col-6">
+                        <label className="form-label">Return</label>
+                        <div className={`input-group ${styles.datePickerContainer}`}>
+                          <span className="input-group-text">
+                            <FaCalendar />
+                          </span>
+                          <DatePicker
+                            selected={formData.returnDate}
+                            onChange={(date) => handleDateChange(date, 'returnDate')}
+                            className="form-control"
+                            dateFormat="yyyy-MM-dd"
+                            minDate={formData.departureDate || new Date()}
+                            placeholderText="Select return"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="row mb-3">
+                      <div className="col-4">
+                        <label className="form-label">Adults</label>
+                        <input
+                          type="number"
+                          name="adults"
+                          className="form-control"
+                          value={formData.adults}
+                          onChange={handleChange}
+                          min="1"
+                          required
+                        />
+                      </div>
+                      <div className="col-4">
+                        <label className="form-label">Children</label>
+                        <input
+                          type="number"
+                          name="children"
+                          className="form-control"
+                          value={formData.children}
+                          onChange={handleChange}
+                          min="0"
+                        />
+                      </div>
+                      <div className="col-4">
+                        <label className="form-label">Infants</label>
+                        <input
+                          type="number"
+                          name="infants"
+                          className="form-control"
+                          value={formData.infants}
+                          onChange={handleChange}
+                          min="0"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label">Travel Class</label>
+                      <select 
+                        name="travelClass" 
+                        className="form-select"
+                        value={formData.travelClass} 
+                        onChange={handleChange}
+                      >
+                        <option value="ECONOMY">Economy</option>
+                        <option value="PREMIUM_ECONOMY">Premium Economy</option>
+                        <option value="BUSINESS">Business</option>
+                        <option value="FIRST">First</option>
+                      </select>
+                    </div>
+
+                    <div className="mb-3">
+                      <div className="form-check">
+                        <input
+                          type="checkbox"
+                          name="nonStop"
+                          className="form-check-input"
+                          checked={formData.nonStop}
+                          onChange={handleChange}
+                          id="nonStop"
+                        />
+                        <label className="form-check-label" htmlFor="nonStop">
+                          Non-Stop Flights Only
+                        </label>
+                      </div>
+                    </div>
+
+                    <button type="submit" className="btn btn-primary w-100">
+                      <FaSearch className="me-2" />
+                      Search Flights
+                    </button>
+                  </form>
                 </div>
-              ))}
+              </div>
+              
+              <button 
+                onClick={handleViewMyBookings}
+                className={`btn btn-outline-primary w-100 mt-3 ${styles.viewBookingsButton}`}
+              >
+                View My Bookings
+              </button>
             </div>
-          )}
-        </div>
 
-        {selectedOffer && (
-          <Modal open={isModalOpen} onClose={handleCloseModal}>
-            <div className={styles.modalContent}>
-              <h3>Confirm Your Booking</h3>
-              <p><strong>Price:</strong> {selectedOffer?.price.total} {selectedOffer?.price.currency}</p>
-              <p><strong>Departure:</strong> {selectedOffer?.itineraries[0].segments[0].departure.at}</p>
-              <p><strong>Arrival:</strong> {selectedOffer?.itineraries[0].segments.slice(-1)[0].arrival.at}</p>
-              <Button variant="contained" color="primary" onClick={handleConfirmBooking}>Confirm Booking</Button>
+            {/* Results Section */}
+            <div className="col-lg-8">
+              <div className={`${styles.resultsWrapper} card shadow-sm`}>
+                <div className="card-body">
+                  <h5 className="card-title mb-4">
+                    <FaPlane className="me-2" />
+                    Flight Results
+                  </h5>
+                  
+                  {loading ? (
+                    <div className="text-center py-5">
+                      <div className="spinner-border text-primary" />
+                      <p className="mt-2 mb-0">Searching for flights...</p>
+                    </div>
+                  ) : results.length > 0 ? (
+                    <div className="row g-4">
+                      {results.map((offer) => (
+                        <div key={offer.id} className="col-12">
+                          <div className={`${styles.flightCard} card h-100`}>
+                            <div className="card-body">
+                              <div className="row align-items-center">
+                                <div className="col-md-8">
+                                  <h5 className="card-title mb-3">
+                                    {offer.itineraries[0].segments[0].departure.iataCode} → 
+                                    {offer.itineraries[0].segments.slice(-1)[0].arrival.iataCode}
+                                  </h5>
+                                  <p className="mb-2">
+                                    <strong>Departure:</strong> {new Date(offer.itineraries[0].segments[0].departure.at).toLocaleString()}
+                                  </p>
+                                  <p className="mb-2">
+                                    <strong>Arrival:</strong> {new Date(offer.itineraries[0].segments.slice(-1)[0].arrival.at).toLocaleString()}
+                                  </p>
+                                  <p className="mb-0">
+                                    <strong>Airline:</strong> {offer.itineraries[0].segments[0].carrierCode}
+                                  </p>
+                                </div>
+                                <div className="col-md-4 text-md-end mt-3 mt-md-0">
+                                  <h4 className="text-primary mb-3">
+                                    {offer.price.total} {offer.price.currency}
+                                  </h4>
+                                  <button
+                                    className="btn btn-primary w-100"
+                                    onClick={() => handleOfferClick(offer)}
+                                  >
+                                    Book Now
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-5">
+                      <p className={`mb-0 ${styles.emptyMessage}`}>
+                        Search for flights to see results
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-          </Modal>
-        )}
-
-        {/* {isBookingConfirmed && (
-        <div>
-          <p>Your booking has been confirmed!</p>
-          <button onClick={handleViewMyBookings}>View My Bookings</button>
+          </div>
         </div>
-      )} */}
-      </div>
+      </main>
+
+      {/* Modal */}
+      <Modal 
+        open={isModalOpen} 
+        onClose={handleCloseModal}
+        className={styles.modalWrapper}
+      >
+        <div className={`${styles.modalContent} bg-white rounded-3 shadow-lg`}>
+          <div className="modal-header border-bottom">
+            <h5 className="modal-title">Confirm Your Booking</h5>
+            <button 
+              type="button" 
+              className="btn-close" 
+              onClick={handleCloseModal}
+            />
+          </div>
+
+          <div className="modal-body">
+            {selectedOffer && (
+              <div className="row g-4">
+                <div className="col-md-6">
+                  <h6>Flight Details</h6>
+                  <ul className="list-unstyled">
+                    <li>From: {selectedOffer.itineraries[0].segments[0].departure.iataCode}</li>
+                    <li>To: {selectedOffer.itineraries[0].segments.slice(-1)[0].arrival.iataCode}</li>
+                    <li>Airline: {selectedOffer.itineraries[0].segments[0].carrierCode}</li>
+                  </ul>
+                </div>
+                <div className="col-md-6">
+                  <h6>Price Details</h6>
+                  <h4 className="text-primary">
+                    {selectedOffer.price.total} {selectedOffer.price.currency}
+                  </h4>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="modal-footer border-top">
+            <button 
+              type="button" 
+              className="btn btn-secondary" 
+              onClick={handleCloseModal}
+            >
+              Close
+            </button>
+            <button 
+              type="button" 
+              className="btn btn-primary" 
+              onClick={handleConfirmBooking}
+            >
+              Confirm Booking
+            </button>
+          </div>
+        </div>
+      </Modal>
+
       <Footer />
     </div>
   );

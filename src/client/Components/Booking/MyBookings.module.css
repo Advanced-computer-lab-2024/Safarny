@@ -95,3 +95,89 @@ h1 {
   align-items: center;
   height: 100%;
 }
+
+.pageWrapper {
+    width: 100vw;
+    overflow-x: hidden;
+    background-color: #f8f9fa;
+}
+
+.heroSection {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                url('/path-to-your-bookings-image.jpg') center/cover;
+    padding: 60px 0;
+    margin-bottom: 2rem;
+}
+
+.filterSection {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.filterButton {
+    min-width: 160px;
+    transition: all 0.3s ease;
+}
+
+.filterButton:hover {
+    transform: translateY(-2px);
+}
+
+.bookingCard {
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #dee2e6;
+}
+
+.bookingCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.bookingHeader {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.tourGuideSection {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.ratingSection {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.emptyState {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .heroSection {
+        padding: 40px 0;
+    }
+
+    .filterSection {
+        padding: 1rem;
+    }
+
+    .bookingCard {
+        margin-bottom: 1rem;
+    }
+}
+
+.activityTitle {
+    color: white;
+}

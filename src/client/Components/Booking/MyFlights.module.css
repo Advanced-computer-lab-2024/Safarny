@@ -61,3 +61,73 @@
   text-align: center;
   margin-top: 20px;
 }
+
+.pageWrapper {
+    width: 100vw;
+    overflow-x: hidden;
+    background-color: #f8f9fa;
+}
+
+.heroSection {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                url('/path-to-your-flights-image.jpg') center/cover;
+    padding: 60px 0;
+    margin-bottom: 2rem;
+}
+
+.bookingCard {
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #dee2e6;
+    background-color: #ffffff;
+}
+
+.bookingCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.routeInfo {
+    position: relative;
+}
+
+.passengerBadge {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    background-color: #e9ecef;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    color: #495057;
+}
+
+.priceTag {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #0d6efd;
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-top: 1rem;
+}
+
+.emptyState {
+    background: white;
+    border-radius: 8px;
+    padding: 3rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.emptyState h3 {
+    color: #343a40;
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .heroSection {
+        padding: 40px 0;
+    }
+
+    .bookingCard {
+        margin-bottom: 1rem;
+    }
+}

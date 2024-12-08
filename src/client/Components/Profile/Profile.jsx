@@ -91,6 +91,10 @@ const Profile = () => {
         }
     };
 
+    const handleGuidePageClick = () => {
+        navigate('/GuidePage', { state: { userId } });
+    };
+
     if (!userId) {
         return <div className="text-center p-5">Loading...</div>;
     }
@@ -141,6 +145,12 @@ const Profile = () => {
                                             disabled={userInfo.loyaltyPoints === 0}
                                         >
                                             Cash in Points
+                                        </button>
+                                        <button
+                                            className={`btn btn-success ${styles.guideButton}`}
+                                            onClick={handleGuidePageClick}
+                                        >
+                                            Guide Page
                                         </button>
                                         {message && (
                                             <div className={`alert ${message.includes('success') ? 'alert-success' : 'alert-danger'} mt-3`}>

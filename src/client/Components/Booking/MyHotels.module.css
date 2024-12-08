@@ -1,0 +1,96 @@
+.pageWrapper {
+    width: 100vw;
+    overflow-x: hidden;
+    background-color: #f8f9fa;
+}
+
+.heroSection {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                url('/path-to-your-hotels-image.jpg') center/cover;
+    padding: 60px 0;
+    margin-bottom: 2rem;
+}
+
+.bookingCard {
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #dee2e6;
+    background-color: #ffffff;
+}
+
+.bookingCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.locationInfo {
+    margin-bottom: 1rem;
+}
+
+.roomInfo {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+    color: #495057;
+}
+
+.guestBadge {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    background-color: #e9ecef;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    color: #495057;
+}
+
+.descriptionBox {
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+.priceTag {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #0d6efd;
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.emptyState {
+    background: #343a40;
+    border-radius: 8px;
+    padding: 3rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    max-width: 600px;
+    margin: 2rem auto;
+    text-align: center;
+}
+
+.emptyState h3 {
+    color: #ffffff;
+    margin-bottom: 1rem;
+}
+
+.emptyMessage {
+    color: #ffffff;
+    margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+    .heroSection {
+        padding: 40px 0;
+    }
+
+    .bookingCard {
+        margin-bottom: 1rem;
+    }
+
+    .descriptionBox {
+        max-height: 80px;
+    }
+} 
