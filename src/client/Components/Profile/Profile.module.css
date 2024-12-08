@@ -19,15 +19,9 @@
 }
 
 .guideButton {
-  background-color: var(--sub-button-color);
-  color: white;
+  background-color: blue;
   border: none;
-  padding: var(--sub-button-padding);
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  margin: 0.25rem 0; /* 5px */
-  transition: background-color 0.3s, transform 0.2s;
-  font-size: 0.875rem; /* Smaller font size for sub-buttons */
+  transition: transform 0.2s ease-in-out;
 }
 
 .subButton:hover {
@@ -36,8 +30,8 @@
 }
 
 .guideButton:hover {
-  background-color: var(--sub-button-hover-color);
-  transform: scale(1.05);
+  background-color: rgb(12, 81, 105);
+  transform: scale(1.05);
 }
 
 .container {

@@ -22,7 +22,7 @@ const GuidePage  = () => {
                             <h3 className={styles.stepTitle}>Sign Up</h3>
                         </div>
                         <p className={styles.stepContent}>
-                            Click on the Sign Up button to begin your journey with us by clicking on the Sign Up Options button then Sign Up as Tourist
+                            Click on the Sign Up Options button in the top right corner then click on Sign Up as Tourist to begin your journey with us
                         </p>
                         <div className={styles.imageContainer}>
                             <img
