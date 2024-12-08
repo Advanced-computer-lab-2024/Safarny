@@ -146,7 +146,7 @@ const BookingHotel = () => {
       <main className="flex-grow-1">
         {/* <div className={`${styles.heroSection} py-5 text-center text-white`}> */}
           <div className="container">
-            {/* <h1 className="display-4 mb-3">Find Your Perfect Stay</h1> */}
+            <h1 className="display-4 mb-3">Find Your Perfect Stay</h1>
             {/* <p className="lead mb-0">Search through thousands of hotels worldwide</p> */}
           </div>
         {/* </div> */}
