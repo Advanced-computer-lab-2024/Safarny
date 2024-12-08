@@ -144,12 +144,12 @@ const BookingHotel = () => {
       <Header />
       
       <main className="flex-grow-1">
-        <div className={`${styles.heroSection} py-5 text-center text-white`}>
+        {/* <div className={`${styles.heroSection} py-5 text-center text-white`}> */}
           <div className="container">
             {/* <h1 className="display-4 mb-3">Find Your Perfect Stay</h1> */}
             {/* <p className="lead mb-0">Search through thousands of hotels worldwide</p> */}
           </div>
-        </div>
+        {/* </div> */}
 
         <div className="container py-5">
           <div className="row">
@@ -181,21 +181,21 @@ const BookingHotel = () => {
                     </div>
 
                     <div className="row mb-3">
-                      <div className="col-8">
+                      <div className={`col-8 ${styles.radiusContainer}`}>
                         <label className="form-label">Radius</label>
                         <input
                           type="number"
                           name="radius"
-                          className="form-control"
+                          className={`form-control ${styles.radiusInput}`}
                           value={formData.radius}
                           onChange={handleChange}
                         />
                       </div>
-                      <div className="col-4">
+                      <div className={`col-4 ${styles.unitContainer}`}>
                         <label className="form-label">Unit</label>
                         <select
                           name="radiusUnit"
-                          className="form-select"
+                          className={`form-select ${styles.unitSelect}`}
                           value={formData.radiusUnit}
                           onChange={handleChange}
                         >
@@ -276,7 +276,7 @@ const BookingHotel = () => {
             <div className="col-lg-8">
               <div className={`${styles.resultsWrapper} card shadow-sm`}>
                 <div className="card-body">
-                  <h5 className="card-title mb-4 text-dark">
+                  <h5 className="card-title mb-4">
                     <FaHotel className="me-2" />
                     Hotel Results
                   </h5>
@@ -287,13 +287,19 @@ const BookingHotel = () => {
                         <div key={hotel.hotelId} className="col-md-6">
                           <div className={`${styles.hotelCard} card h-100`}>
                             <div className="card-body">
-                              <h5 className="card-title mb-3">{hotel.name}</h5>
-                              <div className={styles.hotelDistance}>
-                                <FaMapMarkerAlt className="me-2" />
-                                {hotel.distance.value} {hotel.distance.unit} from center
-                              </div>
+                              <h5 className="card-title">{hotel.name}</h5>
+                              <p className="card-text">
+                                <small className="text-muted">
+                                  <div className={styles.hotelDistance}>
+                                    <FaMapMarkerAlt className="me-2" />
+                                    <span className={styles.distanceText}>
+                                        {hotel.distance.value} {hotel.distance.unit} from center
+                                    </span>
+                                  </div>
+                                </small>
+                              </p>
                               <button
-                                className="btn btn-primary w-100"
+                                className="btn btn-outline-primary w-100"
                                 onClick={() => handleOfferClick(hotel)}
                               >
                                 View Offers
@@ -305,7 +311,7 @@ const BookingHotel = () => {
                     </div>
                   ) : (
                     <div className="text-center py-5">
-                      <p className="text-muted mb-0">
+                      <p className={`mb-0 ${styles.emptyMessage}`}>
                         {loading ? 'Searching for hotels...' : 'No results found.'}
                       </p>
                     </div>
