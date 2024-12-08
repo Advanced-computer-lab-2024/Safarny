@@ -23,7 +23,7 @@ const MyBookingModal = ({
     useEffect(() => {
         const fetchAddresses = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/users/${userId}/addresses`);
+                const response = await axios.get(`http://localhost:3000/tourist/${userId}`);
                 setAddresses(response.data.addresses || []); // Ensure addresses is an array
             } catch (error) {
                 console.error("Error fetching addresses:", error);
@@ -146,9 +146,16 @@ const MyBookingModal = ({
                                         className={`${styles.addressItem} ${
                                             selectedAddress === address ? styles.selected : ""
                                         }`}
-                                        onClick={() => setSelectedAddress(address)}
                                     >
-                                        <p>{address}</p>
+                                        <input
+                                            type="radio"
+                                            id={`address-${index}`}
+                                            name="address"
+                                            value={address}
+                                            checked={selectedAddress === address}
+                                            onChange={() => setSelectedAddress(address)}
+                                        />
+                                        <label htmlFor={`address-${index}`}>{address}</label>
                                     </div>
                                 ))}
                             </div>

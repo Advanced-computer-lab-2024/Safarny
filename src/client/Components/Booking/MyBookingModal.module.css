@@ -11,6 +11,9 @@
     z-index: 1000;
 }
 
+.sectionTitle{
+    color: white;
+}
 .modalContent {
     width: 400px; /* Small size for the modal */
     padding: 20px;
