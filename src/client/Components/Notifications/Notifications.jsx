@@ -8,7 +8,7 @@ import styles from './Notifications.module.css';
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
   const location = useLocation();
-  const { userId } = location.state || {};
+  const userId = location.state?.userId || localStorage.getItem('userId');
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -42,15 +42,22 @@ const Notifications = () => {
     <div className={styles.container}>
       <Header />
       <main className={styles.main}>
-        <h1 className={styles.heading}>Notifications</h1>
+        <div className={styles.notificationHeader}>
+          <h1 className={styles.heading}>Notifications</h1>
+          <span className={styles.notificationCount}>
+            {unreadNotifications.length} unread
+          </span>
+        </div>
         {unreadNotifications.length > 0 ? (
           <ul className={styles.notificationList}>
             {unreadNotifications.map(notification => (
               <li key={notification._id} className={styles.notificationItem}>
-                <div>
+                <div className={styles.notificationContent}>
                   <h2 className={styles.title}>{notification.title}</h2>
                   <p className={styles.message}>{notification.message}</p>
-                  <p className={styles.status}>{notification.read ? 'Read' : 'Unread'}</p>
+                  <p className={styles.timestamp}>
+                    {new Date(notification.createdAt).toLocaleDateString()}
+                  </p>
                 </div>
                 {!notification.read && (
                   <button

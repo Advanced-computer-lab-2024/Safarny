@@ -6,7 +6,7 @@ import {
     FaMapMarked, FaStore, FaPlus, FaChartLine,
     FaShip, FaCog, FaMap, FaClipboard, FaUserCog, FaTrash,
     FaChevronRight, FaChevronDown, FaSearch, FaArrowLeft,
-    FaBars, FaTimes
+    FaBars, FaTimes, FaBell
 } from 'react-icons/fa';
 import styles from './ProfileSideBar.module.css';
 import axios from 'axios';
@@ -32,10 +32,13 @@ const ProfileSideBar = ({ userId, userInfo }) => {
 
     // Common navigation items that appear for all roles
     const commonItems = [
+        { name: "Notifications", icon: <FaBell />, action: () => {
+            navigate('/notifications', { state: { userId } });
+        }},
         { name: "Update Profile", icon: <FaCog />, action: () => {
-                localStorage.setItem('userId', userId);
-                window.location.href = '/UpdateProfile';
-            }},
+            localStorage.setItem('userId', userId);
+            window.location.href = '/UpdateProfile';
+        }},
     ];
 
     // Add "Products" to commonItems for Tourist and Seller
