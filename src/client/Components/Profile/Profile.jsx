@@ -47,7 +47,8 @@ const Profile = () => {
 
         // Check if today is the user's birthday
         const today = new Date();
-        const userBirthday = new Date(userData.birthday);
+        const userBirthday = new Date(userData.DOB);
+        console.log("today:", today, "userBirthday:", userBirthday);
         if (today.getMonth() === userBirthday.getMonth() && today.getDate() === userBirthday.getDate()) {
           // Fetch promo codes
           const promoResponse = await fetch('/promocodes/promocodes');
