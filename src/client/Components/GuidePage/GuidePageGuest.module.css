@@ -86,25 +86,24 @@ html, body {
 }
 
 .imageContainer {
-    margin: 1rem 0;
-    border-radius: 6px;
-    overflow: hidden;
+  margin: 1rem 0;
+  border-radius: 6px;
+  overflow: hidden;
+  width: 80%; /* Match the image width */
+  margin-left: auto; /* Center the container */
+  margin-right: auto;
 }
 
 .stepImage {
-    width: 100%;
-    height: auto;
-    display: block;
+  width: 80%; /* Reduced from 100% to 80% */
+  height: auto;
+  display: block;
+  margin: 0 auto; /* This centers the image horizontally */
 }
 
 @media (max-width: 768px) {
-    .main {
-        padding: 1rem;
-        margin: 0;
-        border-radius: 0;
-    }
-    
-    .title {
-        font-size: 1.5rem;
-    }
+  .stepImage,
+  .imageContainer {
+      width: 100%;
+  }
 }

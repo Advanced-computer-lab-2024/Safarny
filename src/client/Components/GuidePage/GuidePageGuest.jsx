@@ -2,7 +2,8 @@ import React from 'react';
 import styles from "./GuidePageGuest.module.css";
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
-import photo from '/src/client/Assets/Img/test.png';
+import photo from '/src/client/Assets/Img/Sign up.png';
+import photo1 from '/src/client/Assets/Img/Home.png';
 
 const GuidePage  = () => {
     return (

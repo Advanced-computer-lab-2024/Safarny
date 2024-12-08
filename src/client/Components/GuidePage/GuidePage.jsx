@@ -3,6 +3,8 @@ import styles from "./GuidePage.module.css";
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import photo from '/src/client/Assets/Img/test.png';
+import profile from '/src/client/Assets/Img/Profile Page.png';
+import Ranks from '/src/client/Assets/Img/Ranks.png';
 
 const GuidePage = () => {
     return (
