@@ -41,7 +41,7 @@ const ProfileSideBar = ({ userId, userInfo }) => {
     // Add "Products" to commonItems for Tourist and Seller
     if (userInfo.role === 'Tourist') {
         commonItems.push({ name: "Search", icon: <FaSearch />, action: () => navigate('/Search') });
-        commonItems.push({ name: "Products", icon: <FaStore />, action: () => navigate('/products', { state: { userId } }) });
+        commonItems.push({ name: "Shop", icon: <FaStore />, action: () => navigate('/products', { state: { userId } }) });
     }
 
     const menuItems = {
@@ -84,7 +84,7 @@ const ProfileSideBar = ({ userId, userInfo }) => {
                     { name: "Add Product", icon: <FaPlus />, path: '/create-post' },
                     { name: "My Products", icon: <FaList />, path: '/seller' },
                     { name: "Sales Report", icon: <FaChartLine />, path: '/sellerSales' },
-                    { name: "Products", icon: <FaStore />, path: '/products' },
+                    { name: "Shop", icon: <FaStore />, path: '/products' },
                 ]
             }
         ],
