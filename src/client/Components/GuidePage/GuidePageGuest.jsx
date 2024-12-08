@@ -4,6 +4,8 @@ import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import photo from '/src/client/Assets/Img/Sign up.png';
 import photo1 from '/src/client/Assets/Img/Home.png';
+import sign1 from '/src/client/Assets/Img/Click sign up.png';
+import sign2 from '/src/client/Assets/Img/Click sign up options.png';
 
 const GuidePage  = () => {
     return (
@@ -20,11 +22,16 @@ const GuidePage  = () => {
                             <h3 className={styles.stepTitle}>Sign Up</h3>
                         </div>
                         <p className={styles.stepContent}>
-                            Click on the Sign Up button to begin your journey with us
+                            Click on the Sign Up button to begin your journey with us by clicking on the Sign Up Options button then Sign Up as Tourist
                         </p>
                         <div className={styles.imageContainer}>
                             <img
-                                src={photo}
+                                src={sign2}
+                                alt="Sign up process"
+                                className={styles.stepImage}
+                            />
+                            <img
+                                src={sign1}
                                 alt="Sign up process"
                                 className={styles.stepImage}
                             />
