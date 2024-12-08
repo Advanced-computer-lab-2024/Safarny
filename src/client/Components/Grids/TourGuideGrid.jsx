@@ -29,7 +29,7 @@ const handleView2 = async (email) => {
 
 // Define the columns without TypeScript typing
 const columns = [
-  { field: 'id', headerName: 'ID', width: 250 },
+  { field: 'id', headerName: 'ID', width: 240 },
   { field: 'username', headerName: 'Username', width: 130 },
   { field: 'email', headerName: 'Email', width: 150 },
   { field: 'PrevWork', headerName: 'PrevWork', width: 135 },
