@@ -88,7 +88,7 @@ import Notifications from "./Components/Notifications/Notifications";
 
 import MyOrders from "./Components/MyOrder/MyOrders";
 import Sales from "./Components/Admin/Report/Sales";
-import AdvertiserSales from "./Components/Sales/Advertiser/advertiserSales";
+import AdvertiserSales from "./Components/Sales/Advertiser/AdvertiserSales";
 import TourGuideSales from "./Components/Sales/TourGuide/TourGuideSales";
 import SellerSales from "./Components/Sales/Seller/SellerSales";
 
