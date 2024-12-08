@@ -15,7 +15,7 @@ const Profile = () => {
     console.log("Initial render - userId:", userId);
     console.log("Location state:", location.state);
 
-    const [userInfo, setUserInfo] = useState({
+    const [userData, setUserData] = useState({
         username: "",
         email: "",
         role: "",
@@ -44,7 +44,7 @@ const Profile = () => {
                 const { password, __v, _id, imageurl, ...userData } = data;
                 console.log("Processed user data:", userData);
                 
-                setUserInfo({ ...userData, photo: imageurl });
+                setUserData({ ...userData, photo: imageurl });
             } catch (error) {
                 console.error("Error in fetchUserData:", error);
             }
@@ -58,11 +58,11 @@ const Profile = () => {
         }
     }, [userId]);
 
-    console.log("Current userInfo state:", userInfo);
+    console.log("Current userData state:", userData);
 
     const handleCashInPoints = async () => {
         try {
-            if (userInfo.loyaltyPoints === 0) {
+            if (userData.loyaltyPoints === 0) {
                 setMessage("You do not have any loyalty points!");
                 return;
             }
@@ -70,15 +70,15 @@ const Profile = () => {
             const response = await fetch(import.meta.env.VITE_EXCHANGE_API_URL);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const data = await response.json();
-            const exchangeRate = data.conversion_rates[userInfo.walletcurrency];
-            const pointsInWallet = userInfo.loyaltyPoints * 0.01 * exchangeRate;
+            const exchangeRate = data.conversion_rates[userData.walletcurrency];
+            const pointsInWallet = userData.loyaltyPoints * 0.01 * exchangeRate;
 
             await axios.put(`/tourist/${userId}`, {
-                wallet: userInfo.wallet + pointsInWallet,
+                wallet: userData.wallet + pointsInWallet,
                 loyaltyPoints: 0
             });
 
-            setUserInfo(prev => ({
+            setUserData(prev => ({
                 ...prev,
                 wallet: prev.wallet + pointsInWallet,
                 loyaltyPoints: 0
@@ -97,7 +97,7 @@ const Profile = () => {
 
     return (
         <div className={styles.profileWrapper}>
-            <ProfileSideBar userId={userId} userInfo={userInfo} />
+            <ProfileSideBar userId={userId} userInfo={userData} />
             
             <Header />
             
@@ -107,38 +107,38 @@ const Profile = () => {
                     <div className="row g-0">
                         <div className="col-md-4 text-center p-4 bg-primary text-white">
                             <img
-                                src={userInfo.photo || "https://via.placeholder.com/150"}
+                                src={userData.photo || "https://via.placeholder.com/150"}
                                 alt="Profile"
                                 className={`${styles.profileImage} mb-3`}
                             />
-                            <h4 className="fw-bold">{userInfo.username}</h4>
-                            <p className="mb-0">{userInfo.email}</p>
+                            <h4 className="fw-bold">{userData.username}</h4>
+                            <p className="mb-0">{userData.email}</p>
                         </div>
 
                         <div className="col-md-8">
                             <div className={`${styles.infoSection} card-body`}>
                                 <h5 className="card-title text-primary mb-4">
-                                    Welcome, {userInfo.username}!
+                                    Welcome, {userData.username}!
                                 </h5>
                                 <div className="mb-3">
                                     <p className="card-text">
-                                        <strong>Role:</strong> {userInfo.role}
+                                        <strong>Role:</strong> {userData.role}
                                     </p>
                                     <p className="card-text">
-                                        <strong>Loyalty Points:</strong> {userInfo.loyaltyPoints}
+                                        <strong>Loyalty Points:</strong> {userData.loyaltyPoints}
                                     </p>
                                     <p className="card-text">
-                                        <strong>Wallet:</strong> {userInfo.wallet.toFixed(2)}{" "}
-                                        {userInfo.walletcurrency}
+                                        <strong>Wallet:</strong> {userData.wallet.toFixed(2)}{" "}
+                                        {userData.walletcurrency}
                                     </p>
                                 </div>
                                 
-                                {userInfo.role === "Tourist" && (
+                                {userData.role === "Tourist" && (
                                     <div className="mt-4">
                                         <button
                                             className={`btn btn-success ${styles.cashInButton}`}
                                             onClick={handleCashInPoints}
-                                            disabled={userInfo.loyaltyPoints === 0}
+                                            disabled={userData.loyaltyPoints === 0}
                                         >
                                             Cash in Points
                                         </button>
