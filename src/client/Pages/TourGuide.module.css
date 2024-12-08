@@ -74,3 +74,162 @@
 h4.tour-guide-dashboard {
     color: var(--text-color);
 }
+
+.pageWrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f0f2f5;
+}
+
+.mainContent {
+    flex: 1;
+    padding: 2rem 0;
+}
+
+.dashboardHeader {
+    background: linear-gradient(135deg, #1a237e, #0d47a1);
+    color: white;
+    padding: 3rem 0;
+    margin-bottom: 2rem;
+}
+
+.customTabs {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.itinerariesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+.itineraryCard {
+    background-color: white;
+    border: none;
+    border-radius: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.itineraryCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+}
+
+.cardHeader {
+    background-color: #1a237e !important;
+    color: white !important;
+    padding: 1.25rem !important;
+}
+
+.cardHeader span {
+    color: white !important;
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+}
+
+.cardContent {
+    padding: 1.5rem !important;
+    background-color: white;
+}
+
+.infoItem {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 0.75rem !important;
+}
+
+.icon {
+    color: #1a237e;
+    font-size: 1.2rem;
+    min-width: 24px;
+}
+
+.price {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #2e7d32;
+    margin-left: auto;
+}
+
+.bookingStatus {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+.bookingStatus .badge {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+.cardActions {
+    background-color: #f8f9fa;
+    border-top: 1px solid #eee;
+    padding: 1rem !important;
+    gap: 1rem;
+}
+
+.createForm {
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 12px;
+    background-color: white;
+    padding: 2rem;
+}
+
+.createFormHeader {
+    background-color: #1a237e !important;
+    color: white !important;
+    border-radius: 12px 12px 0 0;
+    padding: 1.5rem !important;
+    margin-bottom: 2rem;
+}
+
+.createFormHeader span {
+    color: white !important;
+}
+
+.formGroup {
+    margin-bottom: 1.5rem;
+}
+
+.formGroup label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: 500;
+}
+
+.formControl {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    background-color: white;
+}
+
+.submitButton {
+    background-color: #1a237e !important;
+    color: white !important;
+    padding: 0.75rem 1.5rem !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .itinerariesGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .mainContent {
+        padding: 1rem;
+    }
+}
