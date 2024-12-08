@@ -117,20 +117,31 @@ const Profile = () => {
         return;
       }
 
+      // Add loading state while processing
+      setMessage("Processing...");
+
+      // 1. First issue: Missing API endpoint
       const response = await fetch(import.meta.env.VITE_EXCHANGE_API_URL);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const data = await response.json();
       const exchangeRate = data.conversion_rates[userData.walletcurrency];
       const pointsInWallet = userData.loyaltyPoints * 0.01 * exchangeRate;
 
-      await axios.put(`/tourist/${userId}`, {
+      // 2. Second issue: Update user endpoint
+      const updateResponse = await axios.put(`/tourist/update/${userId}`, {  // Changed endpoint
         wallet: userData.wallet + pointsInWallet,
         loyaltyPoints: 0
       });
 
+      // 3. Check if update was successful
+      if (updateResponse.status !== 200) {
+        throw new Error('Failed to update user data');
+      }
+
+      // 4. Update local state only after successful API call
       setUserData(prev => ({
         ...prev,
-        wallet: prev.wallet + pointsInWallet,
+        wallet: Number(prev.wallet + pointsInWallet),  // Ensure number type
         loyaltyPoints: 0
       }));
 
@@ -182,6 +193,29 @@ const Profile = () => {
                     <strong>Loyalty Points:</strong> {userData.loyaltyPoints}
                   </p>
                   <p className="card-text">
+                    <strong>Loyalty Badge:</strong>{" "}
+                    <img 
+                      src={
+                        userData.loyaltyPoints >= 500000 ? "/src/client/assets/Img/rank3.jpg" :
+                        userData.loyaltyPoints >= 100000 ? "/src/client/assets/Img/rank2.jpg" :
+                        "/src/client/assets/Img/rank1.jpg"
+                      }
+                      alt="Loyalty Badge"
+                      className={styles.loyaltyBadgeImage}
+                      style={{ 
+                        width: '30px', 
+                        height: '30px', 
+                        marginLeft: '10px',
+                        verticalAlign: 'middle'
+                      }}
+                    />
+                    <span style={{ marginLeft: '10px', fontSize: '0.9em', color: '#666' }}>
+                      {userData.loyaltyPoints >= 500000 ? "Level 3" :
+                       userData.loyaltyPoints >= 100000 ? "Level 2" :
+                       "Level 1"}
+                    </span>
+                  </p>
+                  <p className="card-text">
                     <strong>Wallet:</strong> {userData.wallet.toFixed(2)}{" "}
                     {userData.walletcurrency}
                   </p>
@@ -192,7 +226,11 @@ const Profile = () => {
                     <button
                       className={`btn btn-success ${styles.cashInButton}`}
                       onClick={handleCashInPoints}
-                      disabled={userData.loyaltyPoints === 0}
+                      style={{ 
+                        position: 'relative', 
+                        zIndex: 1000, 
+                        cursor: 'pointer'
+                      }}
                     >
                       Cash in Points
                     </button>
