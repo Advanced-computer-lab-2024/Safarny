@@ -33,10 +33,12 @@ const userModel = new mongoose.Schema(
       type: [String],
       default: [],
     },
-    promos: {
-        type: [String],
-        default: [],
-    },
+      promos: [
+          {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "PromoCode",
+          },
+      ],
     loyaltyPoints: { type: Number, default: 0 },
     loyaltyLevel: {
       type: String,
