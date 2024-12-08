@@ -147,14 +147,6 @@ const ProfileSideBar = ({ userId, userInfo }) => {
                     </div>
 
                     <div className={styles.menuContainer}>
-                        {userInfo.role === 'Tourist' && (
-                            <div className={styles.menuSection}>
-                                <button className={styles.menuItem} onClick={menuItems.Tourist[0].action}>
-                                    {menuItems.Tourist[0].icon}
-                                    <span>{menuItems.Tourist[0].name}</span>
-                                </button>
-                            </div>
-                        )}
                         {/* Common Actions */}
                         <div className={styles.menuSection}>
                             {commonItems.map((item, index) => (
