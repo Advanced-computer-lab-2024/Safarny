@@ -1,53 +1,109 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: #f5f7fa;
+}
+
 .container {
+    min-height: 100vh;
     width: 100vw;
-    height: 100vh;
-    padding: 2rem;
-    background-color: #dcdbdb;
-    font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
-    box-sizing: border-box;
-    overflow-y: auto;
-  }
-  
-  .container h2 {
+    background: #f5f7fa;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow-x: hidden;
+}
+
+.main {
+    flex: 1;
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.title {
     color: #333;
-    margin-bottom: 1rem;
     font-size: 1.8rem;
-  }
-  
-  .container > main p,
-  .container > main li {
-    color: #555;
-    line-height: 1.6;
-    margin-bottom: 1rem;
-  }
-  
-  .container ul {
-    list-style-type: disc;
-    margin: 1rem 0;
-    padding-left: 1.5rem;
-  }
+    margin-bottom: 1.5rem;
+    text-align: center;
+    border-bottom: 2px solid #4299e1;
+    padding-bottom: 0.5rem;
+}
 
-  .stepSection {
-    margin-bottom: 40px;
-  }
+.stepContent {
+  background: #333;
+  color: white;
+  font-weight: 600;
+  padding: 1rem;
+  border-radius: 6px;
+  margin: 0.5rem 0 1.5rem 0;
+  width: 100%; /* Ensure it takes full width of its container */
+  box-sizing: border-box;
+}
 
-  .stepHeader {
+.stepHeader {
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
-  }
+    width: 100%;
+    gap: 0.75rem;
+    margin: 2rem 0 1rem 0;
+}
 
-  .stepNumber {
-    background-color: #2196f3;
+.stepNumber {
+    background: #4299e1;
     color: white;
-    width: 35px;
-    height: 35px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
+    font-weight: 600;
+}
+
+.stepTitle {
+    color: #333;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.instructionList {
+    list-style: none;
+    padding: 0;
+}
+
+.imageContainer {
+  margin: 1rem 0;
+  border-radius: 6px;
+  overflow: hidden;
+  width: 80%; /* Match the image width */
+  margin-left: auto; /* Center the container */
+  margin-right: auto;
+}
+
+.stepImage {
+  width: 80%; /* Reduced from 100% to 80% */
+  height: auto;
+  display: block;
+  margin: 0 auto; /* This centers the image horizontally */
+}
+
+@media (max-width: 768px) {
+  .stepImage,
+  .imageContainer {
+      width: 100%;
   }
+}
