@@ -281,7 +281,7 @@ const PurchasedProducts = () => {
                               ))}
                             </ul>
                           ) : (
-                            <p className="small text-muted">No reviews available</p>
+                            <p className="small text-white">No reviews available</p>
                           )}
                         </div>
                       </div>

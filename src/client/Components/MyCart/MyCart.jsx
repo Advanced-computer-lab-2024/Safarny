@@ -6,6 +6,7 @@ import Header from "/src/client/components/Header/Header";
 import styles from "./MyCart.module.css";
 import StarRatings from "react-star-ratings";
 import CheckoutModal from "../MyOrder/CheckoutModal.jsx";
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
 
 const Cart = () => {
   const location = useLocation();
@@ -278,109 +279,132 @@ const Cart = () => {
   );
 
   return (
-      <div className={styles.container}>
-        <Header />
-        <h1 className={styles.headerTitle}>My Cart</h1>
+    <div className={styles.pageContainer}>
+      <Header />
+      <Container fluid className={styles.mainContent}>
+        <div className={styles.cartHeader}>
+          <h1 className={styles.headerTitle}>My Cart</h1>
+          <div className={styles.cartSummary}>
+            <span className={styles.itemCount}>
+              {cartItems.length} {cartItems.length === 1 ? 'Item' : 'Items'}
+            </span>
+            <span className={styles.totalAmount}>
+              Total: {walletCurrency} {totalPrice2.toFixed(2)}
+            </span>
+          </div>
+        </div>
+
         {cartItems.length > 0 && (
-            <button
-                className={styles.proceedButton}
-                onClick={() => setShowCheckoutModal(true)}
-            >
-              Proceed to checkout
-            </button>
+          <Button
+            variant="primary"
+            size="lg"
+            className={styles.checkoutButton}
+            onClick={() => setShowCheckoutModal(true)}
+          >
+            Proceed to Checkout
+          </Button>
         )}
 
-        {showCheckoutModal && (
-            <CheckoutModal
-                cartItems={cartItems}
-                totalPrice={totalPrice2}
-                onClose={() => setShowCheckoutModal(false)}
-                currency={walletCurrency}
-                userId={userId}
-                desiredQuantities={desiredQuantities}
-                handleClearCart={handleClearCart} 
-            />
-        )}
+        <Row className={styles.cartItemsContainer}>
+          {cartItems.map((item) => {
+            const convertedPrice = convertPrice(
+              item.price,
+              item.currency,
+              walletCurrency
+            );
+            const desiredQuantity = desiredQuantities[item._id] || 1;
+            const averageRating = item.rating.length > 0
+              ? (item.rating.reduce((acc, val) => acc + val, 0) / item.rating.length).toFixed(1)
+              : 0;
 
-        {cartItems.length > 0 ? (
-            <div style={{ display: "flex", flexWrap: "wrap" }}>
-              {cartItems.map((item) => {
-                const convertedPrice = convertPrice(
-                    item.price,
-                    item.currency,
-                    walletCurrency
-                );
-                const desiredQuantity = desiredQuantities[item._id] || 1; // Default to 1 if not set
-
-                const averageRating =
-                    item.rating.length > 0
-                        ? (
-                            item.rating.reduce((acc, val) => acc + val, 0) /
-                            item.rating.length
-                        ).toFixed(1)
-                        : 0;
-                return (
-                    <div className={styles.productCard} key={item._id}>
-                      <h2 className={styles.productDetails}>{item.details}</h2>
-                      <p>
-                        Price: {convertedPrice} {walletCurrency}
-                      </p>
-                      <p>Quantity: {item.quantity}</p>
-                      <div>
-                        <button
-                            onClick={() => handleQuantityChange(item._id, -1)}
-                            disabled={desiredQuantity <= 1}
+            return (
+              <Col key={item._id} xs={12} md={6} lg={4} xl={3} className="mb-4">
+                <Card className={styles.cartItemCard}>
+                  <div className={styles.imageContainer}>
+                    <Card.Img
+                      variant="top"
+                      src={item.imageurl}
+                      className={styles.productImage}
+                      alt={item.details}
+                    />
+                  </div>
+                  <Card.Body>
+                    <Card.Title className={styles.productTitle}>
+                      {item.details}
+                    </Card.Title>
+                    <div className={styles.priceSection}>
+                      <span className={styles.price}>
+                        {walletCurrency} {(convertedPrice * desiredQuantity).toFixed(2)}
+                      </span>
+                      <div className={styles.quantityControls}>
+                        <Button
+                          variant="outline-secondary"
+                          size="sm"
+                          onClick={() => handleQuantityChange(item._id, -1)}
+                          disabled={desiredQuantity <= 1}
                         >
                           -
-                        </button>
-                        <span>{desiredQuantity}</span>
-                        <button
-                            onClick={() => handleQuantityChange(item._id, 1)}
-                            disabled={desiredQuantity >= item.quantity}
+                        </Button>
+                        <span className={styles.quantity}>{desiredQuantity}</span>
+                        <Button
+                          variant="outline-secondary"
+                          size="sm"
+                          onClick={() => handleQuantityChange(item._id, 1)}
+                          disabled={desiredQuantity >= item.quantity}
                         >
                           +
-                        </button>
+                        </Button>
                       </div>
-                      <div className={styles.ratingContainer}>
-                        <StarRatings
-                            rating={Math.round(averageRating * 2) / 2}
-                            starRatedColor="gold"
-                            numberOfStars={5}
-                            starDimension="20px"
-                            starSpacing="2px"
-                            name="rating"
-                        />
-                        <p>{averageRating} out of 5</p>
-                      </div>
-
-                      <img
-                          className={styles.productImage}
-                          src={item.imageurl}
-                          alt={item.details}
+                    </div>
+                    <div className={styles.ratingSection}>
+                      <StarRatings
+                        rating={Math.round(averageRating * 2) / 2}
+                        starRatedColor="#ffd700"
+                        numberOfStars={5}
+                        starDimension="20px"
+                        starSpacing="2px"
                       />
-                      <button
-                          className={styles.buyButton}
-                          onClick={() =>
-                              handleBuyButtonClick(item, desiredQuantities[item._id] || 1)
-                          }
+                      <span className={styles.ratingCount}>
+                        ({averageRating} / 5)
+                      </span>
+                    </div>
+                    <div className={styles.actionButtons}>
+                      <Button
+                        variant="success"
+                        className={styles.buyButton}
+                        onClick={() => handleBuyButtonClick(item, desiredQuantity)}
                       >
-                        Purchase
-                      </button>
-                      <button
-                          className={styles.button}
-                          onClick={() => handleRemoveFromCart(item)}
+                        Buy Now
+                      </Button>
+                      <Button
+                        variant="danger"
+                        className={styles.removeButton}
+                        onClick={() => handleRemoveFromCart(item)}
                       >
                         Remove
-                      </button>
+                      </Button>
                     </div>
-                );
-              })}
-            </div>
-        ) : (
-            <p>No items in the cart available</p>
+                  </Card.Body>
+                </Card>
+              </Col>
+            );
+          })}
+        </Row>
+
+        {showCheckoutModal && (
+          <CheckoutModal
+            cartItems={cartItems}
+            totalPrice={totalPrice2}
+            onClose={() => setShowCheckoutModal(false)}
+            currency={walletCurrency}
+            userId={userId}
+            desiredQuantities={desiredQuantities}
+            handleClearCart={handleClearCart}
+          />
         )}
-        <Footer />
-      </div>
+      </Container>
+      <Footer />
+    </div>
   );
 };
 

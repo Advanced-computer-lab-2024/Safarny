@@ -12,6 +12,7 @@ import { Rating } from "@mui/material";
 const UpcomingActivities = () => {
   const location = useLocation();
   const { userId } = location.state || {};
+  const touristId = userId || localStorage.getItem("userId");
   const [activities, setActivities] = useState([]);
   const [sortCriteria, setSortCriteria] = useState("date");
   const [filterCriteria, setFilterCriteria] = useState("");
@@ -37,21 +38,27 @@ const UpcomingActivities = () => {
 
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [selectedActivityId, setSelectedActivityId] = useState(null);
-
+  const [error, setError] = useState(null);
 
   // Method to fetch user role
   const fetchUserRole = async () => {
+    if (!touristId) {
+      console.log('No tourist ID available');
+      setLoading(false);
+      return;
+    }
+
     try {
-      // Replace `userId` with the actual user ID if available
-      const response = await axios.get(`http://localhost:3000/tourist/${userId}`);
-      setUserRole(response.data.role); // Store user role in state
+      const response = await axios.get(`http://localhost:3000/tourist/${touristId}`);
       const user = response.data;
+      setUserRole(user.role);
       setWallet(user.wallet);
       setWalletCurrency(user.walletcurrency || 'EGP');
       setSelectedCurrency(user.walletcurrency || 'EGP');
-      console.log('User role:', response.data.role); // Log user role for debugging
+      console.log('User role fetched:', user.role);
     } catch (err) {
       console.error('Error fetching user role:', err);
+      setError('Error fetching user data');
     }
   };
 
@@ -67,7 +74,7 @@ const UpcomingActivities = () => {
       }
       setExchangeRates(data.conversion_rates);
       setCurrencyCodes(Object.keys(data.conversion_rates));
-      console.log("id", userId);
+      console.log("id", touristId);
     } catch (error) {
       console.error('Error fetching exchange rates:', error);
       setExchangeRates({ EGP: 1 }); // Set default exchange rate
@@ -135,9 +142,14 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
     const fetchActivities = async () => {
       setLoading(true);
       try {
+        console.log('Fetching activities for user:', touristId);
+        
         // First, fetch the user's preference tags
-        const userResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
-        const userPreferenceTags = userResponse.data.preferencestags || [];
+        let userPreferenceTags = [];
+        if (touristId) {
+          const userResponse = await axios.get(`http://localhost:3000/tourist/${touristId}`);
+          userPreferenceTags = userResponse.data.preferencestags || [];
+        }
 
         let url = `http://localhost:3000/guest/get-activities-sorted?sortBy=${sortCriteria}:desc`;
 
@@ -151,44 +163,27 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
           url = `http://localhost:3000/guest/filter-activities?&averageRating=${averageRating}`;
         }
 
-        if (sortCriteria === "averageRating") {
-          url = `http://localhost:3000/guest/get-activities-sorted?sortBy=averageRating:desc`;
-        }
-
+        console.log('Fetching from URL:', url);
         const response = await fetch(url);
+        
         if (!response.ok) {
-          throw new Error("Failed to fetch activities");
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-        let data = await response.json();
-
-        // Filter out archived activities for non-admin/non-advertiser users
-        if (userRole !== 'Advertiser' && userRole !== 'Admin') {
-          data = data.filter(activity => !activity.archived);
-        }
-
-        // Sort activities based on matching preference tags
-        data.sort((a, b) => {
-          const aMatchCount = a.tags.filter(tag => 
-            userPreferenceTags.includes(tag._id)
-          ).length;
-          
-          const bMatchCount = b.tags.filter(tag => 
-            userPreferenceTags.includes(tag._id)
-          ).length;
-
-          return bMatchCount - aMatchCount; // Sort in descending order of matches
-        });
-
+        
+        const data = await response.json();
+        console.log('Activities fetched:', data.length);
+        
         setActivities(data);
       } catch (error) {
         console.error("Error fetching activities:", error);
+        setError("Failed to load activities");
       } finally {
         setLoading(false);
       }
     };
 
     fetchActivities();
-  }, [sortCriteria, filterCriteria, budget, dateRange, selectedCategories, averageRating, userRole]);
+  }, [touristId, sortCriteria, filterCriteria, budget, dateRange, selectedCategories]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -418,6 +413,16 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
           {loading ? (
             <div className="col-12 text-center">
               <CircularProgress />
+              <p>Loading activities...</p>
+            </div>
+          ) : error ? (
+            <div className="col-12">
+              <div className={styles.errorMessage}>
+                <p>{error}</p>
+                <button onClick={() => window.location.reload()}>
+                  Try Again
+                </button>
+              </div>
             </div>
           ) : activities.length === 0 ? (
             <div className="col-12">

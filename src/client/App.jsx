@@ -40,7 +40,7 @@ import UpdateHistoricalPlace from "./Components/HistoricalPlace/UpdateHistorical
 //import DeleteHistoricalPlace from './Components/HistoricalPlace/DeleteHistoricalPlace';
 import DeleteTags from "./Components/Tags/deleteTags";
 import Tags from "./Components/Tags/tags";
-import CreateHistoricalTags from "./Components/HistoricalTags/CraeteHistoricalTags";
+import CreateHistoricalTags from "./Components/HistoricalTags/CreateHistoricalTags";
 import Getcategory from "./Components/ActivityCategories/getcategory";
 import CreateCategory from "./Components/ActivityCategories/createcategory";
 import Editcategory from "./Components/ActivityCategories/editcategory";
