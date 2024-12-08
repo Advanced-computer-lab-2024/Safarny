@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Button, Modal, TextField, Typography, Alert, InputLabel, MenuItem, FormControl, Select } from '@mui/material';
+import { Button, TextField, Typography, Alert, InputLabel, MenuItem, FormControl, Select } from '@mui/material';
 import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../../server/config/Firebase';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 import 'leaflet/dist/leaflet.css';
+import styles from './CreateHistoricalPlace.module.css';
 import L from 'leaflet';
 
 // Fixing marker icon issue
@@ -151,101 +154,184 @@ const CreateHistoricalPlace = () => {
   };
 
   return (
-      <Modal open={openModal} onClose={handleCloseModal}>
-        <div style={{
-          padding: '20px',
-          backgroundColor: 'white',
-          margin: '100px auto',
-          width: '80%',
-          maxWidth: '600px',
-          height: '80%',
-          overflowY: 'auto'
-        }}>
-          <Typography variant="h6" style={{ color: 'black' }}>Create Historical Place</Typography>
-          {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-
-          <TextField
-              fullWidth
-              label="Description"
-              name="description"
-              value={historicalPlace.description}
-              onChange={handleInputChange}
-              margin="normal"
-          />
-          <TextField
-              fullWidth
-              label="Opening Hours"
-              name="openingHours"
-              value={historicalPlace.openingHours}
-              onChange={handleInputChange}
-              margin="normal"
-          />
-          <TextField
-              fullWidth
-              label="Ticket Prices"
-              name="ticketPrices"
-              value={historicalPlace.ticketPrices}
-              onChange={handleInputChange}
-              margin="normal"
-          />
-          <FormControl fullWidth margin="normal">
-            <InputLabel>Currency</InputLabel>
-            <Select
-                name="currency"
-                value={historicalPlace.currency}
-                onChange={handleInputChange}
-            >
-              {currencyCodes.map(code => (
-                  <MenuItem key={code} value={code}>{code}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          {tags.length > 0 && (
-              <div>
-                <Typography variant="h6" style={{ color: 'black' }}>Available Tags:</Typography>
-                <ul style={{ color: 'black' }}>
-                  {tags.map((tag) => (
-                      <li key={tag._id}>{tag.name}</li>
-                  ))}
-                </ul>
-              </div>
-          )}
-          <TextField
-              fullWidth
-              label="Tag Names (comma separated)"
-              name="tagNames"
-              value={historicalPlace.tagNames}
-              onChange={handleInputChange}
-              margin="normal"
-          />
-          <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              style={{ margin: '10px 0' }}
-          />
-
-          {/* Map Section */}
-          <div style={{ height: '300px', marginTop: '20px' }}>
-            <MapContainer center={[51.505, -0.09]} zoom={13} style={{ height: '100%', width: '100%' }}>
-              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-              <LocationMap />
-              {historicalPlace.coordinates.lat && historicalPlace.coordinates.lng && (
-                  <Marker position={[historicalPlace.coordinates.lat, historicalPlace.coordinates.lng]} />
-              )}
-            </MapContainer>
+    <div className={styles.pageWrapper}>
+      <Header />
+      
+      <div className="container-fluid py-5" style={{ width: '100vw' }}>
+        <div className={styles.formContainer}>
+          <div className={styles.formHeader}>
+            <Typography variant="h4" className={styles.title}>
+              Create Historical Place
+            </Typography>
+            {errorMessage && (
+              <Alert severity="error" className="mb-4">
+                {errorMessage}
+              </Alert>
+            )}
           </div>
 
-          <Button
-              variant="contained"
-              color="primary"
-              onClick={handleSubmitPlace}
-              style={{ marginTop: '20px' }}
-          >
-            Add Historical Place
-          </Button>
+          <div className={styles.formContent}>
+            <div className="row g-4">
+              <div className="col-md-6">
+                <div className={styles.inputGroup}>
+                  <TextField
+                    fullWidth
+                    label="Description"
+                    name="description"
+                    value={historicalPlace.description}
+                    onChange={handleInputChange}
+                    className={styles.input}
+                  />
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <div className={styles.inputGroup}>
+                  <TextField
+                    fullWidth
+                    label="Opening Hours"
+                    name="openingHours"
+                    value={historicalPlace.openingHours}
+                    onChange={handleInputChange}
+                    className={styles.input}
+                  />
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <div className={styles.inputGroup}>
+                  <TextField
+                    fullWidth
+                    label="Ticket Prices"
+                    name="ticketPrices"
+                    value={historicalPlace.ticketPrices}
+                    onChange={handleInputChange}
+                    className={styles.input}
+                    type="number"
+                  />
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <div className={styles.inputGroup}>
+                  <FormControl fullWidth>
+                    <InputLabel className={styles.selectLabel}>Currency</InputLabel>
+                    <Select
+                      name="currency"
+                      value={historicalPlace.currency}
+                      onChange={handleInputChange}
+                      className={styles.select}
+                    >
+                      {currencyCodes.map(code => (
+                        <MenuItem key={code} value={code}>{code}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </div>
+              </div>
+
+              <div className="col-12">
+                <div className={styles.tagsSection}>
+                  <Typography variant="h6" className={styles.sectionTitle}>
+                    Available Tags
+                  </Typography>
+                  <div className={styles.tagsList}>
+                    {tags.map((tag) => (
+                      <span key={tag._id} className={styles.tag}>
+                        {tag.name}
+                      </span>
+                    ))}
+                  </div>
+                  <TextField
+                    fullWidth
+                    label="Tag Names (comma separated)"
+                    name="tagNames"
+                    value={historicalPlace.tagNames}
+                    onChange={handleInputChange}
+                    className={`${styles.input} mt-3`}
+                    helperText="Enter tags separated by commas"
+                  />
+                </div>
+              </div>
+
+              <div className="col-12">
+                <div className={styles.imageUpload}>
+                  <Typography variant="h6" className={styles.sectionTitle}>
+                    Upload Image
+                  </Typography>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className={styles.fileInput}
+                  />
+                  {selectedImage && (
+                    <div className={styles.selectedImage}>
+                      <Typography variant="body2">
+                        Selected: {selectedImage.name}
+                      </Typography>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="col-12">
+                <div className={styles.mapSection}>
+                  <Typography variant="h6" className={styles.sectionTitle}>
+                    Select Location
+                  </Typography>
+                  <div className={styles.mapContainer}>
+                    <MapContainer
+                      center={[30.0444, 31.2357]} // Cairo coordinates
+                      zoom={13}
+                      style={{ height: '400px', width: '100%' }}
+                    >
+                      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                      <LocationMap />
+                      {historicalPlace.coordinates.lat && historicalPlace.coordinates.lng && (
+                        <Marker
+                          position={[
+                            historicalPlace.coordinates.lat,
+                            historicalPlace.coordinates.lng
+                          ]}
+                        />
+                      )}
+                    </MapContainer>
+                  </div>
+                  {historicalPlace.coordinates.lat && historicalPlace.coordinates.lng && (
+                    <Typography variant="body2" className={styles.coordinates}>
+                      Selected coordinates: {historicalPlace.coordinates.lat.toFixed(4)}, {historicalPlace.coordinates.lng.toFixed(4)}
+                    </Typography>
+                  )}
+                </div>
+              </div>
+
+              <div className="col-12">
+                <div className={styles.actionButtons}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSubmitPlace}
+                    className={styles.submitButton}
+                  >
+                    Create Historical Place
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => navigate('/')}
+                    className={styles.cancelButton}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </Modal>
+      </div>
+
+      <Footer />
+    </div>
   );
 };
 
