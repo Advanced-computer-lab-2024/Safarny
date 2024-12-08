@@ -223,7 +223,7 @@ const Preferences = () => {
                               ) : null;
                             })
                           ) : (
-                            <p className="mb-0 text-muted">No historical tags selected</p>
+                            <p className="mb-0 text-white">No historical tags selected</p>
                           )}
                         </div>
                       </div>
