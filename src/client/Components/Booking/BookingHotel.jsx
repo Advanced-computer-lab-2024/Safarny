@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Modal, Button } from '@mui/material';
-import { useLocation,useNavigate } from 'react-router-dom';
+import { Modal } from '@mui/material';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { FaHotel, FaSearch, FaList, FaMapMarkerAlt } from 'react-icons/fa';
 import styles from './BookingHotel.module.css';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
@@ -139,135 +140,263 @@ const BookingHotel = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.pageWrapper} min-vh-100 d-flex flex-column`}>
       <Header />
-      <div className={styles.content}>
-      <h2 className={styles.title}>Hotel Booking</h2>
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <div>
-          <label className={styles.label}>City Code</label>
-          <input
-            type="text"
-            name="cityCode"
-            value={formData.cityCode}
-            onChange={handleChange}
-            required
-            className={styles.input}
-          />
+      
+      <main className="flex-grow-1">
+        <div className={`${styles.heroSection} py-5 text-center text-white`}>
+          <div className="container">
+            {/* <h1 className="display-4 mb-3">Find Your Perfect Stay</h1> */}
+            {/* <p className="lead mb-0">Search through thousands of hotels worldwide</p> */}
+          </div>
         </div>
-  
-        <div>
-          <label className={styles.label}>Radius</label>
-          <input
-            type="number"
-            name="radius"
-            value={formData.radius}
-            onChange={handleChange}
-            className={styles.input}
-          />
+
+        <div className="container py-5">
+          <div className="row">
+            {/* Search Form */}
+            <div className="col-lg-4 mb-4">
+              <div className="card shadow-sm">
+                <div className="card-body">
+                  <h5 className="card-title mb-4">
+                    <FaSearch className="me-2" />
+                    Search Hotels
+                  </h5>
+                  <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                      <label className="form-label">City Code</label>
+                      <div className="input-group">
+                        <span className="input-group-text">
+                          <FaMapMarkerAlt />
+                        </span>
+                        <input
+                          type="text"
+                          name="cityCode"
+                          className="form-control"
+                          value={formData.cityCode}
+                          onChange={handleChange}
+                          required
+                          placeholder="e.g., PAR"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="row mb-3">
+                      <div className="col-8">
+                        <label className="form-label">Radius</label>
+                        <input
+                          type="number"
+                          name="radius"
+                          className="form-control"
+                          value={formData.radius}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className="col-4">
+                        <label className="form-label">Unit</label>
+                        <select
+                          name="radiusUnit"
+                          className="form-select"
+                          value={formData.radiusUnit}
+                          onChange={handleChange}
+                        >
+                          {radiusUnits.map((unit) => (
+                            <option key={unit} value={unit}>{unit}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label">Amenities</label>
+                      <select
+                        name="amenities"
+                        className="form-select"
+                        value={formData.amenities}
+                        onChange={handleChange}
+                      >
+                        <option value="">Select Amenity</option>
+                        {amenitiesOptions.map((option) => (
+                          <option key={option} value={option}>
+                            {option.replace(/_/g, ' ')}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="form-label">Rating</label>
+                      <select
+                        name="ratings"
+                        className="form-select"
+                        value={formData.ratings}
+                        onChange={handleChange}
+                      >
+                        <option value="">Select Rating</option>
+                        {ratingsOptions.map((option) => (
+                          <option key={option} value={option}>
+                            {"⭐".repeat(option)}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <button 
+                      type="submit" 
+                      className={`btn btn-primary w-100 ${styles.searchButton}`}
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" />
+                          Searching...
+                        </>
+                      ) : (
+                        <>
+                          <FaSearch className="me-2" />
+                          Search Hotels
+                        </>
+                      )}
+                    </button>
+                  </form>
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <button 
+                  onClick={handleViewMyBooking}
+                  className={`btn btn-outline-primary w-100 ${styles.viewBookingsButton}`}
+                >
+                  <FaList className="me-2" />
+                  View My Bookings
+                </button>
+              </div>
+            </div>
+
+            {/* Results Section */}
+            <div className="col-lg-8">
+              <div className={`${styles.resultsWrapper} card shadow-sm`}>
+                <div className="card-body">
+                  <h5 className="card-title mb-4 text-dark">
+                    <FaHotel className="me-2" />
+                    Hotel Results
+                  </h5>
+                  
+                  {hotels.length > 0 ? (
+                    <div className="row g-4">
+                      {hotels.map((hotel) => (
+                        <div key={hotel.hotelId} className="col-md-6">
+                          <div className={`${styles.hotelCard} card h-100`}>
+                            <div className="card-body">
+                              <h5 className="card-title mb-3">{hotel.name}</h5>
+                              <div className={styles.hotelDistance}>
+                                <FaMapMarkerAlt className="me-2" />
+                                {hotel.distance.value} {hotel.distance.unit} from center
+                              </div>
+                              <button
+                                className="btn btn-primary w-100"
+                                onClick={() => handleOfferClick(hotel)}
+                              >
+                                View Offers
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-5">
+                      <p className="text-muted mb-0">
+                        {loading ? 'Searching for hotels...' : 'No results found.'}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-  
-        <div>
-          <label className={styles.label}>Radius Unit</label>
-          <select
-            name="radiusUnit"
-            value={formData.radiusUnit}
-            onChange={handleChange}
-            className={styles.select}
-          >
-            {radiusUnits.map((unit) => (
-              <option key={unit} value={unit}>
-                {unit}
-              </option>
-            ))}
-          </select>
-  
-          <label className={styles.label}>Amenities</label>
-          <select
-            name="amenities"
-            value={formData.amenities}
-            onChange={handleChange}
-            className={styles.select}
-          >
-            {amenitiesOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-  
-          <label className={styles.label}>Rating</label>
-          <select
-            name="ratings"
-            value={formData.ratings}
-            onChange={handleChange}
-            className={styles.select}
-          >
-            {ratingsOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
-  
-        <button type="submit" disabled={loading} className={styles.button}>
-          {loading ? 'Searching...' : 'Search Hotels'}
-        </button>
-      </form>
-  
-      <div className={styles.hotelResults}>
-        <h3>Hotel Results</h3>
-        {hotels.length > 0 ? (
-          <ul>
-            {hotels.map((hotel) => (
-              <li key={hotel.hotelId} className={styles.hotelItem}>
-                <h4>{hotel.name}</h4>
-                <Button onClick={() => handleOfferClick(hotel)}>View Offers</Button>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No results found.</p>
-        )}
-      </div>
-  
-      <a href="#" className={styles.buttonLink} onClick={handleViewMyBooking}>
-          View My Bookings
-        </a>
-      <Modal open={isModalOpen} onClose={handleCloseModal}>
-        <div className={styles.modalContent}>
-          <h2>Hotel Offer Details</h2>
-          {selectedOffer && (
-            <>
-              <h4>Hotel Name: {selectedOffer.name}</h4>
-              <h4>Hotel ID: {selectedOffer.hotelId}</h4>
-            </>
-          )}
-          {offerDetails ? (
-            <ul className={styles.offerList}>
-              <li>Price: {offerDetails.offers[0].price.total} {offerDetails.offers[0].price.currency}</li>
-              <li>Check-in: {offerDetails.offers[0].checkInDate}</li>
-              <li>Check-out: {offerDetails.offers[0].checkOutDate}</li>
-              <li>Distance from center: {selectedOffer.distance.value}{selectedOffer.distance.unit}</li>
-              <li>Guests Adults: {offerDetails.offers[0].guests.adults}</li>
-              <li>Room Type: {offerDetails.offers[0].room.typeEstimated.category}</li>
-              <li>Number Of Beds: {offerDetails.offers[0].room.typeEstimated.beds}</li>
-              <li>Bed Type: {offerDetails.offers[0].room.typeEstimated.bedType}</li>
-              <li>Offer Description: {offerDetails.offers[0].room.description.text}</li>
-            </ul>
-          ) : (
-            <p>Loading offer details...</p>
-          )}
-          <Button onClick={handleCloseModal} className={styles.button}>Close</Button>
-          <Button onClick={handleBooking} className={styles.button}>Book</Button>
+      </main>
+
+      {/* Modal */}
+      <Modal 
+        open={isModalOpen} 
+        onClose={handleCloseModal}
+        className={styles.modalWrapper}
+      >
+        <div className={`${styles.modalContent} bg-white rounded-3 shadow-lg`}>
+          <div className="modal-header border-bottom">
+            <h5 className="modal-title">Hotel Offer Details</h5>
+            <button 
+              type="button" 
+              className="btn-close" 
+              onClick={handleCloseModal}
+            />
+          </div>
+
+          <div className="modal-body">
+            {selectedOffer && offerDetails ? (
+              <>
+                <h4 className="mb-4">{selectedOffer.name}</h4>
+                <div className="row g-4">
+                  <div className="col-md-6">
+                    <h6>Room Details</h6>
+                    <ul className="list-unstyled">
+                      <li>Type: {offerDetails.offers[0].room.typeEstimated.category}</li>
+                      <li>Beds: {offerDetails.offers[0].room.typeEstimated.beds}</li>
+                      <li>Bed Type: {offerDetails.offers[0].room.typeEstimated.bedType}</li>
+                    </ul>
+                  </div>
+                  <div className="col-md-6">
+                    <h6>Booking Details</h6>
+                    <ul className="list-unstyled">
+                      <li>Check-in: {offerDetails.offers[0].checkInDate}</li>
+                      <li>Check-out: {offerDetails.offers[0].checkOutDate}</li>
+                      <li>Adults: {offerDetails.offers[0].guests.adults}</li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <h6>Description</h6>
+                  <p>{offerDetails.offers[0].room.description.text}</p>
+                </div>
+                <div className="mt-4">
+                  <h6>Price</h6>
+                  <h4 className="text-primary">
+                    {offerDetails.offers[0].price.total} {offerDetails.offers[0].price.currency}
+                  </h4>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-4">
+                <div className="spinner-border text-primary" />
+                <p className="mt-2 mb-0">Loading offer details...</p>
+              </div>
+            )}
+          </div>
+
+          <div className="modal-footer border-top">
+            <button 
+              type="button" 
+              className="btn btn-secondary" 
+              onClick={handleCloseModal}
+            >
+              Close
+            </button>
+            <button 
+              type="button" 
+              className="btn btn-primary" 
+              onClick={handleBooking}
+              disabled={!offerDetails}
+            >
+              Book Now
+            </button>
+          </div>
         </div>
       </Modal>
-      </div>
+
       <Footer />
     </div>
   );
-  
 };
 
 export default BookingHotel;
