@@ -10,6 +10,7 @@ const PaymentModal = ({ addresses, userId, isOpen, onRequestClose, bookingType, 
   const navigate = useNavigate();
 
   const handleConfirm = async () => {
+    console.log("User ID:", userId); // Log the userId
     const bookingData = { tourist: userId, bookingDate, bookingHour };
     if (!selectedAddress || !selectedPaymentMethod) {
       alert("Please select both an address and a payment method.");
@@ -76,7 +77,7 @@ const PaymentModal = ({ addresses, userId, isOpen, onRequestClose, bookingType, 
         <div className={styles.modalContent}>
           <h2 className={styles.modalTitle}>Payment</h2>
 
-          {addresses.length === 0 ? (
+          {addresses.length === 1 ? (
               <div>
                 <p>No addresses found. Please update your profile to add an address.</p>
                 <button
@@ -112,7 +113,7 @@ const PaymentModal = ({ addresses, userId, isOpen, onRequestClose, bookingType, 
                         <div
                             key={index}
                             className={`${styles.paymentOption} ${
-                                selectedPaymentMethod === method ? styles.selected : ""
+                                selectedPaymentMethod === method ? styles.selected : ""}
                             }`}
                             onClick={() => setSelectedPaymentMethod(method)}
                         >
@@ -132,7 +133,10 @@ const PaymentModal = ({ addresses, userId, isOpen, onRequestClose, bookingType, 
                 <div className={styles.actions}>
                   <button
                       className={`${styles.modalButton} ${styles.confirmButton}`}
-                      onClick={handleConfirm}
+                      onClick={() => {
+                        console.log("User ID:", userId); // Log the userId
+                        handleConfirm();
+                      }}
                   >
                     Confirm
                   </button>
