@@ -91,34 +91,79 @@ const TourGuideSales = () => {
     return (
         <div className={styles.container}>
             <Header />
-            <h2 className={styles.heading}>Tour Guide Sales</h2>
-            <p className={styles.stat}>Total Client Number for all Itineraries: {boughtCount}</p>
-            <p className={styles.stat}>Total Revenue: {revenue}$</p>
+            <div className={styles.reportContainer}>
+                <h2 className={styles.reportTitle}>Tour Guide Performance Report</h2>
+                
+                <div className={styles.summaryCards}>
+                    <div className={styles.card}>
+                        <h3>Total Clients</h3>
+                        <div className={styles.amount}>{boughtCount}</div>
+                        <div className={styles.period}>All Time</div>
+                    </div>
 
-            <div className={styles.dropdownContainer}>
-                <select value={month} onChange={(e) => setMonth(e.target.value)}>
-                    <option value="">Select Month</option>
-                    {months.map((month) => (
-                        <option key={month.value} value={month.value}>
-                            {month.label}
-                        </option>
-                    ))}
-                </select>
+                    <div className={styles.card}>
+                        <h3>Total Revenue</h3>
+                        <div className={styles.amount}>${revenue.toLocaleString()}</div>
+                        <div className={styles.period}>All Time</div>
+                    </div>
 
-                <select value={year} onChange={(e) => setYear(e.target.value)}>
-                    <option value="">Select Year</option>
-                    {years.map((year) => (
-                        <option key={year} value={year}>
-                            {year}
-                        </option>
-                    ))}
-                </select>
+                    <div className={styles.card}>
+                        <h3>Total Tourists</h3>
+                        <div className={styles.amount}>{totalTourists}</div>
+                        <div className={styles.period}>Selected Period</div>
+                    </div>
+                </div>
 
-                <button onClick={handleSubmit}>Submit</button>
+                <div className={styles.filterSection}>
+                    <h3>Filter by Period</h3>
+                    <div className={styles.filterControls}>
+                        <select 
+                            className={styles.select}
+                            value={month} 
+                            onChange={(e) => setMonth(e.target.value)}
+                        >
+                            <option value="">Select Month</option>
+                            {months.map((month) => (
+                                <option key={month.value} value={month.value}>
+                                    {month.label}
+                                </option>
+                            ))}
+                        </select>
+
+                        <select 
+                            className={styles.select}
+                            value={year} 
+                            onChange={(e) => setYear(e.target.value)}
+                        >
+                            <option value="">Select Year</option>
+                            {years.map((year) => (
+                                <option key={year} value={year}>
+                                    {year}
+                                </option>
+                            ))}
+                        </select>
+
+                        <button 
+                            className={styles.filterButton}
+                            onClick={handleSubmit}
+                        >
+                            Generate Report
+                        </button>
+                    </div>
+                </div>
+
+                {filteredRevenue > 0 && (
+                    <div className={styles.summaryCards} style={{ marginTop: '2rem' }}>
+                        <div className={styles.card}>
+                            <h3>Filtered Revenue</h3>
+                            <div className={styles.amount}>${filteredRevenue.toLocaleString()}</div>
+                            <div className={styles.period}>
+                                {month && months.find(m => m.value === month)?.label} {year}
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
-
-            <p>Total Tourists: {totalTourists}</p> {/* Display the sum of tourists */}
-            <p>Filtered Revenue {filteredRevenue}</p>
             <Footer />
         </div>
     );

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -86,41 +87,72 @@ const AdvertiserSales = () => {
     return (
         <div className={styles.container}>
             <Header />
-            <h2 className={styles.heading}>Advertiser Sales</h2>
-            <p className={styles.stat}>Total Client Number for all activities: {boughtCount}</p>
-            <p className={styles.stat}>Total Revenue: {revenue}$</p>
-            <div className={styles.formGroup}>
-                <select
-                    className={styles.select}
-                    value={month}
-                    onChange={(e) => setMonth(e.target.value)}
-                >
-                    <option value="">Select Month</option>
-                    {months.map((month) => (
-                        <option key={month.value} value={month.value}>
-                            {month.label}
-                        </option>
-                    ))}
-                </select>
-                <select
-                    className={styles.select}
-                    value={year}
-                    onChange={(e) => setYear(e.target.value)}
-                >
-                    <option value="">Select Year</option>
-                    {years.map((year) => (
-                        <option key={year} value={year}>
-                            {year}
-                        </option>
-                    ))}
-                </select>
-                <button className={styles.button} onClick={handleSubmit}>
-                    Submit
-                </button>
-            </div>
+            <div className={styles.reportContainer}>
+                <h2 className={styles.heading}>Advertiser Performance Report</h2>
+                
+                <div className={styles.statsGrid}>
+                    <div className={styles.statCard}>
+                        <h3 className={styles.statLabel}>Total Clients</h3>
+                        <div className={styles.statValue}>{boughtCount}</div>
+                    </div>
+                    
+                    <div className={styles.statCard}>
+                        <h3 className={styles.statLabel}>Total Revenue</h3>
+                        <div className={styles.statValue}>${revenue}</div>
+                    </div>
+                    
+                    <div className={styles.statCard}>
+                        <h3 className={styles.statLabel}>Total Tourists</h3>
+                        <div className={styles.statValue}>{totalTourists}</div>
+                    </div>
+                </div>
 
-            <p>Total Tourists: {totalTourists}</p> {/* Display the sum of tourists */}
-            <p>Filtered Revenue {filteredRevenue}</p>
+                <div className={styles.formGroup}>
+                    <h3 className={styles.filterTitle}>Filter by Period</h3>
+                    <div className={styles.filterControls}>
+                        <select
+                            className={styles.select}
+                            value={month}
+                            onChange={(e) => setMonth(e.target.value)}
+                        >
+                            <option value="">Select Month</option>
+                            {months.map((month) => (
+                                <option key={month.value} value={month.value}>
+                                    {month.label}
+                                </option>
+                            ))}
+                        </select>
+                        
+                        <select
+                            className={styles.select}
+                            value={year}
+                            onChange={(e) => setYear(e.target.value)}
+                        >
+                            <option value="">Select Year</option>
+                            {years.map((year) => (
+                                <option key={year} value={year}>
+                                    {year}
+                                </option>
+                            ))}
+                        </select>
+                        
+                        <button className={styles.button} onClick={handleSubmit}>
+                            Generate Report
+                        </button>
+                    </div>
+                </div>
+
+                {(filteredRevenue > 0 || totalTourists > 0) && (
+                    <div className={styles.resultsSection}>
+                        <div className={styles.statsGrid}>
+                            <div className={styles.statCard}>
+                                <h3 className={styles.statLabel}>Filtered Revenue</h3>
+                                <div className={styles.statValue}>${filteredRevenue}</div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
             <Footer />
         </div>
     );

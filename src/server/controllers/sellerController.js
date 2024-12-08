@@ -1,7 +1,11 @@
+
 const User = require("../models/userModel.js");
 const { default: mongoose } = require("mongoose");
+const Order = require("../models/Order"); // Replace with the correct path to your Order model
+const Post = require("../models/Posts");   // Replace with the correct path to your Post model
 const jwt = require("jsonwebtoken"); // Ensure you have imported jwt
 const dotenv = require("dotenv");
+const axios = require("axios");
 dotenv.config();
 
 const createSeller = async (req, res) => {
@@ -68,4 +72,92 @@ const deletePostsByCreator = async (req, res) => {
   }
 };
 
-module.exports = { createSeller, getSellers, updateSeller, deleteSeller, deletePostsByCreator };
+
+const getFilteredRevenueBySeller = async (req, res) => {
+  try {
+    const { id } = req.params; // Seller ID
+    const { month, year } = req.query; // Optional month and year filters
+
+    // Step 1: Fetch posts created by the seller
+    const posts = await Post.find({ createdby: id }).select("_id price currency");
+    const postIds = posts.map((post) => post._id);
+
+    if (postIds.length === 0) {
+      return res.status(200).json({ totalRevenue: 0 }); // No posts found for the seller
+    }
+
+    // Step 2: Match orders for the seller's posts
+    const matchConditions = {
+      "items.productId": { $in: postIds },
+      status: { $in: ["confirmed", "delivered","shipped","pending"] }, // Filter orders based on status
+    };
+
+    // Add date filters if month/year are provided
+    if (month || year) {
+      matchConditions.$expr = {
+        $and: [],
+      };
+
+      if (month) {
+        matchConditions.$expr.$and.push({
+          $eq: [{ $month: "$createdAt" }, parseInt(month)],
+        });
+      }
+
+      if (year) {
+        matchConditions.$expr.$and.push({
+          $eq: [{ $year: "$createdAt" }, parseInt(year)],
+        });
+      }
+    }
+
+    // Step 3: Aggregate orders and calculate revenue
+    const orders = await Order.aggregate([
+      {
+        $match: matchConditions, // Match orders based on conditions
+      },
+      {
+        $unwind: "$items", // Flatten the items array to access individual items
+      },
+      {
+        $match: {
+          "items.productId": { $in: postIds }, // Ensure items belong to the seller's posts
+        },
+      },
+      {
+        $group: {
+          _id: "$items.currency", // Group by currency
+          totalRevenue: { $sum: { $multiply: ["$items.price", "$items.quantity"] } }, // Calculate total revenue
+        },
+      },
+    ]);
+
+    // Step 4: Fetch exchange rates (example: USD base rates)
+    const apiUrl = "https://api.exchangerate-api.com/v4/latest/USD";
+    const { data } = await axios.get(apiUrl);
+
+    if (!data || !data.rates) {
+      return res.status(500).json({ error: "Failed to fetch exchange rates" });
+    }
+
+    const exchangeRates = data.rates;
+
+    // Step 5: Convert revenue to USD and calculate total
+    let totalRevenueUSD = 0;
+    orders.forEach((order) => {
+      const { _id: currency, totalRevenue } = order;
+      const exchangeRate = exchangeRates[currency] || 1;
+      const convertedRevenue = totalRevenue / exchangeRate;
+      totalRevenueUSD += convertedRevenue;
+    });
+
+    // Step 6: Return the total revenue (apply 10% deduction if needed)
+    res.status(200).json({ totalRevenue: totalRevenueUSD * 0.9 });
+  } catch (error) {
+    console.error("Error calculating revenue for seller:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
+module.exports = { createSeller, getSellers, updateSeller, deleteSeller, deletePostsByCreator,getFilteredRevenueBySeller };

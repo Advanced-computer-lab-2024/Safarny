@@ -17,7 +17,8 @@ const {
     getPostById,
     deletePostById,
     deletePostsByCreator,
-    getTotalRevenue
+    getTotalRevenue,
+    getFilteredAdminRevenue
 } = require("../controllers/postsController.js");
 
 const { addAdmin } = require("../controllers/signUpController.js");
@@ -169,5 +170,6 @@ router.delete("/deleteTourGuide/:id", deleteTourGuideAndIterinaries);
 router.delete("/deleteAdvertiser/:id", deleteAdvertiserAndActivities);
 
 router.get("/userCounts", getUserCounts); // This will fetch total users and users this month
+router.get("/filteredrevenueadmin", getFilteredAdminRevenue); // This will fetch total users and users this month
 
 module.exports = router;

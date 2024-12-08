@@ -13,6 +13,8 @@ const {
   updateDeleteAccount
 } = require("../controllers/usersController.js");
 
+const  sellerController= require("../controllers/sellerController.js");
+
 /*
     1-post product
     2-edit product
@@ -24,6 +26,7 @@ const {
 */
 
 router.get("/getTotalRevenueByseller/:id", getRevenueBySeller);
+router.get("/filteredRevenueByseller/:id", sellerController.getFilteredRevenueBySeller);
 
 router.post("/createProduct", createPost);
 
