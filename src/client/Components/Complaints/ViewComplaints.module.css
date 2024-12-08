@@ -70,3 +70,114 @@ select {
   min-width: 150px;
   min-height: 50px;/* Adjust the width as needed */
 }
+
+.pageWrapper {
+    width: 100vw;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.mainContent {
+    flex: 1;
+}
+
+.titleSection {
+    margin-bottom: 2rem;
+}
+
+.complaintCard {
+    background-color: #1a1a1a;
+    border: 1px solid #2c2c2c;
+    transition: transform 0.2s, box-shadow 0.2s;
+    color: #ffffff;
+}
+
+.complaintCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+.title {
+    color: #ffffff;
+    font-size: 1.5rem;
+    margin-bottom: 0;
+}
+
+.body {
+    color: #ffffff;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Status badges */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 50px;
+}
+
+.pending {
+    background-color: #ffc107;
+    color: #000000;
+}
+
+.resolved {
+    background-color: #198754;
+    color: #ffffff;
+}
+
+.cancelled {
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+.commentsSection {
+    background-color: #2c2c2c;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    border: 1px solid #363636;
+}
+
+.commentsSection h4 {
+    color: #ffffff;
+    font-size: 1.25rem;
+}
+
+.commentsList {
+    margin-top: 1rem;
+}
+
+.commentItem {
+    background-color: #333333;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.commentItem:last-child {
+    margin-bottom: 0;
+}
+
+/* Ensure date text is visible */
+.complaintCard .text-muted {
+    color: #ffffff !important;
+}
+
+@media (max-width: 768px) {
+    .titleSection {
+        padding: 2rem 0;
+    }
+    
+    .badge {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+}
