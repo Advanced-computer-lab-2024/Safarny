@@ -101,13 +101,78 @@ const BookingHotel = () => {
     setSelectedOffer(hotel);
     setIsModalOpen(true);
     try {
-      const url = `https://test.api.amadeus.com/v3/shopping/hotel-offers?hotelIds=${hotel.hotelId}`;
+      // Always fetch a new token before making the request
+      await fetchAccessToken();
+      
+      // Get dates in YYYY-MM-DD format with proper validation
+      const today = new Date();
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      
+      // Format dates to YYYY-MM-DD
+      const checkInDate = today.toISOString().slice(0, 10);
+      const checkOutDate = tomorrow.toISOString().slice(0, 10);
+
+      const url = 'https://test.api.amadeus.com/v3/shopping/hotel-offers';
+      
+      // Ensure all required parameters are present and properly formatted
+      const params = {
+        hotelIds: hotel.hotelId,
+        adults: 1,
+        checkInDate,
+        checkOutDate,
+        roomQuantity: 1,
+        paymentPolicy: 'NONE',
+        bestRateOnly: true
+      };
+
+      console.log('Request params:', params); // Debug log
+
       const response = await axios.get(url, {
-        headers: { Authorization: `Bearer ${accessToken}` },
+        headers: { 
+          Authorization: `Bearer ${accessToken}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        params,
+        validateStatus: function (status) {
+          return status < 500; // Resolve only if status code is less than 500
+        }
       });
-      setOfferDetails(response.data.data[0]); // Assuming the first offer is of interest
+
+      if (response.status === 400) {
+        console.error('API Error Response:', response.data);
+        setOfferDetails(null);
+        return;
+      }
+
+      if (response.data && response.data.data && response.data.data[0]) {
+        setOfferDetails(response.data.data[0]);
+      } else {
+        console.warn('No offer details available for this hotel');
+        setOfferDetails(null);
+      }
     } catch (error) {
       console.error('Error fetching hotel offers:', error);
+      if (error.response?.status === 401) {
+        try {
+          await fetchAccessToken();
+          // Wait a brief moment before retrying
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          handleOfferClick(hotel); // Retry the request
+        } catch (retryError) {
+          console.error('Error after token refresh:', retryError);
+          setOfferDetails(null);
+        }
+      } else {
+        // Log the full error response for debugging
+        if (error.response) {
+          console.error('Error Response Data:', error.response.data);
+          console.error('Error Response Status:', error.response.status);
+          console.error('Error Response Headers:', error.response.headers);
+        }
+        setOfferDetails(null);
+      }
     }
   };
 
