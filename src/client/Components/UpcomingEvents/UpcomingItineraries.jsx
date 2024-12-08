@@ -168,30 +168,45 @@ const handleArchiveToggle = async (ItineraryId, isArchived) => {
         language: language,
       }).toString();
 
+      // First, fetch the user's preference tags
+      const userResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
+      const userPreferenceTags = userResponse.data.preferencestags || [];
+
       let response;
       if (whichResponse) {
         response = await fetch(
-            `http://localhost:3000/guest/get-itineraries-sorted?${queryParams}`
+          `http://localhost:3000/guest/get-itineraries-sorted?${queryParams}`
         );
       } else {
         response = await fetch(
-            `http://localhost:3000/guest/filter-itineraries?${queryParams}`
+          `http://localhost:3000/guest/filter-itineraries?${queryParams}`
         );
       }
 
       if (!response.ok) {
         throw new Error("Failed to fetch itineraries");
       }
-      const data = await response.json();
+      let data = await response.json();
 
+      // Filter out archived itineraries for non-admin/non-tourguide users
       if (userRole !== "TourGuide" && userRole !== "Admin") {
-        const filteredItineraries = data.filter(
-            (itinerary) => !itinerary.archived
-        );
-        setItineraries(filteredItineraries);
-      } else {
-        setItineraries(data);
+        data = data.filter((itinerary) => !itinerary.archived);
       }
+
+      // Sort itineraries based on matching preference tags
+      data.sort((a, b) => {
+        const aMatchCount = a.tags.filter(tag => 
+          userPreferenceTags.includes(tag._id)
+        ).length;
+        
+        const bMatchCount = b.tags.filter(tag => 
+          userPreferenceTags.includes(tag._id)
+        ).length;
+
+        return bMatchCount - aMatchCount; // Sort in descending order of matches
+      });
+
+      setItineraries(data);
     } catch (error) {
       console.error("Error fetching itineraries:", error);
     } finally {

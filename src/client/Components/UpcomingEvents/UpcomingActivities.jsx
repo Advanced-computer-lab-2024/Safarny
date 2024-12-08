@@ -135,6 +135,10 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
     const fetchActivities = async () => {
       setLoading(true);
       try {
+        // First, fetch the user's preference tags
+        const userResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
+        const userPreferenceTags = userResponse.data.preferencestags || [];
+
         let url = `http://localhost:3000/guest/get-activities-sorted?sortBy=${sortCriteria}:desc`;
 
         if (filterCriteria === "budget") {
@@ -147,29 +151,39 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
           url = `http://localhost:3000/guest/filter-activities?&averageRating=${averageRating}`;
         }
 
-        // Update the sort order for rating to descending
         if (sortCriteria === "averageRating") {
           url = `http://localhost:3000/guest/get-activities-sorted?sortBy=averageRating:desc`;
         }
+
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Failed to fetch activities");
         }
-        const data = await response.json();
+        let data = await response.json();
 
-        // Check if the user is a tourist
+        // Filter out archived activities for non-admin/non-advertiser users
         if (userRole !== 'Advertiser' && userRole !== 'Admin') {
-          // Filter activities to only include those that are not archived
-          const filteredActivities = data.filter(activity => !activity.archived);
-          setActivities(filteredActivities);
-        } else {
-          // If the user is not a tourist, set all activities without filtering
-          setActivities(data);
+          data = data.filter(activity => !activity.archived);
         }
+
+        // Sort activities based on matching preference tags
+        data.sort((a, b) => {
+          const aMatchCount = a.tags.filter(tag => 
+            userPreferenceTags.includes(tag._id)
+          ).length;
+          
+          const bMatchCount = b.tags.filter(tag => 
+            userPreferenceTags.includes(tag._id)
+          ).length;
+
+          return bMatchCount - aMatchCount; // Sort in descending order of matches
+        });
+
+        setActivities(data);
       } catch (error) {
         console.error("Error fetching activities:", error);
       } finally {
-        setLoading(false); // Set loading to false after fetching
+        setLoading(false);
       }
     };
 
