@@ -50,18 +50,30 @@ const ReadHistoricalPlace = () => {
 
   const fetchHistoricalPlaces = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:3000/toursimgovernor/places"
-      );
-      const placesData = response.data;
+      // First get user preferences if userId exists
+      let userPreferences = [];
+      if (userId) {
+        const userResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
+        userPreferences = userResponse.data.preferedhistoricaltags || [];
+      }
+
+      const response = await axios.get("http://localhost:3000/toursimgovernor/places");
+      let placesData = response.data;
 
       if (Array.isArray(placesData)) {
+        // Sort places based on user preferences if they exist
+        if (userPreferences.length > 0) {
+          placesData.sort((a, b) => {
+            const aMatchCount = a.tags.filter(tag => userPreferences.includes(tag._id)).length;
+            const bMatchCount = b.tags.filter(tag => userPreferences.includes(tag._id)).length;
+            return bMatchCount - aMatchCount;
+          });
+        }
         setPlaces(placesData);
       } else {
         console.error("Expected an array, but got:", typeof placesData);
         setError("Invalid data format received");
       }
-
       setLoading(false);
     } catch (err) {
       console.error("Error fetching historical places:", err);
