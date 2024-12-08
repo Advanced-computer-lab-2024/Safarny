@@ -120,6 +120,7 @@ const ProfileSideBar = ({ userId, userInfo }) => {
                 subItems: [
                     { name: "Historical Tags", icon: <FaMapMarked />, path: '/historical-tags' },
                     { name: "Historical Places", icon: <FaMapMarked />, path: '/historical-places' },
+                    { name: "Create Historical Place", icon: <FaPlus />, path: '/create-historical-place' },
                 ]
             }
         ]
