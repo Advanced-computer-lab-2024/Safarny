@@ -34,7 +34,6 @@ const ProfileSideBar = ({ userId, userInfo }) => {
     const commonItems = [
         // { name: "Back", icon: <FaArrowLeft />, action: () => navigate(-1) },
         { name: "Products", icon: <FaStore />, action: () => navigate('/products', { state: { userId } }) },
-        { name: "Search", icon: <FaSearch />, action: () => navigate('/Search') },
         { name: "Update Profile", icon: <FaCog />, action: () => {
             localStorage.setItem('userId', userId);
             window.location.href = '/UpdateProfile';
@@ -43,6 +42,11 @@ const ProfileSideBar = ({ userId, userInfo }) => {
 
     const menuItems = {
         Tourist: [
+            {
+                name: "Search", // Search button for Tourist role
+                icon: <FaSearch />,
+                action: () => navigate('/Search'),
+            },
             {
                 title: "Bookings & Services",
                 icon: <FaBook />,
@@ -143,6 +147,14 @@ const ProfileSideBar = ({ userId, userInfo }) => {
                     </div>
 
                     <div className={styles.menuContainer}>
+                        {userInfo.role === 'Tourist' && (
+                            <div className={styles.menuSection}>
+                                <button className={styles.menuItem} onClick={menuItems.Tourist[0].action}>
+                                    {menuItems.Tourist[0].icon}
+                                    <span>{menuItems.Tourist[0].name}</span>
+                                </button>
+                            </div>
+                        )}
                         {/* Common Actions */}
                         <div className={styles.menuSection}>
                             {commonItems.map((item, index) => (
@@ -159,7 +171,7 @@ const ProfileSideBar = ({ userId, userInfo }) => {
 
                         {/* Role Specific Menu */}
                         <div className={styles.menuSection}>
-                            {menuItems[userInfo.role]?.map((menu, index) => (
+                            {menuItems[userInfo.role]?.slice(1)?.map((menu, index) => ( // Skip the first item (search) for Tourist
                                 <div key={index} className={styles.menuGroup}>
                                     <button
                                         className={styles.menuItem}
@@ -174,7 +186,7 @@ const ProfileSideBar = ({ userId, userInfo }) => {
                                     </button>
                                     
                                     <div className={`${styles.subMenu} ${activeMenu === menu.title ? styles.show : ''}`}>
-                                        {menu.subItems.map((item, idx) => (
+                                        {menu.subItems?.map((item, idx) => (
                                             <button
                                                 key={idx}
                                                 className={styles.subMenuItem}
