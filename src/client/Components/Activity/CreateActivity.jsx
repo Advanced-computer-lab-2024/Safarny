@@ -6,7 +6,7 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import styles from "./CreateActivity.module.css";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { FaMapMarkerAlt, FaClock, FaCalendar, FaDollarSign, FaTags } from 'react-icons/fa';
 
 // Fixing marker icon issue
 delete L.Icon.Default.prototype._getIconUrl;
@@ -101,127 +101,187 @@ const CreateActivity = () => {
     };
 
     return (
-        <div className={styles.createActivityContainer}>
-            <Header/>
-            <h2 className={styles.heading}>Create Activity</h2>
+        <div className={styles.pageWrapper}>
+            <Header />
+            <main className={styles.mainContent}>
+                <div className="container py-4">
+                    <div className={styles.formCard}>
+                        <div className={styles.formHeader}>
+                            <h2>Create New Activity</h2>
+                            <p>Fill in the details to create your activity</p>
+                        </div>
 
-            <form onSubmit={handleSubmit}>
-                <div className={styles.formGroup}>
-                    <label>Date:</label>
-                    <input name="date" type="date" value={activityDetails.date} onChange={handleChange} required />
+                        <form onSubmit={handleSubmit} className={styles.form}>
+                            <div className="row g-4">
+                                <div className="col-md-6">
+                                    <div className={styles.inputGroup}>
+                                        <div className="form-floating">
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                id="date"
+                                                name="date"
+                                                value={activityDetails.date}
+                                                onChange={handleChange}
+                                                required
+                                                onClick={(e) => (e.target.type = "date")}
+                                                onFocus={(e) => (e.target.type = "date")}
+                                                onBlur={(e) => {
+                                                    if (!e.target.value) {
+                                                        e.target.type = "text";
+                                                    }
+                                                }}
+                                                placeholder="Select date"
+                                            />
+                                            <label htmlFor="date">Date</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="col-md-6">
+                                    <div className={styles.inputGroup}>
+                                        <div className="form-floating">
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                id="time"
+                                                name="time"
+                                                value={activityDetails.time}
+                                                onChange={handleChange}
+                                                required
+                                                onClick={(e) => (e.target.type = "time")}
+                                                onFocus={(e) => (e.target.type = "time")}
+                                                onBlur={(e) => {
+                                                    if (!e.target.value) {
+                                                        e.target.type = "text";
+                                                    }
+                                                }}
+                                                placeholder="Select time"
+                                            />
+                                            <label htmlFor="time">Time</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="col-12">
+                                    <div className={styles.inputGroup}>
+                                        <div className="form-floating">
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                id="location"
+                                                name="location"
+                                                value={activityDetails.location}
+                                                onChange={handleChange}
+                                                placeholder="Enter location"
+                                                required
+                                            />
+                                            <label htmlFor="location">Location</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="col-md-6">
+                                    <div className={styles.inputGroup}>
+                                        <div className="form-floating">
+                                            <input
+                                                type="number"
+                                                className="form-control"
+                                                id="price"
+                                                name="price"
+                                                value={activityDetails.price}
+                                                onChange={handleChange}
+                                                required
+                                            />
+                                            <label htmlFor="price">Price</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="col-md-6">
+                                    <div className={styles.inputGroup}>
+                                        <div className="form-floating">
+                                            <select
+                                                className="form-select"
+                                                id="currency"
+                                                name="currency"
+                                                value={activityDetails.currency}
+                                                onChange={handleChange}
+                                                required
+                                            >
+                                                <option value="">Select currency</option>
+                                                {currencyCodes.map((code) => (
+                                                    <option key={code} value={code}>{code}</option>
+                                                ))}
+                                            </select>
+                                            <label htmlFor="currency">Currency</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="col-12">
+                                    <div className={styles.inputGroup}>
+                                        <div className="form-floating">
+                                            <select
+                                                className="form-select"
+                                                id="category"
+                                                name="category"
+                                                value={activityDetails.category}
+                                                onChange={handleChange}
+                                                required
+                                            >
+                                                <option value="">Select category</option>
+                                                {categories.map((category) => (
+                                                    <option key={category._id} value={category._id}>
+                                                        {category.type}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            <label htmlFor="category">Category</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="col-12">
+                                    <div className={styles.mapWrapper}>
+                                        <label className={styles.mapLabel}>
+                                            Select Location on Map
+                                        </label>
+                                        <div className={styles.mapContainer}>
+                                            <MapContainer
+                                                center={[51.505, -0.09]}
+                                                zoom={13}
+                                                style={{ height: '100%', width: '100%' }}
+                                            >
+                                                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                                                <LocationMap />
+                                                {activityDetails.coordinates.lat && (
+                                                    <Marker position={[activityDetails.coordinates.lat, activityDetails.coordinates.lng]} />
+                                                )}
+                                            </MapContainer>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="col-12">
+                                    <button type="submit" className={styles.submitButton}>
+                                        Create Activity
+                                    </button>
+                                </div>
+
+                                {message && (
+                                    <div className="col-12">
+                                        <div className={`alert ${message.includes('success') ? 'alert-success' : 'alert-danger'}`}>
+                                            {message}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div className={styles.formGroup}>
-                    <label>Time:</label>
-                    <input name="time" type="time" value={activityDetails.time} onChange={handleChange} required />
-                </div>
-                <div className={styles.formGroup}>
-                    <label>Location:</label>
-                    <input
-                        name="location"
-                        type="text"
-                        value={activityDetails.location}
-                        onChange={handleChange}
-                        placeholder="Enter location name"
-                    />
-                </div>
-                <div className={styles.formGroup}>
-                    <label>Price:</label>
-                    <input name="price" type="number" value={activityDetails.price} onChange={handleChange} required />
-                </div>
-                <div className={styles.selectContainer}>
-                    <FormControl fullWidth margin="normal">
-                        <InputLabel style={{ color: 'white' }}>Currency:</InputLabel>
-                        <Select
-                            name="currency"
-                            value={activityDetails.currency}
-                            onChange={handleChange}
-                            style={{ color: 'white' }}
-                        >
-                            {currencyCodes.map((code) => (
-                                <MenuItem key={code} value={code}>
-                                    {code}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </div>
-                <div className={styles.formGroup}>
-                    <label>Category:</label>
-                    <select
-                        name="category"
-                        value={activityDetails.category}
-                        onChange={handleChange}
-                        required
-                    >
-                        <option value="">Select Category</option>
-                        {categories.map((category) => (
-                            <option key={category._id} value={category._id}>
-                                {category.type}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className={styles.formGroup}>
-                    <label>Tags:</label>
-                    <select
-                        name="tags"
-                        multiple
-                        value={activityDetails.tags}
-                        onChange={(e) =>
-                            setActivityDetails({
-                                ...activityDetails,
-                                tags: [...e.target.selectedOptions].map((o) => o.value),
-                            })
-                        }
-                    >
-                        {tags.map((tag) => (
-                            <option key={tag._id} value={tag.name}>
-                                {tag.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className={styles.formGroup}>
-                    <label>Special Discount:</label>
-                    <input
-                        name="specialDiscount"
-                        type="text"
-                        value={activityDetails.specialDiscount}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div className={styles.formGroup}>
-                    <label>Booking Open:</label>
-                    <input
-                        type="checkbox"
-                        checked={activityDetails.bookingOpen}
-                        onChange={(e) =>
-                            setActivityDetails({ ...activityDetails, bookingOpen: e.target.checked })
-                        }
-                    />
-                </div>
-                <div style={{ height: '400px', width: '100%', marginTop: '20px' }}>
-                    <MapContainer
-                        center={[
-                            activityDetails.coordinates.lat || 51.505,
-                            activityDetails.coordinates.lng || -0.09,
-                        ]}
-                        zoom={13}
-                        style={{ height: '100%', width: '100%' }}
-                    >
-                        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                        <LocationMap />
-                        {activityDetails.coordinates.lat && activityDetails.coordinates.lng && (
-                            <Marker position={[activityDetails.coordinates.lat, activityDetails.coordinates.lng]} />
-                        )}
-                    </MapContainer>
-                </div>
-                <button className={styles.button} type="submit">
-                    Create Activity
-                </button>
-                {message && <p className={styles.message}>{message}</p>}
-            </form>
-            <Footer/>
+            </main>
+            <Footer />
         </div>
     );
 };

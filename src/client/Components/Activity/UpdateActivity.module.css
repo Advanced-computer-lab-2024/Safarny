@@ -156,3 +156,138 @@
     margin-top: 2rem;
   }
   
+  .pageWrapper {
+    width: 100vw;
+    min-height: 100vh;
+    background-color: #dcdbdb;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .mainContent {
+    flex: 1;
+    padding: 2rem 0;
+  }
+  
+  .formCard {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 2.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  .formHeader {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .formHeader h2 {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+  }
+  
+  .formHeader p {
+    color: #6c757d;
+    font-size: 1.1rem;
+  }
+  
+  .selectContainer {
+    margin-bottom: 2rem;
+  }
+  
+  .selectContainer select {
+    border-radius: 0.5rem;
+    border: 1px solid #dee2e6;
+    padding: 1rem;
+    font-size: 1.1rem;
+  }
+  
+  .inputGroup {
+    margin-bottom: 1rem;
+  }
+  
+  .inputGroup .form-floating input,
+  .inputGroup .form-floating select {
+    height: 3.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid #dee2e6;
+  }
+  
+  .switchContainer {
+    padding: 1rem 0;
+  }
+  
+  .switchContainer .form-check {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .form-check-input {
+    width: 3rem;
+    height: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .form-check-label {
+    font-size: 1.1rem;
+    color: #2c3e50;
+  }
+  
+  .mapWrapper {
+    margin-top: 1.5rem;
+  }
+  
+  .mapLabel {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #2c3e50;
+  }
+  
+  .mapContainer {
+    height: 400px;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 1px solid #dee2e6;
+  }
+  
+  .submitButton {
+    width: 100%;
+    padding: 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+  }
+  
+  .submitButton:hover {
+    background-color: #0056b3;
+  }
+  
+  .submitButton:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+  }
+  
+  @media (max-width: 768px) {
+    .formCard {
+      margin: 1rem;
+      padding: 1.5rem;
+    }
+    
+    .mapContainer {
+      height: 300px;
+    }
+    
+    .formHeader h2 {
+      font-size: 1.75rem;
+    }
+  }
+  
