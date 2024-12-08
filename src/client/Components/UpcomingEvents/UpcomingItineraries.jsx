@@ -287,6 +287,7 @@ const handleArchiveToggle = async (ItineraryId, isArchived) => {
                   className="form-select"
                   value={sortCriteria}
                   onChange={(e) => setSortCriteria(e.target.value)}
+                  style={{backgroundColor: "#2a2a2a", color: "white"}}
                 >
                   <option value="date">Date</option>
                   <option value="price">Price</option>
@@ -322,6 +323,7 @@ const handleArchiveToggle = async (ItineraryId, isArchived) => {
                   className="form-control"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
+                  style={{backgroundColor: "#2a2a2a", color: "white"}}
                 />
               </div>
             </div>
@@ -338,6 +340,7 @@ const handleArchiveToggle = async (ItineraryId, isArchived) => {
                   value={language}
                   onChange={(e) => setLanguage(e.target.value)}
                   placeholder="Preferred language"
+                  style={{backgroundColor: "#2a2a2a", color: "white"}}
                 />
               </div>
             </div>
@@ -378,6 +381,7 @@ const handleArchiveToggle = async (ItineraryId, isArchived) => {
                   className="form-select"
                   value={selectedCurrency}
                   onChange={(e) => setSelectedCurrency(e.target.value)}
+                  style={{backgroundColor: "#2a2a2a", color: "white"}}
                 >
                   {currencyCodes.map((code) => (
                     <option key={code} value={code}>{code}</option>

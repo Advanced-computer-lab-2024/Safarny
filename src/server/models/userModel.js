@@ -33,12 +33,6 @@ const userModel = new mongoose.Schema(
       type: [String],
       default: [],
     },
-      promos: [
-          {
-              type: mongoose.Schema.Types.ObjectId,
-              ref: "PromoCode",
-          },
-      ],
     loyaltyPoints: { type: Number, default: 0 },
     loyaltyLevel: {
       type: String,
@@ -122,11 +116,15 @@ const userModel = new mongoose.Schema(
       type: String,
       default: "Not Accepted",
     },
-
-    // Add this new field for preference tags
     preferencestags: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Tags'
+    }],
+
+    // Add this new field for historical preference tags
+    preferedhistoricaltags: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'HistoricalTags'
     }],
   },
   {

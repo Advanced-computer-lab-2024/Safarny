@@ -16,6 +16,8 @@ const Preferences = () => {
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [historicalTags, setHistoricalTags] = useState([]);
+  const [selectedHistoricalTags, setSelectedHistoricalTags] = useState([]);
 
   useEffect(() => {
     const fetchData = async() => {
@@ -24,12 +26,19 @@ const Preferences = () => {
         const tagsResponse = await axios.get('http://localhost:3000/admin/tag');
         setTags(tagsResponse.data);
         
+        const historicalTagsResponse = await axios.get('http://localhost:3000/toursimgovernor/gettags');
+        setHistoricalTags(historicalTagsResponse.data);
+        
         const userResponse = await axios.get(`http://localhost:3000/tourist/${touristId}`);
         if (userResponse.data.preferencestags) {
           setSelectedTags(userResponse.data.preferencestags);
         }
+        if (userResponse.data.preferedhistoricaltags) {
+          setSelectedHistoricalTags(userResponse.data.preferedhistoricaltags);
+        }
       } catch (error) {
         setError('Error fetching data');
+        console.error('Fetch error:', error);
       } finally {
         setLoading(false);
       }
@@ -41,15 +50,23 @@ const Preferences = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.put(`http://localhost:3000/tourist/${touristId}`, { 
-        preferencestags: selectedTags 
+      console.log('Submitting preferences:', {
+        preferencestags: selectedTags,
+        preferedhistoricaltags: selectedHistoricalTags
+      });
+
+      const response = await axios.put(`http://localhost:3000/tourist/${touristId}`, {
+        preferencestags: selectedTags,
+        preferedhistoricaltags: selectedHistoricalTags
       });
       
       if (response.data) {
         setSaveSuccess(true);
         setTimeout(() => setSaveSuccess(false), 3000);
+        console.log('Preferences saved successfully:', response.data);
       }
     } catch (error) {
+      console.error('Error saving preferences:', error);
       alert('Error updating preferences');
     }
   };
@@ -59,6 +76,16 @@ const Preferences = () => {
       return prev.includes(tagId)
         ? prev.filter(id => id !== tagId)
         : [...prev, tagId];
+    });
+  };
+
+  const handleHistoricalTagSelection = (tagId) => {
+    setSelectedHistoricalTags(prev => {
+      const newSelection = prev.includes(tagId)
+        ? prev.filter(id => id !== tagId)
+        : [...prev, tagId];
+      console.log('Updated historical tags selection:', newSelection);
+      return newSelection;
     });
   };
 
@@ -152,6 +179,53 @@ const Preferences = () => {
                         ) : (
                           <p className="mb-0 text-white">No tags selected</p>
                         )}
+                      </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <div className="d-flex align-items-center mb-3">
+                        <FaTags className="text-primary me-2" size={24} />
+                        <h3 className="mb-0">Historical Place Tags</h3>
+                      </div>
+                      
+                      <div className={styles.tagsGrid}>
+                        {historicalTags.map((tag) => (
+                          <div key={tag._id} className={styles.tagItem}>
+                            <input
+                              type="checkbox"
+                              id={`historical-${tag._id}`}
+                              className="btn-check"
+                              checked={selectedHistoricalTags.includes(tag._id)}
+                              onChange={() => handleHistoricalTagSelection(tag._id)}
+                              autoComplete="off"
+                            />
+                            <label
+                              className={`btn ${selectedHistoricalTags.includes(tag._id) ? 'btn-primary' : 'btn-outline-primary'} w-100`}
+                              htmlFor={`historical-${tag._id}`}
+                            >
+                              {selectedHistoricalTags.includes(tag._id) && <FaCheck className="me-2" />}
+                              {tag.name}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                      
+                      <div className={`${styles.selectedSection} bg-light p-3 rounded mb-4`}>
+                        <h4 className="mb-3 text-black">Selected Historical Tags</h4>
+                        <div className={styles.selectedTags}>
+                          {selectedHistoricalTags.length > 0 ? (
+                            selectedHistoricalTags.map(tagId => {
+                              const tag = historicalTags.find(t => t._id === tagId);
+                              return tag ? (
+                                <span key={tagId} className="badge bg-primary me-2 mb-2 p-2">
+                                  {tag.name}
+                                </span>
+                              ) : null;
+                            })
+                          ) : (
+                            <p className="mb-0 text-muted">No historical tags selected</p>
+                          )}
+                        </div>
                       </div>
                     </div>
 
