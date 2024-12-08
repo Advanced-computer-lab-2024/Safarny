@@ -45,10 +45,13 @@ const Profile = () => {
           audioRef.current.play();
         }
 
+        console.log("User data:", userData);
+        // console.log("User data:", userinfo);
         // Check if today is the user's birthday
-        if (userInfo.role === "Tourist") {
+        if (userData.role === "Tourist") {
           const today = new Date();
           const userBirthday = new Date(userData.DOB);
+          console.log("Today:", today, "User birthday:", userBirthday);
           if (today.getMonth() === userBirthday.getMonth() && today.getDate() === userBirthday.getDate()) {
             // Fetch promo codes
             const promoResponse = await fetch('/promocodes/promocodes');
@@ -68,11 +71,14 @@ const Profile = () => {
             });
 
             // Send email
-            await axios.post('/email/send-email', {
+            console.log("Sending promo code to user:", userData.email);
+            const emailResponse = await axios.post('/email/send-email', {
               to: userData.email,
               subject: 'Your Promo Code',
               text: `Congratulations! You have received a promo code: ${randomPromoCode.code}`
             });
+            console.log("Email response:", JSON.stringify(emailResponse.data, null, 2));
+            console.log("Promo code sent to user");
           }
         }
       } catch (error) {
