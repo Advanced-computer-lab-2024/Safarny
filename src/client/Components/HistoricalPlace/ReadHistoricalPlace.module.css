@@ -122,3 +122,29 @@
         margin-bottom: 2rem;
     }
 }
+
+.loadingContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--background-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Optional: Make the spinner larger */
+.spinner .spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
