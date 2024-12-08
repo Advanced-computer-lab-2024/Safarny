@@ -43,7 +43,6 @@ export default function MyBookingModal({
                                           currency,
                                           userId,
                                           desiredQuantities,
-                                          handleClearCart,
                                           bookingType,
                                           bookingId,
                                       }) {
@@ -182,7 +181,6 @@ export default function MyBookingModal({
                             desiredQuantities={desiredQuantities}
                             clickedSumit={clickedSumit}
                             setClickedSumit={setClickedSumit}
-                            handleClearCart={handleClearCart}
                         />
                     )}
                 </div>
@@ -397,12 +395,12 @@ function ConfirmationStep({
                 Order Summary
             </Typography>
             <List>
-                {cartItems.map((item) => (
-                    <ListItem key={item._id} className={styles.summaryItem}>
-                        {item.details} - {desiredQuantities[item._id] || 1} x {item.price}{" "}
-                        {item.currency}
-                    </ListItem>
-                ))}
+                {/*{cartItems.map((activity) => (*/}
+                {/*    <ListItem key={activity._id} className={styles.summaryItem}>*/}
+                {/*         {activity.price}{" "}*/}
+                {/*        {activity.currency}*/}
+                {/*    </ListItem>*/}
+                {/*))}*/}
                 {/* Promo Code Text Field */}
                 <ListItem className={styles.summaryItem}>
                     <TextField
@@ -536,48 +534,66 @@ function FinishStep({
                         desiredQuantities,
                         clickedSumit,
                         setClickedSumit,
-                        handleClearCart,
                     }) {
     const [errorMessage, setErrorMessage] = useState("");
 
-    const handleOrderSubmit = async () => {
-        setClickedSumit(true);
+    const handleConfirm = async () => {
+        console.log("User ID:", userId); // Log the userId
+        const bookingData = { tourist: userId, bookingDate, bookingHour };
+        if (!selectedAddress || !selectedPaymentMethod) {
+            alert("Please select both an address and a payment method.");
+            return;
+        }
         try {
-            const response = await axios.post(
-                "http://localhost:3000/tourist/order/checkout",
-                {
-                    userId,
-                    items: cartItems.map((item) => ({
-                        productId: item._id,
-                        name: item.details,
-                        quantity: desiredQuantities[item._id] || 1,
-                        price: item.price,
-                        currency: item.currency,
-                    })),
-                    deliveryAddress,
-                    paymentMethod,
-                    totalAmount: totalPrice,
-                    currency,
-                }
-            );
+            var response = null;
+            if (bookingType === "itinerary" || bookingType === "activity") {
+                bookingData[bookingType] = bookingId;
+                console.log("Booking created:", bookingData);
 
-            console.log("Order saved successfully:", response.data);
-
-            await handleClearCart();
-
-            if (onSuccess) onSuccess();
-        } catch (error) {
-            if (
-                error.response?.status === 400 &&
-                error.response?.data === "Insufficient funds" &&
-                paymentMethod === "wallet"
-            ) {
-                setErrorMessage("Insufficient funds for this order.");
-            } else {
-                console.error(
-                    "Error saving order:",
-                    error.response?.data || error.message
+                response = await axios.post(
+                    "http://localhost:3000/tourist/bookings",
+                    bookingData
                 );
+            } else if (bookingType === "historicalPlace") {
+                bookingData.historicalPlace = bookingId;
+                console.log("Booking created:", bookingData);
+
+                response = await axios.post(
+                    "http://localhost:3000/tourist/bookings/historicalPlace",
+                    bookingData
+                );
+            }
+
+            // After successful booking, send receipt email
+            if (response && response.data) {
+                try {
+                    const emailData = {
+                        bookingId: response.data._id,
+                        touristName: response.data.tourist.username,
+                        touristEmail: response.data.tourist.email,
+                        itemName: response.data[bookingType]?.name || response.data[bookingType]?.location,
+                        price: response.data[bookingType]?.price,
+                        currency: response.data[bookingType]?.currency || 'EGP',
+                        bookingDate: bookingData.bookingDate,
+                        type: bookingType.charAt(0).toUpperCase() + bookingType.slice(1),
+                        pointsEarned: response.data.pointsEarned || 0
+                    };
+
+                    await axios.post('http://localhost:3000/tourist/bookings/send-receipt', emailData);
+                    console.log('Receipt email sent successfully');
+                } catch (error) {
+                    console.error('Error sending receipt email:', error);
+                    // Don't throw error here as booking was successful
+                }
+            }
+
+            console.log("Booking created:", response.data);
+            onRequestClose();
+        } catch (error) {
+            if (error.response && error.response.status === 400) {
+                setErrorMessage(error.response.data.message);
+            } else {
+                console.error("Error creating booking:", error);
             }
         }
     };
@@ -607,7 +623,7 @@ function FinishStep({
                 </Typography>
             )}
             {!clickedSumit && (
-                <Button variant="contained" onClick={handleOrderSubmit}>
+                <Button variant="contained" onClick={handleConfirm}>
                     Submit Order
                 </Button>
             )}
