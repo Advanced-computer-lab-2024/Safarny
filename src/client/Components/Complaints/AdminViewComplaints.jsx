@@ -4,6 +4,8 @@ import Modal from 'react-modal';
 import Footer from "/src/client/Components/Footer/Footer";
 import Header from "/src/client/Components/Header/Header";
 import styles from "./AdminViewComplaints.module.css";
+import { Container, Row, Col, Form, Button, Card, Alert, Spinner } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 Modal.setAppElement('#root');
 
@@ -129,170 +131,197 @@ const AdminViewComplaints = () => {
         return complaint.status === filterStatus;
     });
 
-    if (loading) {
-        return <p className={styles.loading}>Loading...</p>;
-    }
-
-    if (error) {
-        return <p className={styles.error}>{error}</p>;
-    }
-
     return (
-        <div className={styles.container}>
+        <div className={styles.pageContainer} style={{ width: '100vw', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
             <Header />
-            <h2 className={styles.heading}>All Complaints</h2>
-            <div className={styles.select}>
-                <label>Sort by date: </label>
-                <select value={sortOrder} onChange={handleSortChange}>
-                    <option value="asc">Ascending</option>
-                    <option value="desc">Descending</option>
-                </select>
-                <label>Filter by status: </label>
-                <select value={filterStatus} onChange={handleFilterChange}>
-                    <option value="all">All</option>
-                    <option value="pending">Pending</option>
-                    <option value="resolved">Resolved</option>
-                </select>
-            </div>
-            {filteredComplaints.length === 0 ? (
-    <p className={styles.noComplaints}>No complaints found.</p>
-) : (
-    <ul className={styles.complaintsList}>
-    {filteredComplaints.map((complaint) => (
-        <li key={complaint._id} className={styles.complaintItem}>
-            <div className={styles.complaint}>
-                <h3 className={styles.title}>{complaint.title}</h3>
-                <p className={styles.body}>{complaint.body}</p>
-                <p className={styles.status}>Status: {complaint.status}</p>
-                <p className={styles.date}>Date: {new Date(complaint.date).toLocaleString()}</p>
-                <button onClick={() => handleEditClick(complaint)} className={styles.editButton}>
-                    Edit
-                </button>
-                <div className={styles.commentsSection}>
-                    <h4>Comments:</h4>
-                    {complaint.comments.length > 0 ? (
-                        complaint.comments.map((comment, index) => (
-                            <div key={index} className={styles.comment}>
-                                {editingComment &&
-                                editingComment.complaintId === complaint._id &&
-                                editingComment.commentIndex === index ? (
-                                    <div className={styles.editComment}>
-                                        <textarea
-                                            value={editCommentText}
-                                            onChange={handleEditCommentChange}
-                                            className={styles.commentEditInput}
-                                        />
-                                        <button
-                                            onClick={handleEditCommentSubmit}
-                                            className={styles.saveCommentButton}
-                                        >
-                                            Save
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <div className={styles.commentText}>
-                                        <p>{comment}</p>
-                                        <button
-                                            onClick={() =>
-                                                handleEditCommentClick(complaint._id, index, comment)
-                                            }
-                                            className={styles.editCommentButton}
-                                        >
-                                            Edit
-                                        </button>
-                                    </div>
-                                )}
+            
+            <Container fluid className={`${styles.mainContent} flex-grow-1 py-4`}>
+                <Card className={`${styles.contentCard} mb-4`}>
+                    <Card.Body>
+                        <h2 className={`${styles.heading} text-center mb-4`}>Complaints Management</h2>
+
+                        <Row className="mb-4">
+                            <Col md={6} className="mb-3 mb-md-0">
+                                <Form.Group>
+                                    <Form.Label>Sort by date</Form.Label>
+                                    <Form.Select 
+                                        value={sortOrder} 
+                                        onChange={handleSortChange}
+                                        className={styles.select}
+                                    >
+                                        <option value="asc">Ascending</option>
+                                        <option value="desc">Descending</option>
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Group>
+                                    <Form.Label>Filter by status</Form.Label>
+                                    <Form.Select 
+                                        value={filterStatus} 
+                                        onChange={handleFilterChange}
+                                        className={styles.select}
+                                    >
+                                        <option value="all">All</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="resolved">Resolved</option>
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+
+                        {loading ? (
+                            <div className="text-center py-5">
+                                <Spinner animation="border" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </Spinner>
                             </div>
-                        ))
-                    ) : (
-                        <p>No comments available.</p>
-                    )}
-                </div>
-            </div>
-        </li>
-    ))}
-</ul>
-)}
-            <Footer />
+                        ) : error ? (
+                            <Alert variant="danger">{error}</Alert>
+                        ) : filteredComplaints.length === 0 ? (
+                            <Alert variant="info">No complaints found.</Alert>
+                        ) : (
+                            <div className={styles.complaintsContainer}>
+                                <Row className="g-4">
+                                    {filteredComplaints.map((complaint) => (
+                                        <Col key={complaint._id} lg={4} md={6}>
+                                            <Card className={styles.complaintItem}>
+                                                <Card.Body>
+                                                    <Card.Title className={styles.title}>{complaint.title}</Card.Title>
+                                                    <Card.Text className={styles.body}>{complaint.body}</Card.Text>
+                                                    <div className={`${styles.status} mb-2`}>
+                                                        <span className={`badge ${complaint.status === 'resolved' ? 'bg-success' : 'bg-warning'}`}>
+                                                            {complaint.status}
+                                                        </span>
+                                                    </div>
+                                                    <div className={styles.date}>
+                                                        {new Date(complaint.date).toLocaleString()}
+                                                    </div>
+                                                    
+                                                    <div className={`${styles.commentsSection} mt-3`}>
+                                                        <h6 style={{color: 'white'}}>Comments ({complaint.comments.length})</h6>
+                                                        {complaint.comments.map((comment, index) => (
+                                                            <div key={index} className={styles.comment}>
+                                                                <p className="mb-1">{comment}</p>
+                                                                <Button 
+                                                                    variant="link" 
+                                                                    size="sm"
+                                                                    onClick={() => handleEditCommentClick(complaint._id, index, comment)}
+                                                                >
+                                                                    Edit
+                                                                </Button>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                    
+                                                    <Button 
+                                                        variant="primary" 
+                                                        className={`${styles.editButton} w-100 mt-3`}
+                                                        onClick={() => handleEditClick(complaint)}
+                                                    >
+                                                        Manage Complaint
+                                                    </Button>
+                                                </Card.Body>
+                                            </Card>
+                                        </Col>
+                                    ))}
+                                </Row>
+                            </div>
+                        )}
+                    </Card.Body>
+                </Card>
+            </Container>
+
             <Modal
                 isOpen={!!editingComplaint}
                 onRequestClose={() => setEditingComplaint(null)}
-                contentLabel="Edit Complaint"
-                style={{
-                    content: {
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        right: 'auto',
-                        bottom: 'auto',
-                        marginRight: '-50%',
-                        transform: 'translate(-50%, -50%)',
-                        background: 'white',
-                        padding: '20px',
-                        borderRadius: '10px',
-                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                        width: '600px',
-                        height: '370px',
-                        overflowY: 'auto',
-                        zIndex: 1000
-                    },
-                    overlay: {
-                        position: 'fixed',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        backgroundColor: 'rgba(0, 0, 0, 0.75)',
-                        zIndex: 999
-                    }
-                }}
+                className={styles.modal}
+                overlayClassName={styles.modalOverlay}
             >
                 {editingComplaint && (
-                    <div>
-                        <button
-                            onClick={() => setEditingComplaint(null)}
-                            className={styles.closeButton}
-                        >
-                            &times;
-                        </button>
-                        <h2>Edit Complaint</h2>
-                        <input
-                            type="text"
-                            name="title"
-                            value={editDetails.title}
-                            onChange={handleEditChange}
-                            style={{color: 'black'}}
-                        />
-                        <textarea
-                            name="body"
-                            value={editDetails.body}
-                            onChange={handleEditChange}
-                        />
-                        <select
-                            name="status"
-                            value={editDetails.status}
-                            onChange={handleEditChange}
-                        >
-                            <option value="pending">Pending</option>
-                            <option value="resolved">Resolved</option>
-                        </select>
-                        <button onClick={() => handleEditSubmit(editingComplaint)}>
-                            Save
-                        </button>
-                        <br/>
-                        <br/>
-                        <textarea
-                            placeholder="Add a new comment"
-                            value={newCommentText}
-                            onChange={handleNewCommentChange}
-                        />
-                        <br/>
-                        <button onClick={() => handleNewCommentSubmit(editingComplaint)}>
-                            Add Comment
-                        </button>
+                    <div className={styles.modalContent}>
+                        <div className="d-flex justify-content-between align-items-center mb-4">
+                            <h4 className="m-0">Edit Complaint</h4>
+                            <Button 
+                                variant="link" 
+                                className={styles.closeButton}
+                                onClick={() => setEditingComplaint(null)}
+                            >
+                                ×
+                            </Button>
+                        </div>
+
+                        <Form>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Title</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="title"
+                                    value={editDetails.title}
+                                    onChange={handleEditChange}
+                                />
+                            </Form.Group>
+
+                            <Form.Group className="mb-3">
+                                <Form.Label>Description</Form.Label>
+                                <Form.Control
+                                    as="textarea"
+                                    rows={3}
+                                    name="body"
+                                    value={editDetails.body}
+                                    onChange={handleEditChange}
+                                />
+                            </Form.Group>
+
+                            <Form.Group className="mb-3">
+                                <Form.Label>Status</Form.Label>
+                                <Form.Select
+                                    name="status"
+                                    value={editDetails.status}
+                                    onChange={handleEditChange}
+                                >
+                                    <option value="pending">Pending</option>
+                                    <option value="resolved">Resolved</option>
+                                </Form.Select>
+                            </Form.Group>
+
+                            <Form.Group className="mb-3">
+                                <Form.Label>Add Comment</Form.Label>
+                                <Form.Control
+                                    as="textarea"
+                                    rows={2}
+                                    placeholder="Add a new comment"
+                                    value={newCommentText}
+                                    onChange={handleNewCommentChange}
+                                />
+                            </Form.Group>
+
+                            <div className="d-flex gap-2 justify-content-end">
+                                <Button 
+                                    variant="secondary" 
+                                    onClick={() => setEditingComplaint(null)}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button 
+                                    variant="success"
+                                    onClick={() => handleNewCommentSubmit(editingComplaint)}
+                                >
+                                    Add Comment
+                                </Button>
+                                <Button 
+                                    variant="primary"
+                                    onClick={() => handleEditSubmit(editingComplaint)}
+                                >
+                                    Save Changes
+                                </Button>
+                            </div>
+                        </Form>
                     </div>
                 )}
             </Modal>
+
+            <Footer />
         </div>
     );
 };

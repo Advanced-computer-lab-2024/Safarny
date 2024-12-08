@@ -17,6 +17,17 @@ const SideBar = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
+  const menuItems = [
+    { icon: <FiHome className={styles.icon} />, text: "Dashboard", path: '/admin' },
+    { icon: <FiUserCheck className={styles.icon} />, text: "Tour Guides", path: '/tourguidesadmin' },
+    { icon: <FiUsers className={styles.icon} />, text: "Tourists", path: '/touristsadmin' },
+    { icon: <FiShoppingBag className={styles.icon} />, text: "Sellers", path: '/sellersadmin' },
+    { icon: <FiRadio className={styles.icon} />, text: "Advertisers", path: '/advertisersadmin' },
+    { icon: <FiShield className={styles.icon} />, text: "Admins", path: '/adminlist' },
+    { icon: <FiFlag className={styles.icon} />, text: "Tourism Governor", path: '/tourismgoverneradmin' },
+    { icon: <FiBarChart2 className={styles.icon} />, text: "Sales Report", path: '/salesReport' }
+  ];
+
   return (
     <div className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
       <div className={styles.header}>
@@ -31,45 +42,17 @@ const SideBar = () => {
       </div>
 
       <div className={styles.menuItems}>
-        <button className={styles.menuItem} onClick={() => navigate('/admin')}>
-          <FiHome className={styles.icon} />
-          <span>Dashboard</span>
-        </button>
-
-        <button className={styles.menuItem} onClick={() => navigate('/tourguidesadmin')}>
-          <FiUserCheck className={styles.icon} />
-          <span>Tour Guides</span>
-        </button>
-
-        <button className={styles.menuItem} onClick={() => navigate('/touristsadmin')}>
-          <FiUsers className={styles.icon} />
-          <span>Tourists</span>
-        </button>
-
-        <button className={styles.menuItem} onClick={() => navigate('/sellersadmin')}>
-          <FiShoppingBag className={styles.icon} />
-          <span>Sellers</span>
-        </button>
-
-        <button className={styles.menuItem} onClick={() => navigate('/advertisersadmin')}>
-          <FiRadio className={styles.icon} />
-          <span>Advertisers</span>
-        </button>
-
-        <button className={styles.menuItem} onClick={() => navigate('/adminlist')}>
-          <FiShield className={styles.icon} />
-          <span>Admins</span>
-        </button>
-
-        <button className={styles.menuItem} onClick={() => navigate('/tourismgoverneradmin')}>
-          <FiFlag className={styles.icon} />
-          <span>Tourism Governor</span>
-        </button>
-
-        <button className={styles.menuItem} onClick={() => navigate('/salesReport')}>
-          <FiBarChart2 className={styles.icon} />
-          <span>Sales Report</span>
-        </button>
+        {menuItems.map((item, index) => (
+          <button 
+            key={index}
+            className={styles.menuItem} 
+            onClick={() => navigate(item.path)}
+            data-tooltip={item.text}
+          >
+            {item.icon}
+            <span>{item.text}</span>
+          </button>
+        ))}
       </div>
     </div>
   );

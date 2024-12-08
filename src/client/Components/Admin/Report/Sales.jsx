@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Footer from '/src/client/Components/Footer/Footer';
 import Header from '/src/client/Components/Header/Header';
-import styles from "./Sales.module.css"; // You'll need to create this CSS module
+import SideBar from '../../SideBar/SideBar';
+import { Container, Row, Col, Card } from 'react-bootstrap';
+import styles from "./Sales.module.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Sales = () => {
     const [totalRev, setTotalRev] = useState(0);
@@ -65,79 +68,98 @@ const Sales = () => {
     };
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container} style={{ width: '100vw', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
             <Header />
-            <div className={styles.reportContainer}>
-                <h2 className={styles.heading}>System Revenue Report</h2>
+            
+            <div className={styles.contentWrapper}>
+                <SideBar />
                 
-                <div className={styles.statsGrid}>
-                    <div className={styles.statCard}>
-                        <h3 className={styles.statLabel}>Total Merchandise Revenue</h3>
-                        <div className={styles.statValue}>${totalRev}</div>
-                    </div>
-                    
-                    <div className={styles.statCard}>
-                        <h3 className={styles.statLabel}>Activity Revenue</h3>
-                        <div className={styles.statValue}>${activityRev}</div>
-                    </div>
-                    
-                    <div className={styles.statCard}>
-                        <h3 className={styles.statLabel}>Itinerary Revenue</h3>
-                        <div className={styles.statValue}>${itineraryRev}</div>
-                    </div>
+                <Container fluid className={styles.reportContainer}>
+                    <Card className={styles.headerCard}>
+                        <Card.Body>
+                            <h2 className={styles.heading}>System Revenue Analytics</h2>
+                            <p className={styles.subHeading}>Comprehensive financial overview of all revenue streams</p>
+                        </Card.Body>
+                    </Card>
 
-                    <div className={styles.statCard}>
-                        <h3 className={styles.statLabel}>Total System Revenue</h3>
-                        <div className={styles.statValue}>${itineraryRev + activityRev + totalRev}</div>
-                    </div>
-                </div>
-
-                <div className={styles.formGroup}>
-                    <h3 className={styles.filterTitle}>Filter by Period</h3>
-                    <div className={styles.filterControls}>
-                        <select
-                            className={styles.select}
-                            value={month}
-                            onChange={(e) => setMonth(e.target.value)}
-                        >
-                            <option value="">Select Month</option>
-                            {months.map((month) => (
-                                <option key={month.value} value={month.value}>
-                                    {month.label}
-                                </option>
-                            ))}
-                        </select>
+                    <div className={styles.statsGrid}>
+                        <Card className={`${styles.statCard} ${styles.primaryCard}`}>
+                            <Card.Body>
+                                <h3 className={styles.statLabel}>Total Merchandise Revenue</h3>
+                                <div className={styles.statValue}>${totalRev.toLocaleString()}</div>
+                            </Card.Body>
+                        </Card>
                         
-                        <select
-                            className={styles.select}
-                            value={year}
-                            onChange={(e) => setYear(e.target.value)}
-                        >
-                            <option value="">Select Year</option>
-                            {years.map((year) => (
-                                <option key={year} value={year}>
-                                    {year}
-                                </option>
-                            ))}
-                        </select>
+                        <Card className={`${styles.statCard} ${styles.secondaryCard}`}>
+                            <Card.Body>
+                                <h3 className={styles.statLabel}>Activity Revenue</h3>
+                                <div className={styles.statValue}>${activityRev.toLocaleString()}</div>
+                            </Card.Body>
+                        </Card>
                         
-                        <button className={styles.button} onClick={handleSubmit}>
-                            Generate Report
-                        </button>
-                    </div>
-                </div>
+                        <Card className={`${styles.statCard} ${styles.tertiaryCard}`}>
+                            <Card.Body>
+                                <h3 className={styles.statLabel}>Itinerary Revenue</h3>
+                                <div className={styles.statValue}>${itineraryRev.toLocaleString()}</div>
+                            </Card.Body>
+                        </Card>
 
-                {filteredRevenue > 0 && (
-                    <div className={styles.resultsSection}>
-                        <div className={styles.statsGrid}>
-                            <div className={styles.statCard}>
-                                <h3 className={styles.statLabel}>Filtered Revenue</h3>
-                                <div className={styles.statValue}>${filteredRevenue}</div>
+                        <Card className={`${styles.statCard} ${styles.totalCard}`}>
+                            <Card.Body>
+                                <h3 className={styles.statLabel}>Total System Revenue</h3>
+                                <div className={styles.statValue}>${(itineraryRev + activityRev + totalRev).toLocaleString()}</div>
+                            </Card.Body>
+                        </Card>
+                    </div>
+
+                    <Card className={styles.formGroup}>
+                        <Card.Body>
+                            <h3 className={styles.filterTitle}>Revenue Filter</h3>
+                            <div className={styles.filterControls}>
+                                <select
+                                    className={styles.select}
+                                    value={month}
+                                    onChange={(e) => setMonth(e.target.value)}
+                                >
+                                    <option value="">Select Month</option>
+                                    {months.map((month) => (
+                                        <option key={month.value} value={month.value}>
+                                            {month.label}
+                                        </option>
+                                    ))}
+                                </select>
+                                
+                                <select
+                                    className={styles.select}
+                                    value={year}
+                                    onChange={(e) => setYear(e.target.value)}
+                                >
+                                    <option value="">Select Year</option>
+                                    {years.map((year) => (
+                                        <option key={year} value={year}>
+                                            {year}
+                                        </option>
+                                    ))}
+                                </select>
+                                
+                                <button className={styles.button} onClick={handleSubmit}>
+                                    Generate Report
+                                </button>
                             </div>
-                        </div>
-                    </div>
-                )}
+                        </Card.Body>
+                    </Card>
+
+                    {filteredRevenue > 0 && (
+                        <Card className={`${styles.statCard} ${styles.resultCard}`}>
+                            <Card.Body>
+                                <h3 className={styles.statLabel}>Filtered Period Revenue</h3>
+                                <div className={styles.statValue}>${filteredRevenue.toLocaleString()}</div>
+                            </Card.Body>
+                        </Card>
+                    )}
+                </Container>
             </div>
+
             <Footer />
         </div>
     );

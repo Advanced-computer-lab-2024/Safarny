@@ -1,15 +1,51 @@
-import SideBar from '../SideBar/SideBar'
-import DataTable2 from '../Grids/TourGuideGrid'
+import React from 'react';
+import SideBar from '../SideBar/SideBar';
+import DataTable2 from '../Grids/TourGuideGrid';
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
+import { Container, Row, Col, Card } from 'react-bootstrap';
+import styles from './TourGuideAdmin.module.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const TourGuideAmin = () => {
+const TourGuideAdmin = () => {
   return (
-    <div style={{ display: 'flex' }}>
-      <SideBar />
-      <div style={{ marginLeft: '47px', padding: '20px' }}> {/* Adjust the margin */}
-        <DataTable2/>
-      </div>
-    </div>
-  )
-}
+    <div className={styles.pageContainer} style={{ width: '100vw', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <Header />
+      
+      <div className={styles.contentWrapper}>
+        <SideBar />
+        
+        <Container fluid className={styles.mainContent}>
+          <Row className="mb-4">
+            <Col>
+              <Card className={styles.headerCard}>
+                <Card.Body>
+                  <h2 className={styles.pageTitle}>Tour Guide Management</h2>
+                  <p className={styles.pageDescription}>
+                    Manage and oversee all tour guide information and assignments
+                  </p>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
 
-export default TourGuideAmin
+          <Row>
+            <Col>
+              <Card className={styles.contentCard}>
+                <Card.Body>
+                  <div className={styles.tableWrapper}>
+                    <DataTable2 />
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default TourGuideAdmin;

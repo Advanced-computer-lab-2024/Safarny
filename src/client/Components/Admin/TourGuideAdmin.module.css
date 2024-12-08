@@ -6,39 +6,157 @@
     --delete-button-color: #d32f2f;
     --update-button-color: #388e3c;
     --button-text-color: #fff;
-  }
-  
-  .container {
+    --primary-bg: #f8f9fa;
+    --card-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+.pageContainer {
+    background-color: var(--primary-bg);
+    overflow-x: hidden;
+}
+
+.contentWrapper {
     display: flex;
-  }
-  
-  .sidebar {
-    width: var(--sidebar-width);
-  }
-  
-  .content {
-    margin-left: var(--sidebar-width);
-    padding: var(--content-padding);
-  }
-  
-  .tableContainer {
-    height: 31.25rem; /* 500px converted to rem */
+    flex: 1;
+    position: relative;
+    margin-top: 80px;
+    min-height: calc(100vh - 160px);
+    justify-content: center;
+}
+
+.mainContent {
+    flex: 1;
+    padding: 2rem;
+    background-color: var(--primary-bg);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.headerCard {
+    border: none;
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+    background-color: #fff;
+    margin-bottom: 1.5rem;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.contentCard {
+    border: none;
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+    background-color: #fff;
+    min-height: 400px;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+}
+
+.pageTitle {
+    color: #2c3e50;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.pageDescription {
+    color: #7f8c8d;
+    font-size: 1rem;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.tableWrapper {
+    height: 100%;
     width: 100%;
-  }
-  
-  .buttonsContainer {
+    overflow: auto;
+    padding: 1rem;
+}
+
+.buttonsContainer {
     display: flex;
     gap: var(--button-spacing);
     margin-top: var(--button-margin-top);
-  }
-  
-  .deleteButton {
+}
+
+.deleteButton {
     background-color: var(--delete-button-color);
     color: var(--button-text-color);
-  }
-  
-  .updateButton {
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: opacity 0.3s ease;
+}
+
+.deleteButton:hover {
+    opacity: 0.9;
+}
+
+.updateButton {
     background-color: var(--update-button-color);
     color: var(--button-text-color);
-  }
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: opacity 0.3s ease;
+}
+
+.updateButton:hover {
+    opacity: 0.9;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .mainContent {
+        padding: 1rem;
+        margin: 0 1rem;
+    }
+
+    .headerCard,
+    .contentCard {
+        max-width: 100%;
+    }
+}
+
+.addButton {
+    margin-top: 1rem !important;
+    background-color: #1976d2 !important;
+    color: white !important;
+    transition: background-color 0.3s ease !important;
+}
+
+.addButton:hover {
+    background-color: #1565c0 !important;
+}
+
+.modalCard {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 500px;
+    background-color: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Add these to your existing responsive styles */
+@media (max-width: 768px) {
+    .modalCard {
+        width: 95%;
+        padding: 1.5rem;
+    }
+}
   

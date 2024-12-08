@@ -26,7 +26,7 @@ import ActivityCategory from './ActivityCategory';
 
 const Admin = () => {
   const location = useLocation();
-  const [activeView, setActiveView] = useState("");
+  const [activeView, setActiveView] = useState("posts");
   const { userId } = location.state || {};
   const [userInfo, setUserInfo] = useState({
     username: "",
@@ -75,7 +75,8 @@ const Admin = () => {
   };
 
   const handleManageCategoriesClick = () => {
-    setActiveView("categories");
+    setSelectedSection('categories');
+    setActiveView('categories');
   };
 
   const handleClearFilter = () => {
@@ -358,8 +359,12 @@ const Admin = () => {
     return 0;
   });
 
+  useEffect(() => {
+    console.log('Selected Section:', selectedSection);
+  }, [selectedSection]);
+
   return (
-    <div className={styles.container}>
+    <div className={styles.adminLayout}>
       <Navbar bg="light" expand="lg" className={`${styles.header} ${window.scrollY > 50 ? styles.translucent : ''}`}>
         <Container>
           <Navbar.Brand>
@@ -374,6 +379,9 @@ const Admin = () => {
               
               {/* Content Management Dropdown */}
               <NavDropdown title="Content Management" id="basic-nav-dropdown" color="light">
+                <NavDropdown.Item onClick={() => setSelectedSection('posts')}>
+                  Manage Posts
+                </NavDropdown.Item>
                 <NavDropdown.Item onClick={handleOpenModal}>Add Post</NavDropdown.Item>
                 <NavDropdown.Item onClick={handleOpenPromoCodeModal}>Add PromoCode</NavDropdown.Item>
                 <NavDropdown.Item onClick={() => setSelectedSection('tags')}>Manage Tags</NavDropdown.Item>
@@ -396,169 +404,338 @@ const Admin = () => {
         </Container>
       </Navbar>
 
-      <Container fluid className="mt-4" style={{ maxWidth: '1400px', margin: '0 auto' }}>
-        <Row>
-          {/* Sidebar */}
-            <SideBar className={`${styles.sidebar} position-fixed`} />
+      <div className={styles.mainContainer}>
+        <SideBar className={`${styles.sidebar} ${styles.overlaySidebar}`} />
 
-          {/* Main Content */}
-          <Col md={12}>
-            {/* User Stats Cards */}
+        <div className={styles.contentWrapper}>
+          <Container className={styles.dashboardContainer}>
             <Row className="mb-4">
-              <Col md={6}>
-                <Card className="h-100 shadow-sm">
+              <Col lg={3} md={6} className="mb-4">
+                <Card className={`${styles.statsCard} h-100`}>
                   <Card.Body>
-                    {loading ? (
-                      <div className="text-center">
-                        <CircularProgress />
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div>
+                        <h6 className="text-muted mb-2">Total Users</h6>
+                        <h3 className="mb-0">{totalUsers}</h3>
                       </div>
-                    ) : errorMessage ? (
-                      <Alert variant="danger">{errorMessage}</Alert>
-                    ) : (
-                      <>
-                        <Card.Title>User Statistics</Card.Title>
-                        <ListGroup variant="flush">
-                          <ListGroup.Item>Total Users: {totalUsers}</ListGroup.Item>
-                          <ListGroup.Item>Users This Month: {usersThisMonth}</ListGroup.Item>
-                        </ListGroup>
-                      </>
-                    )}
+                      <div className={`${styles.iconBox} ${styles.primaryBox}`}>
+                        <i className="fas fa-users"></i>
+                      </div>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col lg={3} md={6} className="mb-4">
+                <Card className={`${styles.statsCard} h-100`}>
+                  <Card.Body>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div>
+                        <h6 className="text-muted mb-2">Monthly Users</h6>
+                        <h3 className="mb-0">{usersThisMonth}</h3>
+                      </div>
+                      <div className={`${styles.iconBox} ${styles.successBox}`}>
+                        <i className="fas fa-user-plus"></i>
+                      </div>
+                    </div>
                   </Card.Body>
                 </Card>
               </Col>
             </Row>
 
-            {/* Filters Section */}
-            <Card className="mb-4 shadow-sm">
-              <Card.Body>
-                <Card.Title className="mb-3">Filters</Card.Title>
-                <Row>
-                  <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Control
-                        type="text"
-                        placeholder="Search by Name"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={3}>
-                    <Form.Group className="mb-3">
-                      <Form.Control
-                        type="number"
-                        placeholder="Min Price"
-                        value={minPrice}
-                        onChange={(e) => setMinPrice(e.target.value)}
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={3}>
-                    <Form.Group className="mb-3">
-                      <Form.Control
-                        type="number"
-                        placeholder="Max Price"
-                        value={maxPrice}
-                        onChange={(e) => setMaxPrice(e.target.value)}
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Select
-                        value={selectedCurrency}
-                        onChange={(e) => setSelectedCurrency(e.target.value)}
+            <Row className="mb-4">
+              <Col md={12}>
+                <Card className={styles.actionCard}>
+                  <Card.Body>
+                    <h5 className="mb-4">Quick Actions</h5>
+                    <div className="d-flex gap-3">
+                      <Button 
+                        variant="primary" 
+                        onClick={handleOpenModal}
+                        className={styles.actionButton}
                       >
-                        <option value="">Select Currency</option>
-                        {currencyCodes.map((code) => (
-                          <option key={code} value={code}>{code}</option>
-                        ))}
-                      </Form.Select>
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Check
-                      type="checkbox"
-                      label="Sort By Rating"
-                      checked={sortBy === 'rating'}
-                      onChange={(e) => setSortBy(e.target.checked ? 'rating' : '')}
-                    />
-                  </Col>
-                </Row>
-              </Card.Body>
-            </Card>
+                        <i className="fas fa-plus-circle me-2"></i>
+                        Add Post
+                      </Button>
+                      <Button 
+                        variant="success" 
+                        onClick={handleOpenPromoCodeModal}
+                        className={styles.actionButton}
+                      >
+                        <i className="fas fa-tag me-2"></i>
+                        Add Promo Code
+                      </Button>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
 
-            {/* Content Section */}
             {loading ? (
-              <div className="text-center my-5">
+              <div className={styles.loadingContainer}>
                 <CircularProgress />
               </div>
             ) : (
               <>
                 {selectedSection === 'posts' && (
-                  <Row>
-                    {sortedPosts.map((post) => (
-                      <Col key={post._id} lg={4} md={6} className="mb-4">
-                        <Card className="h-100 shadow-sm">
-                          <Card.Img 
-                            variant="top" 
-                            src={post.imageurl} 
-                            style={{ height: '200px', objectFit: 'cover' }}
-                          />
-                          <Card.Body>
-                            <Card.Title>{post.details}</Card.Title>
-                            <ListGroup variant="flush" className="mb-3">
-                              <ListGroup.Item>Price: {post.price} {post.currency}</ListGroup.Item>
-                              <ListGroup.Item>Quantity: {post.quantity}</ListGroup.Item>
-                              <ListGroup.Item>Purchased: {post.purchasedCount}</ListGroup.Item>
-                              <ListGroup.Item>Sales: {post.purchasedCount * post.price}</ListGroup.Item>
-                            </ListGroup>
+                  <>
+                    <Card className={`${styles.filterCard} mb-4`}>
+                      <Card.Body>
+                        <h5 className="mb-4">Advanced Filters</h5>
+                        <Row className="g-3">
+                          <Col lg={4} md={6}>
+                            <Form.Group>
+                              <Form.Control
+                                type="text"
+                                placeholder="Search by Name"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className={styles.filterInput}
+                              />
+                            </Form.Group>
+                          </Col>
+                          <Col lg={2} md={6}>
+                            <Form.Group>
+                              <Form.Control
+                                type="number"
+                                placeholder="Min Price"
+                                value={minPrice}
+                                onChange={(e) => setMinPrice(e.target.value)}
+                                className={styles.filterInput}
+                              />
+                            </Form.Group>
+                          </Col>
+                          <Col lg={2} md={6}>
+                            <Form.Group>
+                              <Form.Control
+                                type="number"
+                                placeholder="Max Price"
+                                value={maxPrice}
+                                onChange={(e) => setMaxPrice(e.target.value)}
+                                className={styles.filterInput}
+                              />
+                            </Form.Group>
+                          </Col>
+                          <Col lg={3} md={6}>
+                            <Form.Select
+                              value={selectedCurrency}
+                              onChange={(e) => setSelectedCurrency(e.target.value)}
+                              className={styles.filterInput}
+                            >
+                              <option value="">Select Currency</option>
+                              {currencyCodes.map((code) => (
+                                <option key={code} value={code}>{code}</option>
+                              ))}
+                            </Form.Select>
+                          </Col>
+                          <Col lg={1} md={12}>
                             <Form.Check
                               type="switch"
-                              id={`archive-switch-${post._id}`}
-                              label="Archive"
-                              checked={post.archived}
-                              onChange={(e) => handleArchiveToggle(post._id, e.target.checked)}
-                              className="mb-3"
+                              label="Rating"
+                              checked={sortBy === 'rating'}
+                              onChange={(e) => setSortBy(e.target.checked ? 'rating' : '')}
+                              className={styles.filterSwitch}
                             />
-                            <div className="d-flex justify-content-between">
-                              <Button 
-                                variant="outline-primary" 
-                                size="sm"
-                                onClick={() => handleEditPost(post)}
-                              >
-                                Edit
-                              </Button>
-                              <Button 
-                                variant="outline-danger" 
-                                size="sm"
-                                onClick={() => handleDeletePost(post._id)}
-                              >
-                                Delete
-                              </Button>
+                          </Col>
+                        </Row>
+                      </Card.Body>
+                    </Card>
+                    <Row className="g-4">
+                      {sortedPosts.map((post) => (
+                        <Col key={post._id} xl={3} lg={4} md={6}>
+                          <Card className={styles.postCard}>
+                            <div className={styles.postImageContainer}>
+                              <Card.Img 
+                                variant="top" 
+                                src={post.imageurl} 
+                                className={styles.postImage}
+                              />
+                              {post.archived && (
+                                <div className={styles.archivedBadge}>
+                                  Archived
+                                </div>
+                              )}
                             </div>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                    ))}
-                  </Row>
+                            <Card.Body>
+                              <Card.Title className={styles.postTitle}>{post.details}</Card.Title>
+                              <div className={styles.postStats}>
+                                <div className={styles.statItem}>
+                                  <span className="text-muted">Price:</span>
+                                  <span className="fw-bold">{post.price} {post.currency}</span>
+                                </div>
+                                <div className={styles.statItem}>
+                                  <span className="text-muted">Quantity:</span>
+                                  <span className="fw-bold">{post.quantity}</span>
+                                </div>
+                                <div className={styles.statItem}>
+                                  <span className="text-muted">Sales:</span>
+                                  <span className="fw-bold">{post.purchasedCount * post.price}</span>
+                                </div>
+                              </div>
+                              <Form.Check
+                                type="switch"
+                                id={`archive-switch-${post._id}`}
+                                label="Archive"
+                                checked={post.archived}
+                                onChange={(e) => handleArchiveToggle(post._id, e.target.checked)}
+                                className="mb-3"
+                              />
+                              <div className={styles.postActions}>
+                                <Button 
+                                  variant="outline-primary" 
+                                  size="sm"
+                                  onClick={() => handleEditPost(post)}
+                                  className={styles.actionBtn}
+                                >
+                                  <i className="fas fa-edit me-1"></i> Edit
+                                </Button>
+                                <Button 
+                                  variant="outline-danger" 
+                                  size="sm"
+                                  onClick={() => handleDeletePost(post._id)}
+                                  className={styles.actionBtn}
+                                >
+                                  <i className="fas fa-trash-alt me-1"></i> Delete
+                                </Button>
+                              </div>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                      ))}
+                    </Row>
+                  </>
                 )}
-                {selectedSection === 'tags' && <Tags />}
-                {selectedSection === 'ActivityCategory' && <ActivityCategory />}
+                {selectedSection === 'tags' && (
+                  <div className="mt-4">
+                    <Tags />
+                  </div>
+                )}
+                {selectedSection === 'ActivityCategory' && (
+                  <div className="mt-4">
+                    <div>Debug: Categories Section</div>
+                    <ActivityCategory />
+                  </div>
+                )}
               </>
             )}
-          </Col>
-        </Row>
-      </Container>
+          </Container>
+        </div>
+      </div>
 
       <Modal show={promoCodeModalOpen} onHide={handleClosePromoCodeModal} centered>
-        {/* ... Promo Code Modal content ... */}
+        <Modal.Header closeButton>
+          <Modal.Title>Add New Promo Code</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>Code</Form.Label>
+              <Form.Control
+                type="text"
+                value={promoCodeData.code}
+                onChange={(e) => setPromoCodeData({...promoCodeData, code: e.target.value})}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Discount Percentage</Form.Label>
+              <Form.Control
+                type="number"
+                value={promoCodeData.discountPercentage}
+                onChange={(e) => setPromoCodeData({...promoCodeData, discountPercentage: e.target.value})}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Expiry Date</Form.Label>
+              <Form.Control
+                type="date"
+                value={promoCodeData.expiryDate}
+                onChange={(e) => setPromoCodeData({...promoCodeData, expiryDate: e.target.value})}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Check
+                type="checkbox"
+                label="Activated"
+                checked={promoCodeData.activated}
+                onChange={(e) => setPromoCodeData({...promoCodeData, activated: e.target.checked})}
+              />
+            </Form.Group>
+          </Form>
+          {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClosePromoCodeModal}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleSubmitPromoCode}>
+            Add Promo Code
+          </Button>
+        </Modal.Footer>
       </Modal>
 
       <Modal show={openModal} onHide={handleCloseModal} centered>
-        {/* ... Add/Edit Post Modal content ... */}
+        <Modal.Header closeButton>
+          <Modal.Title>{editingPostId ? 'Edit Post' : 'Add New Post'}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>Details</Form.Label>
+              <Form.Control
+                type="text"
+                name="details"
+                value={currentPost.details}
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Price</Form.Label>
+              <Form.Control
+                type="number"
+                name="price"
+                value={currentPost.price}
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Currency</Form.Label>
+              <Form.Select
+                name="currency"
+                value={currentPost.currency}
+                onChange={handleInputChange}
+              >
+                <option value="">Select Currency</option>
+                {currencyCodes.map((code) => (
+                  <option key={code} value={code}>{code}</option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Quantity</Form.Label>
+              <Form.Control
+                type="number"
+                name="quantity"
+                value={currentPost.quantity}
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Image</Form.Label>
+              <Form.Control
+                type="file"
+                onChange={handleImageChange}
+              />
+            </Form.Group>
+          </Form>
+          {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleSubmitPost}>
+            {editingPostId ? 'Update' : 'Add'} Post
+          </Button>
+        </Modal.Footer>
       </Modal>
 
       <Footer />

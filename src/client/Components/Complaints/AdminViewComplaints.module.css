@@ -218,3 +218,145 @@
 .editButton:hover {
     background-color: var(--button-hover-bg-color);
 }
+
+.pageContainer {
+    background-color: #f8f9fa;
+    overflow-x: hidden;
+}
+
+.mainContent {
+    padding: 2rem;
+    background-color: #f8f9fa;
+}
+
+.contentCard {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+.heading {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.select {
+    border: 1.5px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 0.5rem;
+}
+
+.complaintsContainer {
+    margin-top: 2rem;
+}
+
+.complaintItem {
+    height: 100%;
+    border: none;
+    border-radius: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background-color: #121212;
+}
+
+.complaintItem:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.body {
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.status {
+    font-size: 0.9rem;
+}
+
+.date {
+    font-size: 0.85rem;
+    color: #e0e0e0;
+}
+
+.commentsSection {
+    background-color: #1e1e1e;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.comment {
+    padding: 0.5rem;
+    border-bottom: 1px solid #333;
+    color: white;
+}
+
+.comment:last-child {
+    border-bottom: none;
+}
+
+.editButton {
+    background-color: #3498db;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.editButton:hover {
+    background-color: #2980b9;
+}
+
+.modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.closeButton {
+    font-size: 1.5rem;
+    color: #7f8c8d;
+    text-decoration: none;
+    padding: 0;
+}
+
+.closeButton:hover {
+    color: #34495e;
+}
+
+@media (max-width: 768px) {
+    .mainContent {
+        padding: 1rem;
+    }
+    
+    .modal {
+        width: 95%;
+        padding: 1rem;
+    }
+}

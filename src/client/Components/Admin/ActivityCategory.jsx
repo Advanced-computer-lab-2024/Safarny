@@ -3,14 +3,17 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
 const ActivityCategory = () => {
+    console.log('ActivityCategory component mounted');
     const [category, setCategory] = useState([]);
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchcategory = async () => {
+        console.log('Fetching categories...');
+        const fetchCategories = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/admin/category/'); // Ensure this is the correct endpoint
+                const response = await axios.get('/admin/category/');
+                console.log('Categories response:', response.data);
                 if (Array.isArray(response.data)) {
                     setCategory(response.data);
                 } else {
@@ -23,7 +26,7 @@ const ActivityCategory = () => {
             }
         };
 
-        fetchcategory();
+        fetchCategories();
     }, []);
 
     const handleDelete = async (id) => {
