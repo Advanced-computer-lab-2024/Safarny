@@ -16,6 +16,8 @@
   background-attachment: fixed; /* Optional: adds parallax effect */
   min-height: 100vh;
   width: 100vw;
+  display: flex;
+  flex-direction: column;
   position: relative;
 }
 
@@ -237,9 +239,106 @@
   color: var(--card-text-color);
 }
 
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
 
+.dropdownToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.dropdownToggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dropdownToggle i {
+  transition: transform 0.3s ease;
+}
+
+.dropdown.show .dropdownToggle i {
+  transform: rotate(180deg);
+}
+
+/* Add a subtle indicator */
+.dropdownToggle::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background-color: white;
+  transition: width 0.3s ease;
+}
+
+.dropdownToggle:hover::after {
+  width: 80%;
+}
+
+/* Make the dropdown menu more visible */
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 0.75rem;
+  min-width: 220px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dropdownMenu::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 20px;
+  width: 12px;
+  height: 12px;
+  background-color: white;
+  transform: rotate(45deg);
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dropdownMenu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  color: var(--text-color);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.dropdownItem:hover {
+  background-color: rgba(149, 142, 250, 0.1);
+  color: var(--accent-color);
+}
+
+/* Mobile responsiveness */
 @media (max-width: 768px) {
-  
   .features {
     padding: 1rem;
     gap: 1rem;
@@ -252,7 +351,6 @@
   .cardOverlay {
     transform: translateY(0);
   }
-
 
   .cardArrow {
     opacity: 1;
@@ -293,5 +391,25 @@
   .navOpen {
     display: flex;
     transform: translateY(0);
+  }
+
+  .dropdownMenu {
+    position: static;
+    background-color: transparent;
+    box-shadow: none;
+    padding: 0;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .dropdownItem {
+    color: white;
+    padding: 0.5rem 1rem;
+  }
+
+  .dropdownItem:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
   }
 }

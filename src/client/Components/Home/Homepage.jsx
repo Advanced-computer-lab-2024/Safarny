@@ -13,9 +13,14 @@ import Footer from '/src/client/components/Footer/Footer';
 
 const Homepage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
+  };
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
   };
 
   useEffect(() => {
@@ -54,8 +59,25 @@ const Homepage = () => {
           <div className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
             <Link to="/GuidePageGuest" className={styles.button}>Guide Page</Link>
             <Link to="/signin" className={styles.button}>Sign In</Link>
-            <Link to="/signup" className={styles.button}>Sign Up</Link>
-            <Link to="/signupextra" className={styles.button}>Sign Up Extra</Link>
+            
+            <div className={styles.dropdown}>
+              <button 
+                className={`${styles.button} ${styles.dropdownToggle}`}
+                onClick={toggleDropdown}
+              >
+                Sign Up Options <i className="fas fa-caret-down ms-2"></i>
+              </button>
+              <div className={`${styles.dropdownMenu} ${dropdownOpen ? styles.show : ''}`}>
+                <Link to="/signup" className={styles.dropdownItem}>
+                  <i className="fas fa-user me-2"></i>
+                  Sign Up as Tourist
+                </Link>
+                <Link to="/signupextra" className={styles.dropdownItem}>
+                  <i className="fas fa-briefcase me-2"></i>
+                  Sign Up as Business
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </header>
