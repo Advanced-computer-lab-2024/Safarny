@@ -39,29 +39,29 @@ const Notifications = () => {
   const unreadNotifications = notifications.filter(notification => !notification.read);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.notificationsContainer}>
       <Header />
-      <main className={styles.main}>
-        <div className={styles.notificationHeader}>
-          <h1 className={styles.heading}>Notifications</h1>
-          <span className={styles.notificationCount}>
+      <main className={styles.notificationsMain}>
+        <div className={styles.notificationsHeader}>
+          <h1 className={styles.notificationsHeading}>Notifications</h1>
+          <span className={styles.notificationsCount}>
             {unreadNotifications.length} unread
           </span>
         </div>
         {unreadNotifications.length > 0 ? (
-          <ul className={styles.notificationList}>
+          <ul className={styles.notificationsList}>
             {unreadNotifications.map(notification => (
-              <li key={notification._id} className={styles.notificationItem}>
-                <div className={styles.notificationContent}>
-                  <h2 className={styles.title}>{notification.title}</h2>
-                  <p className={styles.message}>{notification.message}</p>
-                  <p className={styles.timestamp}>
+              <li key={notification._id} className={styles.notificationsItem}>
+                <div className={styles.notificationsContent}>
+                  <h2 className={styles.notificationsTitle}>{notification.title}</h2>
+                  <p className={styles.notificationsMessage}>{notification.message}</p>
+                  <p className={styles.notificationsTimestamp}>
                     {new Date(notification.createdAt).toLocaleDateString()}
                   </p>
                 </div>
                 {!notification.read && (
                   <button
-                    className={styles.markAsReadButton}
+                    className={styles.notificationsReadButton}
                     onClick={() => markAsRead(notification._id)}
                   >
                     Mark as Read
@@ -71,7 +71,7 @@ const Notifications = () => {
             ))}
           </ul>
         ) : (
-          <p className={styles.noNotifications}>No unread notifications found.</p>
+          <p className={styles.noNotificationsMessage}>No unread notifications found.</p>
         )}
       </main>
       <Footer />
