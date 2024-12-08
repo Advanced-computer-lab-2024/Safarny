@@ -18,7 +18,7 @@ import flight from '/src/client/Assets/Img/flight2.png';
 import hotel from '/src/client/Assets/Img/hotel2.png';
 import trans from '/src/client/Assets/Img/trans2.png';
 import book from '/src/client/Assets/Img/mybooks2.png';
-import open1 from '/src/client/Assets/Img/open1.png';
+import open from '/src/client/Assets/Img/open.png';
 import open3 from '/src/client/Assets/Img/open3.png';
 import open4 from '/src/client/Assets/Img/open4.png';
 import pref from '/src/client/Assets/Img/pref.png';
@@ -64,7 +64,7 @@ const GuidePage = () => {
                         </p>
                         <div className={styles.imageContainer}>
                             <img
-                                src={open1}
+                                src={open}
                                 alt="Sidebar navigation"
                                 className={styles.stepImage}
                             />
@@ -74,10 +74,10 @@ const GuidePage = () => {
                     <li className={styles.instructionItem}>
                         <div className={styles.stepHeader}>
                             <span className={styles.stepNumber}>3</span>
-                            <h3 className={styles.stepTitle}>Products</h3>
+                            <h3 className={styles.stepTitle}>Shop</h3>
                         </div>
                         <p className={styles.stepContent}>
-                            Click on Products
+                            Click on Shop
                         </p>
                         <p className={styles.stepContent}>
                             Here you can check all of the products:
