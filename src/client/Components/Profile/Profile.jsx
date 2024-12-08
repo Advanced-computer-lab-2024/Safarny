@@ -49,45 +49,46 @@ const Profile = () => {
         console.log("User data:", userData);
         // Check if today is the user's birthday
         if (userData.role === "Tourist") {
-          const today = new Date();
-          const userBirthday = new Date(userData.DOB);
-          console.log("Today:", today, "User birthday:", userBirthday);
-          if (today.getMonth() === userBirthday.getMonth() && today.getDate() === userBirthday.getDate()) {
-            // Fetch promo codes
-            const promoResponse = await fetch('/promocodes/promocodes');
-            if (!promoResponse.ok) {
-              throw new Error("Failed to fetch promo codes");
-            }
-            const promoCodes = await promoResponse.json();
+  const today = new Date();
+  const userBirthday = new Date(userData.DOB);
+  console.log("Today:", today, "User birthday:", userBirthday);
+  if (today.getMonth() === userBirthday.getMonth() && today.getDate() === userBirthday.getDate()) {
+    // Fetch promo codes
+    const promoResponse = await axios.get('/promocodes/promocodes');
+    if (!promoResponse.data || promoResponse.data.length === 0) {
+      console.log("No promo codes available");
+      return;
+    }
+    const promoCodes = promoResponse.data;
 
-            // Select a random promo code
-            const randomPromoCode = promoCodes[Math.floor(Math.random() * promoCodes.length)];
+    // Select a random promo code
+    const randomPromoCode = promoCodes[Math.floor(Math.random() * promoCodes.length)];
 
-            // Send notification
-            await axios.post('/notification/create', {
-              title: 'Promo Code',
-              userId,
-              message: `You have received a promo code: ${randomPromoCode.code}`
-            });
+    // Send notification
+    await axios.post('/notification/create', {
+      title: 'Promo Code',
+      userId,
+      message: `You have received a promo code: ${randomPromoCode.code}`
+    });
 
-            // Send email
-            console.log("Sending promo code to user:", userData.email);
-            const emailResponse = await axios.post('/email/send-email', {
-              to: userData.email,
-              subject: 'Your Promo Code',
-              text: `Congratulations! You have received a promo code: ${randomPromoCode.code}`
-            });
-            console.log("Email response:", JSON.stringify(emailResponse.data, null, 2));
-            console.log("Promo code sent to user");
+    // Send email
+    console.log("Sending promo code to user:", userData.email);
+    const emailResponse = await axios.post('/email/send-email', {
+      to: userData.email,
+      subject: 'Your Promo Code',
+      text: `Congratulations! You have received a promo code: ${randomPromoCode.code}`
+    });
+    console.log("Email response:", JSON.stringify(emailResponse.data, null, 2));
+    console.log("Promo code sent to user");
 
-            // Add promo code to user's array of promos
-            await axios.put(`/tourist/${userId}`, {
-              promos: [...userData.promos, randomPromoCode.code]
-            });
+    // Add promo code to user's array of promos
+    await axios.put(`/tourist/${userId}`, {
+      promos: [...userData.promos, randomPromoCode._id]
+    });
 
-            console.log("Promo code added to user's promos");
-          }
-        }
+    console.log("Promo code added to user's promos");
+  }
+}
       } catch (error) {
         console.error("Error fetching user data:", error);
         setLoading(false); // Set loading to false in case of error
