@@ -28,3 +28,26 @@
     margin: 1rem 0;
     padding-left: 1.5rem;
   }
+
+  .stepSection {
+    margin-bottom: 40px;
+  }
+
+  .stepHeader {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .stepNumber {
+    background-color: #2196f3;
+    color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }

@@ -5,19 +5,78 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styles from "./GuidePage.module.css";
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
-import photo from '/src/client/Assets/Img/test.png';
+import photo from '/src/client/Assets/Img/Sign up.png';
+import photo1 from '/src/client/Assets/Img/Home.png';
 
 const GuidePage = () => {
     return (
         <div className={styles.container}>
             <Header />
-            <main style={{ flexGrow: 1 }}>
-                <h2>Steps to enjoy the trip</h2>
-                <p style={{ color: 'white' }}>Please read the following steps carefully:</p>
-                <ul style={{ listStyleType: 'none' }}>
-                <li>Steps to follow if you are a tourist:</li>
-                    <li>Step 1: Click on Sign Up</li>
-                    <li>Step 2: Fill in the required information as seen below:</li>
+            <main className={styles.mainContent} style={{ flexGrow: 1 }}>
+                <h1 style={{ 
+                    textAlign: 'center', 
+                    borderBottom: '2px solid #2196f3',
+                    paddingBottom: '10px',
+                    marginBottom: '30px'
+                }}>
+                    Welcome to Your Travel Guide
+                </h1>
+                
+                <div style={{ 
+                    backgroundColor: '#333',
+                    padding: '15px',
+                    borderRadius: '5px',
+                    marginBottom: '30px'
+                }}>
+                    <p style={{ color: '#fff', margin: 0 }}>
+                        Follow these simple steps to make the most of your journey
+                    </p>
+                </div>
+
+                <div className={styles.stepSection}>
+                    <div className={styles.stepHeader}>
+                        <span className={styles.stepNumber}>1</span>
+                        <h2>Getting Started</h2>
+                    </div>
+                    
+                    <div style={{ 
+                        backgroundColor: '#333',
+                        padding: '15px',
+                        borderRadius: '5px',
+                        marginBottom: '20px'
+                    }}>
+                        <p style={{ color: '#fff', margin: 0 }}>
+                            Click on Sign up in the Home Page:
+                        </p>
+                    </div>
+
+                    <img
+                            src={photo1}
+                            alt="Monument"
+                            style={{
+                                display: 'block',
+                                margin: '10px auto',
+                                maxWidth: '100%',
+                                height: 'auto'
+                            }}
+                        />
+
+                    <div className={styles.stepHeader}>
+                        <span className={styles.stepNumber}>2</span>
+                        <h2>Fill in with your credentials</h2>
+                    </div>
+
+                    <div style={{ 
+                        backgroundColor: '#333',
+                        padding: '15px',
+                        borderRadius: '5px',
+                        marginBottom: '20px'
+                    }}>
+                        <p style={{ color: '#fff', margin: 0 }}>
+                            All of your credentials and important information should be typed below:
+                        </p>
+                    </div>
+
                     <img
                             src={photo}
                             alt="Monument"
@@ -28,9 +87,12 @@ const GuidePage = () => {
                                 height: 'auto'
                             }}
                         />
-                    <li>Step 3: Read the terms and conditions</li>
-                    <li>Step 4: Click on Sign Up</li>
-                </ul>
+
+                    <div className={styles.stepHeader}>
+                        <span className={styles.stepNumber}>3</span>
+                        <h2>Click on Sign Up</h2>
+                    </div>
+                </div>
             </main>
             <Footer />
         </div>
