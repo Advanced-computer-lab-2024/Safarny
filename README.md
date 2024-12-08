@@ -13,7 +13,13 @@ The Safarny project aims to revolutionize the travel planning experience by offe
 CommonJs
 
 ### Screenshots
-Provide screenshots or a video demonstrating how the system looks and works.
+
+![act.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/act.png)
+![Home.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/Home.png)
+![Iti2.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/Iti2.png)
+![pref.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/pref.png)
+
+
 
 ### Tech/Framework Used
 - [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)

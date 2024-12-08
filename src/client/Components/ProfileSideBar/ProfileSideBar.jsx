@@ -32,21 +32,20 @@ const ProfileSideBar = ({ userId, userInfo }) => {
 
     // Common navigation items that appear for all roles
     const commonItems = [
-        // { name: "Back", icon: <FaArrowLeft />, action: () => navigate(-1) },
-        { name: "Products", icon: <FaStore />, action: () => navigate('/products', { state: { userId } }) },
         { name: "Update Profile", icon: <FaCog />, action: () => {
-            localStorage.setItem('userId', userId);
-            window.location.href = '/UpdateProfile';
-        }},
+                localStorage.setItem('userId', userId);
+                window.location.href = '/UpdateProfile';
+            }},
     ];
+
+    // Add "Products" to commonItems for Tourist and Seller
+    if (userInfo.role === 'Tourist') {
+        commonItems.push({ name: "Search", icon: <FaSearch />, action: () => navigate('/Search') });
+        commonItems.push({ name: "Shop", icon: <FaStore />, action: () => navigate('/products', { state: { userId } }) });
+    }
 
     const menuItems = {
         Tourist: [
-            {
-                name: "Search", // Search button for Tourist role
-                icon: <FaSearch />,
-                action: () => navigate('/Search'),
-            },
             {
                 title: "Bookings & Services",
                 icon: <FaBook />,
@@ -85,6 +84,7 @@ const ProfileSideBar = ({ userId, userInfo }) => {
                     { name: "Add Product", icon: <FaPlus />, path: '/create-post' },
                     { name: "My Products", icon: <FaList />, path: '/seller' },
                     { name: "Sales Report", icon: <FaChartLine />, path: '/sellerSales' },
+                    { name: "Shop", icon: <FaStore />, path: '/products' },
                 ]
             }
         ],
@@ -147,14 +147,6 @@ const ProfileSideBar = ({ userId, userInfo }) => {
                     </div>
 
                     <div className={styles.menuContainer}>
-                        {userInfo.role === 'Tourist' && (
-                            <div className={styles.menuSection}>
-                                <button className={styles.menuItem} onClick={menuItems.Tourist[0].action}>
-                                    {menuItems.Tourist[0].icon}
-                                    <span>{menuItems.Tourist[0].name}</span>
-                                </button>
-                            </div>
-                        )}
                         {/* Common Actions */}
                         <div className={styles.menuSection}>
                             {commonItems.map((item, index) => (
@@ -171,7 +163,7 @@ const ProfileSideBar = ({ userId, userInfo }) => {
 
                         {/* Role Specific Menu */}
                         <div className={styles.menuSection}>
-                            {menuItems[userInfo.role]?.slice(1)?.map((menu, index) => ( // Skip the first item (search) for Tourist
+                            {menuItems[userInfo.role]?.map((menu, index) => (
                                 <div key={index} className={styles.menuGroup}>
                                     <button
                                         className={styles.menuItem}
