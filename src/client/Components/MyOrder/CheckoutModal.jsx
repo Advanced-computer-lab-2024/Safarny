@@ -30,8 +30,13 @@ import {
 } from "@mui/icons-material";
 import styles from "./CheckoutModal.module.css";
 import axios from "axios";
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  Elements,
+  CardElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
 
 // Initialize Stripe (put this outside your component)
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY); // Replace with your Stripe publishable key
@@ -73,12 +78,13 @@ export default function CheckoutModal({
     try {
       // Call the backend to check if the promo code exists
       const response = await axios.get(`/admin/promocodes/${promoCode}`);
-  
+
       // If promo code exists, apply the discount
       if (response.data) {
         const discountPercentage = response.data.discountPercentage;
-        const discountedPrice = totalPrice - (totalPrice * discountPercentage) / 100;
-        
+        const discountedPrice =
+          totalPrice - (totalPrice * discountPercentage) / 100;
+
         // Update the total price after applying the discount
         setTotalPrice(discountedPrice); // Correctly update the state
         setError(""); // Clear any previous errors
@@ -94,7 +100,7 @@ export default function CheckoutModal({
       console.log(err);
     }
   };
-  
+
   const handleClose = () => {
     setOpen(false);
     if (onClose) onClose();
@@ -108,8 +114,9 @@ export default function CheckoutModal({
     const Icon = icons[step];
     return (
       <div
-        className={`${styles.stepIcon} ${activeStep >= step ? styles.stepIconActive : ""
-          }`}
+        className={`${styles.stepIcon} ${
+          activeStep >= step ? styles.stepIconActive : ""
+        }`}
       >
         <Icon />
       </div>
@@ -204,12 +211,12 @@ export default function CheckoutModal({
   );
 }
 
-function DeliveryStep({ 
-  onValidationChange, 
- handleDeliveryChange, 
+function DeliveryStep({
+  onValidationChange,
+  handleDeliveryChange,
   userId,
   deliveryAddress,
-  setDeliveryAddress 
+  setDeliveryAddress,
 }) {
   const [userAddresses, setUserAddresses] = useState([]);
   const [showNewAddressForm, setShowNewAddressForm] = useState(false);
@@ -222,10 +229,12 @@ function DeliveryStep({
 
   const fetchAddresses = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/tourist/${userId}`);
+      const response = await axios.get(
+        `http://localhost:3000/tourist/${userId}`
+      );
       setUserAddresses(response.data.addresses || []);
     } catch (error) {
-      console.error('Error fetching addresses:', error);
+      console.error("Error fetching addresses:", error);
     }
   };
 
@@ -248,8 +257,6 @@ function DeliveryStep({
     });
   };
 
-  
-  
   const handleSaveNewAddress = async () => {
     if (!newAddress.trim()) {
       alert("Please enter an address");
@@ -258,27 +265,28 @@ function DeliveryStep({
 
     try {
       // Get current user data
-      const response = await axios.get(`http://localhost:3000/tourist/${userId}`);
+      const response = await axios.get(
+        `http://localhost:3000/tourist/${userId}`
+      );
       const currentAddresses = response.data.addresses || [];
-      
+
       // Update user profile with new address
       await axios.put(`http://localhost:3000/tourist/${userId}`, {
-        addresses: [...currentAddresses, newAddress]
+        addresses: [...currentAddresses, newAddress],
       });
 
       // Refresh addresses list
       await fetchAddresses();
-      
+
       // Select the newly added address
       handleAddressSelect(newAddress);
-      
+
       // Clear form and return to address selection
       setNewAddress("");
       setShowNewAddressForm(false);
-
     } catch (error) {
-      console.error('Error saving new address:', error);
-      alert('Failed to save new address');
+      console.error("Error saving new address:", error);
+      alert("Failed to save new address");
     }
   };
 
@@ -354,7 +362,10 @@ function DeliveryStep({
             fullWidth
             value={deliveryAddress.city}
             onChange={(e) => {
-              const newDeliveryAddress = { ...deliveryAddress, city: e.target.value };
+              const newDeliveryAddress = {
+                ...deliveryAddress,
+                city: e.target.value,
+              };
               setDeliveryAddress(newDeliveryAddress);
               handleDeliveryChange("city", e.target.value);
             }}
@@ -366,7 +377,10 @@ function DeliveryStep({
             fullWidth
             value={deliveryAddress.postcode}
             onChange={(e) => {
-              const newDeliveryAddress = { ...deliveryAddress, postcode: e.target.value };
+              const newDeliveryAddress = {
+                ...deliveryAddress,
+                postcode: e.target.value,
+              };
               setDeliveryAddress(newDeliveryAddress);
               handleDeliveryChange("postcode", e.target.value);
             }}
@@ -401,22 +415,22 @@ function ConfirmationStep({
         ))}
         {/* Promo Code Text Field */}
         <ListItem className={styles.summaryItem}>
-      <TextField
-        label="Promo Code"
-        variant="outlined"
-        value={promoCode}
-        onChange={(e) => setPromoCode(e.target.value)}
-        fullWidth
-      />
-      <Button
-        variant="contained"
-        onClick={handleApplyPromoCode}
-        disabled={!promoCode.trim()}
-        className={styles.buttonContainer} // Make sure this is defined in your styles
-      >
-        Apply
-      </Button>
-    </ListItem>
+          <TextField
+            label="Promo Code"
+            variant="outlined"
+            value={promoCode}
+            onChange={(e) => setPromoCode(e.target.value)}
+            fullWidth
+          />
+          <Button
+            variant="contained"
+            onClick={handleApplyPromoCode}
+            disabled={!promoCode.trim()}
+            className={styles.buttonContainer} // Make sure this is defined in your styles
+          >
+            Apply
+          </Button>
+        </ListItem>
 
         <ListItem className={`${styles.summaryItem} ${styles.totalPrice}`}>
           <ListItemText primary="Total" />
@@ -425,7 +439,6 @@ function ConfirmationStep({
           </Typography>
         </ListItem>
       </List>
-      
     </div>
   );
 }
@@ -436,8 +449,11 @@ function PaymentStep({ onValidationChange, userId, handlePaymentChange }) {
   });
 
   const handleInputChange = (field, value) => {
-    setFormValues((prev) => ({ ...prev, [field]: value }));
-    handlePaymentChange(formValues.paymentMethod);
+    setFormValues((prev) => {
+      const newFormValues = { ...prev, [field]: value };
+      handlePaymentChange(newFormValues.paymentMethod);
+      return newFormValues;
+    });
   };
 
   return (
@@ -459,11 +475,7 @@ function PaymentStep({ onValidationChange, userId, handlePaymentChange }) {
             control={<Radio />}
             label="Cash on Delivery"
           />
-          <FormControlLabel 
-            value="wallet" 
-            control={<Radio />} 
-            label="Wallet" 
-          />
+          <FormControlLabel value="wallet" control={<Radio />} label="Wallet" />
         </RadioGroup>
       </FormControl>
 
@@ -491,7 +503,7 @@ function CreditCardForm({ onValidationChange }) {
     // Update validation state whenever the card element changes
     if (elements) {
       const card = elements.getElement(CardElement);
-      card.on('change', (event) => {
+      card.on("change", (event) => {
         onValidationChange(2, event.complete);
         setError(event.error ? event.error.message : null);
       });
@@ -504,14 +516,14 @@ function CreditCardForm({ onValidationChange }) {
         options={{
           style: {
             base: {
-              fontSize: '16px',
-              color: '#424770',
-              '::placeholder': {
-                color: '#aab7c4',
+              fontSize: "16px",
+              color: "#424770",
+              "::placeholder": {
+                color: "#aab7c4",
               },
             },
             invalid: {
-              color: '#9e2146',
+              color: "#9e2146",
             },
           },
         }}

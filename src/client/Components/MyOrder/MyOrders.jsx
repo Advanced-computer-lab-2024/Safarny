@@ -83,6 +83,11 @@ export default function MyOrders() {
     setExpandedOrderId((prev) => (prev === orderId ? null : orderId));
   };
 
+  // Sort orders by date (most recent first)
+  const sortedOrders = [...orders].sort((a, b) => {
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
+
   return (
     <div className={styles.container}>
       <Header />
@@ -90,7 +95,7 @@ export default function MyOrders() {
         <h1 className={styles.headerTitle}>My Orders</h1>
         {orders.length > 0 ? (
           <div className={styles.orderList}>
-            {orders.map((order) => (
+            {sortedOrders.map((order) => (
               <div key={order._id} className={styles.orderCard}>
                 <div className={styles.orderDetails}>
                   <h2>Order ID: {order._id}</h2>
