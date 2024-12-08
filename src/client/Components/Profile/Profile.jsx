@@ -79,6 +79,13 @@ const Profile = () => {
             });
             console.log("Email response:", JSON.stringify(emailResponse.data, null, 2));
             console.log("Promo code sent to user");
+
+            // Add promo code to user's array of promos
+            await axios.put(`/tourist/${userId}`, {
+              promos: [...userData.promos, randomPromoCode.code]
+            });
+
+            console.log("Promo code added to user's promos");
           }
         }
       } catch (error) {
