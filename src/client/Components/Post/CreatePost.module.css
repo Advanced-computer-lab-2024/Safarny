@@ -98,3 +98,91 @@ input[type="text"], textarea {
 .dropdownMenuItem {
   color: black;
 }
+
+.pageWrapper {
+  width: 100vw;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  overflow-x: hidden;
+}
+
+.mainContent {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.formCard {
+  background-color: white;
+  border: none;
+  border-radius: 1rem;
+}
+
+.imageUpload {
+  text-align: center;
+}
+
+.uploadButton {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: #e9ecef;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.uploadButton:hover {
+  background-color: #dee2e6;
+}
+
+.imagePreviewContainer {
+  margin-bottom: 1rem;
+  max-width: 300px;
+  width: 100%;
+}
+
+.imagePreview {
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  object-fit: cover;
+}
+
+.submitButton {
+  padding: 0.75rem;
+  font-weight: 500;
+  text-transform: none;
+}
+
+.submitButton:disabled {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+/* Form styling */
+.formCard input,
+.formCard textarea,
+.formCard select {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+}
+
+.formCard input:focus,
+.formCard textarea:focus,
+.formCard select:focus {
+  background-color: #fff;
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.formCard label {
+  font-weight: 500;
+  color: #212529;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .formCard {
+    margin: 0 1rem;
+  }
+}

@@ -105,3 +105,163 @@
       width: 100%;
   }
 }
+
+.pageWrapper {
+    width: 100vw;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+}
+
+.mainContent {
+    flex: 1;
+    padding: 2rem 0;
+}
+
+.pageHeader {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.pageHeader h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.subheading {
+    text-align: center;
+    margin: 0 auto;
+    max-width: 600px;
+}
+
+.summaryCards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.card {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.cardIcon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #007bff;
+}
+
+.card h3 {
+    color: #6c757d;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.amount {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.cardSubtext {
+    color: #6c757d;
+    font-size: 0.9rem;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.period {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.filterSection {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.filterHeader {
+    margin-bottom: 1.5rem;
+}
+
+.filterHeader h3 {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.filterControls {
+    padding: 1rem 0;
+}
+
+.select {
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+    color: #495057;
+    background-color: white;
+}
+
+.select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.filterButton {
+    background-color: #007bff !important;
+    color: white !important;
+    padding: 0.75rem 1.5rem !important;
+    border-radius: 0.5rem !important;
+    font-weight: 500 !important;
+    width: 100%;
+    transition: background-color 0.2s !important;
+}
+
+.filterButton:hover:not(:disabled) {
+    background-color: #0056b3 !important;
+}
+
+.filterButton:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    .summaryCards {
+        grid-template-columns: 1fr;
+    }
+
+    .filterControls .row {
+        row-gap: 1rem;
+    }
+
+    .pageHeader h1 {
+        font-size: 2rem;
+    }
+
+    .amount {
+        font-size: 2rem;
+    }
+}
