@@ -82,3 +82,185 @@
     margin-top: 2rem;
   }
   
+  .pageWrapper {
+    width: 100vw;
+    min-height: 100vh;
+    background-color: #dcdbdb;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .mainContent {
+    flex: 1;
+    padding: 2rem 0;
+  }
+  
+  .pageHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3rem;
+    width: 100%;
+  }
+  
+  .headerContainer {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  .headerContainer h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+  }
+  
+  .headerDescription {
+    color: #6c757d;
+    font-size: 1.1rem;
+    margin: 0;
+  }
+  
+  .activitiesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+  }
+  
+  .activityCard {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .activityCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .activityHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .activityTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+  }
+  
+  .activityDetails {
+    margin-bottom: 1.5rem;
+  }
+  
+  .detailRow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    color: #6c757d;
+  }
+  
+  .detailRow svg {
+    color: #007bff;
+  }
+  
+  .categoryTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .tag {
+    background: #e9ecef;
+    color: #495057;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .mapWrapper {
+    height: 200px;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 1px solid #dee2e6;
+  }
+  
+  .map {
+    height: 100%;
+    width: 100%;
+  }
+  
+  .emptyState {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .emptyStateContent {
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .emptyStateIcon {
+    font-size: 4rem;
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+  }
+  
+  .emptyStateContent h3 {
+    font-size: 1.75rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+  }
+  
+  .emptyStateContent p {
+    color: #6c757d;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .createActivityButton {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+  }
+  
+  .createActivityButton:hover {
+    background-color: #0056b3;
+    color: white;
+    text-decoration: none;
+  }
+  
+  @media (max-width: 768px) {
+    .activitiesGrid {
+        grid-template-columns: 1fr;
+    }
+    
+    .pageHeader h1 {
+        font-size: 2rem;
+    }
+    
+    .mainContent {
+        padding: 1rem 0;
+    }
+  }
+  

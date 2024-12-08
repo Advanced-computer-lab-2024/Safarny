@@ -11,61 +11,183 @@
     --error-button: maroon;
 }
 
-.container {
+.pageWrapper {
+    width: 100vw;
+    min-height: 100vh;
+    background-color: #dcdbdb;
+    display: flex;
+    flex-direction: column;
+}
+
+.mainContent {
+    flex: 1;
+    padding: 2rem 0;
+}
+
+.deleteCard {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 2.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.cardHeader {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.headerIcon {
+    font-size: 2.5rem;
+    color: #dc3545;
+    margin-bottom: 1rem;
+}
+
+.cardHeader h2 {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.headerDescription {
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+.cardBody {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.selectContainer {
+    margin-bottom: 1rem;
+}
+
+.selectContainer select {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    font-size: 1.1rem;
+    color: #495057;
+}
+
+.warningBox {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.warningIcon {
+    font-size: 1.5rem;
+    color: #ffc107;
+}
+
+.warningBox p {
+    margin: 0;
+    color: #856404;
+    font-size: 1rem;
+}
+
+.deleteButton {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #dc3545;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.deleteButton:hover:not(.disabled) {
+    background-color: #c82333;
+}
+
+.deleteButton.disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+@media (max-width: 768px) {
+    .deleteCard {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+
+    .cardHeader h2 {
+        font-size: 1.75rem;
+    }
+
+    .headerIcon {
+        font-size: 2rem;
+    }
+}
+
+.loadingState {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    min-height: 100vh;
-    width: 100vw;
+    min-height: 300px;
+    gap: 1rem;
 }
 
-.mainContent {
-    background-color: var(--card-background);
-    padding: 2rem;
-    border-radius: var(--border-radius);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.loadingState p {
+    color: #6c757d;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
     text-align: center;
-    max-width: 600px;
-    width: 90%;
-    margin: auto;
+    padding: 2rem;
 }
 
-.heading {
-    color: var(--header-color);
-    font-size: 2rem;
+.emptyStateIcon {
+    font-size: 3rem;
+    color: #6c757d;
     margin-bottom: 1.5rem;
 }
 
-.select {
-    width: 100%;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    border: 1px solid #ccc;
-    color: var(--text-color);
-    background-color: var(--secondary-color);
+.emptyState h3 {
+    font-size: 1.75rem;
+    color: #2c3e50;
     margin-bottom: 1rem;
 }
 
-.button {
-    padding: 1rem 2rem;
-    background-color: var(--primary-color);
-    color: var(--header-color);
-    border: none;
+.emptyState p {
+    color: #6c757d;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.createButton {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
     border-radius: 0.5rem;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s;
+    font-weight: 500;
+    transition: background-color 0.2s;
 }
 
-.button:disabled {
-    background-color: #555;
-    cursor: not-allowed;
-}
-
-.button:hover:not(:disabled) {
-    background-color: var(--glow-color);
+.createButton:hover {
+    background-color: #0056b3;
+    color: white;
+    text-decoration: none;
 }

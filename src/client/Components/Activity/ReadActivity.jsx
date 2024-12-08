@@ -6,6 +6,7 @@ import Footer from '/src/client/Components/Footer/Footer';
 import styles from "./ReadActivity.module.css";
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { FaMapMarkerAlt, FaClock, FaCalendar, FaDollarSign, FaTags, FaShoppingCart } from 'react-icons/fa';
 
 // Fixing Leaflet marker icon issue
 delete L.Icon.Default.prototype._getIconUrl;
@@ -25,13 +26,28 @@ const ReadActivities = () => {
     useEffect(() => {
         const fetchActivities = async () => {
             try {
-                const response = await fetch(`/advertiser/activities/user/${userId}`);
+                const response = await fetch(`http://localhost:3000/advertiser/activities/user/${userId}`);
 
                 if (!response.ok) {
+                    if (response.status === 404) {
+                        // No activities found - this is not an error
+                        setActivities([]);
+                        return;
+                    }
                     throw new Error('Network response was not ok');
                 }
+                
                 const data = await response.json();
+                
+                if (!data || data.length === 0) {
+                    // Handle empty data case
+                    setActivities([]);
+                    return;
+                }
+
                 setActivities(data);
+                
+                // Only fetch counts if we have activities
                 const counts = await Promise.all(
                     data.map(async (activity) => {
                         try {
@@ -47,7 +63,8 @@ const ReadActivities = () => {
                 const countsMap = counts.reduce((acc, count) => ({ ...acc, ...count }), {});
                 setBoughtCounts(countsMap);
             } catch (error) {
-                setErrorMessage("Error fetching activities. Please try again later.");
+                console.error("Error:", error);
+                setErrorMessage("Unable to connect to the server. Please try again later.");
             }
         };
         
@@ -86,61 +103,91 @@ const ReadActivities = () => {
     }, [userId]);
 
     return (
-        <div className={styles.container}>
+        <div className={styles.pageWrapper}>
             <Header />
-            <h2 className={styles.header}>Activities</h2>
-            {/* {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>} */}
-            {activities.length === 0 ? (
-                <p className={styles.noActivitiesMessage}>No activities found for this user.</p>
-            ) : (
-                <ul className={styles.activitiesList}>
-                    {activities.map((activity) => (
-                        <li key={activity._id} className={styles.activityItem}>
-                            <div className={styles.activityDetails}>
-                                <p className={styles.activityText}>
-                                    {activity.date} - {activity.location} - ${activity.price} - {activity.time}
-                                </p>
-                                <p className={styles.activityText}>
-                                    Categories: {activity.category && activity.category.length > 0
-                                        ? activity.category.map(catId => categories[catId] || "Unknown Category").join(", ")
-                                        : "No categories"}
-                                </p>
-                                <p className={styles.activityText}>
-                                    Tags: {activity.tags && activity.tags.length > 0
-                                        ? activity.tags.map(tagId => tags[tagId] || "Unknown Tag").join(", ")
-                                        : "No tags"}
-                                </p>
-                                <p className={styles.activityText}>
-                                    Special Discount: {activity.specialDiscount}
-                                </p>
-                                <p className={styles.activityText}>
-                                    {activity.bookingOpen ? "Booking Open" : "Booking Closed"}
-                                </p>
-                                <p className={styles.activityText}>
-                                    Purchases: {boughtCounts[activity._id] ?? "Loading..."}
-                                </p>
+            <main className={styles.mainContent}>
+                <div className="container py-4">
+                    <div className={styles.pageHeader}>
+                        <div className={styles.headerContainer}>
+                            <h1>My Activities</h1>
+                            <p className={styles.headerDescription}>
+                                View and manage your created activities
+                            </p>
+                        </div>
+                    </div>
+
+                    {errorMessage ? (
+                        <div className="alert alert-danger" role="alert">
+                            {errorMessage}
+                        </div>
+                    ) : activities.length === 0 ? (
+                        <div className={styles.emptyState}>
+                            <div className={styles.emptyStateContent}>
+                                <FaMapMarkerAlt className={styles.emptyStateIcon} />
+                                <h3>No Activities Yet</h3>
+                                <p>Start creating activities to see them listed here.</p>
                             </div>
-                            
-                            {activity.coordinates && activity.coordinates.lat && activity.coordinates.lng && (
-                                <MapContainer
-                                    center={[activity.coordinates.lat, activity.coordinates.lng]}
-                                    zoom={13}
-                                    className={styles.mapContainer}
-                                >
-                                    <TileLayer
-                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                    />
-                                    <Marker position={[activity.coordinates.lat, activity.coordinates.lng]}>
-                                        <Popup>
-                                            {activity.location} <br /> ${activity.price}
-                                        </Popup>
-                                    </Marker>
-                                </MapContainer>
-                            )}
-                        </li>
-                    ))}
-                </ul>
-            )}
+                        </div>
+                    ) : (
+                        <div className={styles.activitiesGrid}>
+                            {activities.map((activity) => (
+                                <div key={activity._id} className={styles.activityCard}>
+                                    <div className={styles.activityHeader}>
+                                        <h3 className={styles.activityTitle}>{activity.location}</h3>
+                                        <span className={`badge ${activity.bookingOpen ? 'bg-success' : 'bg-danger'}`}>
+                                            {activity.bookingOpen ? 'Booking Open' : 'Booking Closed'}
+                                        </span>
+                                    </div>
+
+                                    <div className={styles.activityDetails}>
+                                        <div className={styles.detailRow}>
+                                            <FaCalendar />
+                                            <span>{activity.date}</span>
+                                        </div>
+                                        <div className={styles.detailRow}>
+                                            <FaClock />
+                                            <span>{activity.time}</span>
+                                        </div>
+                                        <div className={styles.detailRow}>
+                                            <FaDollarSign />
+                                            <span>{activity.price}</span>
+                                        </div>
+                                        <div className={styles.detailRow}>
+                                            <FaShoppingCart />
+                                            <span>Purchases: {boughtCounts[activity._id] ?? "Loading..."}</span>
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.categoryTags}>
+                                        {activity.category && activity.category.map(catId => (
+                                            <span key={catId} className={styles.tag}>
+                                                {categories[catId] || "Unknown Category"}
+                                            </span>
+                                        ))}
+                                    </div>
+
+                                    {activity.coordinates && activity.coordinates.lat && (
+                                        <div className={styles.mapWrapper}>
+                                            <MapContainer
+                                                center={[activity.coordinates.lat, activity.coordinates.lng]}
+                                                zoom={13}
+                                                className={styles.map}
+                                            >
+                                                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                                                <Marker position={[activity.coordinates.lat, activity.coordinates.lng]}>
+                                                    <Popup>
+                                                        {activity.location} <br /> ${activity.price}
+                                                    </Popup>
+                                                </Marker>
+                                            </MapContainer>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </main>
             <Footer />
         </div>
     );
