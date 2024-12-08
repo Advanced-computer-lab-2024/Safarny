@@ -368,7 +368,7 @@ const MyBookings = () => {
                                                 <div className={styles.emptyState}>
                                                         <FaCalendar className="display-1 text-muted mb-3" />
                                                         <h3>No Bookings Found</h3>
-                                                        <p className="text-muted">You haven't made any bookings yet.</p>
+                                                        <p className="text-white">You haven't made any bookings yet.</p>
                                                 </div>
                                         ) : (
                                                 <div className="row g-4">

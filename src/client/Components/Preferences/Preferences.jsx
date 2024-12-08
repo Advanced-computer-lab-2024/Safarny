@@ -106,11 +106,11 @@ const Preferences = () => {
         </form>
 
         <div className={styles.selectedTags}>
-          <h3>Currently Selected Tags:</h3>
-          <div>
+          <h3 style={{ color: 'white' }}>Currently Selected Tags:</h3>
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
             {selectedTags.map(tagId => {
               const tag = tags.find(t => t._id === tagId);
-              return tag ? <span key={tagId} className={styles.tag}>{tag.name}</span> : null;
+              return tag ? <span key={tagId} className={styles.tag} style={{ color: 'white' }}>{tag.name}</span> : null;
             })}
           </div>
         </div>
