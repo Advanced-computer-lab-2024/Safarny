@@ -1,35 +1,77 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { Button, Modal } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
-import styles from "./GuidePage.module.css";
+import React from 'react';
+import styles from "./GuidePageGuest.module.css";
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import photo from '/src/client/Assets/Img/test.png';
 
-const GuidePage = () => {
+const GuidePage  = () => {
     return (
         <div className={styles.container}>
             <Header />
-            <main style={{ flexGrow: 1 }}>
-                <h2>Steps to enjoy the trip</h2>
-                <p style={{ color: 'white' }}>Please read the following steps carefully:</p>
-                <ul style={{ listStyleType: 'none' }}>
-                <li>Steps to follow if you are a tourist:</li>
-                    <li>Step 1: Click on Sign Up</li>
-                    <li>Step 2: Fill in the required information as seen below:</li>
-                    <img
-                            src={photo}
-                            alt="Monument"
-                            style={{
-                                display: 'block',
-                                margin: '10px auto',
-                                maxWidth: '100%',
-                                height: 'auto'
-                            }}
-                        />
-                    <li>Step 3: Read the terms and conditions</li>
-                    <li>Step 4: Click on Sign Up</li>
+            <main className={styles.main}>
+                <h1 className={styles.title}>Steps to enjoy the trip</h1>
+                <p className={styles.subtitle}>Please read the following steps carefully to get started</p>
+
+                <ul className={styles.instructionList}>
+                    <li className={styles.instructionItem}>
+                        <div className={styles.stepHeader}>
+                            <span className={styles.stepNumber}>1</span>
+                            <h3 className={styles.stepTitle}>Sign Up</h3>
+                        </div>
+                        <p className={styles.stepContent}>
+                            Click on the Sign Up button to begin your journey with us
+                        </p>
+                        <div className={styles.imageContainer}>
+                            <img
+                                src={photo}
+                                alt="Sign up process"
+                                className={styles.stepImage}
+                            />
+                        </div>
+                    </li>
+
+                    <li className={styles.instructionItem}>
+                        <div className={styles.stepHeader}>
+                            <span className={styles.stepNumber}>2</span>
+                            <h3 className={styles.stepTitle}>Fill Required Information</h3>
+                        </div>
+                        <p className={styles.stepContent}>
+                            Complete all the required fields as shown below:
+                        </p>
+                        <div className={styles.imageContainer}>
+                            <img
+                                src={photo}
+                                alt="Registration form"
+                                className={styles.stepImage}
+                            />
+                        </div>
+                        <div className={styles.tip}>
+                            💡 Tip: Make sure to use a valid email address for account verification.
+                        </div>
+                    </li>
+
+                    <li className={styles.instructionItem}>
+                        <div className={styles.stepHeader}>
+                            <span className={styles.stepNumber}>3</span>
+                            <h3 className={styles.stepTitle}>Terms and Conditions</h3>
+                        </div>
+                        <p className={styles.stepContent}>
+                            Read our terms and conditions carefully before proceeding
+                        </p>
+                    </li>
+
+                    <li className={styles.instructionItem}>
+                        <div className={styles.stepHeader}>
+                            <span className={styles.stepNumber}>4</span>
+                            <h3 className={styles.stepTitle}>Complete Registration</h3>
+                        </div>
+                        <p className={styles.stepContent}>
+                            Click on the Sign Up button to complete your registration
+                        </p>
+                        <div className={styles.tip}>
+                            💡 Tip: You'll receive a confirmation email after successful registration.
+                        </div>
+                    </li>
                 </ul>
             </main>
             <Footer />
@@ -37,4 +79,4 @@ const GuidePage = () => {
     );
 };
 
-export default GuidePage;
+export default GuidePage ;

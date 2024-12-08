@@ -1,7 +1,4 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { Button, Modal } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React from 'react';
 import styles from "./GuidePage.module.css";
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
@@ -11,76 +8,69 @@ const GuidePage = () => {
     return (
         <div className={styles.container}>
             <Header />
-            <main style={{ flexGrow: 1 }}>
-                <h2>Steps to enjoy the trip</h2>
-                <p style={{ color: 'white' }}>Please read the following steps carefully:</p>
-                <ul style={{ listStyleType: 'none' }}>
-                    <li>Step 1: All of your credentials are shown in this page as follows:</li>
-                    <img
-                            src={photo}
-                            alt="Monument"
-                            style={{
-                                display: 'block',
-                                margin: '10px auto',
-                                maxWidth: '100%',
-                                height: 'auto'
-                            }}
-                        />
-                    <li>Step 2: Here are all the buttons to use in the header:</li>
-                    <img
-                            src={photo}
-                            alt="Monument"
-                            style={{
-                                display: 'block',
-                                margin: '10px auto',
-                                maxWidth: '100%',
-                                height: 'auto'
-                            }}
-                        />
-                        <li>Step 3: Choose the Upcoming Activities button: </li>
-                        <img
-                            src={photo}
-                            alt="Monument"
-                            style={{
-                                display: 'block',
-                                margin: '10px auto',
-                                maxWidth: '100%',
-                                height: 'auto'
-                            }}
-                        />
-                    <li>Step 4: Here you can see all the activities that are upcoming:</li>
-                    <img
-                            src={photo}
-                            alt="Monument"
-                            style={{
-                                display: 'block',
-                                margin: '10px auto',
-                                maxWidth: '100%',
-                                height: 'auto'
-                            }}
-                        />
-                    <li>Step 5: Alternatively, you can choose the Upcoming Itineraries button:</li>
-                    <img
-                            src={photo}
-                            alt="Monument"
-                            style={{
-                                display: 'block',
-                                margin: '10px auto',
-                                maxWidth: '100%',
-                                height: 'auto'
-                            }}
-                        />
-                    <li>Step 6: Here you can see all the itineraries that are upcoming:</li>
-                    <img
-                            src={photo}
-                            alt="Monument"
-                            style={{
-                                display: 'block',
-                                margin: '10px auto',
-                                maxWidth: '100%',
-                                height: 'auto'
-                            }}
-                        />
+            <main className={styles.main}>
+                <h1 className={styles.title}>Welcome to Your Travel Guide</h1>
+                <p className={styles.subtitle}>Follow these simple steps to make the most of your journey</p>
+
+                <ul className={styles.instructionList}>
+                    <li className={styles.instructionItem}>
+                        <div className={styles.stepHeader}>
+                            <span className={styles.stepNumber}>1</span>
+                            <h3 className={styles.stepTitle}>Getting Started</h3>
+                        </div>
+                        <p className={styles.stepContent}>
+                            All of your credentials and important information are displayed on this page for easy access:
+                        </p>
+                        <div className={styles.imageContainer}>
+                            <img
+                                src={photo}
+                                alt="Credentials display"
+                                className={styles.stepImage}
+                            />
+                        </div>
+                        <div className={styles.tip}>
+                            💡 Tip: Keep your credentials handy for quick reference throughout your journey.
+                        </div>
+                    </li>
+
+                    <li className={styles.instructionItem}>
+                        <div className={styles.stepHeader}>
+                            <span className={styles.stepNumber}>2</span>
+                            <h3 className={styles.stepTitle}>Navigation Guide</h3>
+                        </div>
+                        <p className={styles.stepContent}>
+                            Familiarize yourself with these essential navigation buttons in the header:
+                        </p>
+                        <div className={styles.imageContainer}>
+                            <img
+                                src={photo}
+                                alt="Header navigation"
+                                className={styles.stepImage}
+                            />
+                        </div>
+                    </li>
+
+                    <li className={styles.instructionItem}>
+                        <div className={styles.stepHeader}>
+                            <span className={styles.stepNumber}>3</span>
+                            <h3 className={styles.stepTitle}>Upcoming Activities</h3>
+                        </div>
+                        <p className={styles.stepContent}>
+                            Access your upcoming activities through the dedicated button:
+                        </p>
+                        <div className={styles.imageContainer}>
+                            <img
+                                src={photo}
+                                alt="Activities section"
+                                className={styles.stepImage}
+                            />
+                        </div>
+                        <div className={styles.tip}>
+                            💡 Tip: Check this section regularly for any updates to your scheduled activities.
+                        </div>
+                    </li>
+
+                    {/* Add remaining steps following the same pattern */}
                 </ul>
             </main>
             <Footer />
