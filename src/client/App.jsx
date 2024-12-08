@@ -85,6 +85,7 @@ import CreateCommentForItinerary from "./Components/Comments/CreateCommentForIti
 import CreateCommentForTourGuide from "./Components/Comments/CreateCommentForTourGuide";
 import PasswordRecovery from "./Components/PasswordRecovery/PasswordRecovery";
 import Notifications from "./Components/Notifications/Notifications";
+import PaymentModal from './Components/Booking/PaymentModal';
 
 import MyOrders from "./Components/MyOrder/MyOrders";
 import Sales from "./Components/Admin/Report/Sales";
@@ -162,6 +163,7 @@ function App() {
           path="/update-historical-place/:id"
           element={<UpdateHistoricalPlace />}
         />
+        <Route path="/payment" element={<PaymentModal />} />
         {/* <Route path="/delete-historical-place/:placeId" element={<DeleteHistoricalPlace />} /> */}
         <Route path="/historical-tags" element={<CreateHistoricalTags />} />
         <Route path="/createcomplaints" element={<CreateComplaints />} />
