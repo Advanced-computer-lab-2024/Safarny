@@ -18,11 +18,18 @@ import flight from '/src/client/Assets/Img/flight2.png';
 import hotel from '/src/client/Assets/Img/hotel2.png';
 import trans from '/src/client/Assets/Img/trans2.png';
 import book from '/src/client/Assets/Img/mybooks2.png';
-import open1 from '/src/client/Assets/Img/open1.png';
+import open from '/src/client/Assets/Img/open.png';
 import open3 from '/src/client/Assets/Img/open3.png';
 import open4 from '/src/client/Assets/Img/open4.png';
 import pref from '/src/client/Assets/Img/pref.png';
 import search from '/src/client/Assets/Img/search2.png';
+import Notifications from '/src/client/Assets/Img/notifications.png';
+import cart from '/src/client/Assets/Img/cart.png';
+import purchased from '/src/client/Assets/Img/puchased.png';
+import proceed1 from '/src/client/Assets/Img/proceed1.png';
+import proceed2 from '/src/client/Assets/Img/proceed2.png';
+import proceed3 from '/src/client/Assets/Img/proceed3.png';
+import proceed4 from '/src/client/Assets/Img/proceed4.png';
 
 const GuidePage = () => {
     return (
@@ -63,7 +70,7 @@ const GuidePage = () => {
                         </p>
                         <div className={styles.imageContainer}>
                             <img
-                                src={open1}
+                                src={open}
                                 alt="Sidebar navigation"
                                 className={styles.stepImage}
                             />
@@ -73,10 +80,10 @@ const GuidePage = () => {
                     <li className={styles.instructionItem}>
                         <div className={styles.stepHeader}>
                             <span className={styles.stepNumber}>3</span>
-                            <h3 className={styles.stepTitle}>Products</h3>
+                            <h3 className={styles.stepTitle}>Shop</h3>
                         </div>
                         <p className={styles.stepContent}>
-                            Click on Products
+                            Click on Shop
                         </p>
                         <p className={styles.stepContent}>
                             Here you can check all of the products:
@@ -92,7 +99,96 @@ const GuidePage = () => {
 
                     <li className={styles.instructionItem}>
                         <div className={styles.stepHeader}>
+                        </div>
+                        <p className={styles.stepContent}>
+                            Click on Purchased Products
+                        </p>
+                        <p className={styles.stepContent}>
+                            Here you can check all of your purchased products:
+                        </p>
+                        <div className={styles.imageContainer}>
+                            <img
+                                src={purchased}
+                                alt="View Complaints section"
+                                className={styles.stepImage}
+                            />
+                        </div>
+                    </li>
+
+                    <li className={styles.instructionItem}>
+                        <div className={styles.stepHeader}>
+                        </div>
+                        <p className={styles.stepContent}>
+                            Click on Cart from the Shop
+                        </p>
+                        <p className={styles.stepContent}>
+                            Here you can check your cart:
+                        </p>
+                        <div className={styles.imageContainer}>
+                            <img
+                                src={cart}
+                                alt="View Complaints section"
+                                className={styles.stepImage}
+                            />
+                        </div>
+                    </li>
+
+                    <li className={styles.instructionItem}>
+                        <div className={styles.stepHeader}>
+                        </div>
+                        <p className={styles.stepContent}>
+                            Click on Proceed to Checkout
+                        </p>
+                        <p className={styles.stepContent}>
+                            Here you can buy the products from your cart:
+                        </p>
+                        <div className={styles.imageContainer}>
+                            <img
+                                src={proceed1}
+                                alt="View Complaints section"
+                                className={styles.stepImage}
+                            />
+                            <img
+                                src={proceed2}
+                                alt="View Complaints section"
+                                className={styles.stepImage}
+                            />
+                            <img
+                                src={proceed3}
+                                alt="View Complaints section"
+                                className={styles.stepImage}
+                            />
+                            <img
+                                src={proceed4}
+                                alt="View Complaints section"
+                                className={styles.stepImage}
+                            />
+                        </div>
+                    </li>
+
+                    <li className={styles.instructionItem}>
+                        <div className={styles.stepHeader}>
                             <span className={styles.stepNumber}>4</span>
+                            <h3 className={styles.stepTitle}>Notifications</h3>
+                        </div>
+                        <p className={styles.stepContent}>
+                            Click on Notifications
+                        </p>
+                        <p className={styles.stepContent}>
+                            Here you can check all your received notifications:
+                        </p>
+                        <div className={styles.imageContainer}>
+                            <img
+                                src={Notifications}
+                                alt="View Complaints section"
+                                className={styles.stepImage}
+                            />
+                        </div>
+                    </li>
+
+                    <li className={styles.instructionItem}>
+                        <div className={styles.stepHeader}>
+                            <span className={styles.stepNumber}>5</span>
                             <h3 className={styles.stepTitle}>Search</h3>
                         </div>
                         <p className={styles.stepContent}>
@@ -112,7 +208,7 @@ const GuidePage = () => {
 
                     <li className={styles.instructionItem}>
                         <div className={styles.stepHeader}>
-                            <span className={styles.stepNumber}>5</span>
+                            <span className={styles.stepNumber}>6</span>
                             <h3 className={styles.stepTitle}>Update Profile</h3>
                         </div>
                         <p className={styles.stepContent}>
@@ -132,7 +228,7 @@ const GuidePage = () => {
 
                     <li className={styles.instructionItem}>
                         <div className={styles.stepHeader}>
-                            <span className={styles.stepNumber}>6</span>
+                            <span className={styles.stepNumber}>7</span>
                             <h3 className={styles.stepTitle}>Upcoming Activities</h3>
                         </div>
                         <p className={styles.stepContent}>
@@ -162,7 +258,7 @@ const GuidePage = () => {
 
                     <li className={styles.instructionItem}>
                         <div className={styles.stepHeader}>
-                            <span className={styles.stepNumber}>7</span>
+                            <span className={styles.stepNumber}>8</span>
                             <h3 className={styles.stepTitle}>Upcoming Itineraries</h3>
                         </div>
                         <p className={styles.stepContent}>
@@ -185,7 +281,7 @@ const GuidePage = () => {
 
                      <li className={styles.instructionItem}>
                         <div className={styles.stepHeader}>
-                            <span className={styles.stepNumber}>8</span>
+                            <span className={styles.stepNumber}>9</span>
                             <h3 className={styles.stepTitle}>Upcoming Historical Places</h3>
                         </div>
                         <p className={styles.stepContent}>
@@ -208,7 +304,7 @@ const GuidePage = () => {
 
                     <li className={styles.instructionItem}>
                         <div className={styles.stepHeader}>
-                            <span className={styles.stepNumber}>9</span>
+                            <span className={styles.stepNumber}>10</span>
                             <h3 className={styles.stepTitle}>Create Complaints</h3>
                         </div>
                         <p className={styles.stepContent}>
@@ -235,7 +331,7 @@ const GuidePage = () => {
 
                     <li className={styles.instructionItem}>
                         <div className={styles.stepHeader}>
-                            <span className={styles.stepNumber}>10</span>
+                            <span className={styles.stepNumber}>11</span>
                             <h3 className={styles.stepTitle}>View Complaints</h3>
                         </div>
                         <p className={styles.stepContent}>
@@ -255,7 +351,7 @@ const GuidePage = () => {
 
                     <li className={styles.instructionItem}>
                         <div className={styles.stepHeader}>
-                            <span className={styles.stepNumber}>11</span>
+                            <span className={styles.stepNumber}>12</span>
                             <h3 className={styles.stepTitle}>Book Flight</h3>
                         </div>
                         <p className={styles.stepContent}>
@@ -282,7 +378,7 @@ const GuidePage = () => {
 
                     <li className={styles.instructionItem}>
                         <div className={styles.stepHeader}>
-                            <span className={styles.stepNumber}>12</span>
+                            <span className={styles.stepNumber}>13</span>
                             <h3 className={styles.stepTitle}>Book Hotel</h3>
                         </div>
                         <p className={styles.stepContent}>
@@ -302,7 +398,7 @@ const GuidePage = () => {
 
                     <li className={styles.instructionItem}>
                         <div className={styles.stepHeader}>
-                            <span className={styles.stepNumber}>13</span>
+                            <span className={styles.stepNumber}>14</span>
                             <h3 className={styles.stepTitle}>Book Transport</h3>
                         </div>
                         <p className={styles.stepContent}>
@@ -322,7 +418,7 @@ const GuidePage = () => {
 
                     <li className={styles.instructionItem}>
                         <div className={styles.stepHeader}>
-                            <span className={styles.stepNumber}>14</span>
+                            <span className={styles.stepNumber}>15</span>
                             <h3 className={styles.stepTitle}>My Bookings</h3>
                         </div>
                         <p className={styles.stepContent}>
@@ -342,7 +438,7 @@ const GuidePage = () => {
 
                     <li className={styles.instructionItem}>
                         <div className={styles.stepHeader}>
-                            <span className={styles.stepNumber}>15</span>
+                            <span className={styles.stepNumber}>16</span>
                             <h3 className={styles.stepTitle}>My Orders</h3>
                         </div>
                         <p className={styles.stepContent}>
@@ -362,7 +458,7 @@ const GuidePage = () => {
 
                     <li className={styles.instructionItem}>
                         <div className={styles.stepHeader}>
-                            <span className={styles.stepNumber}>16</span>
+                            <span className={styles.stepNumber}>17</span>
                             <h3 className={styles.stepTitle}>My Preferences</h3>
                         </div>
                         <p className={styles.stepContent}>
@@ -382,7 +478,7 @@ const GuidePage = () => {
 
                     <li className={styles.instructionItem}>
                         <div className={styles.stepHeader}>
-                            <span className={styles.stepNumber}>17</span>
+                            <span className={styles.stepNumber}>18</span>
                             <h3 className={styles.stepTitle}>Loyalty Badges</h3>
                         </div>
                         <p className={styles.stepContent}>
