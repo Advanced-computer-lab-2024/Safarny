@@ -32,7 +32,7 @@ const ProfileSideBar = ({ userId, userInfo }) => {
 
     // Common navigation items that appear for all roles
     const commonItems = [
-        { name: "Back", icon: <FaArrowLeft />, action: () => navigate(-1) },
+        // { name: "Back", icon: <FaArrowLeft />, action: () => navigate(-1) },
         { name: "Products", icon: <FaStore />, action: () => navigate('/products', { state: { userId } }) },
         { name: "Search", icon: <FaSearch />, action: () => navigate('/Search') },
         { name: "Update Profile", icon: <FaCog />, action: () => {
@@ -120,91 +120,86 @@ const ProfileSideBar = ({ userId, userInfo }) => {
     return (
         <>
             {/* Toggle Button */}
+            
             <button 
-                className={`btn btn-dark ${styles.toggleButton}`}
+                className={`btn btn-dark ${isOpen ? '': styles.toggleButton }`}
                 onClick={() => setIsOpen(!isOpen)}
+                aria-label="Toggle Menu"
             >
-                {isOpen ? <FaTimes /> : <FaBars />}
+                {!isOpen && <FaBars />}
             </button>
 
             {/* Sidebar */}
             <div className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
-                <div className="p-3">
-                    <div className="d-flex align-items-center justify-content-between mb-4">
-                        <div className="d-flex align-items-center">
-                            <FaUserCog className="me-2" />
-                            <h5 className="mb-0">User Menu</h5>
-                        </div>
-                        <button 
-                            className="btn btn-link text-dark"
-                            onClick={() => setIsOpen(false)}
+                <div className={styles.sidebarHeader}>
+                    <div className="d-flex align-items-center">
+                        <FaUserCog className="me-2" style={{ color: '#4a90e2' }} />
+                        <h5>User Menu</h5>
+                    </div>
+                    <button 
+                        className="btn btn-link text-dark p-0"
+                        onClick={() => setIsOpen(false)}
+                    >
+                        <FaTimes />
+                    </button>
+                </div>
+
+                {/* Common Actions */}
+                <div className="mb-4">
+                    {commonItems.map((item, index) => (
+                        <button
+                            key={index}
+                            className={styles.menuItem}
+                            onClick={item.action}
                         >
-                            <FaTimes />
+                            {item.icon}
+                            <span>{item.name}</span>
                         </button>
-                    </div>
+                    ))}
+                </div>
 
-                    {/* Common Actions */}
-                    <div className="mb-4">
-                        <div className="d-flex flex-wrap gap-2">
-                            {commonItems.map((item, index) => (
-                                <button
-                                    key={index}
-                                    className="btn btn-outline-secondary"
-                                    onClick={item.action}
-                                >
-                                    {item.icon}
-                                    <span className="ms-2">{item.name}</span>
-                                </button>
-                            ))}
-                        </div>
-                    </div>
+                {/* Delete Account Button */}
+                
 
-                    {/* Delete Account Button */}
-                    <div className="mb-4">
-                        <button 
-                            className="btn btn-outline-danger w-100 mb-2"
-                            onClick={handleDelete}
-                        >
-                            <FaTrash className="me-2" />
-                            Delete Account
-                        </button>
-                    </div>
-
-                    {/* Role Specific Menu */}
-                    <div className="nav flex-column">
-                        {menuItems[userInfo.role]?.map((menu, index) => (
-                            <div key={index} className="mb-2">
-                                <button
-                                    className="btn btn-light w-100 text-start d-flex align-items-center justify-content-between"
-                                    onClick={() => setActiveMenu(activeMenu === menu.title ? null : menu.title)}
-                                >
-                                    <span>
-                                        {menu.icon}
-                                        <span className="ms-2">{menu.title}</span>
-                                    </span>
-                                    {activeMenu === menu.title ? <FaChevronDown /> : <FaChevronRight />}
-                                </button>
-                                
-                                <div className={`collapse ${activeMenu === menu.title ? 'show' : ''}`}>
-                                    <div className="ps-3 pt-2">
-                                        {menu.subItems.map((item, idx) => (
-                                            <button
-                                                key={idx}
-                                                className="btn btn-link text-decoration-none text-muted w-100 text-start py-1"
-                                                onClick={() => {
-                                                    navigate(item.path, { state: { userId } });
-                                                    setIsOpen(false);
-                                                }}
-                                            >
-                                                {item.icon}
-                                                <span className="ms-2">{item.name}</span>
-                                            </button>
-                                        ))}
-                                    </div>
+                {/* Role Specific Menu */}
+                <div className="nav flex-column">
+                    {menuItems[userInfo.role]?.map((menu, index) => (
+                        <div key={index} className="mb-2">
+                            <button
+                                className={styles.menuItem}
+                                onClick={() => setActiveMenu(activeMenu === menu.title ? null : menu.title)}
+                            >
+                                {menu.icon}
+                                <span>{menu.title}</span>
+                                {activeMenu === menu.title ? <FaChevronDown className="ms-auto" /> : <FaChevronRight className="ms-auto" />}
+                            </button>
+                            
+                            <div className={`collapse ${activeMenu === menu.title ? 'show' : ''}`}>
+                                <div className={styles.subMenu}>
+                                    {menu.subItems.map((item, idx) => (
+                                        <button
+                                            key={idx}
+                                            className={styles.subMenuItem}
+                                            onClick={() => {
+                                                navigate(item.path, { state: { userId } });
+                                                setIsOpen(false);
+                                            }}
+                                        >
+                                            {item.icon}
+                                            <span>{item.name}</span>
+                                        </button>
+                                    ))}
                                 </div>
                             </div>
-                        ))}
-                    </div>
+                        </div>
+                    ))}
+                    <button 
+                    className={styles.deleteButton}
+                    onClick={handleDelete}
+                >
+                    <FaTrash />
+                    Delete Account
+                </button>
                 </div>
             </div>
 
