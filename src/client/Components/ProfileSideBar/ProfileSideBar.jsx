@@ -119,8 +119,6 @@ const ProfileSideBar = ({ userId, userInfo }) => {
 
     return (
         <>
-            {/* Toggle Button */}
-            
             <button 
                 className={`btn btn-dark ${isOpen ? '': styles.toggleButton }`}
                 onClick={() => setIsOpen(!isOpen)}
@@ -129,81 +127,85 @@ const ProfileSideBar = ({ userId, userInfo }) => {
                 {!isOpen && <FaBars />}
             </button>
 
-            {/* Sidebar */}
             <div className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
-                <div className={styles.sidebarHeader}>
-                    <div className="d-flex align-items-center">
-                        <FaUserCog className="me-2" style={{ color: '#4a90e2' }} />
-                        <h5>User Menu</h5>
-                    </div>
-                    <button 
-                        className="btn btn-link text-dark p-0"
-                        onClick={() => setIsOpen(false)}
-                    >
-                        <FaTimes />
-                    </button>
-                </div>
-
-                {/* Common Actions */}
-                <div className="mb-4">
-                    {commonItems.map((item, index) => (
-                        <button
-                            key={index}
-                            className={styles.menuItem}
-                            onClick={item.action}
-                        >
-                            {item.icon}
-                            <span>{item.name}</span>
-                        </button>
-                    ))}
-                </div>
-
-                {/* Delete Account Button */}
-                
-
-                {/* Role Specific Menu */}
-                <div className="nav flex-column">
-                    {menuItems[userInfo.role]?.map((menu, index) => (
-                        <div key={index} className="mb-2">
-                            <button
-                                className={styles.menuItem}
-                                onClick={() => setActiveMenu(activeMenu === menu.title ? null : menu.title)}
-                            >
-                                {menu.icon}
-                                <span>{menu.title}</span>
-                                {activeMenu === menu.title ? <FaChevronDown className="ms-auto" /> : <FaChevronRight className="ms-auto" />}
-                            </button>
-                            
-                            <div className={`collapse ${activeMenu === menu.title ? 'show' : ''}`}>
-                                <div className={styles.subMenu}>
-                                    {menu.subItems.map((item, idx) => (
-                                        <button
-                                            key={idx}
-                                            className={styles.subMenuItem}
-                                            onClick={() => {
-                                                navigate(item.path, { state: { userId } });
-                                                setIsOpen(false);
-                                            }}
-                                        >
-                                            {item.icon}
-                                            <span>{item.name}</span>
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
+                <div className={styles.sidebarContent}>
+                    <div className={styles.sidebarHeader}>
+                        <div className="d-flex align-items-center">
+                            <FaUserCog className="me-2" style={{ color: '#4a90e2' }} />
+                            <h5 className="mb-0">User Menu</h5>
                         </div>
-                    ))}
-                    <button 
-                    className={styles.deleteButton}
-                    onClick={handleDelete}
-                >
-                    <FaTrash />
-                    Delete Account
-                </button>
+                        <button 
+                            className="btn btn-link text-dark p-0"
+                            onClick={() => setIsOpen(false)}
+                        >
+                            <FaTimes />
+                        </button>
+                    </div>
+
+                    <div className={styles.menuContainer}>
+                        {/* Common Actions */}
+                        <div className={styles.menuSection}>
+                            {commonItems.map((item, index) => (
+                                <button
+                                    key={index}
+                                    className={styles.menuItem}
+                                    onClick={item.action}
+                                >
+                                    {item.icon}
+                                    <span>{item.name}</span>
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Role Specific Menu */}
+                        <div className={styles.menuSection}>
+                            {menuItems[userInfo.role]?.map((menu, index) => (
+                                <div key={index} className={styles.menuGroup}>
+                                    <button
+                                        className={styles.menuItem}
+                                        onClick={() => setActiveMenu(activeMenu === menu.title ? null : menu.title)}
+                                    >
+                                        {menu.icon}
+                                        <span>{menu.title}</span>
+                                        {activeMenu === menu.title ? 
+                                            <FaChevronDown className="ms-auto" /> : 
+                                            <FaChevronRight className="ms-auto" />
+                                        }
+                                    </button>
+                                    
+                                    <div className={`${styles.subMenu} ${activeMenu === menu.title ? styles.show : ''}`}>
+                                        {menu.subItems.map((item, idx) => (
+                                            <button
+                                                key={idx}
+                                                className={styles.subMenuItem}
+                                                onClick={() => {
+                                                    navigate(item.path, { state: { userId } });
+                                                    setIsOpen(false);
+                                                }}
+                                            >
+                                                {item.icon}
+                                                <span>{item.name}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Delete Account Button */}
+                    <div className={styles.deleteButtonContainer}>
+                        <button 
+                            className={styles.deleteButton}
+                            onClick={handleDelete}
+                        >
+                            <FaTrash />
+                            <span>Delete Account</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            {/* Overlay */}
             {isOpen && (
                 <div 
                     className={styles.overlay}

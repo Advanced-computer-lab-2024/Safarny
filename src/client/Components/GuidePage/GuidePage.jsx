@@ -2,14 +2,16 @@ import React from 'react';
 import styles from "./GuidePage.module.css";
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
-import photo from '/src/client/Assets/Img/test.png';
-import profile from '/src/client/Assets/Img/Profile Page.png';
+import profile from '/src/client/Assets/Img/profile.png';
 import Ranks from '/src/client/Assets/Img/Ranks.png';
 import Bar from '/src/client/Assets/Img/sidebar.png';
 import act from '/src/client/Assets/Img/act.png';
 import iti from '/src/client/Assets/Img/Iti2.png';
 import open from '/src/client/Assets/Img/openevents.png';
 import places from '/src/client/Assets/Img/places2.png'; 
+import open2 from '/src/client/Assets/Img/open2.png';
+import create from '/src/client/Assets/Img/create2.png';
+import view from '/src/client/Assets/Img/view2.png';
 
 
 const GuidePage = () => {
@@ -131,6 +133,53 @@ const GuidePage = () => {
                         </div>
                         <div className={styles.tip}>
                             💡 Tip: Check this section regularly for any updates to your scheduled historical places.
+                        </div>
+                    </li>
+
+                    <li className={styles.instructionItem}>
+                        <div className={styles.stepHeader}>
+                            <span className={styles.stepNumber}>6</span>
+                            <h3 className={styles.stepTitle}>Create Complaints</h3>
+                        </div>
+                        <p className={styles.stepContent}>
+                            Click on Complaints button then click on create complaints:
+                        </p>
+                        <div className={styles.imageContainer}>
+                            <img
+                                src={open2}
+                                alt="Activities section"
+                                className={styles.stepImage}
+                            />
+                        </div>
+                        <p className={styles.stepContent}>
+                            Here you can write any complaints you might have:
+                        </p>
+                        <div className={styles.imageContainer}>
+                            <img
+                                src={create}
+                                alt="Create Complaints section"
+                                className={styles.stepImage}
+                            />
+                        </div>
+                    </li>
+
+                    <li className={styles.instructionItem}>
+                        <div className={styles.stepHeader}>
+                            <span className={styles.stepNumber}>7</span>
+                            <h3 className={styles.stepTitle}>View Complaints</h3>
+                        </div>
+                        <p className={styles.stepContent}>
+                            Click on Complaints button as seen in Create Complaints and choose View Complaints
+                        </p>
+                        <p className={styles.stepContent}>
+                            Here you can see all of your complaints
+                        </p>
+                        <div className={styles.imageContainer}>
+                            <img
+                                src={view}
+                                alt="View Complaints section"
+                                className={styles.stepImage}
+                            />
                         </div>
                     </li>
 

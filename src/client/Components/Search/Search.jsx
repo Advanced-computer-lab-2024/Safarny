@@ -5,36 +5,30 @@ import Header from '/src/client/components/Header/Header';
 import Logo from "/src/client/Assets/Img/logo.png";
 import styles from "./Search.module.css";
 import { Link } from "react-router-dom";
+import { FaSearch, FaMapMarkerAlt, FaClock, FaMoneyBillWave, FaTags, FaLanguage } from 'react-icons/fa';
 
 const Search = () => {
   const [query, setQuery] = useState("");
-  const [type, setType] = useState(""); // Define type as per your needs (e.g., 'historical', 'activity')
+  const [type, setType] = useState("");
   const [results, setResults] = useState([]);
   const [error, setError] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
 
-  // Handle form submission
   const handleSearch = async (e) => {
     e.preventDefault();
-    console.log("Submitting form with:", { query, type }); // Add this line
-
     if (!query) {
       setError("Please enter a search query.");
       return;
     }
-    console.log({ query, type }); // Log them before sending
 
+    setIsSearching(true);
     try {
       const response = await axios.get("http://localhost:3000/tourist/search", {
         params: { query, type },
       });
 
-      //console.log('API Response:', response.data);
-      console.log("Response:", response); // Log the full response to inspect it
-      console.log("Search Results:", response.data.results); // Add this line
-
       if (response.data.success) {
         setResults(response.data.results);
-
         setError("");
       } else {
         setResults([]);
@@ -44,119 +38,198 @@ const Search = () => {
       console.error("Error occurred while searching:", err);
       setResults([]);
       setError("An error occurred while searching.");
+    } finally {
+      setIsSearching(false);
     }
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.pageWrapper}>
       <Header />
-      <main className={styles.main}>
-        <h2>Search for new adventures</h2>
+      
+      <main className={styles.mainContent}>
+        {/* <div className={`${styles.titleSection} bg-dark`}> */}
+          <div className="container text-center py-5">
+            <h1 className="display-4 mb-3 text-black">Discover Your Next Adventure</h1>
+            <div className="d-flex justify-content-center">
+              <p className="lead text-white-50 mb-0 w-75">Search through historical places, activities, and itineraries</p>
+            </div>
+          {/* </div> */}
+        </div>
 
-        {error && <p className={styles.errorMessage}>{error}</p>}
-
-        <form onSubmit={handleSearch} className={styles.form}>
-          <label>
-            Search Query:
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Type:
-            <select
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              required
-            >
-              <option value="">Select Type</option>
-              <option value="historical">Historical Places</option>
-              <option value="activity">Activities</option>
-              <option value="itinerary">Itineraries</option>
-            </select>
-          </label>
-          <button type="submit" className={styles.button}>
-            Search
-          </button>
-        </form>
-
-        {results.historicalPlaces && results.historicalPlaces.length > 0 && (
-          <div className={styles.results}>
-            <h3>Historical Places:</h3>
-            <ul>
-              {results.historicalPlaces.map((item) => (
-                <li key={item._id} className={styles.resultItem}>
-                  <h4>{item.description}</h4>
-                  {item.pictures && item.pictures.length > 0 && (
-                    <div className={styles.imageContainer}>
-                      {item.pictures.map((pic, index) => (
-                        <img
-                          key={index}
-                          src={pic}
-                          alt={`Image of ${item.description}`}
-                          className={styles.resultImage}
-                        />
-                      ))}
+        <div className="container py-5">
+          <div className="row justify-content-center">
+            <div className="col-lg-8">
+              <div className={`${styles.searchCard} card shadow-sm`}>
+                <div className="card-body p-4">
+                  {error && (
+                    <div className="alert alert-danger" role="alert">
+                      {error}
                     </div>
                   )}
-                  <p>Location: {item.location}</p>
-                  <p>Opening Hours: {item.openingHours}</p>
-                  <p>Ticket Prices: ${item.ticketPrices}</p>
-                  {/* Add more fields as necessary */}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
 
-        {results.activities && results.activities.length > 0 && (
-          <div className={styles.results}>
-            <h3>Activities:</h3>
-            <ul>
-              {results.activities.map((item) => (
-                <li key={item._id} className={styles.resultItem}>
-                  <h4>{item.name}</h4>
+                  <form onSubmit={handleSearch} className="mb-4">
+                    <div className="row g-3">
+                      <div className="col-md-6">
+                        <div className="form-floating">
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="searchQuery"
+                            placeholder="Enter your search"
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                            required
+                          />
+                          <label htmlFor="searchQuery">Search Query</label>
+                        </div>
+                      </div>
+                      <div className="col-md-6">
+                        <div className="form-floating">
+                          <select
+                            className="form-select"
+                            id="searchType"
+                            value={type}
+                            onChange={(e) => setType(e.target.value)}
+                            required
+                          >
+                            <option value="">Select a category</option>
+                            <option value="historical">Historical Places</option>
+                            <option value="activity">Activities</option>
+                            <option value="itinerary">Itineraries</option>
+                          </select>
+                          <label htmlFor="searchType">Category</label>
+                        </div>
+                      </div>
+                      <div className="col-12">
+                        <button 
+                          type="submit" 
+                          className={`${styles.searchButton} btn btn-primary w-100`}
+                          disabled={isSearching}
+                        >
+                          {isSearching ? (
+                            <>
+                              <span className="spinner-border spinner-border-sm me-2" />
+                              Searching...
+                            </>
+                          ) : (
+                            <>
+                              <FaSearch className="me-2" />
+                              Search
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </form>
 
-                  <p>date: {item.date}</p>
-                  <p>Location: {item.location}</p>
-                  <p>Price: ${item.price}</p>
-                  {/* Add more fields as necessary */}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+                  {/* Results Section */}
+                  {results.historicalPlaces && results.historicalPlaces.length > 0 && (
+                    <div className={styles.resultSection}>
+                      <h3 className="mb-4">Historical Places</h3>
+                      <div className="row g-4">
+                        {results.historicalPlaces.map((item) => (
+                          <div key={item._id} className="col-md-6">
+                            <div className={`${styles.resultCard} card h-100`}>
+                              {item.pictures && item.pictures.length > 0 && (
+                                <div className={styles.imageContainer}>
+                                  <img
+                                    src={item.pictures[0]}
+                                    alt={item.description}
+                                    className="card-img-top"
+                                  />
+                                </div>
+                              )}
+                              <div className="card-body">
+                                <h5 className="card-title">{item.description}</h5>
+                                <div className="d-flex align-items-center mb-2">
+                                  <FaMapMarkerAlt className="me-2" />
+                                  <span>{item.location}</span>
+                                </div>
+                                <div className="d-flex align-items-center mb-2">
+                                  <FaClock className="me-2" />
+                                  <span>{item.openingHours}</span>
+                                </div>
+                                <div className="d-flex align-items-center">
+                                  <FaMoneyBillWave className="me-2" />
+                                  <span>${item.ticketPrices}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
-        {results.itineraries && results.itineraries.length > 0 && (
-          <div className={styles.results}>
-            <h3>Itineraries:</h3>
-            <ul>
-              {results.itineraries.map((item) => (
-                <li key={item._id} className={styles.resultItem}>
-                  <h4>{item.title}</h4>
-                  <p>name: {item.name}</p>
-                  <p>
-                    tags:
-                    {item.tags.length > 0 ? (
-                      item.tags.map((tag) => (
-                        <span key={tag._id}>{tag.name} </span>
-                      ))
-                    ) : (
-                      <span>No tags</span>
-                    )}
-                  </p>
-                  <p>lang: {item.language}</p>
-                </li>
-              ))}
-            </ul>
+                  {results.activities && results.activities.length > 0 && (
+                    <div className={styles.resultSection}>
+                      <h3 className="mb-4">Activities</h3>
+                      <div className="row g-4">
+                        {results.activities.map((item) => (
+                          <div key={item._id} className="col-md-6">
+                            <div className={`${styles.resultCard} card h-100`}>
+                              <div className="card-body">
+                                <h5 className="card-title">{item.name}</h5>
+                                <div className="d-flex align-items-center mb-2">
+                                  <FaClock className="me-2" />
+                                  <span>{item.date}</span>
+                                </div>
+                                <div className="d-flex align-items-center mb-2">
+                                  <FaMapMarkerAlt className="me-2" />
+                                  <span>{item.location}</span>
+                                </div>
+                                <div className="d-flex align-items-center">
+                                  <FaMoneyBillWave className="me-2" />
+                                  <span>${item.price}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {results.itineraries && results.itineraries.length > 0 && (
+                    <div className={styles.resultSection}>
+                      <h3 className="mb-4">Itineraries</h3>
+                      <div className="row g-4">
+                        {results.itineraries.map((item) => (
+                          <div key={item._id} className="col-md-6">
+                            <div className={`${styles.resultCard} card h-100`}>
+                              <div className="card-body">
+                                <h5 className="card-title">{item.title}</h5>
+                                <p className="card-text">{item.name}</p>
+                                <div className="d-flex align-items-center mb-2">
+                                  <FaTags className="me-2" />
+                                  <span>
+                                    {item.tags.length > 0
+                                      ? item.tags.map(tag => tag.name).join(", ")
+                                      : "No tags"}
+                                  </span>
+                                </div>
+                                <div className="d-flex align-items-center">
+                                  <FaLanguage className="me-2" />
+                                  <span>{item.language}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
-        )}
+        </div>
       </main>
+
       <Footer />
     </div>
   );
 };
+
 export default Search;

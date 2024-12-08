@@ -1,31 +1,147 @@
-.container {
-    padding: 20px;
-  }
-  
-  .itemsList {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
+.pageWrapper {
+    width: 100vw;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.mainContent {
+    flex: 1;
+}
+
+.heroSection {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                url('/path-to-your-orders-image.jpg') center/cover;
+    margin-bottom: 2rem;
+}
+
+.orderCard {
+    background-color: white;
+    border: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.orderCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+.statusBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 50px;
+    color: white;
+    font-weight: 500;
+}
+
+.itemsList {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.itemCard {
+    background-color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #1f2937;
+}
+
+.itemCard .badge {
+    color: white;
+    background-color: #4b5563;
+}
+
+.actionButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+}
+
+.expandedDetails {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.detailsSection {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    height: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.detailsSection h6 {
+    color: #495057;
+    display: flex;
+    align-items: center;
+}
+
+.emptyState {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .heroSection {
+        padding: 2rem 0;
+    }
+
+    .statusBadge {
+        margin-top: 1rem;
+    }
+
+    .actionButton {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 0.5rem;
+    }
+}
   
   .pending {
-    background-color: #ffd700;
+    background-color: #f59e0b;
+    color: white;
   }
   
   .confirmed {
-    background-color: #87ceeb;
+    background-color: #0891b2;
+    color: white;
   }
   
   .shipped {
-    background-color: #ffa500;
+    background-color: #2563eb;
+    color: white;
   }
   
   .delivered {
-    background-color: #90ee90;
+    background-color: #16a34a;
+    color: white;
   }
   
   .cancelled {
-    background-color: #ff6347;
+    background-color: #dc2626;
+    color: white;
+  }
+  
+  .titleSection {
+    margin-bottom: 2rem;
   }
   
   
