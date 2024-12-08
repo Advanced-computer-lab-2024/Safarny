@@ -64,14 +64,18 @@ const ProductList = () => {
           const sellerIds = response.data.map(product => product.createdby);
           const uniqueSellerIds = [...new Set(sellerIds)];
 
-          const sellerPromises = uniqueSellerIds.map(id =>
-              axios.get(`/user/${id}`).then(res => res.data)
-          );
+          const sellerPromises = uniqueSellerIds.map(id => {
+            if (!id) {
+              console.error('Seller ID is undefined');
+              return null;
+            }
+            return axios.get(`/tourist/${id}`).then(res => res.data);
+          });
 
-          const sellerData = await Promise.all(sellerPromises);
+          const sellerData = await Promise.all(sellerPromises.filter(Boolean));
 
           const sellersMap = sellerData.reduce((acc, seller) => {
-            acc[seller._id] = seller.sellerName;
+            acc[seller._id] = seller.username; // Assuming the seller's name is in the `username` field
             return acc;
           }, {});
 
@@ -107,7 +111,6 @@ const ProductList = () => {
     fetchUserRole();
     fetchExchangeRates();
   }, [userId]);
-
   const handleAddToWishlist = async (postId) => {
     try {
       const response = await axios.post('/wishlist/add', { userId, postId });

@@ -119,6 +119,7 @@ const ProfileSideBar = ({ userId, userInfo }) => {
                 icon: <FaClipboard />,
                 subItems: [
                     { name: "Historical Tags", icon: <FaMapMarked />, path: '/historical-tags' },
+                    { name: "Historical Places", icon: <FaMapMarked />, path: '/historical-places' },
                 ]
             }
         ]

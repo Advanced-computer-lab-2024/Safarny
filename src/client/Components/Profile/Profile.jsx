@@ -51,8 +51,17 @@ const Profile = () => {
         if (userData.role === "Tourist") {
   const today = new Date();
   const userBirthday = new Date(userData.DOB);
-  console.log("Today:", today, "User birthday:", userBirthday);
-  if (today.getMonth() === userBirthday.getMonth() && today.getDate() === userBirthday.getDate()) {
+  const lastPromoDate = new Date(userData.lastPromoDate || 0); // Default to epoch if not set
+
+  console.log("Today:", today, "User birthday:", userBirthday, "Last promo date:", lastPromoDate);
+
+  if (
+    today.getMonth() === userBirthday.getMonth() &&
+    today.getDate() === userBirthday.getDate() &&
+    (lastPromoDate.getFullYear() < today.getFullYear() ||
+      lastPromoDate.getMonth() !== today.getMonth() ||
+      lastPromoDate.getDate() !== today.getDate())
+  ) {
     // Fetch promo codes
     const promoResponse = await axios.get('/promocodes/promocodes');
     if (!promoResponse.data || promoResponse.data.length === 0) {
@@ -81,12 +90,13 @@ const Profile = () => {
     console.log("Email response:", JSON.stringify(emailResponse.data, null, 2));
     console.log("Promo code sent to user");
 
-    // Add promo code to user's array of promos
+    // Add promo code to user's array of promos and update lastPromoDate
     await axios.put(`/tourist/${userId}`, {
-      promos: [...userData.promos, randomPromoCode._id]
+      promos: [...userData.promos, randomPromoCode._id],
+      lastPromoDate: today.toISOString()
     });
 
-    console.log("Promo code added to user's promos");
+    console.log("Promo code added to user's promos and lastPromoDate updated");
   }
 }
       } catch (error) {

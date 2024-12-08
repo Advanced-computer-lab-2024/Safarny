@@ -213,6 +213,7 @@ const updateProfileById = AsyncHandler(async (req, res) => {
       addresses: req.body.addresses,
       promos: req.body.promos,
       preferencestags: req.body.preferencestags,
+      preferedhistoricaltags: req.body.preferedhistoricaltags,
     };
 
     // Remove undefined fields from updateData

@@ -44,6 +44,8 @@ export default function MyBookingModal({
                                           userId,
                                           desiredQuantities,
                                           handleClearCart,
+                                          bookingType,
+                                          bookingId,
                                       }) {
     const steps = ["Delivery", "Confirmation", "Payment", "Finish"];
     const [deliveryAddress, setDeliveryAddress] = useState({});
@@ -53,6 +55,8 @@ export default function MyBookingModal({
     //const [totalPrice, setTotalPrice] = useState("");
     const [activeStep, setActiveStep] = useState(0);
     const [error, setError] = useState("");
+    const [bookingDate, setBookingDate] = useState("");
+    const [bookingHour, setBookingHour] = useState("");
     const [stepValidation, setStepValidation] = useState([
         false,
         true,
