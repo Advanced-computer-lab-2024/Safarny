@@ -212,65 +212,92 @@ const ReadHistoricalPlace = () => {
     <div className={styles.pageWrapper}>
       <Header />
       
-      <div className="container py-5">
-        <h1 className="text-center mb-5">Historical Places</h1>
-
-        {/* Filter Section */}
-        <div className={`${styles.filterSection} row g-3 mb-4`}>
-          <div className="col-md-4">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search by description..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          
-          <div className="col-md-3">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Filter by opening hours..."
-              value={openingHoursFilter}
-              onChange={(e) => setOpeningHoursFilter(e.target.value)}
-            />
-          </div>
-          
-          <div className="col-md-3">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Filter by tag..."
-              value={tagFilter}
-              onChange={(e) => setTagFilter(e.target.value)}
-            />
-          </div>
-
-          <div className="col-md-2">
-            <select
-              className="form-select"
-              value={selectedCurrency}
-              onChange={(e) => setSelectedCurrency(e.target.value)}
-            >
-              {currencyCodes.map((code) => (
-                <option key={code} value={code}>{code}</option>
-              ))}
-            </select>
-          </div>
+      <div className="container-fluid px-4 py-5" style={{ width: '100vw' }}>
+        <div className={styles.pageHeader}>
+          <h1 className="text-center mb-4 text-black">Discover Historical Places</h1>
+          {/* <p className="text-center text-muted mb-5">Explore Egypt's rich heritage and ancient wonders</p> */}
         </div>
 
-        {/* Governor Filter Button */}
-        {userInfo.role === "TourismGovernor" && (
-          <div className="text-center mb-4">
-            <button
-              onClick={handleFilterByGovernor}
-              className="btn btn-outline-light"
-            >
-              {filterByGovernor ? "Show All Places" : "Show My Places"}
-            </button>
+        {/* Enhanced Filter Section */}
+        <div className={`${styles.filterSection} mb-5`}>
+          <div className="row g-4">
+            <div className="col-md-4">
+              <div className={styles.filterGroup}>
+                <div className={styles.filterIcon}>
+                  <i className="fas fa-search"></i>
+                </div>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search historical places..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+            </div>
+            
+            <div className="col-md-3">
+              <div className={styles.filterGroup}>
+                <div className={styles.filterIcon}>
+                  <i className="fas fa-clock"></i>
+                </div>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Opening hours..."
+                  value={openingHoursFilter}
+                  onChange={(e) => setOpeningHoursFilter(e.target.value)}
+                />
+              </div>
+            </div>
+            
+            <div className="col-md-3">
+              <div className={styles.filterGroup}>
+                <div className={styles.filterIcon}>
+                  <i className="fas fa-tags"></i>
+                </div>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search by tag..."
+                  value={tagFilter}
+                  onChange={(e) => setTagFilter(e.target.value)}
+                  style={{backgroundColor: 'var(--form-background)', color: '#fff'}}
+                />
+              </div>
+            </div>
+
+            <div className="col-md-2">
+              <div className={styles.filterGroup}>
+                <div className={styles.filterIcon}>
+                  <i className="fas fa-money-bill-wave"></i>
+                </div>
+                <select
+                  className="form-select"
+                  value={selectedCurrency}
+                  onChange={(e) => setSelectedCurrency(e.target.value)}
+                  style={{backgroundColor: 'var(--form-background)', color: 'var(--heading-color)'}}
+                >
+                  {currencyCodes.map((code) => (
+                    <option key={code} value={code}>{code}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
           </div>
-        )}
+
+          {userInfo.role === "TourismGovernor" && (
+            <div className="text-center mt-4">
+              <button
+                onClick={handleFilterByGovernor}
+                className={`${styles.filterButton} btn`}
+              >
+                <i className={`fas ${filterByGovernor ? 'fa-globe' : 'fa-filter'} me-2`}></i>
+                {filterByGovernor ? "Show All Places" : "Show My Places"}
+              </button>
+            </div>
+          )}
+        </div>
 
         {/* Places Grid */}
         {filteredPlaces.length > 0 ? (
@@ -281,26 +308,40 @@ const ReadHistoricalPlace = () => {
               
               return (
                 <div className="col-lg-6 col-xl-4" key={place._id}>
-                  <div className={`card h-100 ${styles.placeCard}`}>
+                  <div className={styles.placeCard}>
                     {place.pictures?.[0] && (
-                      <img
-                        src={place.pictures[0]}
-                        className="card-img-top"
-                        alt={place.description}
-                        style={{ height: "200px", objectFit: "cover" }}
-                      />
+                      <div className={styles.cardImageWrapper}>
+                        <img
+                          src={place.pictures[0]}
+                          className="card-img-top"
+                          alt={place.description}
+                        />
+                        <div className={styles.cardPriceTag}>
+                          {convertedPrice} {selectedCurrency}
+                        </div>
+                      </div>
                     )}
                     
-                    <div className="card-body">
-                      <h5 className="card-title">{place.description}</h5>
-                      <div className={`${styles.cardDetails} mb-3`}>
-                        <p className="mb-2"><strong>Opening Hours:</strong> {place.openingHours}</p>
-                        <p className="mb-2"><strong>Price:</strong> {convertedPrice} {selectedCurrency}</p>
-                        <p className="mb-2"><strong>Tags:</strong> {place.tags?.map(tag => tag.name).join(", ") || "No tags"}</p>
+                    <div className={styles.cardContent}>
+                      <h3 className={styles.cardTitle}>{place.description}</h3>
+                      
+                      <div className={styles.cardDetails}>
+                        <div className={styles.infoItem}>
+                          <i className="fas fa-clock"></i>
+                          <span>{place.openingHours}</span>
+                        </div>
+                        
+                        <div className={styles.tagContainer}>
+                          {place.tags?.map(tag => (
+                            <span key={tag._id} className={styles.tag}>
+                              {tag.name}
+                            </span>
+                          ))}
+                        </div>
                       </div>
 
                       {hasCoordinates && (
-                        <div className={`${styles.mapWrapper} mb-3`}>
+                        <div className={styles.mapWrapper}>
                           <MapContainer
                             center={[place.coordinates.lat, place.coordinates.lng]}
                             zoom={13}
@@ -312,41 +353,57 @@ const ReadHistoricalPlace = () => {
                         </div>
                       )}
 
-                      <div className="d-flex gap-2 flex-wrap">
+                      <div className={styles.cardActions}>
                         <button
                           onClick={() => handleReadHistoricalPlaceDetails(place._id)}
-                          className="btn btn-primary btn-sm"
+                          className={styles.primaryButton}
                         >
+                          <i className="fas fa-info-circle me-2"></i>
                           View Details
                         </button>
-                        <button
-                          onClick={() => navigator.clipboard.writeText(`${window.location.origin}/historical-place/${place._id}`)}
-                          className="btn btn-outline-secondary btn-sm"
-                        >
-                          Copy Link
-                        </button>
-                        <button
-                          onClick={() => window.location.href = `mailto:?subject=Check out this historical place&body=${window.location.origin}/historical-place/${place._id}`}
-                          className="btn btn-outline-secondary btn-sm"
-                        >
-                          Share via Email
-                        </button>
+                        
+                        {userId && (
+                          <button
+                            onClick={() => handleReadHistoricalPlaceBook(place._id)}
+                            className={styles.bookButton}
+                          >
+                            <i className="fas fa-ticket-alt me-2"></i>
+                            Book Now
+                          </button>
+                        )}
+
+                        <div className={styles.shareActions}>
+                          <button
+                            onClick={() => navigator.clipboard.writeText(`${window.location.origin}/historical-place/${place._id}`)}
+                            className={styles.shareButton}
+                          >
+                            <i className="fas fa-link me-2"></i>
+                            Copy Link
+                          </button>
+                          <button
+                            onClick={() => window.location.href = `mailto:?subject=Check out this historical place&body=${window.location.origin}/historical-place/${place._id}`}
+                            className={styles.shareButton}
+                          >
+                            <i className="fas fa-envelope me-2"></i>
+                            Share via Email
+                          </button>
+                        </div>
                         
                         {userInfo.role === "TourismGovernor" && (
-                          <>
+                          <div className={styles.adminActions}>
                             <button
                               onClick={() => handleUpdateHistoricalPlace(place._id)}
-                              className="btn btn-warning btn-sm"
+                              className={styles.editButton}
                             >
-                              Update
+                              <i className="fas fa-edit"></i>
                             </button>
                             <button
                               onClick={() => handleDeleteHistoricalPlace(place._id)}
-                              className="btn btn-danger btn-sm"
+                              className={styles.deleteButton}
                             >
-                              Delete
+                              <i className="fas fa-trash"></i>
                             </button>
-                          </>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -356,7 +413,11 @@ const ReadHistoricalPlace = () => {
             })}
           </div>
         ) : (
-          <div className="alert alert-info">No historical places available</div>
+          <div className={styles.noResults}>
+            <i className="fas fa-search fa-3x mb-3"></i>
+            <h3>No Places Found</h3>
+            <p>Try adjusting your filters to find more historical places</p>
+          </div>
         )}
       </div>
 
