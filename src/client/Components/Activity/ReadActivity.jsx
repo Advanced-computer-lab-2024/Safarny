@@ -150,7 +150,7 @@ const ReadActivities = () => {
                                         </div>
                                         <div className={styles.detailRow}>
                                             <FaDollarSign />
-                                            <span>{activity.price}</span>
+                                            <span>{activity.price} {activity.currency}</span>
                                         </div>
                                         <div className={styles.detailRow}>
                                             <FaShoppingCart />
