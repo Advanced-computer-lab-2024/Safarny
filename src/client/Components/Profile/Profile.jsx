@@ -105,6 +105,10 @@ const Profile = () => {
 
   console.log("Current userData state:", userData);
 
+  const handleGuidePage = () => {
+    navigate('/GuidePage', { state: { userId } });
+  };
+
   const handleCashInPoints = async () => {
     try {
       if (userData.loyaltyPoints === 0) {
@@ -191,6 +195,14 @@ const Profile = () => {
                     >
                       Cash in Points
                     </button>
+
+                    <button
+                      className={`btn btn-success ${styles.guideButton}`}
+                      onClick={handleGuidePage}
+                    >
+                      Guide Page
+                    </button>
+
                     {message && (
                       <div className={`alert ${message.includes('success') ? 'alert-success' : 'alert-danger'} mt-3`}>
                         {message}

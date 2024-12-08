@@ -331,62 +331,142 @@ const Seller = () => {
 
       {/* Modal - keep existing modal code */}
       <Modal open={openModal} onClose={handleCloseModal}>
-        <div className={styles.modalContent}>
-          <Typography variant="h6" style={{ color: "black" }}>
-  {editingPostId ? "Edit Post:" : "Add New Post"}
-</Typography>
-          <TextField
-              fullWidth
-              label="Details"
-              name="details"
-              value={currentPost.details}
-              onChange={handleInputChange}
-              margin="normal"
-          />
-          <TextField
-              fullWidth
-              label="Price"
-              name="price"
-              type="number"
-              value={currentPost.price}
-              onChange={handleInputChange}
-              margin="normal"
-          />
-          <FormControl fullWidth margin="normal">
-            <InputLabel>Currency</InputLabel>
-            <Select
-                name="currency"
-                value={currentPost.currency}
-                onChange={handleInputChange}
-            >
-              {currencyCodes.map(code => (
-                  <MenuItem key={code} value={code}>{code}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <TextField
-              fullWidth
-              label="Quantity"
-              name="quantity"
-              type="number"
-              value={currentPost.quantity}
-              onChange={handleInputChange}
-              margin="normal"
-          />
-          <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              style={{ margin: "10px 0" }}
-          />
-          <Button
-              variant="contained"
-              color="primary"
-              onClick={handleSubmitPost}
-              style={{ marginTop: "20px" }}
-          >
-            {editingPostId ? "Update Post" : "Add Post"}
-          </Button>
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <div className={styles.modalHeader}>
+              <h4 className="m-0 text-black">
+                {editingPostId ? "Edit Product" : "Add New Product"}
+              </h4>
+              <button 
+                className={styles.closeButton}
+                onClick={handleCloseModal}
+                aria-label="Close"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className={styles.modalBody}>
+              {errorMessage && (
+                <div className="alert alert-danger mb-4">
+                  {errorMessage}
+                </div>
+              )}
+
+              <div className="mb-4">
+                <label className="form-label">Product Details</label>
+                <textarea
+                  className="form-control"
+                  name="details"
+                  value={currentPost.details}
+                  onChange={handleInputChange}
+                  rows="3"
+                  placeholder="Enter product description..."
+                />
+              </div>
+
+              <div className="row mb-4">
+                <div className="col-md-6">
+                  <label className="form-label">Price</label>
+                  <div className="input-group">
+                    <span className="input-group-text">
+                      <i className="fas fa-dollar-sign"></i>
+                    </span>
+                    <input
+                      type="number"
+                      className="form-control"
+                      name="price"
+                      value={currentPost.price}
+                      onChange={handleInputChange}
+                      placeholder="0.00"
+                    />
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <label className="form-label">Currency</label>
+                  <select
+                    className="form-select"
+                    name="currency"
+                    value={currentPost.currency}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Select currency</option>
+                    {currencyCodes.map(code => (
+                      <option key={code} value={code}>{code}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <label className="form-label">Quantity</label>
+                <div className="input-group">
+                  <span className="input-group-text">
+                    <i className="fas fa-boxes"></i>
+                  </span>
+                  <input
+                    type="number"
+                    className="form-control"
+                    name="quantity"
+                    value={currentPost.quantity}
+                    onChange={handleInputChange}
+                    placeholder="Enter quantity"
+                  />
+                </div>
+              </div>
+
+              <div className={styles.imageUploadSection}>
+                <label className="form-label d-block">Product Image</label>
+                {selectedImage || currentPost.imageurl ? (
+                  <div className={styles.imagePreview}>
+                    <img 
+                      src={selectedImage ? URL.createObjectURL(selectedImage) : currentPost.imageurl} 
+                      alt="Preview" 
+                    />
+                    <button 
+                      className={styles.removeImage} 
+                      onClick={() => setSelectedImage(null)}
+                      type="button"
+                    >
+                      x
+                      <i className="fas fa-times"></i>
+                    </button>
+                  </div>
+                ) : (
+                  <div className={styles.dropZone}>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="d-none"
+                      id="imageInput"
+                    />
+                    <label htmlFor="imageInput" className={styles.uploadLabel}>
+                      <i className="fas fa-cloud-upload-alt mb-2"></i>
+                      <span>Click to upload image</span>
+                    </label>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className={styles.modalFooter}>
+              <button 
+                type="button" 
+                className="btn btn-outline-secondary"
+                onClick={handleCloseModal}
+              >
+                Cancel
+              </button>
+              <button 
+                type="button" 
+                className="btn btn-primary"
+                onClick={handleSubmitPost}
+              >
+                {editingPostId ? "Update Product" : "Add Product"}
+              </button>
+            </div>
+          </div>
         </div>
       </Modal>
 

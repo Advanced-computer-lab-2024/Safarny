@@ -106,7 +106,7 @@ router.get(
 
 router.put("/updatewallet", usersController.updateWallet);
 router.put("/cashInPoints", usersController.cashInPoints);
-router.put("/delete_request/:id", usersController.updateProfileById);
+router.put("/delete_request/:id", usersController.updateDeleteAccount);
 
 router.get(
   "/getUsersBySavedActivity/:activityId",
