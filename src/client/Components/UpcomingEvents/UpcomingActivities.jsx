@@ -143,7 +143,7 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
       setLoading(true);
       try {
         console.log('Fetching activities for user:', touristId);
-        
+
         // First, fetch the user's preference tags
         let userPreferenceTags = [];
         if (touristId) {
@@ -165,14 +165,27 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
 
         console.log('Fetching from URL:', url);
         const response = await fetch(url);
-        
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         const data = await response.json();
+
+        // Sort activities based on matching preference tags
+        data.sort((a, b) => {
+          const aMatchCount = a.tags.filter(tag =>
+              userPreferenceTags.includes(tag._id)
+          ).length;
+
+          const bMatchCount = b.tags.filter(tag =>
+              userPreferenceTags.includes(tag._id)
+          ).length;
+
+          return bMatchCount - aMatchCount; // Sort in descending order of matches
+        });
+
         console.log('Activities fetched:', data.length);
-        
         setActivities(data);
       } catch (error) {
         console.error("Error fetching activities:", error);
@@ -181,7 +194,6 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
         setLoading(false);
       }
     };
-
     fetchActivities();
   }, [touristId, sortCriteria, filterCriteria, budget, dateRange, selectedCategories]);
 
