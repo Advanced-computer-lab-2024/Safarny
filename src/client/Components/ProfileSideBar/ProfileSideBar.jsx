@@ -1,198 +1,221 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaBell } from 'react-icons/fa';
+import { 
+    FaPlane, FaHotel, FaCar, FaBook, FaShoppingBag, 
+    FaUser, FaExclamationCircle, FaList, FaCalendar,
+    FaMapMarked, FaStore, FaPlus, FaChartLine,
+    FaShip, FaCog, FaMap, FaClipboard, FaUserCog, FaTrash,
+    FaChevronRight, FaChevronDown, FaSearch, FaArrowLeft,
+    FaBars, FaTimes
+} from 'react-icons/fa';
 import styles from './ProfileSideBar.module.css';
+import axios from 'axios';
 
 const ProfileSideBar = ({ userId, userInfo }) => {
     const navigate = useNavigate();
+    const [activeMenu, setActiveMenu] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
 
-    // State for submenu toggles
-    const [showBookingsButtons, setShowBookingsButtons] = useState(false);
-    const [showComplaintsButtons, setShowComplaintsButtons] = useState(false);
-    const [showTransportationsButtons, setShowTransportButtons] = useState(false);
-    const [showPostButtons, setShowPostButtons] = useState(false);
-    const [showButtons, setShowButtons] = useState(false);
     const handleDelete = async () => {
-        if (userInfo.role === "Seller") {
-          axios.put(`/seller/delete_request/${userId}`, { delete_request: true });
+        const roleEndpoints = {
+            "Seller": "/seller/delete_request/",
+            "TourGuide": "/tourGuide/delete_request/",
+            "Tourist": "/tourist/delete_request/",
+            "Advertiser": "/advertiser/delete_request/"
+        };
+        
+        const endpoint = roleEndpoints[userInfo.role];
+        if (endpoint) {
+            await axios.put(`${endpoint}${userId}`, { delete_request: true });
         }
-        else if (userInfo.role === "TourGuide") {
-          axios.put(`/tourGuide/delete_request/${userId}`, { delete_request: true });
-        }
-        else if (userInfo.role === "Tourist") {
-          axios.put(`/tourist/delete_request/${userId}`, { delete_request: true });
-        }
-        else if (userInfo.role === "Advertiser") {
-          axios.put(`/advertiser/delete_request/${userId}`, { delete_request: true });
-        }
-      };
+    };
 
-      const handleProductViewClick = () => {
-        navigate("/products", { state: { userId } });
-      };
+    // Common navigation items that appear for all roles
+    const commonItems = [
+        { name: "Back", icon: <FaArrowLeft />, action: () => navigate(-1) },
+        { name: "Products", icon: <FaStore />, action: () => navigate('/products', { state: { userId } }) },
+        { name: "Search", icon: <FaSearch />, action: () => navigate('/Search') },
+        { name: "Update Profile", icon: <FaCog />, action: () => {
+            localStorage.setItem('userId', userId);
+            window.location.href = '/UpdateProfile';
+        }},
+    ];
 
-      const handleUpdateClick2 = () => {
-        navigate("/Search");
-      };
-
-      const handleUpdateClick = () => {
-        localStorage.setItem("userId", userId);
-        window.location.href = "/UpdateProfile";
-      };
-
-    const toggleSidebar = () => setIsOpen(!isOpen);
+    const menuItems = {
+        Tourist: [
+            {
+                title: "Bookings & Services",
+                icon: <FaBook />,
+                subItems: [
+                    { name: "Book Flight", icon: <FaPlane />, path: '/BookFlight' },
+                    { name: "Book Hotel", icon: <FaHotel />, path: '/BookHotel' },
+                    { name: "Book Transport", icon: <FaCar />, path: '/transportss/book-transport' },
+                    { name: "My Bookings", icon: <FaList />, path: '/mybookings' },
+                    { name: "My Orders", icon: <FaShoppingBag />, path: '/myorders' },
+                    { name: "My Preferences", icon: <FaUser />, path: '/PreferencesPage' },
+                ]
+            },
+            {
+                title: "Complaints",
+                icon: <FaExclamationCircle />,
+                subItems: [
+                    { name: "Create Complaint", icon: <FaPlus />, path: '/createcomplaints' },
+                    { name: "View Complaints", icon: <FaList />, path: '/viewcomplaints' },
+                ]
+            },
+            {
+                title: "Upcoming Events",
+                icon: <FaCalendar />,
+                subItems: [
+                    { name: "Activities", icon: <FaCalendar />, path: '/UpcomingActivites' },
+                    { name: "Itineraries", icon: <FaMapMarked />, path: '/UpcomingItineraries' },
+                    { name: "Historical Places", icon: <FaMapMarked />, path: '/historical-places' },
+                ]
+            }
+        ],
+        Seller: [
+            {
+                title: "Product Management",
+                icon: <FaStore />,
+                subItems: [
+                    { name: "Add Product", icon: <FaPlus />, path: '/create-post' },
+                    { name: "My Products", icon: <FaList />, path: '/seller' },
+                    { name: "Sales Report", icon: <FaChartLine />, path: '/sellerSales' },
+                ]
+            }
+        ],
+        Advertiser: [
+            {
+                title: "Services",
+                icon: <FaShip />,
+                subItems: [
+                    { name: "Activities", icon: <FaCalendar />, path: '/AdvertiserMain' },
+                    { name: "Create Transport", icon: <FaPlus />, path: '/transportss/create-transport' },
+                    { name: "Manage Transport", icon: <FaCog />, path: '/transportss/edit-transport' },
+                    { name: "Sales Report", icon: <FaChartLine />, path: '/Advertiser_Sales' },
+                ]
+            }
+        ],
+        TourGuide: [
+            {
+                title: "Services",
+                icon: <FaMap />,
+                subItems: [
+                    { name: "Add Itinerary", icon: <FaPlus />, path: '/tourguide' },
+                    { name: "Sales Report", icon: <FaChartLine />, path: '/TourGuideSales' },
+                ]
+            }
+        ],
+        TourismGovernor: [
+            {
+                title: "Management",
+                icon: <FaClipboard />,
+                subItems: [
+                    { name: "Historical Tags", icon: <FaMapMarked />, path: '/historical-tags' },
+                ]
+            }
+        ]
+    };
 
     return (
-        <div className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
-            <div className={styles.toggleButton} onClick={toggleSidebar}>
-                {isOpen ? '←' : '→'}
-            </div>
-            {isOpen && (
-                <div className={styles.content}>
-                    {/* <button className={styles.notificationButton}>
-                        <FaBell />
-                    </button> */}
-                    <h1>Welcome, {userInfo.username}!</h1>
+        <>
+            {/* Toggle Button */}
+            <button 
+                className={`btn btn-dark ${styles.toggleButton}`}
+                onClick={() => setIsOpen(!isOpen)}
+            >
+                {isOpen ? <FaTimes /> : <FaBars />}
+            </button>
 
-                    <div className={styles.mainButton}>
-                        <button onClick={handleDelete}>Request Account To be Deleted</button>
+            {/* Sidebar */}
+            <div className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
+                <div className="p-3">
+                    <div className="d-flex align-items-center justify-content-between mb-4">
+                        <div className="d-flex align-items-center">
+                            <FaUserCog className="me-2" />
+                            <h5 className="mb-0">User Menu</h5>
+                        </div>
+                        <button 
+                            className="btn btn-link text-dark"
+                            onClick={() => setIsOpen(false)}
+                        >
+                            <FaTimes />
+                        </button>
                     </div>
-                    <div className={styles.buttonGroup}>
-                        <button onClick={handleProductViewClick} className={styles.mainButton}>
-                            View Products
-                        </button>
-                        <button onClick={handleUpdateClick2} className={styles.mainButton}>
-                            Search
-                        </button>
-                        <button onClick={handleUpdateClick} className={styles.mainButton}>
-                            Update Profile
+
+                    {/* Common Actions */}
+                    <div className="mb-4">
+                        <div className="d-flex flex-wrap gap-2">
+                            {commonItems.map((item, index) => (
+                                <button
+                                    key={index}
+                                    className="btn btn-outline-secondary"
+                                    onClick={item.action}
+                                >
+                                    {item.icon}
+                                    <span className="ms-2">{item.name}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Delete Account Button */}
+                    <div className="mb-4">
+                        <button 
+                            className="btn btn-outline-danger w-100 mb-2"
+                            onClick={handleDelete}
+                        >
+                            <FaTrash className="me-2" />
+                            Delete Account
                         </button>
                     </div>
 
-                    {userInfo.role === 'Tourist' && (
-                        <div className={styles.buttonGroup}>
-                            <button onClick={() => setShowBookingsButtons(!showBookingsButtons)} className={styles.mainButton}>
-                                View & Book Services
-                            </button>
-                            {showBookingsButtons && (
-                                <div className={styles.subButtonGroup}>
-                                    <button onClick={() => navigate('/BookFlight', { state: { userId } })} className={styles.subButton}>
-                                        Book A Flight
-                                    </button>
-                                    <button onClick={() => navigate('/BookHotel', { state: { userId } })} className={styles.subButton}>
-                                        Book A Hotel
-                                    </button>
-                                    <button onClick={() => navigate('/transportss/book-transport', { state: { userId } })} className={styles.subButton}>
-                                        Book Transports
-                                    </button>
-                                    <button onClick={() => navigate('/mybookings', { state: { userId } })} className={styles.subButton}>
-                                        My Bookings
-                                    </button>
-                                    <button onClick={() => navigate('/myorders', { state: { userId } })} className={styles.subButton}>
-                                        My Orders
-                                    </button>
-                                    <button onClick={() => navigate('/PreferencesPage', { state: { userId } })} className={styles.subButton}>
-                                        Select Your Preferences
-                                    </button>
+                    {/* Role Specific Menu */}
+                    <div className="nav flex-column">
+                        {menuItems[userInfo.role]?.map((menu, index) => (
+                            <div key={index} className="mb-2">
+                                <button
+                                    className="btn btn-light w-100 text-start d-flex align-items-center justify-content-between"
+                                    onClick={() => setActiveMenu(activeMenu === menu.title ? null : menu.title)}
+                                >
+                                    <span>
+                                        {menu.icon}
+                                        <span className="ms-2">{menu.title}</span>
+                                    </span>
+                                    {activeMenu === menu.title ? <FaChevronDown /> : <FaChevronRight />}
+                                </button>
+                                
+                                <div className={`collapse ${activeMenu === menu.title ? 'show' : ''}`}>
+                                    <div className="ps-3 pt-2">
+                                        {menu.subItems.map((item, idx) => (
+                                            <button
+                                                key={idx}
+                                                className="btn btn-link text-decoration-none text-muted w-100 text-start py-1"
+                                                onClick={() => {
+                                                    navigate(item.path, { state: { userId } });
+                                                    setIsOpen(false);
+                                                }}
+                                            >
+                                                {item.icon}
+                                                <span className="ms-2">{item.name}</span>
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
-                            )}
-
-                            <button onClick={() => setShowComplaintsButtons(!showComplaintsButtons)} className={styles.mainButton}>
-                                Manage Complaints
-                            </button>
-                            {showComplaintsButtons && (
-                                <div className={styles.subButtonGroup}>
-                                    <button onClick={() => navigate('/createcomplaints', { state: { userId } })} className={styles.subButton}>
-                                        Create Complaint
-                                    </button>
-                                    <button onClick={() => navigate('/viewcomplaints', { state: { userId } })} className={styles.subButton}>
-                                        View Complaints
-                                    </button>
-                                </div>
-                            )}
-
-                            <button onClick={() => setShowButtons(!showButtons)} className={styles.mainButton}>
-                                View Upcoming Events
-                            </button>
-                            {showButtons && (
-                                <div className={styles.subButtonGroup}>
-                                    <button onClick={() => navigate('/UpcomingActivites', { state: { userId } })} className={styles.subButton}>
-                                        Upcoming Activities
-                                    </button>
-                                    <button onClick={() => navigate('/UpcomingItineraries', { state: { userId } })} className={styles.subButton}>
-                                        Upcoming Itineraries
-                                    </button>
-                                    <button onClick={() => navigate('/historical-places', { state: { userId } })} className={styles.subButton}>
-                                        Upcoming Historical Places
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    )}
-
-                    {userInfo.role === 'Seller' && (
-                        <div className={styles.buttonGroup}>
-                            <button onClick={() => setShowPostButtons(!showPostButtons)} className={styles.mainButton}>
-                                Manage Products
-                            </button>
-                            <button onClick={() => navigate('/sellerSales', { state: { userId } })} className={styles.mainButton}>
-                                        Sales Report
-                            </button>
-                            {showPostButtons && (
-                                <div className={styles.subButtonGroup}>
-                                    <button onClick={() => navigate('/create-post', { state: { userId } })} className={styles.subButton}>
-                                        Add Product
-                                    </button>
-                                    <button onClick={() => navigate('/seller', { state: { userId } })} className={styles.subButton}>
-                                        My Products
-                                    </button>
-
-                                    
-                                </div>
-                            )}
-                        </div>
-                    )}
-
-                    {userInfo.role === 'Advertiser' && (
-                        <div className={styles.buttonGroup}>
-                            <button onClick={() => setShowTransportButtons(!showTransportationsButtons)} className={styles.mainButton}>
-                                Transportation and Activities
-                            </button>
-                            <button onClick={()=>navigate("/Advertiser_Sales",{ state: { userId } })} className={styles.mainButton}>
-                                Sales Report
-                            </button>
-                            {showTransportationsButtons && (
-                                <div className={styles.subButtonGroup}>
-                                    <button onClick={() => navigate('/AdvertiserMain', { state: { userId } })} className={styles.subButton}>
-                                        Activity
-                                    </button>
-                                    <button onClick={() => navigate('/transportss/create-transport', { state: { userId } })} className={styles.subButton}>
-                                        Create Transport
-                                    </button>
-                                    <button onClick={() => navigate('/transportss/edit-transport', { state: { userId } })} className={styles.subButton}>
-                                        Edit & Delete Transport
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    )}
-
-                    {userInfo.role === 'TourGuide' && (
-                        <div className={styles.buttonGroup}>
-                            <button onClick={() => navigate('/tourguide', { state: { userId } })} className={styles.postButton}>
-                                Add Itinerary
-                            </button>
-                            
-                            <button onClick={() => navigate('/TourGuideSales', { state: { userId } })} className={styles.postButton}>
-                                Sales Report
-                            </button>
-                        </div>
-                        
-                    )}
+                            </div>
+                        ))}
+                    </div>
                 </div>
+            </div>
+
+            {/* Overlay */}
+            {isOpen && (
+                <div 
+                    className={styles.overlay}
+                    onClick={() => setIsOpen(false)}
+                />
             )}
-        </div>
+        </>
     );
 };
 
