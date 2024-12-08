@@ -200,19 +200,30 @@
 }
 
 .sellerInfo {
-  color: var(--secondary-color);
-  margin-bottom: 1rem;
+  color: white;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.sellerInfo span {
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .rating {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 1rem;
+  margin: 0.5rem 0;
 }
 
 .rating span {
-  color: var(--secondary-color);
+  color: white;
+  font-size: 0.9rem;
+}
+
+.quantity {
+  color: white;
+  font-size: 0.9rem;
 }
 
 .reviews {
@@ -337,4 +348,11 @@
   color: var(--text-color);
   cursor: pointer;
   user-select: none;
+}
+
+/* If you want to make sure the text is readable, you might want to add a subtle text shadow */
+.sellerInfo span,
+.rating span,
+.quantity {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
