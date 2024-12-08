@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Modal } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { FaHotel, FaSearch, FaList, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaHotel, FaSearch, FaList, FaMapMarkerAlt, FaBed, FaCalendar, FaUsers } from 'react-icons/fa';
 import styles from './BookingHotel.module.css';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
@@ -329,47 +329,68 @@ const BookingHotel = () => {
         onClose={handleCloseModal}
         className={styles.modalWrapper}
       >
-        <div className={`${styles.modalContent} bg-white rounded-3 shadow-lg`}>
-          <div className="modal-header border-bottom">
-            <h5 className="modal-title">Hotel Offer Details</h5>
+        <div className={styles.modalContent}>
+          <div className={styles.modalHeader}>
+            <h5 className="m-0">Hotel Offer Details</h5>
             <button 
-              type="button" 
-              className="btn-close" 
+              className={styles.closeButton}
               onClick={handleCloseModal}
-            />
+              aria-label="Close"
+            >
+              ×
+            </button>
           </div>
 
-          <div className="modal-body">
+          <div className={styles.modalBody}>
             {selectedOffer && offerDetails ? (
               <>
                 <h4 className="mb-4">{selectedOffer.name}</h4>
-                <div className="row g-4">
-                  <div className="col-md-6">
-                    <h6>Room Details</h6>
-                    <ul className="list-unstyled">
-                      <li>Type: {offerDetails.offers[0].room.typeEstimated.category}</li>
-                      <li>Beds: {offerDetails.offers[0].room.typeEstimated.beds}</li>
-                      <li>Bed Type: {offerDetails.offers[0].room.typeEstimated.bedType}</li>
-                    </ul>
-                  </div>
-                  <div className="col-md-6">
-                    <h6>Booking Details</h6>
-                    <ul className="list-unstyled">
-                      <li>Check-in: {offerDetails.offers[0].checkInDate}</li>
-                      <li>Check-out: {offerDetails.offers[0].checkOutDate}</li>
-                      <li>Adults: {offerDetails.offers[0].guests.adults}</li>
-                    </ul>
+                
+                <div className={styles.roomDetails}>
+                  <div className="row g-4">
+                    <div className="col-md-6">
+                      <h6 className="mb-3">Room Details</h6>
+                      <ul className="list-unstyled mb-0">
+                        <li className="mb-2">
+                          <FaBed className="me-2 text-primary" />
+                          {offerDetails.offers[0].room.typeEstimated.category}
+                        </li>
+                        <li className="mb-2">
+                          <span className="me-2">🛏️</span>
+                          {offerDetails.offers[0].room.typeEstimated.beds} {offerDetails.offers[0].room.typeEstimated.bedType}
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="col-md-6">
+                      <h6 className="mb-3">Stay Details</h6>
+                      <ul className="list-unstyled mb-0">
+                        <li className="mb-2">
+                          <FaCalendar className="me-2 text-primary" />
+                          Check-in: {new Date(offerDetails.offers[0].checkInDate).toLocaleDateString()}
+                        </li>
+                        <li className="mb-2">
+                          <FaCalendar className="me-2 text-primary" />
+                          Check-out: {new Date(offerDetails.offers[0].checkOutDate).toLocaleDateString()}
+                        </li>
+                        <li>
+                          <FaUsers className="me-2 text-primary" />
+                          {offerDetails.offers[0].guests.adults} Adults
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
+
                 <div className="mt-4">
-                  <h6>Description</h6>
-                  <p>{offerDetails.offers[0].room.description.text}</p>
+                  <h6 className="mb-3">Description</h6>
+                  <p className="mb-4">{offerDetails.offers[0].room.description.text}</p>
                 </div>
-                <div className="mt-4">
-                  <h6>Price</h6>
-                  <h4 className="text-primary">
+
+                <div className={styles.priceTag}>
+                  <small className="text-muted">Total Price</small>
+                  <div className={styles.priceAmount}>
                     {offerDetails.offers[0].price.total} {offerDetails.offers[0].price.currency}
-                  </h4>
+                  </div>
                 </div>
               </>
             ) : (
@@ -380,21 +401,21 @@ const BookingHotel = () => {
             )}
           </div>
 
-          <div className="modal-footer border-top">
+          <div className={styles.modalFooter}>
             <button 
               type="button" 
-              className="btn btn-secondary" 
+              className="btn btn-outline-secondary"
               onClick={handleCloseModal}
             >
-              Close
+              Cancel
             </button>
             <button 
               type="button" 
-              className="btn btn-primary" 
+              className="btn btn-primary"
               onClick={handleBooking}
               disabled={!offerDetails}
             >
-              Book Now
+              Confirm Booking
             </button>
           </div>
         </div>
