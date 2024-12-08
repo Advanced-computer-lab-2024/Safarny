@@ -1,10 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Footer from '/src/client/Components/Footer/Footer';
 import Header from '/src/client/Components/Header/Header';
-import styles from "./AdvertiserSales.module.css";
+import styles from './AdvertiserSales.module.css';
+import { FaChartLine, FaCalendar, FaFilter, FaDollarSign } from 'react-icons/fa';
 
 const AdvertiserSales = () => {
     const location = useLocation();
@@ -85,74 +85,103 @@ const AdvertiserSales = () => {
     };
 
     return (
-        <div className={styles.container}>
+        <div className={styles.pageWrapper}>
             <Header />
-            <div className={styles.reportContainer}>
-                <h2 className={styles.heading}>Advertiser Performance Report</h2>
-                
-                <div className={styles.statsGrid}>
-                    <div className={styles.statCard}>
-                        <h3 className={styles.statLabel}>Total Clients</h3>
-                        <div className={styles.statValue}>{boughtCount}</div>
+            
+            <main className={styles.mainContent}>
+                <div className={styles.container}>
+                    <div className={styles.pageHeader}>
+                        <div className={styles.headerContent}>
+                            <h1>
+                                <FaChartLine />
+                                <span>Sales Performance Dashboard</span>
+                            </h1>
+                            <p className={styles.subheading}>Track and analyze your sales performance</p>
+                        </div>
                     </div>
-                    
-                    <div className={styles.statCard}>
-                        <h3 className={styles.statLabel}>Total Revenue</h3>
-                        <div className={styles.statValue}>${revenue}</div>
-                    </div>
-                    
-                    <div className={styles.statCard}>
-                        <h3 className={styles.statLabel}>Total Tourists</h3>
-                        <div className={styles.statValue}>{totalTourists}</div>
-                    </div>
-                </div>
 
-                <div className={styles.formGroup}>
-                    <h3 className={styles.filterTitle}>Filter by Period</h3>
-                    <div className={styles.filterControls}>
-                        <select
-                            className={styles.select}
-                            value={month}
-                            onChange={(e) => setMonth(e.target.value)}
-                        >
-                            <option value="">Select Month</option>
-                            {months.map((month) => (
-                                <option key={month.value} value={month.value}>
-                                    {month.label}
-                                </option>
-                            ))}
-                        </select>
-                        
-                        <select
-                            className={styles.select}
-                            value={year}
-                            onChange={(e) => setYear(e.target.value)}
-                        >
-                            <option value="">Select Year</option>
-                            {years.map((year) => (
-                                <option key={year} value={year}>
-                                    {year}
-                                </option>
-                            ))}
-                        </select>
-                        
-                        <button className={styles.button} onClick={handleSubmit}>
-                            Generate Report
-                        </button>
-                    </div>
-                </div>
+                    <div className={styles.summaryCards}>
+                        <div className={styles.card}>
+                            <div className={styles.cardIcon}>
+                                <FaDollarSign />
+                            </div>
+                            <h3>Total Revenue</h3>
+                            <div className={styles.amount}>
+                                ${revenue.toLocaleString()}
+                            </div>
+                            <p className={styles.cardSubtext}>Lifetime earnings</p>
+                        </div>
 
-                {(filteredRevenue > 0 || totalTourists > 0) && (
-                    <div className={styles.resultsSection}>
-                        <div className={styles.statsGrid}>
-                            <div className={styles.statCard}>
-                                <h3 className={styles.statLabel}>Filtered Revenue</h3>
-                                <div className={styles.statValue}>${filteredRevenue}</div>
+                        {filteredRevenue > 0 && (
+                            <div className={styles.card}>
+                                <div className={styles.cardIcon}>
+                                    <FaCalendar />
+                                </div>
+                                <h3>Filtered Revenue</h3>
+                                <div className={styles.amount}>
+                                    ${filteredRevenue.toLocaleString()}
+                                </div>
+                                <p className={styles.period}>
+                                    {month && months.find(m => m.value === month)?.label} {year}
+                                </p>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className={styles.filterSection}>
+                        <div className={styles.filterHeader}>
+                            <h3>
+                                <FaFilter />
+                                <span>Filter by Period</span>
+                            </h3>
+                        </div>
+                        
+                        <div className={styles.filterControls}>
+                            <div className={styles.filterGrid}>
+                                <div className={styles.filterItem}>
+                                    <select 
+                                        className={styles.select}
+                                        value={month} 
+                                        onChange={(e) => setMonth(e.target.value)}
+                                    >
+                                        <option value="">Select Month</option>
+                                        {months.map((month) => (
+                                            <option key={month.value} value={month.value}>
+                                                {month.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className={styles.filterItem}>
+                                    <select 
+                                        className={styles.select}
+                                        value={year} 
+                                        onChange={(e) => setYear(e.target.value)}
+                                    >
+                                        <option value="">Select Year</option>
+                                        {years.map((year) => (
+                                            <option key={year} value={year}>
+                                                {year}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className={styles.filterItem}>
+                                    <button 
+                                        className={styles.filterButton}
+                                        onClick={handleSubmit}
+                                    >
+                                        Generate Report
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                )}
-            </div>
+                </div>
+            </main>
+
             <Footer />
         </div>
     );

@@ -13,10 +13,8 @@ AdvertiserSales.module.css
 
 .container {
     max-width: 1200px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: var(--background-main);
-    font-family: Arial, sans-serif;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
 .reportContainer {
@@ -123,4 +121,164 @@ AdvertiserSales.module.css
         grid-template-columns: 1fr;
     }
 }
-  
+
+.pageWrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f9fa;
+    width: 100vw;
+}
+
+.mainContent {
+    flex: 1;
+    padding: 40px 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.headerContent {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 40px;
+}
+
+.headerContent h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    font-size: 2.5rem;
+    color: #333;
+}
+
+.subheading {
+    color: #666;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.summaryCards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+    align-items: center;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    text-align: center;
+    align-self: center;
+}
+
+.cardIcon {
+    font-size: 2.5rem;
+    color: #007bff;
+    margin-bottom: 16px;
+}
+
+.card h3 {
+    color: #666;
+    margin-bottom: 16px;
+    font-size: 1.2rem;
+}
+
+.amount {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.cardSubtext {
+    color: #666;
+    font-size: 1rem;
+    align-self: center;
+}
+
+.period {
+    color: #666;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+}
+
+.filterSection {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.filterHeader {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.filterHeader h3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 0;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.filterGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: white;
+    font-size: 1rem;
+    color: #333;
+}
+
+.filterButton {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.filterButton:hover {
+    background-color: #0056b3;
+}
+
+.filterButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    .filterGrid {
+        grid-template-columns: 1fr;
+    }
+    
+    .mainContent {
+        padding: 20px 0;
+    }
+}

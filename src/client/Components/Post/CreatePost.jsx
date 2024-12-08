@@ -117,7 +117,7 @@ const CreatePost = () => {
       }
 
       setSuccessMessage("Post added successfully");
-      setTimeout(() => navigate('/dashboard'), 2000);
+      // setTimeout(() => navigate('/dashboard'), 2000);
     } catch (error) {
       setErrorMessage(error.message || "Failed to add post");
     } finally {
