@@ -109,6 +109,14 @@ const handleApplyPromoCode = async (enteredPromoCode) => {
       console.log("Promo code applied successfully.");
       console.log("Discounted price:", discountedPrice);
       setError(""); // Clear any error messages
+
+      try {
+        await axios.delete(`/promocodes/promocodes/${promoCodeObject._id}`);
+        console.log("Promo code deleted successfully.");
+      } catch (deleteError) {
+        console.error("Error deleting the promo code:", deleteError.message);
+        alert("The promo code could not be deleted after use.");
+      }
     } else {
       alert("Promo code not found.");
       setError("Promo code not found.");
@@ -120,10 +128,6 @@ const handleApplyPromoCode = async (enteredPromoCode) => {
   }
 };
   
-  
-  
-  
-
   const handleClose = () => {
     setOpen(false);
     if (onClose) onClose();

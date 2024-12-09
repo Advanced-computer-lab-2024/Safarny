@@ -4,6 +4,7 @@ const {
   getPromoCodeById,
   updatePromoCode,
   getAllPromoCodes,
+  deletePromoCodeById,
 } = require("../controllers/PromoCodeController.js");
 
 const router = express.Router();
@@ -19,5 +20,7 @@ router.get("/promocodes/:id", getPromoCodeById);
 
 // Route for updating a promo code by ID
 router.put("/promocodes/:id", updatePromoCode);
+
+router.delete("/promocodes/:id", deletePromoCodeById); // Added this route
 
 module.exports = router;
