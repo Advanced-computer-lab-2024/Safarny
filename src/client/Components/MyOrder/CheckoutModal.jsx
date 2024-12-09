@@ -74,32 +74,58 @@ export default function CheckoutModal({
     });
   };
 
-  const handleApplyPromoCode = async () => {
+  const handleApplyPromoCode = async (enteredPromoCode) => {
+    console.log("Entered Promo Code:", enteredPromoCode);
+    console.log("User ID:", userId);
+  
     try {
-      // Call the backend to check if the promo code exists
-      const response = await axios.get(`/admin/promocodes/${promoCode}`);
+      // Fetch user data from the backend
+      const response = await axios.get(`/tourist/${userId}`);
+      console.log("Response Data:", response.data);
+  
+      // Get user data and ensure promos is an array (defaults to empty if not found)
+      const user = response.data;
+      const promos = user.promos || [];
+  
+      console.log("user.promos:", promos);
 
-      // If promo code exists, apply the discount
-      if (response.data) {
-        const discountPercentage = response.data.discountPercentage;
-        const discountedPrice =
-          totalPrice - (totalPrice * discountPercentage) / 100;
-
-        // Update the total price after applying the discount
-        setTotalPrice(discountedPrice); // Correctly update the state
-        setError(""); // Clear any previous errors
+      console.log("user.promos0:", promos[0].discountPercentage);
+  
+      // If the promos array is empty, notify the user
+      if (promos.length === 0) {
+        alert("You don't have any promo codes available.");
+        setError("You don't have any promo codes available.");
+        return;
+      }
+  
+      // Check if the promo code exists in the user's promos array
+      const userPromo = promos.find((promo) => promo.code === enteredPromoCode); // Match promo code by 'code' property
+  
+      console.log("userPromo:", userPromo);
+  
+      if (userPromo) {
+        // Apply the discount using the promo's discountPercentage
+        const discountPercentage = userPromo.discountPercentage;
+        const discountedPrice = totalPrice - (totalPrice * discountPercentage) / 100;
+  
+        setTotalPrice(discountedPrice); // Update the total price with the discounted value
+        setError(""); // Clear any error messages
       } else {
-        // If promo code doesn't exist, display an alert
-        alert("Promo code not found.");
-        setError("Promo code not found."); // Optionally set error state
+        alert("Promo code not found in your account.");
+        setError("Promo code not found in your account.");
       }
     } catch (err) {
-      // Handle error if promo code is not valid
-      alert("Invalid Promo Code or Promo Code expired.");
-      setError("Invalid Promo Code or Promo Code expired.");
-      console.log(err);
+      console.error("Error during promo code application:", err.message);
+      alert("An error occurred while applying the promo code.");
+      setError("An error occurred while applying the promo code.");
     }
   };
+  
+  
+  
+  
+  
+  
 
   const handleClose = () => {
     setOpen(false);
@@ -424,9 +450,9 @@ function ConfirmationStep({
           />
           <Button
             variant="contained"
-            onClick={handleApplyPromoCode}
-            disabled={!promoCode.trim()}
-            className={styles.buttonContainer} // Make sure this is defined in your styles
+            onClick={() => handleApplyPromoCode(promoCode.trim())} // Pass promo code as a parameter
+           disabled={!promoCode.trim()}
+           className={styles.buttonContainer}
           >
             Apply
           </Button>
