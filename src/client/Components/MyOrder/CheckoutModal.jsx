@@ -229,7 +229,7 @@ const handleApplyPromoCode = async (enteredPromoCode) => {
               variant="contained"
               disabled={!stepValidation[activeStep]}
             >
-              {activeStep === steps.length - 1 ? "Finish" : "Next"}
+              {activeStep === steps.length - 1 ? "Exit" : "Next"}
             </Button>
           </div>
         </div>

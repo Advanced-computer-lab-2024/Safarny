@@ -38,7 +38,6 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY); /
 
 export default function MyBookingModal({
                                            cartItems,
-                                           totalPrice,
                                            onClose,
                                            currency,
                                            userId,
@@ -51,8 +50,9 @@ export default function MyBookingModal({
     const [paymentMethod, setPaymentMethod] = useState("credit_card");
     const [open, setOpen] = useState(true);
     const [promoCode, setPromoCode] = useState(""); // State for promo code
-    //const [totalPrice, setTotalPrice] = useState("");
+    const [totalPrice, setTotalPrice] = useState("");
     const [activeStep, setActiveStep] = useState(0);
+    const [promoSuccessMessage, setPromoSuccessMessage] = useState("");
     const [error, setError] = useState("");
     const [bookingDate, setBookingDate] = useState("");
     const [stepValidation, setStepValidation] = useState([
@@ -71,29 +71,54 @@ export default function MyBookingModal({
         });
     };
 
-    const handleApplyPromoCode = async () => {
+    const handleApplyPromoCode = async (enteredPromoCode) => {
         try {
-            // Call the backend to check if the promo code exists
-            const response = await axios.get(`/admin/promocodes/${promoCode}`);
+            // Fetch all available promo codes from the backend
+            const promoCodesResponse = await axios.get(`/promocodes/promocodes`);
+            const availablePromoCodes = Array.isArray(promoCodesResponse.data) ? promoCodesResponse.data : [];
 
-            // If promo code exists, apply the discount
-            if (response.data) {
-                const discountPercentage = response.data.discountPercentage;
+            console.log("Available promo codes:", availablePromoCodes);
+            console.log("Entered promo code:", enteredPromoCode);
+            // Find the promo code object that matches the entered promo code
+            const promoCodeObject = availablePromoCodes.find(
+                (promo) => promo.code === enteredPromoCode
+            );
+
+            if (promoCodeObject) {
+                const promoDetailsResponse = await axios.get(`/promocodes/promocodes/${promoCodeObject._id}`);
+                const promoDetails = promoDetailsResponse.data;
+
+                console.log(promoDetails);
+                console.log(promoDetails.discountPercentage);
+                if (!promoDetails || !promoDetails.discountPercentage) {
+                    alert("Unable to retrieve promo code details.");
+                    setError("Unable to retrieve promo code details.");
+                    return;
+                }
+
+                // Calculate the discounted price
+                const discountPercentage = promoDetails.discountPercentage;
                 const discountedPrice = totalPrice - (totalPrice * discountPercentage) / 100;
 
-                // Update the total price after applying the discount
-                setTotalPrice(discountedPrice); // Correctly update the state
-                setError(""); // Clear any previous errors
+                setTotalPrice(discountedPrice); // Update the total price with the discounted value
+                alert(`Promo code applied successfully. You have saved: ${discountPercentage}%`);
+                setError(""); // Clear any error messages
+
+                try {
+                    await axios.delete(`/promocodes/promocodes/${promoCodeObject._id}`);
+                    console.log("Promo code deleted successfully.");
+                } catch (deleteError) {
+                    console.error("Error deleting the promo code:", deleteError.message);
+                    alert("The promo code could not be deleted after use.");
+                }
             } else {
-                // If promo code doesn't exist, display an alert
                 alert("Promo code not found.");
-                setError("Promo code not found."); // Optionally set error state
+                setError("Promo code not found.");
             }
         } catch (err) {
-            // Handle error if promo code is not valid
-            alert("Invalid Promo Code or Promo Code expired.");
-            setError("Invalid Promo Code or Promo Code expired.");
-            console.log(err);
+            console.error("Error during promo code application:", err.message);
+            alert("An error occurred while applying the promo code.");
+            setError("An error occurred while applying the promo code.");
         }
     };
 
@@ -130,8 +155,7 @@ export default function MyBookingModal({
     return (
         <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
             <DialogTitle>Checkout</DialogTitle>
-            <DialogContent className={styles.modalContent}>
-                <Stepper activeStep={activeStep} alternativeLabel>
+            <DialogContent className={styles.modalContent} style={{ maxWidth: '900px', width: '100%' }}>                <Stepper activeStep={activeStep} alternativeLabel>
                     {steps.map((label, index) => (
                         <Step key={label}>
                             <StepLabel StepIconComponent={() => getStepIcon(index)}>
@@ -203,7 +227,7 @@ export default function MyBookingModal({
                             variant="contained"
                             disabled={!stepValidation[activeStep]}
                         >
-                            {activeStep === steps.length - 1 ? "Finish" : "Next"}
+                            {activeStep === steps.length - 1 ? "Exit" : "Next"}
                         </Button>
                     </div>
                 </div>
@@ -433,8 +457,14 @@ function ConfirmationStep({
                     onChange={(e) => setPromoCode(e.target.value)}
                     fullWidth
                 />
-                <Button onClick={handleApplyPromoCode}>Apply</Button>
-            </div>
+                <Button
+                    variant="contained"
+                    onClick={() => handleApplyPromoCode(promoCode.trim())} // Pass promo code as a parameter
+                    disabled={!promoCode.trim()}
+                    className={styles.buttonContainer}
+                >
+                    Apply
+                </Button>            </div>
         </div>
     );
 }
