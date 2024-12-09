@@ -428,7 +428,7 @@ const MyBookings = () => {
                                                                                                                         <span>Guide: {booking.tourGuideUsername}</span>
                                                                                                                 </div>
 
-                                                                                                                {!isPastDate(booking.bookingDate) && !submittedTourGuideRatings[booking.tourGuideId] && (
+                                                                                                                {isPastDate(booking.bookingDate) && !submittedTourGuideRatings[booking.tourGuideId] && (
                                                                                                                         <div className={styles.ratingSection}>
                                                                                                                                 <FormControl fullWidth size="small">
                                                                                                                                         <InputLabel>Rate Guide</InputLabel>
@@ -458,6 +458,39 @@ const MyBookings = () => {
                                                                                                                                         </Button>
                                                                                                                                 </FormControl>
                                                                                                                         </div>
+                                                                                                                )}
+                                                                                                                {isPastDate(booking.bookingDate) && !submittedRatings[booking._id] && (
+                                                                                                                    <div className={styles.ratingSection}>
+                                                                                                                            <FormControl fullWidth size="small">
+                                                                                                                                    <InputLabel>Rate {bookingType === "itinerary" ? "Itinerary" : "Activity"}</InputLabel>
+                                                                                                                                    <Select
+                                                                                                                                        value={selectedRating[booking._id] || 5}
+                                                                                                                                        onChange={(e) => setSelectedRating({
+                                                                                                                                                ...selectedRating,
+                                                                                                                                                [booking._id]: e.target.value
+                                                                                                                                        })}
+                                                                                                                                    >
+                                                                                                                                            {[1, 2, 3, 4, 5].map((rating) => (
+                                                                                                                                                <MenuItem key={rating} value={rating}>
+                                                                                                                                                        {rating} <FaStar className="ms-1 text-warning" />
+                                                                                                                                                </MenuItem>
+                                                                                                                                            ))}
+                                                                                                                                    </Select>
+                                                                                                                                    <Button
+                                                                                                                                        variant="contained"
+                                                                                                                                        size="small"
+                                                                                                                                        onClick={() => handleRatingChange(
+                                                                                                                                            booking._id,
+                                                                                                                                            selectedRating[booking._id],
+                                                                                                                                            bookingType,
+                                                                                                                                            bookingType === "itinerary" ? booking.itinerary._id : booking.activity._id
+                                                                                                                                        )}
+                                                                                                                                        className="mt-2"
+                                                                                                                                    >
+                                                                                                                                            Submit Rating
+                                                                                                                                    </Button>
+                                                                                                                            </FormControl>
+                                                                                                                    </div>
                                                                                                                 )}
                                                                                                         </div>
                                                                                                 )}
