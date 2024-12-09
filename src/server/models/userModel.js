@@ -29,6 +29,10 @@ const userModel = new mongoose.Schema(
     DOB: Date,
     age: Number,
     mobile: String,
+      promos: {
+          type: [String],
+          default: [],
+      },
     addresses: {
       type: [String],
       default: [],
