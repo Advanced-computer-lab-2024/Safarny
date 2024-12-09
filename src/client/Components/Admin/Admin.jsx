@@ -588,14 +588,14 @@ const Admin = () => {
                                 >
                                   <i className="fas fa-edit me-1"></i> Edit
                                 </Button>
-                                <Button 
-                                  variant="outline-danger" 
-                                  size="sm"
-                                  onClick={() => handleDeletePost(post._id)}
-                                  className={styles.actionBtn}
-                                >
-                                  <i className="fas fa-trash-alt me-1"></i> Delete
-                                </Button>
+                                {/*<Button */}
+                                {/*  variant="outline-danger" */}
+                                {/*  size="sm"*/}
+                                {/*  onClick={() => handleDeletePost(post._id)}*/}
+                                {/*  className={styles.actionBtn}*/}
+                                {/*>*/}
+                                {/*  <i className="fas fa-trash-alt me-1"></i> Delete*/}
+                                {/*</Button>*/}
                               </div>
                             </Card.Body>
                           </Card>
