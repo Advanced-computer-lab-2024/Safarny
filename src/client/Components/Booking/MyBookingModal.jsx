@@ -55,7 +55,6 @@ export default function MyBookingModal({
     const [activeStep, setActiveStep] = useState(0);
     const [error, setError] = useState("");
     const [bookingDate, setBookingDate] = useState("");
-    const [bookingHour, setBookingHour] = useState("");
     const [stepValidation, setStepValidation] = useState([
         false,
         true,
@@ -544,8 +543,6 @@ function FinishStep({
                         setClickedSumit,
                         bookingDate, // Add bookingDate prop
                         setBookingDate, // Add setBookingDate prop
-                        bookingHour, // Add bookingHour prop
-                        setBookingHour, // Add setBookingHour prop
                         selectedAddress, // Add selectedAddress prop
                         selectedPaymentMethod, // Add selectedPaymentMethod prop
                         bookingType=bookingType, // Pass bookingType
@@ -556,7 +553,7 @@ function FinishStep({
 
     const handleConfirm = async () => {
         console.log("User ID:", userId); // Log the userId
-        const bookingData = { tourist: userId, bookingDate, bookingHour };
+        const bookingData = { tourist: userId, bookingDate };
         if (!selectedAddress || !selectedPaymentMethod) {
             alert("Please select both an address and a payment method.");
             return;

@@ -21,9 +21,6 @@ const bookingSchema = new Schema({
   bookingDate: {
     type: String,
   },
-  bookingHour:{
-    type: String,    
-  },
   // active    = booking request sent (before the 2 days threshold)
   // confirmed = booking confirmed by tourist (after/during the 2 days threshold)
   // cancelled = booking cancelled by tourist (before the 2 days threshold)

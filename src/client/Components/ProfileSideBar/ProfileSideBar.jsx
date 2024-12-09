@@ -108,7 +108,7 @@ const ProfileSideBar = ({ userId, userInfo }) => {
                 title: "Services",
                 icon: <FaMap />,
                 subItems: [
-                    { name: "Add Itinerary", icon: <FaPlus />, path: '/tourguide' },
+                    { name: "Itinerary Management", icon: <FaMapMarked />, path: '/tourguide' },
                     { name: "Sales Report", icon: <FaChartLine />, path: '/TourGuideSales' },
                 ]
             }

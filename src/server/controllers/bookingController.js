@@ -200,12 +200,9 @@ const createBooking = async (req, res) => {
 
 // make function to book a historical place
 const bookHistoricalPlace = async (req, res) => {
-  const { historicalPlace, tourist, bookingDate, bookingHour } = req.body;
+  const { historicalPlace, tourist, bookingDate, } = req.body;
   if (!tourist) {
     return res.status(400).json({ message: "Tourist is required" });
-  }
-  if (!bookingHour) {
-    return res.status(400).json({ message: "Booking hour is required" });
   }
   if (!historicalPlace) {
     return res.status(400).json({ message: "Historical place is required" });
@@ -229,26 +226,9 @@ const bookHistoricalPlace = async (req, res) => {
       return new Date(1970, 0, 1, hours, minutes);
     });
 
-  // Parse booking hour
-  const [bookingHourHours, bookingHourMinutes] = bookingHour.split(":");
-  const bookingHourObj = new Date(
-    1970,
-    0,
-    1,
-    bookingHourHours,
-    bookingHourMinutes
-  );
-
-  // Check if booking hour is within opening hours
-  if (bookingHourObj < openingHour || bookingHourObj > closingHour) {
-    return res.status(400).json({
-      message: "Booking hour must be within the opening hours",
-    });
-  }
 
   const existingBooking = await Booking.find({
     tourist: tourist,
-    bookingHour: bookingHour,
     status: { $ne: "cancelled" },
   });
   if (existingBooking.length > 0) {
@@ -285,7 +265,6 @@ const bookHistoricalPlace = async (req, res) => {
     historicalPlace: historicalPlace,
     tourist,
     bookingDate,
-    bookingHour,
   });
 
   await foundTourist.save();
@@ -329,11 +308,11 @@ const getBookings = async (req, res) => {
 
 const updateBooking = async (req, res) => {
   const { id } = req.params;
-  const { itinerary, tourist, bookingDate, bookingHour, status } = req.body;
+  const { itinerary, tourist, bookingDate, status } = req.body;
 
   const updatedBooking = await Booking.findByIdAndUpdate(
     id,
-    { itinerary, tourist, bookingDate, bookingHour, status },
+    { itinerary, tourist, bookingDate, status },
     { new: true }
   )
     .populate("itinerary")
