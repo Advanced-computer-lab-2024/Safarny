@@ -58,15 +58,14 @@ const createHistoricalPlaceByGovernorId = async (req, res) => {
       createdby, // Add createdById to the request body
     } = req.body;
 
-
-    let tagsId = [];
-    for (let tagName of tagNames) {
-      let tag = await Tag.findOne({ name: { $regex: new RegExp(`^${tagName}$`, 'i') } });
+    console.log(req.body);
+    const tagsId = await Promise.all(tagNames.map(async (tagName) => {
+      const tag = await Tag.findById(tagName);
       if (!tag) {
-        return res.status(400).send({ error: `Tag ${tagName} does not exist` });
-      }
-      tagsId.push(tag._id);
+      throw new Error(`Tag ${tagName} does not exist`);
     }
+  return tag._id.toString(); // Ensure the ID is returned as a string
+    }));
 
     const newPlace = new HistoricalPlace({
       description,
@@ -80,8 +79,10 @@ const createHistoricalPlaceByGovernorId = async (req, res) => {
     });
 
     const savedPlace = await newPlace.save();
+    console.log(savedPlace);
     res.status(201).send(savedPlace);
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: err.message });
   }
 };
