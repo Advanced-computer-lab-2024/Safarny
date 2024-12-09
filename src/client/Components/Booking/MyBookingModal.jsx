@@ -37,15 +37,15 @@ import { Elements, CardElement, useStripe, useElements } from '@stripe/react-str
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY); // Replace with your Stripe publishable key
 
 export default function MyBookingModal({
-                                          cartItems,
-                                          totalPrice,
-                                          onClose,
-                                          currency,
-                                          userId,
-                                          desiredQuantities,
-                                          bookingType,
-                                          bookingId,
-                                      }) {
+                                           cartItems,
+                                           totalPrice,
+                                           onClose,
+                                           currency,
+                                           userId,
+                                           desiredQuantities,
+                                           bookingType,
+                                           bookingId,
+                                       }) {
     const steps = ["Delivery", "Confirmation", "Payment", "Finish"];
     const [deliveryAddress, setDeliveryAddress] = useState({});
     const [paymentMethod, setPaymentMethod] = useState("credit_card");
@@ -160,6 +160,8 @@ export default function MyBookingModal({
                             promoCode={promoCode}
                             setPromoCode={setPromoCode}
                             handleApplyPromoCode={handleApplyPromoCode}
+                            bookingDate={bookingDate} // Pass bookingDate
+                            setBookingDate={setBookingDate} // Pass setBookingDate
                         />
                     )}
                     {activeStep === 2 && (
@@ -181,6 +183,11 @@ export default function MyBookingModal({
                             desiredQuantities={desiredQuantities}
                             clickedSumit={clickedSumit}
                             setClickedSumit={setClickedSumit}
+                            selectedAddress={deliveryAddress.address} // Pass selectedAddress
+                            selectedPaymentMethod={paymentMethod}
+                            bookingType={bookingType} // Pass bookingType
+                            bookingId={bookingId}
+                            bookingDate={bookingDate}
                         />
                     )}
                 </div>
@@ -388,6 +395,8 @@ function ConfirmationStep({
                               promoCode,
                               setPromoCode,
                               handleApplyPromoCode,
+                              bookingDate, // Add bookingDate prop
+                              setBookingDate, // Add setBookingDate prop
                           }) {
     return (
         <div>
@@ -395,39 +404,38 @@ function ConfirmationStep({
                 Order Summary
             </Typography>
             <List>
-                {/*{cartItems.map((activity) => (*/}
-                {/*    <ListItem key={activity._id} className={styles.summaryItem}>*/}
-                {/*         {activity.price}{" "}*/}
-                {/*        {activity.currency}*/}
+                {/*{cartItems.map((item, index) => (*/}
+                {/*    <ListItem key={index}>*/}
+                {/*        <ListItemText*/}
+                {/*            primary={item.name}*/}
+                {/*            secondary={`Quantity: ${desiredQuantities[index]}`}*/}
+                {/*        />*/}
+                {/*        <Typography variant="body2">*/}
+                {/*            {currency} {item.price}*/}
+                {/*        </Typography>*/}
                 {/*    </ListItem>*/}
                 {/*))}*/}
-                {/* Promo Code Text Field */}
-                <ListItem className={styles.summaryItem}>
-                    <TextField
-                        label="Promo Code"
-                        variant="outlined"
-                        value={promoCode}
-                        onChange={(e) => setPromoCode(e.target.value)}
-                        fullWidth
-                    />
-                    <Button
-                        variant="contained"
-                        onClick={handleApplyPromoCode}
-                        disabled={!promoCode.trim()}
-                        className={styles.buttonContainer} // Make sure this is defined in your styles
-                    >
-                        Apply
-                    </Button>
-                </ListItem>
-
-                <ListItem className={`${styles.summaryItem} ${styles.totalPrice}`}>
-                    <ListItemText primary="Total" />
-                    <Typography variant="subtitle1">
-                        {totalPrice} {currency}
-                    </Typography>
-                </ListItem>
             </List>
-
+            <Typography variant="h6" gutterBottom>
+                Total: {currency} {totalPrice}
+            </Typography>
+            <div>
+                <label className={styles.bookdate}>Booking Date:</label>
+                <input
+                    type="date"
+                    value={bookingDate}
+                    onChange={(e) => setBookingDate(e.target.value)}
+                />
+            </div>
+            <div>
+                <TextField
+                    label="Promo Code"
+                    value={promoCode}
+                    onChange={(e) => setPromoCode(e.target.value)}
+                    fullWidth
+                />
+                <Button onClick={handleApplyPromoCode}>Apply</Button>
+            </div>
         </div>
     );
 }
@@ -534,39 +542,39 @@ function FinishStep({
                         desiredQuantities,
                         clickedSumit,
                         setClickedSumit,
+                        bookingDate, // Add bookingDate prop
+                        setBookingDate, // Add setBookingDate prop
+                        bookingHour, // Add bookingHour prop
+                        setBookingHour, // Add setBookingHour prop
+                        selectedAddress, // Add selectedAddress prop
+                        selectedPaymentMethod, // Add selectedPaymentMethod prop
+                        bookingType=bookingType, // Pass bookingType
+                        bookingId,
+
                     }) {
     const [errorMessage, setErrorMessage] = useState("");
-    const [selectedDate, setSelectedDate] = useState("");
-    const [selectedTime, setSelectedTime] = useState("");
 
     const handleConfirm = async () => {
-        if (!selectedDate || !selectedTime) {
-            setErrorMessage("Please select both date and time for your booking");
-            return;
-        }
-
-        console.log("User ID:", userId);
-        const bookingData = { 
-            tourist: userId, 
-            bookingDate: selectedDate,
-            bookingHour: selectedTime
-        };
-        
+        console.log("User ID:", userId); // Log the userId
+        const bookingData = { tourist: userId, bookingDate, bookingHour };
         if (!selectedAddress || !selectedPaymentMethod) {
             alert("Please select both an address and a payment method.");
             return;
         }
-
         try {
             var response = null;
             if (bookingType === "itinerary" || bookingType === "activity") {
                 bookingData[bookingType] = bookingId;
+                console.log("Booking created:", bookingData);
+
                 response = await axios.post(
                     "http://localhost:3000/tourist/bookings",
                     bookingData
                 );
             } else if (bookingType === "historicalPlace") {
                 bookingData.historicalPlace = bookingId;
+                console.log("Booking created:", bookingData);
+
                 response = await axios.post(
                     "http://localhost:3000/tourist/bookings/historicalPlace",
                     bookingData
@@ -614,63 +622,24 @@ function FinishStep({
     return (
         <div>
             <ThumbUp className={styles.finishIcon} />
-            <Typography variant="h6" gutterBottom>
-                Select Booking Date and Time
-            </Typography>
-            
-            {!clickedSumit && (
-                <div className={styles.formGroup}>
-                    <TextField
-                        type="date"
-                        label="Booking Date"
-                        value={selectedDate}
-                        onChange={(e) => setSelectedDate(e.target.value)}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        fullWidth
-                        className={styles.formGroup}
-                        inputProps={{
-                            min: new Date().toISOString().split('T')[0]
-                        }}
-                    />
-                    
-                    <TextField
-                        type="time"
-                        label="Booking Time"
-                        value={selectedTime}
-                        onChange={(e) => setSelectedTime(e.target.value)}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        fullWidth
-                        className={styles.formGroup}
-                    />
-                </div>
+            {clickedSumit && (
+                <Typography variant="subtitle1">
+                    Your order has been placed successfully. Check your Orders !
+                </Typography>
+            )}
+            {clickedSumit && (
+                <Button variant="contained" onClick={handleMyOrdersClick}>
+                    My Orders
+                </Button>
             )}
 
-            <Typography>Thank you for your order!</Typography>
             {errorMessage && (
                 <Typography variant="body1" color="error">
                     {errorMessage}
                 </Typography>
             )}
-            
-            {clickedSumit ? (
-                <>
-                    <Typography variant="subtitle1">
-                        Your order has been placed successfully. Check your Orders!
-                    </Typography>
-                    <Button variant="contained" onClick={handleMyOrdersClick}>
-                        My Orders
-                    </Button>
-                </>
-            ) : (
-                <Button 
-                    variant="contained" 
-                    onClick={handleConfirm}
-                    disabled={!selectedDate || !selectedTime}
-                >
+            {!clickedSumit && (
+                <Button variant="contained" onClick={handleConfirm}>
                     Submit Order
                 </Button>
             )}
