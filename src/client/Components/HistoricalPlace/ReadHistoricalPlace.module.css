@@ -2,35 +2,27 @@
     --primary-color: #1a1a1a;
     --secondary-color: #333;
     --background-color: #dcdbdb;
-    --text-color: #616161;
-    --heading-color: white;
+    --text-color: #121212;
     --header-color: white;
-    --form-background: #2a2a2a;
+    --header-height: 4rem;
     --border-radius: 1rem;
-    --small-text-color: white;
+    --card-background: #2a2a2a;
+    --glow-color: #958efa;
 }
 
-.pageWrapper {
-    min-height: 100vh;
+.container {
+    font-family: 'Arial', sans-serif;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    padding: 2rem;
     display: flex;
     flex-direction: column;
-    background-color: var(--background-color);
+    align-items: center;
     width: 100vw;
+    min-height: 100vh;
+    box-sizing: border-box;
 }
 
-.pageHeader {
-    text-align: center;
-    margin-bottom: 3rem;
-}
-
-.pageHeader h1 {
-    color: var(--heading-color);
-    font-size: 2.5rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-}
-
-/* Enhanced card styling */
 .placeCard {
     background-color: var(--form-background);
     border-radius: var(--border-radius);
@@ -52,12 +44,6 @@
     overflow: hidden;
 }
 
-.cardImageWrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
 
 .placeCard:hover .cardImageWrapper img {
     transform: scale(1.05);
@@ -75,9 +61,6 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.cardContent {
-    padding: 1.5rem;
-}
 
 .cardTitle {
     color: var(--heading-color);
@@ -104,6 +87,7 @@
     text-align: center;
 }
 
+
 .tagContainer {
     display: flex;
     flex-wrap: wrap;
@@ -126,7 +110,66 @@
     margin-top: 1.5rem;
 }
 
-/* Button styles */
+
+.cardContent {
+    padding: 1.5rem;
+}
+
+
+    .cardImageWrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+
+.pageHeader {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.pageHeader h1 {
+    color: var(--heading-color);
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.pageWrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background-color);
+    width: 100vw;
+}
+
+h1 {
+    color: white;
+    font-size: 2rem;
+    margin: 0;
+}
+
+p {
+    background-color: var(--card-background);
+    color: white;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    margin: 0.5rem 0;
+    width: 90%;
+    max-width: 50rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.placeImage {
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+    border-radius: var(--border-radius);
+    margin: 1rem 0;
+}
+
+
 .primaryButton,
 .bookButton,
 .iconButton,
@@ -157,7 +200,6 @@
     background-color: rgba(255, 255, 255, 0.1);
     color: var(--heading-color);
 }
-
 .editButton {
     background-color: #ffc107;
     color: #000;
@@ -167,6 +209,7 @@
     background-color: #dc3545;
     color: white;
 }
+
 
 /* Filter section styling */
 .filterSection {
@@ -229,25 +272,6 @@
     transform: translateY(-2px);
 }
 
-/* Loading and no results states */
-.loadingContainer,
-.noResults {
-    text-align: center;
-    padding: 3rem;
-    color: var(--heading-color);
-}
-
-.noResults i {
-    color: var(--text-color);
-    margin-bottom: 1rem;
-}
-
-.mapWrapper {
-    border-radius: 0.5rem;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    margin: 1rem 0;
-}
 
 /* Button styling */
 .placeCard button {
@@ -288,6 +312,7 @@
     align-items: center;
     gap: 1rem;
 }
+
 
 /* Optional: Make the spinner larger */
 .spinner .spinner-border {
@@ -335,4 +360,25 @@
 .bookButton {
     width: 100%;
     justify-content: center;
+}
+
+/* Loading and no results states */
+.loadingContainer,
+.noResults {
+    text-align: center;
+    padding: 3rem;
+    color: var(--heading-color);
+}
+
+
+.noResults i {
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.mapWrapper {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 1rem 0;
 }
