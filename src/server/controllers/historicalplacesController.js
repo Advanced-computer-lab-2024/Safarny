@@ -116,7 +116,7 @@ const getHistoricalPlaceById = async (req, res) => {
   try {
     const placeId = req.params.id;
 
-    const place = await HistoricalPlace.findById(placeId);
+    const place = await HistoricalPlace.findById({createdby:placeId} );
 
     if (!place) {
       return res.status(404).json({ message: "Historical place not found" });

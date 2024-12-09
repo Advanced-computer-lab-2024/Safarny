@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Button, TextField, Typography, Alert, InputLabel, MenuItem, FormControl, Select } from '@mui/material';
+import { Button, TextField, Typography, Alert, InputLabel, MenuItem, FormControl, Select, IconButton } from '@mui/material';
 import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../../server/config/Firebase';
@@ -10,6 +10,7 @@ import Footer from '../Footer/Footer';
 import 'leaflet/dist/leaflet.css';
 import styles from './CreateHistoricalPlace.module.css';
 import L from 'leaflet';
+import { FaUpload, FaImage } from 'react-icons/fa';
 
 // Fixing marker icon issue
 delete L.Icon.Default.prototype._getIconUrl;
@@ -38,6 +39,13 @@ const CreateHistoricalPlace = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [tags, setTags] = useState([]);
   const [currencyCodes, setCurrencyCodes] = useState([]);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const fileInputRef = React.useRef(null);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [availableTags, setAvailableTags] = useState([]);
+  const [selectedCurrency, setSelectedCurrency] = useState('');
+  const [currencies, setCurrencies] = useState([]);
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -55,7 +63,7 @@ const CreateHistoricalPlace = () => {
   useEffect(() => {
     const fetchExchangeRates = async () => {
       try {
-        const response = await axios.get('https://v6.exchangerate-api.com/v6/033795aceeb35bc666391ed5/latest/EGP');
+        const response = await axios.get(import.meta.env.VITE_EXCHANGE_API_URL);
         setCurrencyCodes(Object.keys(response.data.conversion_rates));
       } catch (error) {
         console.error('Error fetching exchange rates:', error);
@@ -63,6 +71,35 @@ const CreateHistoricalPlace = () => {
     };
 
     fetchExchangeRates();
+  }, []);
+
+  // Fetch available tags
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/toursimgovernor/gettags');
+        setAvailableTags(response.data);
+      } catch (error) {
+        console.error('Error fetching tags:', error);
+        setErrorMessage('Failed to fetch tags');
+      }
+    };
+    fetchTags();
+  }, []);
+
+  // Fetch currencies
+  useEffect(() => {
+    const fetchCurrencies = async () => {
+      try {
+        const response = await axios.get(import.meta.env.VITE_EXCHANGE_API_URL);
+        setCurrencies(Object.keys(response.data.conversion_rates));
+        setSelectedCurrency('EGP'); // Default currency
+      } catch (error) {
+        console.error('Error fetching currencies:', error);
+        setErrorMessage('Failed to fetch currencies');
+      }
+    };
+    fetchCurrencies();
   }, []);
 
   const handleCloseModal = () => {
@@ -76,67 +113,105 @@ const CreateHistoricalPlace = () => {
     setHistoricalPlace({ ...historicalPlace, [name]: value });
   };
 
-  const handleImageChange = (e) => {
-    setSelectedImage(e.target.files[0]);
+  const handleImageSelect = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      if (file.size > 5242880) { // 5MB limit
+        setErrorMessage('Image size should be less than 5MB');
+        return;
+      }
+
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      if (!allowedTypes.includes(file.type)) {
+        setErrorMessage('Please upload a valid image file (JPG, JPEG, or PNG)');
+        return;
+      }
+
+      setSelectedImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+      setErrorMessage('');
+    }
   };
 
-  const uploadImage = async (file) => {
-    if (!file) return null;
+  const triggerFileInput = () => {
+    fileInputRef.current.click();
+  };
 
-    const storageRef = ref(storage, `images/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+  const handleImageUpload = async () => {
+    if (!selectedImage) return null;
 
-    return new Promise((resolve, reject) => {
-      uploadTask.on(
+    try {
+      const storageRef = ref(storage, `images/${Date.now()}_${selectedImage.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, selectedImage);
+
+      return new Promise((resolve, reject) => {
+        uploadTask.on(
           'state_changed',
           (snapshot) => {
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log(`Upload is ${progress}% done`);
+            setUploadProgress(progress);
           },
-          (error) => reject(error),
-          () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              console.log('File available at', downloadURL);
+          (error) => {
+            console.error('Upload error:', error);
+            setErrorMessage('Failed to upload image');
+            reject(error);
+          },
+          async () => {
+            try {
+              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+              setUploadProgress(0);
               resolve(downloadURL);
-            });
+            } catch (error) {
+              console.error('Get URL error:', error);
+              setErrorMessage('Failed to get image URL');
+              reject(error);
+            }
           }
-      );
-    });
+        );
+      });
+    } catch (error) {
+      console.error('Upload setup error:', error);
+      setErrorMessage('Failed to setup image upload');
+      return null;
+    }
   };
 
   const handleSubmitPlace = async () => {
-    let imageUrl = historicalPlace.pictures;
-
-    if (selectedImage) {
-      imageUrl = await uploadImage(selectedImage);
-      if (!imageUrl) return;
-    }
-
-    // Split tagNames by comma and trim whitespace
-    const tagsArray = historicalPlace.tagNames.split(',').map(tag => tag.trim());
-
-    const placeData = { ...historicalPlace, pictures: imageUrl, tagNames: tagsArray };
-
-    // Validate required fields
-    if (!placeData.description || !placeData.coordinates.lat || !placeData.coordinates.lng || !placeData.openingHours || !placeData.ticketPrices || !placeData.currency || !placeData.tagNames.length || !placeData.createdby) {
-      setErrorMessage('All fields are required');
-      return;
-    }
-
-    console.log('Data sent in POST request:', placeData); // Print data to console
-
     try {
+      let imageUrl = historicalPlace.pictures;
+
+      if (selectedImage) {
+        imageUrl = await handleImageUpload();
+        if (!imageUrl) {
+          setErrorMessage('Failed to upload image');
+          return;
+        }
+      }
+
+      // Split tagNames by comma and trim whitespace
+      const tagsArray = historicalPlace.tagNames.split(',').map(tag => tag.trim());
+
+      const placeData = { ...historicalPlace, pictures: imageUrl, tagNames: tagsArray };
+
+      // Validate required fields
+      if (!placeData.description || !placeData.coordinates.lat || !placeData.coordinates.lng || !placeData.openingHours || !placeData.ticketPrices || !placeData.currency || !placeData.tagNames.length || !placeData.createdby) {
+        console.log(placeData)
+        setErrorMessage('All fields are required');
+        return;
+      }
+
+      console.log('Data sent in POST request:', placeData); // Print data to console
+
       await axios.post('http://localhost:3000/toursimgovernor/placesId', placeData);
       handleCloseModal();
       navigate('/');
     } catch (error) {
-      if (error.response && error.response.data) {
-        setErrorMessage(`Failed to add historical place: ${error.response.data.error}`);
-      } else {
-        setErrorMessage('Failed to add historical place: An unexpected error occurred');
-      }
-      console.error('Error creating historical place:', error);
-      console.log('Request payload:', placeData);
+      console.error('Submission error:', error);
+      setErrorMessage('Failed to submit historical place');
     }
   };
 
@@ -151,6 +226,22 @@ const CreateHistoricalPlace = () => {
       },
     });
     return null;
+  };
+
+  const handleTagChange = (event) => {
+    setSelectedTags(event.target.value);
+    setHistoricalPlace(prev => ({
+      ...prev,
+      tagNames: event.target.value.join(',') // If the API expects a comma-separated string
+    }));
+  };
+
+  const handleCurrencyChange = (event) => {
+    setSelectedCurrency(event.target.value);
+    setHistoricalPlace(prev => ({
+      ...prev,
+      currency: event.target.value
+    }));
   };
 
   return (
@@ -213,63 +304,104 @@ const CreateHistoricalPlace = () => {
               </div>
 
               <div className="col-md-6">
-                <div className={styles.inputGroup}>
-                  <FormControl fullWidth>
-                    <InputLabel className={styles.selectLabel}>Currency</InputLabel>
-                    <Select
-                      name="currency"
-                      value={historicalPlace.currency}
-                      onChange={handleInputChange}
-                      className={styles.select}
-                    >
-                      {currencyCodes.map(code => (
-                        <MenuItem key={code} value={code}>{code}</MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </div>
-              </div>
-
-              <div className="col-12">
-                <div className={styles.tagsSection}>
-                  <Typography variant="h6" className={styles.sectionTitle}>
-                    Available Tags
-                  </Typography>
-                  <div className={styles.tagsList}>
-                    {tags.map((tag) => (
-                      <span key={tag._id} className={styles.tag}>
-                        {tag.name}
-                      </span>
+                <FormControl fullWidth className={styles.formControl}>
+                  <InputLabel id="currency-label">Currency</InputLabel>
+                  <Select
+                    labelId="currency-label"
+                    id="currency-select"
+                    value={selectedCurrency}
+                    onChange={handleCurrencyChange}
+                    label="Currency"
+                  >
+                    {currencies.map((currency) => (
+                      <MenuItem key={currency} value={currency}>
+                        {currency}
+                      </MenuItem>
                     ))}
-                  </div>
-                  <TextField
-                    fullWidth
-                    label="Tag Names (comma separated)"
-                    name="tagNames"
-                    value={historicalPlace.tagNames}
-                    onChange={handleInputChange}
-                    className={`${styles.input} mt-3`}
-                    helperText="Enter tags separated by commas"
-                  />
-                </div>
+                  </Select>
+                </FormControl>
               </div>
 
               <div className="col-12">
-                <div className={styles.imageUpload}>
+                <FormControl fullWidth className={styles.formControl}>
+                  <InputLabel id="tags-label">Tags</InputLabel>
+                  <Select
+                    labelId="tags-label"
+                    id="tags-select"
+                    multiple
+                    value={selectedTags}
+                    onChange={handleTagChange}
+                    label="Tags"
+                    renderValue={(selected) => (
+                      <div className={styles.selectedTags}>
+                        {selected.map((value) => (
+                          <span key={value} className={styles.tagChip}>
+                            {availableTags.find(tag => tag._id === value)?.name}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  >
+                    {availableTags.map((tag) => (
+                      <MenuItem key={tag._id} value={tag._id}>
+                        {tag.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
+
+              <div className="col-12">
+                <div className={styles.imageUploadSection}>
                   <Typography variant="h6" className={styles.sectionTitle}>
                     Upload Image
                   </Typography>
+                  
                   <input
                     type="file"
+                    ref={fileInputRef}
+                    onChange={handleImageSelect}
                     accept="image/*"
-                    onChange={handleImageChange}
-                    className={styles.fileInput}
+                    style={{ display: 'none' }}
                   />
-                  {selectedImage && (
-                    <div className={styles.selectedImage}>
-                      <Typography variant="body2">
-                        Selected: {selectedImage.name}
-                      </Typography>
+
+                  <div className={styles.uploadArea} onClick={triggerFileInput}>
+                    {imagePreview ? (
+                      <div className={styles.previewContainer}>
+                        <img 
+                          src={imagePreview} 
+                          alt="Preview" 
+                          className={styles.imagePreview}
+                        />
+                        <IconButton 
+                          className={styles.changeImageButton}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            triggerFileInput();
+                          }}
+                        >
+                          <FaUpload />
+                        </IconButton>
+                      </div>
+                    ) : (
+                      <div className={styles.uploadPrompt}>
+                        <FaImage className={styles.uploadIcon} />
+                        <Typography>
+                          Click to upload image
+                        </Typography>
+                        <Typography variant="caption" color="textSecondary">
+                          JPG, JPEG, or PNG (max 5MB)
+                        </Typography>
+                      </div>
+                    )}
+                  </div>
+
+                  {uploadProgress > 0 && uploadProgress < 100 && (
+                    <div className={styles.progressBar}>
+                      <div 
+                        className={styles.progressFill} 
+                        style={{ width: `${uploadProgress}%` }}
+                      />
                     </div>
                   )}
                 </div>

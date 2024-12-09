@@ -469,3 +469,174 @@
   background-color: rgba(46, 213, 115, 0.5);
   cursor: not-allowed;
 }
+
+/* Add these new styles for the details page */
+.detailsContainer {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: var(--background-color);
+}
+
+.activityHeader {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.activityHeader h1 {
+    color: var(--text-color);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.rating {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+}
+
+.starFilled {
+    color: var(--warning-color);
+}
+
+.starEmpty {
+    color: rgba(0, 0, 0, 0.2);
+}
+
+.mainContent {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.mapSection {
+    background-color: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    height: 400px; /* Adjust height as needed */
+}
+
+.map {
+    width: 100%;
+    height: 100%;
+}
+
+.noMap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--text-color);
+    font-size: 1.1rem;
+}
+
+/* Make sure the popup content is styled properly */
+:global(.leaflet-popup-content) {
+    margin: 0;
+    padding: 0.5rem;
+}
+
+:global(.leaflet-popup-content h3) {
+    font-size: 1rem;
+    margin: 0 0 0.5rem 0;
+    color: var(--text-color);
+}
+
+:global(.leaflet-popup-content p) {
+    font-size: 0.9rem;
+    margin: 0;
+    color: var(--text-color);
+}
+
+.infoSection {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.priceCard, .detailsCard, .tagsCard {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.priceHeader {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.price {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.discount {
+    background-color: rgba(46, 213, 115, 0.1);
+    color: var(--success-color);
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-weight: 500;
+}
+
+.detailItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.detailItem:last-child {
+    border-bottom: none;
+}
+
+.icon {
+    color: var(--accent-color);
+    font-size: 1.25rem;
+}
+
+.label {
+    display: block;
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.value {
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+@media (max-width: 1024px) {
+    .mainContent {
+        grid-template-columns: 1fr;
+    }
+
+    .mapSection {
+        height: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .detailsContainer {
+        padding: 1rem;
+    }
+
+    .activityHeader h1 {
+        font-size: 2rem;
+    }
+
+    .mapSection {
+        height: 250px;
+    }
+}
