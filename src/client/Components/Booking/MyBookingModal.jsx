@@ -536,28 +536,37 @@ function FinishStep({
                         setClickedSumit,
                     }) {
     const [errorMessage, setErrorMessage] = useState("");
+    const [selectedDate, setSelectedDate] = useState("");
+    const [selectedTime, setSelectedTime] = useState("");
 
     const handleConfirm = async () => {
-        console.log("User ID:", userId); // Log the userId
-        const bookingData = { tourist: userId, bookingDate, bookingHour };
+        if (!selectedDate || !selectedTime) {
+            setErrorMessage("Please select both date and time for your booking");
+            return;
+        }
+
+        console.log("User ID:", userId);
+        const bookingData = { 
+            tourist: userId, 
+            bookingDate: selectedDate,
+            bookingHour: selectedTime
+        };
+        
         if (!selectedAddress || !selectedPaymentMethod) {
             alert("Please select both an address and a payment method.");
             return;
         }
+
         try {
             var response = null;
             if (bookingType === "itinerary" || bookingType === "activity") {
                 bookingData[bookingType] = bookingId;
-                console.log("Booking created:", bookingData);
-
                 response = await axios.post(
                     "http://localhost:3000/tourist/bookings",
                     bookingData
                 );
             } else if (bookingType === "historicalPlace") {
                 bookingData.historicalPlace = bookingId;
-                console.log("Booking created:", bookingData);
-
                 response = await axios.post(
                     "http://localhost:3000/tourist/bookings/historicalPlace",
                     bookingData
@@ -605,25 +614,63 @@ function FinishStep({
     return (
         <div>
             <ThumbUp className={styles.finishIcon} />
-            <Typography>Thank you for your order!</Typography>
-            {clickedSumit && (
-                <Typography variant="subtitle1">
-                    Your order has been placed successfully. Check your Orders !
-                </Typography>
-            )}
-            {clickedSumit && (
-                <Button variant="contained" onClick={handleMyOrdersClick}>
-                    My Orders
-                </Button>
+            <Typography variant="h6" gutterBottom>
+                Select Booking Date and Time
+            </Typography>
+            
+            {!clickedSumit && (
+                <div className={styles.formGroup}>
+                    <TextField
+                        type="date"
+                        label="Booking Date"
+                        value={selectedDate}
+                        onChange={(e) => setSelectedDate(e.target.value)}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        fullWidth
+                        className={styles.formGroup}
+                        inputProps={{
+                            min: new Date().toISOString().split('T')[0]
+                        }}
+                    />
+                    
+                    <TextField
+                        type="time"
+                        label="Booking Time"
+                        value={selectedTime}
+                        onChange={(e) => setSelectedTime(e.target.value)}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        fullWidth
+                        className={styles.formGroup}
+                    />
+                </div>
             )}
 
+            <Typography>Thank you for your order!</Typography>
             {errorMessage && (
                 <Typography variant="body1" color="error">
                     {errorMessage}
                 </Typography>
             )}
-            {!clickedSumit && (
-                <Button variant="contained" onClick={handleConfirm}>
+            
+            {clickedSumit ? (
+                <>
+                    <Typography variant="subtitle1">
+                        Your order has been placed successfully. Check your Orders!
+                    </Typography>
+                    <Button variant="contained" onClick={handleMyOrdersClick}>
+                        My Orders
+                    </Button>
+                </>
+            ) : (
+                <Button 
+                    variant="contained" 
+                    onClick={handleConfirm}
+                    disabled={!selectedDate || !selectedTime}
+                >
                     Submit Order
                 </Button>
             )}

@@ -351,9 +351,14 @@ We would like to thank the following people and resources:
   - [Axios](https://axios-http.com/)
   - [Mailjet](https://www.mailjet.com/)
   - [Vite](https://vitejs.dev/)
+  - [Mui](https://mui.com/)
 
 - **Additional Acknowledgements**
-  - Special thanks to all the online resources and tutorials that helped us build this project.
+- Special thanks to all the online resources and tutorials that helped us build this project.
+- (https://www.youtube.com/playlist?list=PLillGF-RfqbbQeVSccR9PGKHzPJSWqcsm)
+- (https://youtu.be/ofme2o29ngU?si=wlr0ZA-he_k4z7iw)
+- (https://youtu.be/CgkZ7MvWUAA?si=-eq0Cokfv_9FOeEa)
+  
 
 ### License
 The project is licensed under the GNU General Public License v3.0.
