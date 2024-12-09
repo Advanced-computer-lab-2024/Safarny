@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Navbar, Nav, NavDropdown, Container, Row, Col, Card, Button, Form, ListGroup, Modal } from 'react-bootstrap';
 import SideBar from '../SideBar/SideBar';
+import ReactStars from 'react-rating-stars-component';
 import {
   TextField,
   Typography,
@@ -343,18 +344,25 @@ const Admin = () => {
     }
   };
 
-  const filteredPosts = posts.filter((post) => {
+    const filteredPosts = posts.filter((post) => {
     const matchesSearch = post.details.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesPrice =
       (minPrice === '' || post.price >= minPrice) &&
       (maxPrice === '' || post.price <= maxPrice);
+    const averageRating = post.rating.length > 0 ?
+        (post.rating.reduce((acc, val) => acc + val, 0) / post.rating.length).toFixed(1) : 0;
     const matchesCurrency = selectedCurrency === '' || post.currency === selectedCurrency;
     return matchesSearch && matchesPrice && matchesCurrency;
   });
 
-  const sortedPosts = [...filteredPosts].sort((a, b) => {
+  const sortedPosts = [...filteredPosts].map(post => {
+    const averageRating = post.rating.length > 0
+        ? (post.rating.reduce((acc, val) => acc + val, 0) / post.rating.length).toFixed(1)
+        : 0;
+    return { ...post, averageRating };
+  }).sort((a, b) => {
     if (sortBy === 'rating') {
-      return b.rating - a.rating;
+      return b.averageRating - a.averageRating;
     }
     return 0;
   });
@@ -570,32 +578,36 @@ const Admin = () => {
                                   <span className="text-muted">Sales:</span>
                                   <span className="fw-bold">{post.purchasedCount * post.price}</span>
                                 </div>
+                                <div className={styles.statItem}>
+                                  <span className="text-muted">Rating:</span>
+                                  <ReactStars
+                                      count={5}
+                                      value={post.averageRating}
+                                      size={24}
+                                      edit={false}
+                                      isHalf={true}
+                                      activeColor="#ffd700"
+                                  />
+                                  <span className="fw-bold ms-2">{post.averageRating}</span>
+                                </div>
                               </div>
                               <Form.Check
-                                type="switch"
-                                id={`archive-switch-${post._id}`}
-                                label="Archive"
-                                checked={post.archived}
-                                onChange={(e) => handleArchiveToggle(post._id, e.target.checked)}
-                                className="mb-3"
+                                  type="switch"
+                                  id={`archive-switch-${post._id}`}
+                                  label="Archive"
+                                  checked={post.archived}
+                                  onChange={(e) => handleArchiveToggle(post._id, e.target.checked)}
+                                  className="mb-3"
                               />
                               <div className={styles.postActions}>
-                                <Button 
-                                  variant="outline-primary" 
-                                  size="sm"
-                                  onClick={() => handleEditPost(post)}
-                                  className={styles.actionBtn}
+                                <Button
+                                    variant="outline-primary"
+                                    size="sm"
+                                    onClick={() => handleEditPost(post)}
+                                    className={styles.actionBtn}
                                 >
                                   <i className="fas fa-edit me-1"></i> Edit
                                 </Button>
-                                {/*<Button */}
-                                {/*  variant="outline-danger" */}
-                                {/*  size="sm"*/}
-                                {/*  onClick={() => handleDeletePost(post._id)}*/}
-                                {/*  className={styles.actionBtn}*/}
-                                {/*>*/}
-                                {/*  <i className="fas fa-trash-alt me-1"></i> Delete*/}
-                                {/*</Button>*/}
                               </div>
                             </Card.Body>
                           </Card>

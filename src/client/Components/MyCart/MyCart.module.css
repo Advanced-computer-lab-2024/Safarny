@@ -6,6 +6,13 @@
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 }
 
+.centaur{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+}
 .mainContent {
     flex: 1;
     padding: 2rem;

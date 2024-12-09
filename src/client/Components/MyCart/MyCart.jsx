@@ -265,9 +265,18 @@ const Cart = () => {
   if (loading) {
     return <p>Loading cart items...</p>;
   }
-
   if (error) {
-    return <p>{error}</p>;
+    return (
+        <div className={styles.centaur}>
+          <div className={styles.pageContainer}>
+            <Header/>
+            <Container fluid className={styles.mainContent}>
+              <p className="text-center">{error}</p>
+            </Container>
+            <Footer/>
+          </div>
+        </div>
+    );
   }
 
   const totalPrice2 = cartItems.reduce(
