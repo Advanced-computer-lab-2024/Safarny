@@ -29,10 +29,12 @@ const userModel = new mongoose.Schema(
     DOB: Date,
     age: Number,
     mobile: String,
-      promos: {
-          type: [String],
-          default: [],
-      },
+      promos: [
+          {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "PromoCode",
+          },
+      ],
     addresses: {
       type: [String],
       default: [],
