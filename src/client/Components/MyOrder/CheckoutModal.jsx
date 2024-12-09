@@ -76,67 +76,49 @@ export default function CheckoutModal({
     });
   };
 
-  const handleApplyPromoCode = async (enteredPromoCode) => {
-   // console.log("Entered Promo Code:", enteredPromoCode);
-    //console.log("User ID:", userId);
-  
-    try {
-      // Fetch user data from the backend
-      const response = await axios.get(`/tourist/${userId}`);
-     // console.log("Response Data:", response.data);
-  
-      // Get user data and ensure promos is an array
-      const user = response.data;
-      const promos = user.promos || [];
-  
-      
-  
-      // If the promos array is empty, notify the user
-      if (promos.length === 0) {
-        alert("You don't have any promo codes available.");
-        setError("You don't have any promo codes available.");
+const handleApplyPromoCode = async (enteredPromoCode) => {
+  try {
+    // Fetch all available promo codes from the backend
+    const promoCodesResponse = await axios.get(`/promocodes/promocodes`);
+    const availablePromoCodes = Array.isArray(promoCodesResponse.data) ? promoCodesResponse.data : [];
+
+    console.log("Available promo codes:", availablePromoCodes);
+    console.log("Entered promo code:", enteredPromoCode);
+    // Find the promo code object that matches the entered promo code
+    const promoCodeObject = availablePromoCodes.find(
+      (promo) => promo.code === enteredPromoCode
+    );
+
+    if (promoCodeObject) {
+      const promoDetailsResponse = await axios.get(`/promocodes/promocodes/${promoCodeObject._id}`);
+      const promoDetails = promoDetailsResponse.data;
+
+      console.log(promoDetails);
+      console.log(promoDetails.discountPercentage);
+      if (!promoDetails || !promoDetails.discountPercentage) {
+        alert("Unable to retrieve promo code details.");
+        setError("Unable to retrieve promo code details.");
         return;
       }
-      console.log("Full promos array:", promos);
-      console.log("Entered Promo Code:", enteredPromoCode);
 
-      // Check if the entered promo code exists in the user's promos array
-      const isPromoValid = promos.includes(enteredPromoCode);
-  
-      console.log("Promo Valid:", isPromoValid);
-  
-      if (isPromoValid) {
-        const promoDetailsResponse = await axios.get(`/promocode/${enteredPromoCode}`);
-        const promoDetails = promoDetailsResponse.data;
+      // Calculate the discounted price
+      const discountPercentage = promoDetails.discountPercentage;
+      const discountedPrice = totalPrice - (totalPrice * discountPercentage) / 100;
 
-        if (!promoDetails || !promoDetails.discountPercentage) {
-            alert("Unable to retrieve promo code details.");
-            setError("Unable to retrieve promo code details.");
-            return;
-        }
-
-        // Step 4: Calculate the discounted price
-        const discountPercentage = promoDetails.discountPercentage;
-        console.log("Discount Percentage:", discountPercentage);
-
-        const discountedPrice = totalPrice - (totalPrice * discountPercentage) / 100;
-
-  
-        setTotalPrice(discountedPrice); // Update the total price with the discounted value
-        setError(""); // Clear any error messages
-      } else {
-        alert("Promo code not found in your account.");
-        setError("Promo code not found in your account.");
-      }
-    } catch (err) {
-      console.error("Error during promo code application:", err.message);
-      alert("An error occurred while applying the promo code.");
-      setError("An error occurred while applying the promo code.");
+      setTotalPrice(discountedPrice); // Update the total price with the discounted value
+      console.log("Promo code applied successfully.");
+      console.log("Discounted price:", discountedPrice);
+      setError(""); // Clear any error messages
+    } else {
+      alert("Promo code not found.");
+      setError("Promo code not found.");
     }
-  };
-  
-  
-  
+  } catch (err) {
+    console.error("Error during promo code application:", err.message);
+    alert("An error occurred while applying the promo code.");
+    setError("An error occurred while applying the promo code.");
+  }
+};
   
   
   

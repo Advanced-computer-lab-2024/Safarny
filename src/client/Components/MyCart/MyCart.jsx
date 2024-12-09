@@ -369,13 +369,13 @@ const Cart = () => {
                       </span>
                     </div>
                     <div className={styles.actionButtons}>
-                      <Button
+                      {/* <Button
                         variant="success"
                         className={styles.buyButton}
                         onClick={() => handleBuyButtonClick(item, desiredQuantity)}
                       >
                         Buy Now
-                      </Button>
+                      </Button> */}
                       <Button
                         variant="danger"
                         className={styles.removeButton}
