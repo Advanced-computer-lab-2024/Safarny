@@ -43,7 +43,7 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY); /
 
 export default function CheckoutModal({
   cartItems,
-  totalPrice,
+  totalPrice: initialTotalPrice, // Renamed to avoid conflict
   onClose,
   currency,
   userId,
@@ -54,6 +54,8 @@ export default function CheckoutModal({
   const [deliveryAddress, setDeliveryAddress] = useState({});
   const [paymentMethod, setPaymentMethod] = useState("credit_card");
   const [open, setOpen] = useState(true);
+  const [totalPrice, setTotalPrice] = useState(initialTotalPrice); // State for total price
+
   const [promoCode, setPromoCode] = useState(""); // State for promo code
   //const [totalPrice, setTotalPrice] = useState("");
   const [activeStep, setActiveStep] = useState(0);
@@ -75,21 +77,19 @@ export default function CheckoutModal({
   };
 
   const handleApplyPromoCode = async (enteredPromoCode) => {
-    console.log("Entered Promo Code:", enteredPromoCode);
-    console.log("User ID:", userId);
+   // console.log("Entered Promo Code:", enteredPromoCode);
+    //console.log("User ID:", userId);
   
     try {
       // Fetch user data from the backend
       const response = await axios.get(`/tourist/${userId}`);
-      console.log("Response Data:", response.data);
+     // console.log("Response Data:", response.data);
   
-      // Get user data and ensure promos is an array (defaults to empty if not found)
+      // Get user data and ensure promos is an array
       const user = response.data;
       const promos = user.promos || [];
   
-      console.log("user.promos:", promos);
-
-      console.log("user.promos0:", promos[0].discountPercentage);
+      
   
       // If the promos array is empty, notify the user
       if (promos.length === 0) {
@@ -97,16 +97,30 @@ export default function CheckoutModal({
         setError("You don't have any promo codes available.");
         return;
       }
+      console.log("Full promos array:", promos);
+      console.log("Entered Promo Code:", enteredPromoCode);
+
+      // Check if the entered promo code exists in the user's promos array
+      const isPromoValid = promos.includes(enteredPromoCode);
   
-      // Check if the promo code exists in the user's promos array
-      const userPromo = promos.find((promo) => promo.code === enteredPromoCode); // Match promo code by 'code' property
+      console.log("Promo Valid:", isPromoValid);
   
-      console.log("userPromo:", userPromo);
-  
-      if (userPromo) {
-        // Apply the discount using the promo's discountPercentage
-        const discountPercentage = userPromo.discountPercentage;
+      if (isPromoValid) {
+        const promoDetailsResponse = await axios.get(`/promocode/${enteredPromoCode}`);
+        const promoDetails = promoDetailsResponse.data;
+
+        if (!promoDetails || !promoDetails.discountPercentage) {
+            alert("Unable to retrieve promo code details.");
+            setError("Unable to retrieve promo code details.");
+            return;
+        }
+
+        // Step 4: Calculate the discounted price
+        const discountPercentage = promoDetails.discountPercentage;
+        console.log("Discount Percentage:", discountPercentage);
+
         const discountedPrice = totalPrice - (totalPrice * discountPercentage) / 100;
+
   
         setTotalPrice(discountedPrice); // Update the total price with the discounted value
         setError(""); // Clear any error messages
@@ -120,6 +134,7 @@ export default function CheckoutModal({
       setError("An error occurred while applying the promo code.");
     }
   };
+  
   
   
   
