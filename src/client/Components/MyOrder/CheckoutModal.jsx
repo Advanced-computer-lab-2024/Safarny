@@ -55,7 +55,9 @@ export default function CheckoutModal({
   const [paymentMethod, setPaymentMethod] = useState("credit_card");
   const [open, setOpen] = useState(true);
   const [totalPrice, setTotalPrice] = useState(initialTotalPrice); // State for total price
-
+  const [exchangeRates, setExchangeRates] = useState({});
+  const [currencyCodes, setCurrencyCodes] = useState([]);
+  const [walletCurrency, setWalletCurrency] = useState("USD"); // Default to USD
   const [promoCode, setPromoCode] = useState(""); // State for promo code
   //const [totalPrice, setTotalPrice] = useState("");
   const [activeStep, setActiveStep] = useState(0);
@@ -76,7 +78,32 @@ export default function CheckoutModal({
     });
   };
 
-const handleApplyPromoCode = async (enteredPromoCode) => {
+  const fetchExchangeRates = async () => {
+    try {
+      const response = await axios.get(
+          "https://api.exchangerate-api.com/v4/latest/USD"
+      );
+      setExchangeRates(response.data.rates);
+    } catch (err) {
+      console.error("Error fetching exchange rates:", err);
+    }
+  };
+
+  const convertPrice = (price, fromCurrency, toCurrency) => {
+    if (!exchangeRates[fromCurrency] || !exchangeRates[toCurrency]) {
+      console.error("Exchange rates not available for the given currencies");
+      return price;
+    }
+    const rateFrom = exchangeRates[fromCurrency];
+    const rateTo = exchangeRates[toCurrency];
+    return parseFloat((price / rateFrom) * rateTo);
+  };
+
+  useEffect(() => {
+    fetchExchangeRates();
+  }, []);
+
+  const handleApplyPromoCode = async (enteredPromoCode) => {
   try {
     // Fetch all available promo codes from the backend
     const promoCodesResponse = await axios.get(`/promocodes/promocodes`);
@@ -191,6 +218,9 @@ const handleApplyPromoCode = async (enteredPromoCode) => {
               promoCode={promoCode}
               setPromoCode={setPromoCode}
               handleApplyPromoCode={handleApplyPromoCode}
+              convertPrice={convertPrice}
+              exchangeRates={fetchExchangeRates()}
+              walletCurrency={walletCurrency} // Pass walletCurrency as a prop
             />
           )}
           {activeStep === 2 && (
@@ -282,6 +312,15 @@ function DeliveryStep({
     Object.entries(newDeliveryAddress).forEach(([key, value]) => {
       handleDeliveryChange(key, value);
     });
+  };
+
+  const fetchUserWalletCurrency = async () => {
+    try {
+      const response = await axios.get(`/user/${touristId}/wallet`);
+      setWalletCurrency(response.data.currency);
+    } catch (err) {
+      console.error("Error fetching wallet currency:", err);
+    }
   };
 
   const handleSaveNewAddress = async () => {
@@ -419,6 +458,7 @@ function DeliveryStep({
   );
 }
 
+
 function ConfirmationStep({
   cartItems,
   totalPrice,
@@ -427,19 +467,23 @@ function ConfirmationStep({
   promoCode,
   setPromoCode,
   handleApplyPromoCode,
-}) {
+  convertPrice,
+  exchangeRates,
+                          }) {
   return (
     <div>
       <Typography variant="h6" gutterBottom>
         Order Summary
       </Typography>
       <List>
-        {cartItems.map((item) => (
-          <ListItem key={item._id} className={styles.summaryItem}>
-            {item.details} - {desiredQuantities[item._id] || 1} x {item.price}{" "}
-            {item.currency}
-          </ListItem>
-        ))}
+        {cartItems.map((item) => {
+          const convertedPrice = convertPrice(item.price, item.currency, currency);
+          return (
+    <ListItem key={item._id} className={styles.summaryItem}>
+      {item.details} - {desiredQuantities[item._id] || 1} x {convertedPrice.toFixed(2)} {currency}
+    </ListItem>
+  );
+})}
         {/* Promo Code Text Field */}
         <ListItem className={styles.summaryItem}>
           <TextField
