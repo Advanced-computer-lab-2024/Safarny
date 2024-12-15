@@ -328,7 +328,7 @@ const MyBookings = () => {
         }, [userId]);
 
         return (
-                <div className={`${styles.pageWrapper} min-vh-100 d-flex flex-column`}>
+                <div className={`${styles.pageWrapper} min-vh-100 width-vw-100 d-flex flex-column`}>
                         <Header />
 
                         <main className="flex-grow-1">

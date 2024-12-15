@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-    FaPlane, FaHotel, FaCar, FaBook, FaShoppingBag, 
+import {
+    FaPlane, FaHotel, FaCar, FaBook, FaShoppingBag,
     FaUser, FaExclamationCircle, FaList, FaCalendar,
     FaMapMarked, FaStore, FaPlus, FaChartLine,
     FaShip, FaCog, FaMap, FaClipboard, FaUserCog, FaTrash,
     FaChevronRight, FaChevronDown, FaSearch, FaArrowLeft,
-    FaBars, FaTimes, FaBell
+    FaBars, FaTimes, FaBell, FaHeart
 } from 'react-icons/fa';
 import styles from './ProfileSideBar.module.css';
 import axios from 'axios';
@@ -58,6 +58,7 @@ const ProfileSideBar = ({ userId, userInfo }) => {
                     { name: "Book Transport", icon: <FaCar />, path: '/transportss/book-transport' },
                     { name: "My Bookings", icon: <FaList />, path: '/mybookings' },
                     { name: "My Orders", icon: <FaShoppingBag />, path: '/myorders' },
+                    { name: "My Wishlist", icon: <FaHeart />, path: '/wishlist' },
                     { name: "My Preferences", icon: <FaUser />, path: '/PreferencesPage' },
                 ]
             },
