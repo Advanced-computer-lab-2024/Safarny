@@ -5,9 +5,10 @@ import Footer from '/src/client/components/Footer/Footer';
 import Header from '/src/client/components/Header/Header';
 import ProfileHeader from '/src/client/components/ProfileHeader/ProfileHeader';
 import styles from './ProductList.module.css';
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import {CircularProgress, FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 import StarRatings from 'react-star-ratings';
 import { Bookmark, BookmarkBorder } from '@mui/icons-material';
+import Box from "@mui/material/Box";
 
 const ProductList = () => {
   const navigate = useNavigate();
@@ -212,7 +213,19 @@ const ProductList = () => {
       : filteredProducts;
 
   if (loading) {
-    return <p>Loading products...</p>;
+    return (
+        <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100vh',  // Full viewport height
+              width: '100vw',   // Full viewport width
+            }}
+        >
+          <CircularProgress />
+        </Box>
+    );
   }
 
   if (error) {

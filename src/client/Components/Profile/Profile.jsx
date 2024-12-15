@@ -435,7 +435,7 @@ const Profile = () => {
                   <div className="d-flex align-items-center">
                     <i className="fas fa-star me-3"></i>
                     <div>
-                      <h6 className="mb-1">Loyalty Points</h6>
+                      <h6 className="mb-1">Total Loyalty Points</h6>
                       <span className="fs-5">{userData.totalLoyaltyPoints}</span>
                     </div>
                   </div>

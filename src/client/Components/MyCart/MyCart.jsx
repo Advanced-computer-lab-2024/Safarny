@@ -7,6 +7,8 @@ import styles from "./MyCart.module.css";
 import StarRatings from "react-star-ratings";
 import CheckoutModal from "../MyOrder/CheckoutModal.jsx";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import Box from "@mui/material/Box";
+import {CircularProgress} from "@mui/material";
 
 const Cart = () => {
   const location = useLocation();
@@ -261,22 +263,41 @@ const Cart = () => {
   };
 
   if (loading) {
-    return <p>Loading cart items...</p>;
-  }
-  if (error) {
     return (
-        <div className={styles.centaur}>
-          <div className={styles.pageContainer}>
-            <Header/>
-            <Container fluid className={styles.mainContent}>
-              <p className="text-center">{error}</p>
-            </Container>
-            <Footer/>
-          </div>
-        </div>
+        <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100vh',  // Full viewport height
+              width: '100vw',   // Full viewport width
+            }}
+        >
+          <CircularProgress />
+        </Box>
     );
   }
 
+  if (error) {
+    return (
+        <div className={styles.pageContainer}>
+          <Header/>
+          <Container fluid className={styles.mainContent}>
+            <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '40vh',  // Full viewport height
+                  width: '89vw',   // Full viewport width
+                }}
+            >
+              {error}
+            </Box>            </Container>
+          <Footer/>
+        </div>
+    );
+  }
   const totalPrice2 = cartItems.reduce(
       (sum, item) =>
           sum +
