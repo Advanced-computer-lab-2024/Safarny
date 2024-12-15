@@ -6,6 +6,9 @@ import Header from '/src/client/components/Header/Header';
 import styles from './PurchasedProducts.module.css';
 import StarRatings from 'react-star-ratings';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {Container} from "react-bootstrap";
+import { CircularProgress } from '@mui/material';
+import Box from '@mui/material/Box';
 
 const PurchasedProducts = () => {
   const location = useLocation();
@@ -66,34 +69,35 @@ const PurchasedProducts = () => {
       try {
         const response = await axios.get(`/tourist/${touristId}`);
         const postIds = response.data?.posts || [];
-  
+
         if (postIds.length > 0) {
           // Count occurrences of each product ID
           const idCounts = postIds.reduce((acc, id) => {
             acc[id] = (acc[id] || 0) + 1;
             return acc;
           }, {});
-  
+
           // Fetch unique product details
           const uniqueProductDetails = await Promise.all(
-            Object.keys(idCounts).map(async (postId) => {
-              try {
-                const productResponse = await axios.get(`/admin/products/${postId}`);
-                return { ...productResponse.data, count: idCounts[postId] };
-              } catch (err) {
-                if (err.response && err.response.status === 404) {
-                  console.warn(`Product with ID ${postId} not found.`);
-                  return null; // Return null if product is not found
-                } else {
-                  throw err; // Re-throw other errors
+              Object.keys(idCounts).map(async (postId) => {
+                try {
+                  const productResponse = await axios.get(`/admin/products/${postId}`);
+                  return { ...productResponse.data, count: idCounts[postId] };
+                } catch (err) {
+                  if (err.response && err.response.status === 404) {
+                    console.warn(`Product with ID ${postId} not found.`);
+                    return null; // Return null if product is not found
+                  } else {
+                    throw err; // Re-throw other errors
+                  }
                 }
-              }
-            })
+              })
           );
-  
+
+          // Filter out null products
           const validProducts = uniqueProductDetails.filter(product => product !== null);
           setProducts(validProducts);
-  
+
           if (validProducts.length === 0) {
             setError('No purchased products found for this user.');
           }
@@ -107,7 +111,6 @@ const PurchasedProducts = () => {
         setLoading(false);
       }
     };
-  
     if (touristId) {
       fetchPurchasedProducts();
     }
@@ -229,11 +232,40 @@ const PurchasedProducts = () => {
   };
 
   if (loading) {
-    return <p>Loading purchased products...</p>;
-  }
+  return (
+      <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100vh',  // Full viewport height
+            width: '100vw',   // Full viewport width
+          }}
+      >
+        <CircularProgress />
+      </Box>
+  );
+}
 
   if (error) {
-    return <p>{error}</p>;
+    return (
+          <div className={styles.pageContainer}>
+            <Header/>
+            <Container fluid className={styles.mainContent}>
+              <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '50vh',  // Full viewport height
+                    width: '71vw',   // Full viewport width
+                  }}
+              >
+                {error}
+              </Box>            </Container>
+            <Footer/>
+        </div>
+    );
   }
 
   return (
@@ -258,7 +290,7 @@ const PurchasedProducts = () => {
                         <span className="fw-bold">{convertedPrice} {selectedCurrency}</span>
                         <span className="badge bg-secondary">Qty: {product.count}</span>
                       </div>
-                      
+
                       <div className="mb-3">
                         <StarRatings
                           rating={Math.round(averageRating * 2) / 2}
@@ -322,7 +354,15 @@ const PurchasedProducts = () => {
             })}
           </div>
         ) : (
-          <div className="alert alert-info text-center">No purchased products available</div>
+            <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '100vh',  // Full viewport height
+                  width: '100vw',   // Full viewport width
+                }}
+            >No purchased products available</Box>
         )}
       </main>
       <div className={styles.footerWrapper}>

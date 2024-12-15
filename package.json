@@ -10,10 +10,10 @@
   },
   "dependencies": {
     "@cemalgnlts/mailjs": "^3.0.1",
-    "@emotion/react": "^11.13.3",
-    "@emotion/styled": "^11.13.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.1.1",
-    "@mui/material": "^6.1.1",
+    "@mui/material": "^6.2.0",
     "@mui/x-data-grid": "^7.18.0",
     "@popperjs/core": "^2.11.8",
     "@stripe/react-stripe-js": "^3.0.0",
