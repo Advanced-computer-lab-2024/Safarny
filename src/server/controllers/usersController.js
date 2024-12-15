@@ -211,6 +211,7 @@ const updateProfileById = AsyncHandler(async (req, res) => {
       activityCategories: req.body.activityCategories,
       Status: req.body.Status,
       loyaltyPoints: req.body.loyaltyPoints,
+      totalLoyaltyPoints: req.body.totalLoyaltyPoints,
       addresses: req.body.addresses,
       promos: req.body.promos,
       preferencestags: req.body.preferencestags,

@@ -75,9 +75,7 @@ const Cart = () => {
           const productDetails = await Promise.all(
               cartIds.map(async (cartId) => {
                 try {
-                  const productResponse = await axios.get(
-                      `/admin/products/${cartId}`
-                  );
+                  const productResponse = await axios.get(`/admin/products/${cartId}`);
                   return productResponse.data;
                 } catch (err) {
                   if (err.response && err.response.status === 404) {
@@ -93,7 +91,7 @@ const Cart = () => {
           const validCartItems = productDetails.filter((item) => item !== null);
           setCartItems(validCartItems);
           // Initialize desiredQuantities
-          const initialQuantities = productDetails.reduce((acc, item) => {
+          const initialQuantities = validCartItems.reduce((acc, item) => {
             acc[item._id] = 1; // Default quantity is 1
             return acc;
           }, {});

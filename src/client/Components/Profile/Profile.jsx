@@ -22,6 +22,7 @@ const Profile = () => {
     role: "",
     photo: "",
     loyaltyPoints: 0,
+    totalLoyaltyPoints: 0,
     wallet: 0,
     walletcurrency: "EGP"
   });
@@ -285,29 +286,34 @@ const Profile = () => {
                     <strong>Role:</strong> {userData.role}
                   </p>
                   <p className="card-text">
-                    <strong>Loyalty Points:</strong> {userData.loyaltyPoints}
+                    <strong>Current Loyalty Points:</strong> {userData.loyaltyPoints}
+
+                  </p>
+                  <p className="card-text">
+                    <strong>Total Loyalty Points:</strong> {userData.totalLoyaltyPoints}
+
                   </p>
                   <p className="card-text">
                     <strong>Loyalty Badge:</strong>{" "}
-                    <img 
-                      src={
-                        userData.loyaltyPoints >= 500000 ? "/src/client/assets/Img/rank3.jpg" :
-                        userData.loyaltyPoints >= 100000 ? "/src/client/assets/Img/rank2.jpg" :
-                        "/src/client/assets/Img/rank1.jpg"
-                      }
-                      alt="Loyalty Badge"
-                      className={styles.loyaltyBadgeImage}
-                      style={{ 
-                        width: '30px', 
-                        height: '30px', 
-                        marginLeft: '10px',
-                        verticalAlign: 'middle'
-                      }}
+                    <img
+                        src={
+                          userData.totalLoyaltyPoints >= 500000 ? "/src/client/assets/Img/rank3.jpg" :
+                              userData.totalLoyaltyPoints >= 100000 ? "/src/client/assets/Img/rank2.jpg" :
+                                  "/src/client/assets/Img/rank1.jpg"
+                        }
+                        alt="Loyalty Badge"
+                        className={styles.loyaltyBadgeImage}
+                        style={{
+                          width: '30px',
+                          height: '30px',
+                          marginLeft: '10px',
+                          verticalAlign: 'middle'
+                        }}
                     />
-                    <span style={{ marginLeft: '10px', fontSize: '0.9em', color: '#666' }}>
-                      {userData.loyaltyPoints >= 500000 ? "Level 3" :
-                       userData.loyaltyPoints >= 100000 ? "Level 2" :
-                       "Level 1"}
+                    <span style={{marginLeft: '10px', fontSize: '0.9em', color: '#666'}}>
+                      {userData.totalLoyaltyPoints >= 500000 ? "Level 3" :
+                          userData.totalLoyaltyPoints >= 100000 ? "Level 2" :
+                              "Level 1"}
                     </span>
                   </p>
                   <p className="card-text">
@@ -317,10 +323,10 @@ const Profile = () => {
                 </div>
 
                 {userData.role === "Tourist" && (
-                  <div className="mt-4">
-                    <button
-                      className={`btn btn-success ${styles.cashInButton}`}
-                      onClick={handleCashInPoints}
+                    <div className="mt-4">
+                      <button
+                          className={`btn btn-success ${styles.cashInButton}`}
+                          onClick={handleCashInPoints}
                       style={{ 
                         position: 'relative', 
                         zIndex: 1000, 
@@ -362,7 +368,7 @@ const Profile = () => {
                       <div 
                         className={styles.progressFill} 
                         style={{ 
-                          width: `${Math.min((userData.loyaltyPoints / 100000) * 100, 100)}%`
+                          width: `${Math.min((userData.totalLoyaltyPoints / 100000) * 100, 100)}%`
                         }}
                       />
                     </div>
@@ -370,13 +376,13 @@ const Profile = () => {
                   </div>
                   
                   {/* Level 2 Stage (100K-500K) */}
-                  <div className={`${styles.progressStage} ${userData.loyaltyPoints >= 100000 ? styles.active : styles.inactive}`}>
+                  <div className={`${styles.progressStage} ${userData.totalLoyaltyPoints >= 100000 ? styles.active : styles.inactive}`}>
                     <div className={styles.progressBar}>
                       <div 
                         className={styles.progressFill} 
                         style={{ 
-                          width: userData.loyaltyPoints >= 100000 ? 
-                            `${Math.min(((userData.loyaltyPoints - 100000) / 400000) * 100, 100)}%` : '0%'
+                          width: userData.totalLoyaltyPoints >= 100000 ?
+                            `${Math.min(((userData.totalLoyaltyPoints - 100000) / 400000) * 100, 100)}%` : '0%'
                         }}
                       />
                     </div>
@@ -388,20 +394,20 @@ const Profile = () => {
                   <div className={styles.currentLevel}>
                     <span className={styles.levelLabel}>Current Level:</span>
                     <span className={styles.levelValue}>
-                      {userData.loyaltyPoints >= 500000 ? "Level 3" :
-                       userData.loyaltyPoints >= 100000 ? "Level 2" : "Level 1"}
+                      {userData.totalLoyaltyPoints >= 500000 ? "Level 3" :
+                       userData.totalLoyaltyPoints >= 100000 ? "Level 2" : "Level 1"}
                     </span>
                   </div>
                   <div className={styles.pointsNeeded}>
-                    {userData.loyaltyPoints >= 500000 ? (
+                    {userData.totalLoyaltyPoints >= 500000 ? (
                       <span className={styles.maxLevel}>Maximum level achieved! 🎉</span>
                     ) : (
                       <>
                         <span className={styles.pointsLabel}>Points needed for next level:</span>
                         <span className={styles.pointsValue}>
-                          {userData.loyaltyPoints >= 100000 
-                            ? `${(500000 - userData.loyaltyPoints).toLocaleString()} points to Level 3`
-                            : `${(100000 - userData.loyaltyPoints).toLocaleString()} points to Level 2`}
+                          {userData.totalLoyaltyPoints >= 100000
+                            ? `${(500000 - userData.totalLoyaltyPoints).toLocaleString()} points to Level 3`
+                            : `${(100000 - userData.totalLoyaltyPoints).toLocaleString()} points to Level 2`}
                         </span>
                       </>
                     )}
@@ -430,7 +436,7 @@ const Profile = () => {
                     <i className="fas fa-star me-3"></i>
                     <div>
                       <h6 className="mb-1">Loyalty Points</h6>
-                      <span className="fs-5">{userData.loyaltyPoints}</span>
+                      <span className="fs-5">{userData.totalLoyaltyPoints}</span>
                     </div>
                   </div>
                 </div>
