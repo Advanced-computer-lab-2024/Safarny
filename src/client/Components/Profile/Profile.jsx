@@ -6,6 +6,7 @@ import Footer from "/src/client/components/Footer/Footer";
 import Header from "/src/client/components/Header/Header";
 import ProfileSideBar from "../ProfileSideBar/ProfileSideBar";
 import axios from "axios";
+import Calendar from './Calendar';
 
 const Profile = () => {
   const location = useLocation();
@@ -27,6 +28,14 @@ const Profile = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true); // Add loading state
   const audioRef = useRef(null); // Define audioRef using useRef
+  const [userBookings, setUserBookings] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const [itineraries, setItineraries] = useState([]);
+  const [activities, setActivities] = useState([]);
+  const [transports, setTransports] = useState([]);
+  const [places, setPlaces] = useState([]);
+  const [filteredRevenue, setFilteredRevenue] = useState(0);
+  const [advertiserFilteredRevenue, setAdvertiserFilteredRevenue] = useState(0);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -113,6 +122,82 @@ const Profile = () => {
       }
     };
   }, [userId]);
+
+  useEffect(() => {
+    const fetchUserBookings = async () => {
+      try {
+        const response = await fetch(`/booking/get-bookings-by-tourist/${userId}`);
+        if (!response.ok) throw new Error('Failed to fetch bookings');
+        const data = await response.json();
+        setUserBookings(data);
+      } catch (error) {
+        console.error('Error fetching bookings:', error);
+      }
+    };
+
+    if (userId) {
+      fetchUserBookings();
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    const fetchRoleSpecificData = async () => {
+      if (!userId) return;
+
+      try {
+        const currentDate = new Date();
+        const currentMonth = (currentDate.getMonth() + 1).toString();
+        const currentYear = currentDate.getFullYear().toString();
+
+        if (userData.role === "TourGuide") {
+          const itinerariesResponse = await axios.get(
+            `http://localhost:3000/tourguide/get-my-tourguide-itineraries/${userId}`
+          );
+          setItineraries(itinerariesResponse.data);
+          
+          // Get monthly sales for tour guide
+          const salesResponse = await fetch(
+            `http://localhost:3000/tourguide/reportsales/${userId}?month=${currentMonth}&year=${currentYear}`
+          );
+          const salesData = await salesResponse.json();
+          setFilteredRevenue(salesData.totalRevenue);
+        }
+        
+        else if (userData.role === "Advertiser") {
+          const transportsResponse = await axios.get(
+            `http://localhost:3000/transport/transports/advertiser/${userId}`
+          );
+          setTransports(transportsResponse.data);
+          
+          // Get monthly sales for advertiser
+          const salesResponse = await fetch(
+            `http://localhost:3000/advertiser/reportsales/${userId}?month=${currentMonth}&year=${currentYear}`
+          );
+          const salesData = await salesResponse.json();
+          setAdvertiserFilteredRevenue(salesData.totalRevenue);
+        }
+        
+        else if (userData.role === "Seller") {
+          const postsResponse = await axios.get(`/seller/products/${userId}`);
+          setPosts(postsResponse.data);
+          
+          const revenueResponse = await axios.get(
+            `/seller/filteredRevenueByseller/${userId}?month=${currentMonth}&year=${currentYear}`
+          );
+          setFilteredRevenue(revenueResponse.data.totalRevenue);
+        }
+        
+        else if (userData.role === "TourismGovernor") {
+          const placesResponse = await axios.get("http://localhost:3000/toursimgovernor/places");
+          setPlaces(placesResponse.data);
+        }
+      } catch (error) {
+        console.error("Error fetching role-specific data:", error);
+      }
+    };
+
+    fetchRoleSpecificData();
+  }, [userId, userData.role]);
 
   console.log("Current userData state:", userData);
 
@@ -262,6 +347,224 @@ const Profile = () => {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="row mt-4 px-4">
+          {/* Loyalty Progress Card */}
+          <div className="col-12 mb-4">
+            <div className={`${styles.card} p-4`}>
+              <h5 className="mb-3">Loyalty Progress</h5>
+              <div className={styles.progressWrapper}>
+                <div className={styles.progressStages}>
+                  {/* Level 1 Stage (0-100K) */}
+                  <div className={styles.progressStage}>
+                    <div className={styles.progressBar}>
+                      <div 
+                        className={styles.progressFill} 
+                        style={{ 
+                          width: `${Math.min((userData.loyaltyPoints / 100000) * 100, 100)}%`
+                        }}
+                      />
+                    </div>
+                    <span>Level 1</span>
+                  </div>
+                  
+                  {/* Level 2 Stage (100K-500K) */}
+                  <div className={`${styles.progressStage} ${userData.loyaltyPoints >= 100000 ? styles.active : styles.inactive}`}>
+                    <div className={styles.progressBar}>
+                      <div 
+                        className={styles.progressFill} 
+                        style={{ 
+                          width: userData.loyaltyPoints >= 100000 ? 
+                            `${Math.min(((userData.loyaltyPoints - 100000) / 400000) * 100, 100)}%` : '0%'
+                        }}
+                      />
+                    </div>
+                    <span>Level 2</span>
+                  </div>
+                </div>
+
+                <div className={styles.levelInfo}>
+                  <div className={styles.currentLevel}>
+                    <span className={styles.levelLabel}>Current Level:</span>
+                    <span className={styles.levelValue}>
+                      {userData.loyaltyPoints >= 500000 ? "Level 3" :
+                       userData.loyaltyPoints >= 100000 ? "Level 2" : "Level 1"}
+                    </span>
+                  </div>
+                  <div className={styles.pointsNeeded}>
+                    {userData.loyaltyPoints >= 500000 ? (
+                      <span className={styles.maxLevel}>Maximum level achieved! 🎉</span>
+                    ) : (
+                      <>
+                        <span className={styles.pointsLabel}>Points needed for next level:</span>
+                        <span className={styles.pointsValue}>
+                          {userData.loyaltyPoints >= 100000 
+                            ? `${(500000 - userData.loyaltyPoints).toLocaleString()} points to Level 3`
+                            : `${(100000 - userData.loyaltyPoints).toLocaleString()} points to Level 2`}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Spending Summary - Full width for better layout */}
+          <div className="col-12 mb-4">
+            <div className={`${styles.card} p-4`}>
+              <h5 className="mb-3">Spending Summary</h5>
+              <div className={styles.summaryStats}>
+                <div className={styles.statItem}>
+                  <div className="d-flex align-items-center">
+                    <i className="fas fa-wallet me-3"></i>
+                    <div>
+                      <h6 className="mb-1">Wallet Balance</h6>
+                      <span className="fs-5">{userData.wallet?.toFixed(2)} {userData.walletcurrency}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.statItem}>
+                  <div className="d-flex align-items-center">
+                    <i className="fas fa-star me-3"></i>
+                    <div>
+                      <h6 className="mb-1">Loyalty Points</h6>
+                      <span className="fs-5">{userData.loyaltyPoints}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Role-Specific Cards */}
+          {userData.role === "Tourist" && (
+            <>
+              <div className="col-md-6 mb-4">
+                <div className={`${styles.card} p-4 h-100`}>
+                  <h5 className="mb-3">Upcoming Bookings</h5>
+                  <Calendar bookings={userBookings} />
+                </div>
+              </div>
+              <div className="col-md-6 mb-4">
+                <div className={`${styles.card} p-4 h-100`}>
+                  <h5 className="mb-3">Travel Planning</h5>
+                  <div className={styles.quickActions}>
+                    <button className={styles.actionButton} onClick={() => navigate('/BookFlight', { state: { userId } })}>
+                      <i className="fas fa-plane"></i>
+                      Book Flight
+                    </button>
+                    <button className={styles.actionButton} onClick={() => navigate('/BookHotel', { state: { userId } })}>
+                      <i className="fas fa-hotel"></i>
+                      Book Hotel
+                    </button>
+                    <button className={styles.actionButton} onClick={() => navigate('/myorders', { state: { userId } })}>
+                      <i className="fas fa-shopping-bag"></i>
+                      My Orders
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {userData.role === "TourGuide" && (
+            <>
+              <div className="col-md-6 mb-4">
+                <div className={`${styles.card} p-4 h-100`}>
+                  <h5 className="mb-3">Tour Overview</h5>
+                  <div className={styles.statsGrid}>
+                    <div className={styles.statBox}>
+                      <i className="fas fa-route"></i>
+                      <div>
+                        <h6>Active Itineraries</h6>
+                        <span>{itineraries.length}</span>
+                      </div>
+                    </div>
+                    <div className={styles.statBox}>
+                      <i className="fas fa-dollar-sign"></i>
+                      <div>
+                        <h6>Monthly Sales</h6>
+                        <span>${filteredRevenue.toLocaleString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {userData.role === "Advertiser" && (
+            <>
+              <div className="col-md-6 mb-4">
+                <div className={`${styles.card} p-4 h-100`}>
+                  <h5 className="mb-3">Transport Overview</h5>
+                  <div className={styles.statsGrid}>
+                    <div className={styles.statBox}>
+                      <i className="fas fa-bus"></i>
+                      <div>
+                        <h6>Active Transports</h6>
+                        <span>{transports.length}</span>
+                      </div>
+                    </div>
+                    <div className={styles.statBox}>
+                      <i className="fas fa-dollar-sign"></i>
+                      <div>
+                        <h6>Monthly Sales</h6>
+                        <span>${advertiserFilteredRevenue.toLocaleString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {userData.role === "Seller" && (
+            <>
+              <div className="col-md-6 mb-4">
+                <div className={`${styles.card} p-4 h-100`}>
+                  <h5 className="mb-3">Sales Dashboard</h5>
+                  <div className={styles.statsGrid}>
+                    <div className={styles.statBox}>
+                      <i className="fas fa-shopping-cart"></i>
+                      <div>
+                        <h6>Active Listings</h6>
+                        <span>{posts.length}</span>
+                      </div>
+                    </div>
+                    <div className={styles.statBox}>
+                      <i className="fas fa-dollar-sign"></i>
+                      <div>
+                        <h6>Monthly Sales</h6>
+                        <span>${filteredRevenue.toLocaleString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {userData.role === "TourismGovernor" && (
+            <>
+              <div className="col-md-6 mb-4">
+                <div className={`${styles.card} p-4 h-100`}>
+                  <h5 className="mb-3">Region Overview</h5>
+                  <div className={styles.statsGrid}>
+                    <div className={styles.statBox}>
+                      <i className="fas fa-landmark"></i>
+                      <div>
+                        <h6>Historical Sites</h6>
+                        <span>{places.length}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </main>
 
