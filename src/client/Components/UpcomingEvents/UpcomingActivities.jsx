@@ -425,7 +425,6 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
           {loading ? (
             <div className="col-12 text-center">
               <CircularProgress />
-              <p>Loading activities...</p>
             </div>
           ) : error ? (
             <div className="col-12">
