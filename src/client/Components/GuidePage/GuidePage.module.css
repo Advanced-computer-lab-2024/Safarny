@@ -16,114 +16,203 @@ html, body {
 .container {
   min-height: 100vh;
   width: 100vw;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  color: white;
+  position: relative;
   display: flex;
   flex-direction: column;
-  background: #f5f7fa;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  overflow-x: hidden;
+}
+
+.progressBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #00ff88 0%, #00a3ff 100%);
+  z-index: 1000;
+  transition: width 0.2s ease;
 }
 
 .main {
   flex: 1;
-  max-width: 1000px;
-  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 80px 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .title {
-  color: #333;
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
+  font-size: 3rem;
   text-align: center;
-  border-bottom: 2px solid #4299e1;
-  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, #00ff88, #00a3ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .subtitle {
-  background: #333;
-  color: white;
-  font-weight: 600;
-  padding: 1rem;
-  border-radius: 6px;
-  margin: 0.5rem 0 1.5rem 0;
-  width: 100%;
-}
-
-.stepContent {
-  background: #333;
-  color: white;
-  font-weight: 600;
-  padding: 1rem;
-  border-radius: 6px;
-  margin: 0.5rem 0 1.5rem 0;
-  width: 100%;
-}
-
-.stepHeader {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin: 2rem 0 1rem 0;
-}
-
-.stepNumber {
-  background: #4299e1;
-  color: white;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-}
-
-.stepTitle {
-  color: #333;
+  text-align: center;
+  color: #a0a0a0;
   font-size: 1.2rem;
-  font-weight: 600;
+  margin-bottom: 4rem;
+  max-width: 800px;
+}
+
+.stepsNavigation {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.stepDot {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.stepDot.active {
+  background: linear-gradient(135deg, #00ff88, #00a3ff);
+  border-color: transparent;
+  transform: scale(1.1);
 }
 
 .instructionList {
   list-style: none;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  width: 100%;
+}
+
+.instructionItem {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.instructionItem:hover {
+  transform: translateY(-5px);
+}
+
+.stepHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stepNumber {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #00ff88, #00a3ff);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.stepTitle {
+  font-size: 1.5rem;
+  margin: 0;
+  background: linear-gradient(90deg, #ffffff, #a0a0a0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stepContent {
+  color: #d0d0d0;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
 }
 
 .imageContainer {
-  margin: 1rem 0;
-  border-radius: 6px;
-  overflow: hidden;
-  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
 }
 
 .stepImage {
   width: 100%;
-  height: auto;
-  display: block;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.stepImage:hover {
+  transform: scale(1.02);
 }
 
 .tip {
-  background: #ebf8ff;
-  border-left: 4px solid #4299e1;
+  background: rgba(0, 255, 136, 0.1);
+  border-left: 4px solid #00ff88;
   padding: 1rem;
-  margin-top: 1rem;
   border-radius: 0 8px 8px 0;
-  font-size: 0.95rem;
-  color: #2c5282;
+  margin-top: 1.5rem;
+  color: #a0a0a0;
 }
 
 @media (max-width: 768px) {
   .main {
-      padding: 1rem;
-      margin: 0;
-      border-radius: 0;
+    padding: 60px 15px;
   }
-  
+
   .title {
-      font-size: 1.5rem;
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .instructionItem {
+    padding: 1.5rem;
+  }
+
+  .imageContainer {
+    grid-template-columns: 1fr;
+  }
+
+  .stepsNavigation {
+    gap: 0.5rem;
+  }
+
+  .stepDot {
+    width: 35px;
+    height: 35px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .stepTitle {
+    font-size: 1.3rem;
+  }
+
+  .stepDot {
+    width: 30px;
+    height: 30px;
+    font-size: 0.8rem;
   }
 }
