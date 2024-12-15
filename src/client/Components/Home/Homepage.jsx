@@ -251,7 +251,7 @@ const Homepage = () => {
                 className={`${styles.button} ${styles.dropdownToggle}`}
                 onClick={toggleDropdown}
               >
-                Sign Up Options <i className="fas fa-caret-down ms-2"></i>
+                Sign Up Options <i className="fas fa-caret-down ms-2 color-black"></i>
               </button>
               <div className={`${styles.dropdownMenu} ${dropdownOpen ? styles.show : ''}`}>
                 <Link to="/signup" className={styles.dropdownItem}>
