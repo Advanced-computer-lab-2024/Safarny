@@ -20,6 +20,19 @@
     text-align: center;
 }
 
+.activitiesGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px; /* Adjust the gap as needed */
+}
+
+.activityCard {
+    border: 1px solid #ccc;
+    padding: 16px;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
 .container {
     font-family: 'Arial', sans-serif;
     color: var(--text-color);
@@ -32,6 +45,10 @@
     position: relative;
     width: 95vw;
     min-height: 100vh;
+}
+
+.activityCard h3 {
+    color: dodgerblue;
 }
 
 .headerTitle {

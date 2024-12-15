@@ -101,52 +101,61 @@ const MyActivities = () => {
       <Header />
       <h1 className={styles.headerTitle}>My Activities</h1>
       {loading ? (
-        <p>Loading activities...</p>
+          <div className={styles.pageWrapper}>
+            <Header/>
+            <div className="container d-flex justify-content-center align-items-center" style={{minHeight: '60vh'}}>
+              <div className="text-center">
+                <div className="spinner-border text-primary mb-3" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            </div>
+            <Footer/>
+          </div>
       ) : activities.length === 0 ? (
-        <main className={styles.main}>
-          <p>No activities available.</p>
-        </main>
+          <main className={styles.main}>
+            <p>No activities available.</p>
+          </main>
       ) : (
-        <>
-          <FormControl fullWidth margin="normal">
-            <InputLabel>Currency</InputLabel>
-            <Select value={selectedCurrency} onChange={(e) => setSelectedCurrency(e.target.value)}>
-              {Object.keys(exchangeRates).map(code => (
-                <MenuItem key={code} value={code}>{code}</MenuItem>
+          <>
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Currency</InputLabel>
+              <Select value={selectedCurrency} onChange={(e) => setSelectedCurrency(e.target.value)}>
+                {Object.keys(exchangeRates).map(code => (
+                    <MenuItem key={code} value={code}>{code}</MenuItem>
               ))}
             </Select>
           </FormControl>
-          <div>
-            {activities.map(activity => {
-              const convertedPrice = convertPrice(activity.price, activity.currency, selectedCurrency);
-              return (
-                <div className={styles.activityCard} key={activity._id}>
-                  <h3>{activity.name}</h3>
-                  <p>Date: {new Date(activity.date).toLocaleDateString()}</p>
-                  <p>Time: {activity.time}</p>
-                  <p>Location: {activity.location}</p>
-                  {activity.tags && activity.tags.length > 0 && (
-                    <p>Tags: {activity.tags.map((tag) => tag.name).join(", ")}</p>
-                  )}
-                  {activity.category && activity.category.length > 0 && (
-                    <p>Category: {activity.category.map((cat) => cat.type).join(", ")}</p>
-                  )}
-                  <p style={{ color: activity.bookingOpen ? "green" : "red" }}>
-                    {activity.bookingOpen ? "Booking: Open" : "Booking: Closed"}
-                  </p>
-                  <p>Price: {convertedPrice} {selectedCurrency}</p>
-                  <p>
-                    <strong>Rating:</strong>
-                    <Rating value={activity.averageRating} readOnly />
-                  </p>
-                  <img className={styles.activityImage} src={activity.imageUrl} alt={activity.name} />
-                </div>
-              );
-            })}
-          </div>
-        </>
+            <div className={styles.activitiesGrid}>
+              {activities.map(activity => {
+                const convertedPrice = convertPrice(activity.price, activity.currency, selectedCurrency);
+                return (
+                    <div className={styles.activityCard} key={activity._id}>
+                      <h3>{activity.location}</h3>
+                      <p>
+                        <strong>Rating:</strong>
+                        <Rating value={activity.averageRating} readOnly/>
+                      </p>
+                      <p>Date: {new Date(activity.date).toLocaleDateString()}</p>
+                      <p>Time: {activity.time}</p>
+                      <p>Location: {activity.location}</p>
+                      {activity.tags && activity.tags.length > 0 && (
+                          <p>Tags: {activity.tags.map((tag) => tag.name).join(", ")}</p>
+                      )}
+                      {activity.category && activity.category.length > 0 && (
+                          <p>Category: {activity.category.map((cat) => cat.type).join(", ")}</p>
+                      )}
+                      <p style={{color: activity.bookingOpen ? "green" : "red"}}>
+                        {activity.bookingOpen ? "Booking: Open" : "Booking: Closed"}
+                      </p>
+                      <p>Price: {convertedPrice} {selectedCurrency}</p>
+                    </div>
+                );
+              })}
+            </div>
+          </>
       )}
-      <Footer />
+      <Footer/>
     </div>
   );
 };

@@ -5,8 +5,9 @@ import Footer from "/src/client/components/Footer/Footer";
 import Header from "/src/client/components/Header/Header";
 import styles from "./ReadHistoricalPlace.module.css";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
-import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import {FormControl, InputLabel, Select, MenuItem, CircularProgress} from "@mui/material";
 import MyBookingModal from "/src/client/Components/Booking/MyBookingModal";
+import Box from "@mui/material/Box";
 
 const ReadHistoricalPlace = () => {
   const [places, setPlaces] = useState([]);
@@ -194,13 +195,17 @@ const ReadHistoricalPlace = () => {
 
   if (loading) {
     return (
-      <div className={styles.loadingContainer}>
-        <div className={styles.spinner}>
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-        </div>
-      </div>
+        <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100vh',  // Full viewport height
+              width: '100vw',   // Full viewport width
+            }}
+        >
+          <CircularProgress />
+        </Box>
     );
   }
 

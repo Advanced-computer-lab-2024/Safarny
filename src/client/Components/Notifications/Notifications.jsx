@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
-import Header from '../Header/Header'; 
-import Footer from '../Footer/Footer'; 
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 import styles from './Notifications.module.css';
 
 const Notifications = () => {
@@ -36,7 +36,9 @@ const Notifications = () => {
     }
   };
 
-  const unreadNotifications = notifications.filter(notification => !notification.read);
+  const unreadNotifications = notifications
+    .filter(notification => !notification.read)
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   return (
     <div className={styles.notificationsContainer}>

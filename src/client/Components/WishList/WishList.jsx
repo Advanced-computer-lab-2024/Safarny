@@ -73,7 +73,6 @@ const WishList = () => {
         <Header />
         <div className={styles.loadingContainer}>
           <div className={styles.loadingSpinner}></div>
-          <p>Loading your wishlist...</p>
         </div>
       </div>
     );

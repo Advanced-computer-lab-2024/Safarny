@@ -17,6 +17,7 @@ const ProfileSideBar = ({ userId, userInfo }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleDelete = async () => {
+        alert('Delete Account request sent successfully');
         const roleEndpoints = {
             "Seller": "/seller/delete_request/",
             "TourGuide": "/tourGuide/delete_request/",
