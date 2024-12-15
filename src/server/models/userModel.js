@@ -40,6 +40,7 @@ const userModel = new mongoose.Schema(
       default: [],
     },
     loyaltyPoints: { type: Number, default: 0 },
+    totalLoyaltyPoints: { type: Number, default: 0 },
     loyaltyLevel: {
       type: String,
       enum: ["none", "level 1", "level 2", "level 3"],
