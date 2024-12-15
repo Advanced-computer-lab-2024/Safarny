@@ -78,6 +78,18 @@ export default function TourGuide() {
     severity: 'success'
   });
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleActivityChange = (index, e) => {
+    const { name, value } = e.target;
+    const updatedActivities = [...formData.activities];
+    updatedActivities[index] = { ...updatedActivities[index], [name]: value };
+    setFormData({ ...formData, activities: updatedActivities });
+  };
+
   const handleSnackbarClose = () => {
     setSnackbar({ ...snackbar, open: false });
   };

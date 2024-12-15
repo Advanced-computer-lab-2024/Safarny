@@ -175,6 +175,7 @@ const getProfileById = async (req, res) => {
   }
 };
 
+
 // Controller for updating a profile by ID
 const updateProfileById = AsyncHandler(async (req, res) => {
   try {
@@ -239,6 +240,7 @@ const updateProfileById = AsyncHandler(async (req, res) => {
     res.status(400).json({ error: "An error occurred while updating the user" });
   }
 });
+
 
 const updateAcceptedStatus = async (req, res) => {
   try {

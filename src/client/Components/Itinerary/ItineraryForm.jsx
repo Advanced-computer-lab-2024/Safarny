@@ -15,7 +15,6 @@ const ItineraryForm = ({ existingItinerary, onSubmit }) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
-
     const handleActivityChange = (index, e) => {
         const { name, value } = e.target;
         const updatedActivities = [...formData.activities];

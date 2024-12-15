@@ -223,7 +223,7 @@ const Profile = () => {
       const pointsInWallet = userData.loyaltyPoints * 0.01 * exchangeRate;
 
       // 2. Second issue: Update user endpoint
-      const updateResponse = await axios.put(`/tourist/update/${userId}`, {  // Changed endpoint
+      const updateResponse = await axios.put(`/tourist/${userId}`, {  // Changed endpoint
         wallet: userData.wallet + pointsInWallet,
         loyaltyPoints: 0
       });

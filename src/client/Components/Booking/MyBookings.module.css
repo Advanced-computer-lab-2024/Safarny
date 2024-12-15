@@ -42,6 +42,12 @@
     border-bottom: 1px solid #e1e4e8;
 }
 
+.pageWrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100vw;
+}
 .totalPrice {
     font-weight: 600;
     font-size: 1.4em;
