@@ -61,7 +61,7 @@ router.delete("/:id", usersController.deleteUser);
 router.put("/update", usersController.updateUser);
 // Route for creating a new profile
 router.post("/create", usersController.createProfile);
-
+router.put("/updateLoyaltyPoints/:id", usersController.updateLoyaltyPoints);
 router.get("/search", searchController.search);
 // Route for getting a profile by ID
 router.get("/:id", usersController.getProfileById);

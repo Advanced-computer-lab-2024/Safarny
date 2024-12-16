@@ -41,6 +41,24 @@ import {
 // Initialize Stripe (put this outside your component)
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY); // Replace with your Stripe publishable key
 
+const calculateLoyaltyPoints = (amountPaid, loyaltyLevel) => {
+  let points = 0;
+  switch (loyaltyLevel) {
+    case 1:
+      points = amountPaid * 0.5;
+      break;
+    case 2:
+      points = amountPaid * 1;
+      break;
+    case 3:
+      points = amountPaid * 1.5;
+      break;
+    default:
+      points = amountPaid * 0.5;
+  }
+  return points;
+};
+
 export default function CheckoutModal({
   cartItems,
   totalPrice: initialTotalPrice, // Renamed to avoid conflict
@@ -623,39 +641,66 @@ function FinishStep({
     setClickedSumit(true);
     try {
       const response = await axios.post(
-        "http://localhost:3000/tourist/order/checkout",
-        {
-          userId,
-          items: cartItems.map((item) => ({
-            productId: item._id,
-            name: item.details,
-            quantity: desiredQuantities[item._id] || 1,
-            price: item.price,
-            currency: item.currency,
-          })),
-          deliveryAddress,
-          paymentMethod,
-          totalAmount: totalPrice,
-          currency,
-        }
+          "http://localhost:3000/tourist/order/checkout",
+          {
+            userId,
+            items: cartItems.map((item) => ({
+              productId: item._id,
+              name: item.details,
+              quantity: desiredQuantities[item._id] || 1,
+              price: item.price,
+              currency: item.currency,
+            })),
+            deliveryAddress,
+            paymentMethod,
+            totalAmount: totalPrice,
+            currency,
+          }
       );
 
       console.log("Order saved successfully:", response.data);
+
+      // Fetch user data
+      const userResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
+      const user = userResponse.data;
+
+      // Calculate loyalty points based on loyalty level
+      let points = 0;
+      switch (response.data.loyaltyLevel) {
+        case 1:
+          points = totalPrice * 0.5;
+          break;
+        case 2:
+          points = totalPrice * 1;
+          break;
+        case 3:
+          points = totalPrice * 1.5;
+          break;
+        default:
+          points = totalPrice * 0.5; // Default to level 1 if loyalty level is not defined
+      }
+      console.log(`Loyalty points earned: ${points}`);
+
+      // Update the user's loyalty points
+      await axios.put(`/tourist/${userId}`, {
+        loyaltyPoints: user.loyaltyPoints + points,
+        totalLoyaltyPoints: user.totalLoyaltyPoints + points,
+      });
 
       await handleClearCart();
 
       if (onSuccess) onSuccess();
     } catch (error) {
       if (
-        error.response?.status === 400 &&
-        error.response?.data === "Insufficient funds" &&
-        paymentMethod === "wallet"
+          error.response?.status === 400 &&
+          error.response?.data === "Insufficient funds" &&
+          paymentMethod === "wallet"
       ) {
         setErrorMessage("Insufficient funds for this order.");
       } else {
         console.error(
-          "Error saving order:",
-          error.response?.data || error.message
+            "Error saving order:",
+            error.response?.data || error.message
         );
       }
     }

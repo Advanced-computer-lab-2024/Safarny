@@ -383,6 +383,33 @@ const deleteAdvertiserAndActivities = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+const updateLoyaltyPoints = AsyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { loyaltyPoints, totalLoyaltyPoints } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "Invalid user ID" });
+  }
+
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.loyaltyPoints = loyaltyPoints;
+    user.totalLoyaltyPoints = totalLoyaltyPoints;
+
+    await user.save();
+
+    res.status(200).json({ message: "Loyalty points updated successfully", user });
+  } catch (error) {
+    console.error("Error updating loyalty points:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 const cashInPoints = async (req, res) => {
   const { id } = req.params;
   const { walletcurrency } = req.body;
@@ -504,6 +531,7 @@ module.exports = {
   updateUser,
   createProfile,
   getProfileById,
+  updateLoyaltyPoints,
   updateProfileById,
   getAllUsers, // Export the new function
   updateAcceptedStatus,
