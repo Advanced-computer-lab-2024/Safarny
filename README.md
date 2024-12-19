@@ -379,6 +379,16 @@ https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-hotels?hotelI
 http://localhost:3000/tourguide/getItineraryRevenueByTourGuide/6706421efda16b0a35e52ed3
 ![image](https://github.com/user-attachments/assets/7edac337-d8ff-4bad-975b-5e6a9ed08c39)
 
+http://localhost:3000/promocodes/promocodes
+![image](https://github.com/user-attachments/assets/e1f5f552-0442-4318-ae88-21134e195d0c)
+
+http://localhost:3000/tourguide/get-itineraries
+![image](https://github.com/user-attachments/assets/873a9c57-7988-4474-939a-1c857afaaf61)
+
+http://localhost:3000/admin/getUsers?role=Advertiser
+![image](https://github.com/user-attachments/assets/825a9eb3-2ae1-4417-8cac-0c379f421ca2)
+
+
 
 ### How to Use
 To use the Safarny project, follow these steps:
