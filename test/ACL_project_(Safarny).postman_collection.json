@@ -1,0 +1,1184 @@
+{
+	"info": {
+		"_postman_id": "a144544f-9a9b-4ac3-bd28-c3cf8a355e96",
+		"name": "ACL project (Safarny)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38405832"
+	},
+	"item": [
+		{
+			"name": "Stakeholders",
+			"item": [
+				{
+					"name": "TourGuide",
+					"item": [
+						{
+							"name": "create itinerary",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"City Tour\",\r\n  \"tagNames\": [],\r\n  \"category\": [\"Adventure\", \"Sightseeing\"],\r\n  \"activities\": [],\r\n  \"locations\": [\"Museum\", \"Central Park\"],\r\n  \"timeline\": [\"10:00 AM - Museum\", \"12:00 PM - Central Park\"],\r\n  \"duration\": 120,\r\n  \"language\": \"English\",\r\n  \"price\": 50,\r\n  \"availableDates\": [\"2023-10-01\", \"2023-10-02\"],\r\n  \"availableTimes\": [\"10:00 AM\", \"2:00 PM\"],\r\n  \"accessibility\": true,\r\n  \"pickupLocation\": \"Hotel Lobby\",\r\n  \"dropoffLocation\": \"Hotel Lobby\"\r\n  \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}tourguide/create-itineraries",
+									"host": [
+										"{{URL}}tourguide"
+									],
+									"path": [
+										"create-itineraries"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit profile",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"seif@example.com\",\r\n    \"username\": \"seif\",\r\n    \"password\": \"seif123\",\r\n    \"YearOfExp\": 6,\r\n    \"PrevWork\": \"Programmer\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}tourguide/edit-my-tourguide-profile/:id",
+									"host": [
+										"{{URL}}tourguide"
+									],
+									"path": [
+										"edit-my-tourguide-profile",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "67009db9442511d0a050c42b"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get all itineraries",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}tourguide/get-itineraries",
+									"host": [
+										"{{URL}}tourguide"
+									],
+									"path": [
+										"get-itineraries"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "get all users",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}users/all",
+									"host": [
+										"{{URL}}users"
+									],
+									"path": [
+										"all"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get users with type Copy",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}users?type=admin",
+									"host": [
+										"{{URL}}users"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "admin"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create tag",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"modern\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}tag/",
+									"host": [
+										"{{URL}}tag"
+									],
+									"path": [
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get tag",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}tag/",
+									"host": [
+										"{{URL}}tag"
+									],
+									"path": [
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create category",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"type\": \"Outdoor\",\r\n  \"activities\": []\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}}api/categories",
+									"host": [
+										"{{URL}}}api"
+									],
+									"path": [
+										"categories"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Seller",
+					"item": [
+						{
+							"name": "create category",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/categories?type=food",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"categories"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "food"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Advertiser",
+					"item": [
+						{
+							"name": "create activity",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Morning Yoga\",\r\n  \"location\": \"Central Park\",\r\n  \"duration\": 60,\r\n  \"timeline\": \"2023-10-01T08:00:00Z\",\r\n  \"activityCategory\": [],\r\n  \"price\": 15\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}}api/categories",
+									"host": [
+										"{{URL}}}api"
+									],
+									"path": [
+										"categories"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "guest",
+					"item": [
+						{
+							"name": "register (Tourist)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"jwt\", pm.response.json().token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"mostafa321@example.com\",\r\n    \"username\": \"mostafa321\",\r\n    \"password\": \"password123\",\r\n    \"nationality\": \"Egyptian\",\r\n    \"mobile\": \"+1234567890\",\r\n    \"DOB\": \"1990-01-01\",\r\n    \"employed\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}guest/tourist-signup",
+									"host": [
+										"{{URL}}guest"
+									],
+									"path": [
+										"tourist-signup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "register others (Seller)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"jwt\", pm.response.json().token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"mostafa@example.com\",\r\n    \"username\": \"mostafa\",\r\n    \"password\": \"sasa\",\r\n    \"description\": \"cool\",\r\n    \"sellerName\": \"vt\",\r\n    \"role\": \"Seller\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}guest/others-signup",
+									"host": [
+										"{{URL}}guest"
+									],
+									"path": [
+										"others-signup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "register others (Advertiser)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"jwt\", pm.response.json().token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"ahmed@example.com\",\r\n    \"username\": \"ahmed\",\r\n    \"password\": \"ahmed123\",\r\n    \"CompanyName\": \"COOLCOMPANYNAME\",\r\n    \"CompanyLink\": \"HTTPS://LINK.COM\",\r\n    \"CompanyHotline\": 19011,\r\n    \"role\": \"Advertiser\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}guest/others-signup",
+									"host": [
+										"{{URL}}guest"
+									],
+									"path": [
+										"others-signup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "register others (TourGuide)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"jwt\", pm.response.json().token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"seif@example.com\",\r\n    \"username\": \"seif\",\r\n    \"password\": \"seif123\",\r\n    \"YearOfExp\": 5,\r\n    \"PrevWork\": \"Programmer\",\r\n    \"role\": \"TourGuide\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}guest/others-signup",
+									"host": [
+										"{{URL}}guest"
+									],
+									"path": [
+										"others-signup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get itineraries",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}guest/get-itineraries",
+									"host": [
+										"{{URL}}guest"
+									],
+									"path": [
+										"get-itineraries"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get activities",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}guest/get-activities",
+									"host": [
+										"{{URL}}guest"
+									],
+									"path": [
+										"get-activities"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get historicalPLaces",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}guest/get-historicalPlaces",
+									"host": [
+										"{{URL}}guest"
+									],
+									"path": [
+										"get-historicalPlaces"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null,
+											"disabled": true
+										},
+										{
+											"key": "",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "filter activities",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}guest/filter-activities?minBudget=0&maxBudget=22",
+									"host": [
+										"{{URL}}guest"
+									],
+									"path": [
+										"filter-activities"
+									],
+									"query": [
+										{
+											"key": "minBudget",
+											"value": "0"
+										},
+										{
+											"key": "date",
+											"value": "2024-10-04",
+											"disabled": true
+										},
+										{
+											"key": "maxBudget",
+											"value": "22"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "sort activities",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}guest/get-activities-sorted",
+									"host": [
+										"{{URL}}guest"
+									],
+									"path": [
+										"get-activities-sorted"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "sort itineraries",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}guest/get-itineraries-sorted",
+									"host": [
+										"{{URL}}guest"
+									],
+									"path": [
+										"get-itineraries-sorted"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "filter itineraries",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}guest/filter-itineraries",
+									"host": [
+										"{{URL}}guest"
+									],
+									"path": [
+										"filter-itineraries"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "filter historicalPlaces",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}guest/filter-historicalPlaces?tags=ancient,monument",
+									"host": [
+										"{{URL}}guest"
+									],
+									"path": [
+										"filter-historicalPlaces"
+									],
+									"query": [
+										{
+											"key": "tags",
+											"value": "ancient,monument"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login (with admin)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"jwt\", pm.response.json().token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"admin@example.com\",\r\n    \"password\": \"admin\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}guest/login",
+									"host": [
+										"{{URL}}guest"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login (with TourGuide)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"jwt\", pm.response.json().token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"seif@example.com\",\r\n    \"password\": \"seif123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}guest/login",
+									"host": [
+										"{{URL}}guest"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login (with Seller)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"jwt\", pm.response.json().token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"mostafa@example.com\",\r\n    \"password\": \"sasa\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}guest/login",
+									"host": [
+										"{{URL}}guest"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login (with Advertiser)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"jwt\", pm.response.json().token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"ahmed@example.com\",\r\n    \"password\": \"ahmed123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}guest/login",
+									"host": [
+										"{{URL}}guest"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "search",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/tourist/search?query=food&type=activity",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"tourist",
+										"search"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "food"
+										},
+										{
+											"key": "type",
+											"value": "activity"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Tourist",
+					"item": [
+						{
+							"name": "booking",
+							"item": [
+								{
+									"name": "book itinerary",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"itinerary\":\"672aca7f775de976587e0b71\",\r\n    \"tourist\":\"672ac7c2775de976587e0b58\",\r\n    \"bookingDate\":\"2024-11-10\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{URL}}tourist/bookings",
+											"host": [
+												"{{URL}}tourist"
+											],
+											"path": [
+												"bookings"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "book activity",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"activity\":\"672b7ad6974dd0a24eee7208\",\r\n    \"tourist\":\"672ac7c2775de976587e0b58\",\r\n    \"bookingDate\":\"2024-11-21\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{URL}}tourist/bookings",
+											"host": [
+												"{{URL}}tourist"
+											],
+											"path": [
+												"bookings"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "book historicalPlace",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"historicalPlace\":\"672a1bb8749889579000ad0a\",\r\n    \"tourist\":\"672ac7c2775de976587e0b58\",\r\n    \"bookingDate\":\"2024-11-10\",\r\n    \"bookingHour\":\"9:00\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{URL}}tourist/bookings/historicalPlace",
+											"host": [
+												"{{URL}}tourist"
+											],
+											"path": [
+												"bookings",
+												"historicalPlace"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "cancel booking",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}tourist/bookings/:id/cancel",
+											"host": [
+												"{{URL}}tourist"
+											],
+											"path": [
+												"bookings",
+												":id",
+												"cancel"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "672d1d3c7828e3db9e16687a"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "cancel booking (historicalPlace)",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}tourist/bookings/:id/cancel/historicalPlace",
+											"host": [
+												"{{URL}}tourist"
+											],
+											"path": [
+												"bookings",
+												":id",
+												"cancel",
+												"historicalPlace"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "672d26fad0867a27f1428f52"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "get booking",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}tourist/bookings/672ac7c2775de976587e0b58",
+											"host": [
+												"{{URL}}tourist"
+											],
+											"path": [
+												"bookings",
+												"672ac7c2775de976587e0b58"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "functions",
+			"item": [
+				{
+					"name": "sign-in",
+					"item": [
+						{
+							"name": "login user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"jwt\", pm.response.json().token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"testuser@example.com\",\r\n  \"password\": \"securepassword123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}login/",
+									"host": [
+										"{{URL}}login"
+									],
+									"path": [
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "sign-up",
+					"item": [
+						{
+							"name": "register tourist",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"jwt\", pm.response.json().token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"testuser@example.com\",\r\n  \"username\": \"testuserTourist\",\r\n  \"password\": \"securepassword123\",\r\n  \"nationality\": \"Egyptian\",\r\n  \"mobile\": \"+1234567890\",\r\n  \"DOB\": \"1990-01-01\",\r\n  \"employed\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}signup/",
+									"host": [
+										"{{URL}}signup"
+									],
+									"path": [
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "register others",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"jwt\", pm.response.json().token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"testuser@example.com\",\r\n  \"username\": \"testuser\",\r\n  \"password\": \"securepassword123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}signup/others",
+									"host": [
+										"{{URL}}signup"
+									],
+									"path": [
+										"others"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
