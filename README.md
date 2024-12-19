@@ -340,7 +340,9 @@ npm run dev
 
 
 ### Tests
-Postman
+[Postman](test/ACL_project_(Safarny).postman_collection.json)
+
+
 http://localhost:3000/toursimgovernor/gettags:
 ![image](https://github.com/user-attachments/assets/87ca1b68-eac0-4152-895e-b181e0ebe7ef)
 
