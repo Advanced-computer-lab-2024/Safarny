@@ -341,6 +341,30 @@ npm run dev
 
 ### Tests
 Postman
+http://localhost:3000/toursimgovernor/gettags:
+![image](https://github.com/user-attachments/assets/87ca1b68-eac0-4152-895e-b181e0ebe7ef)
+
+http://localhost:3000/guest/get-activities
+![image](https://github.com/user-attachments/assets/4def4556-6168-4dde-9341-462b5eae8a93)
+
+http://localhost:3000/admin/products
+![image](https://github.com/user-attachments/assets/fbeb38d0-cc3e-4906-bade-e820669473a1)
+
+http://localhost:3000/guest/get-activities-sorted
+![image](https://github.com/user-attachments/assets/59c256a7-376d-4b70-a4cc-787734674196)
+
+http://localhost:3000/admin/tag
+![image](https://github.com/user-attachments/assets/5606ae37-1e23-40cc-ae7c-117aab17ea09)
+
+http://localhost:3000/admin/userCounts
+![image](https://github.com/user-attachments/assets/b60cd237-87d9-4b9b-8c16-7d7dcadee44e)
+
+http://localhost:3000/admin/complaints
+![image](https://github.com/user-attachments/assets/b77f3a00-c046-4c87-9cf6-ab59e62e7008)
+
+http://localhost:3000/toursimgovernor/places
+![image](https://github.com/user-attachments/assets/b24245f3-56fa-4193-a3ba-21f160ea0ba6)
+
 
 ### How to Use
 To use the Safarny project, follow these steps:
