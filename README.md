@@ -367,6 +367,18 @@ http://localhost:3000/admin/complaints
 http://localhost:3000/toursimgovernor/places
 ![image](https://github.com/user-attachments/assets/b24245f3-56fa-4193-a3ba-21f160ea0ba6)
 
+https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=NYC&destinationLocationCode=CAI&departureDate=2025-01-01&adults=1
+![image](https://github.com/user-attachments/assets/ca698df1-9f4d-4944-aaf7-0c57a27fb98c)
+
+https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city?cityCode=PAR&radius=5&radiusUnit=KM
+![image](https://github.com/user-attachments/assets/f9bb60e6-0cbe-4bff-b3e2-c962aa982259)
+
+https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-hotels?hotelIds=YXPARRND
+![image](https://github.com/user-attachments/assets/fa4fdde8-2ee8-4996-ba40-821549bef8af)
+
+http://localhost:3000/tourguide/getItineraryRevenueByTourGuide/6706421efda16b0a35e52ed3
+![image](https://github.com/user-attachments/assets/7edac337-d8ff-4bad-975b-5e6a9ed08c39)
+
 
 ### How to Use
 To use the Safarny project, follow these steps:
