@@ -18,6 +18,9 @@ CommonJs
 ![Home.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/Home.png)
 ![Iti2.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/Iti2.png)
 ![pref.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/pref.png)
+![Cart.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/Cart.png)
+![open.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/open.png)
+
 
 
 
