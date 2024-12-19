@@ -220,27 +220,109 @@ npm i
 npm run dev
 ```
 
-### API References
-List all the API routes used in the project with a brief description of each.
+# API Endpoints Documentation
 
-- `/admin`: Admin related operations
-- `/advertiser`: Advertiser related operations
-- `/guest`: Guest related operations
-- `/tourist`: Tourist related operations
-- `/tourguide`: Tour guide related operations
-- `/seller`: Seller related operations
-- `/toursimgovernor`: Tourism governor related operations
-- `/activities`: Activities related operations
-- `/transport`: Transport related operations
-- `/itineraries`: Itineraries related operations
-- `/preferences`: Preferences related operations
-- `/wishlist`: Wish list related operations
-- `/categories`: Activity categories related operations
-- `/historicalplaces`: Historical places related operations
-- `/email`: Email related operations
-- `/notification`: Notification related operations
-- `/api/auth`: Authentication related operations
-- `/promocodes`: Promo code related operations
+## Tags Related Operations
+
+- **POST** `/tags`: Create a new tag  
+- **GET** `/tags`: Get all tags  
+- **GET** `/tags/filter/:name`: Get tags by filter  
+- **GET** `/tags/:id`: Get a tag by ID  
+- **PUT** `/tags/:id`: Update a tag by ID  
+- **DELETE** `/tags/:id`: Delete a tag by ID  
+
+---
+
+## Email Related Operations
+
+- **POST** `/email/send-activity-archived-email`: Send activity archived email  
+- **POST** `/email/send-itinerary-archived-email`: Send itinerary archived email  
+- **POST** `/email/send-tourist-reminder-email`: Send tourist reminder email  
+- **POST** `/email/send-email`: Send general email  
+
+---
+
+## Admin Related Operations
+
+- **POST** `/admin/promocodes`: Create a promo code  
+- **GET** `/admin/promocodes`: Get all promo codes  
+- **GET** `/admin/promocodes/:id`: Get promo code by ID  
+- **PUT** `/admin/promocodes/:id`: Update a promo code by ID  
+- **GET** `/admin/getActivitiesRevenue`: Get activities revenue  
+- **GET** `/admin/getItinerarayRevenue`: Get itinerary revenue  
+- **GET** `/admin/getUsers`: Get all users  
+- **DELETE** `/admin/deleteUser/:id`: Delete a user by ID  
+- **PUT** `/admin/updateUser/:id`: Update a user by ID  
+- **PUT** `/admin/updateUserStatus/:id`: Update user status by ID  
+- **PUT** `/admin/UpdateProfileById`: Update profile by ID  
+- **POST** `/admin/addAdmin`: Add a new admin  
+- **POST** `/admin/createProduct`: Create a new product  
+- **GET** `/admin/products`: Get all products  
+- **GET** `/admin/products/:id`: Get a product by ID  
+- **PUT** `/admin/products/:id`: Update a product by ID  
+- **DELETE** `/admin/products/:id`: Delete a product by ID  
+- **POST** `/admin/tag`: Create a tag  
+- **GET** `/admin/tag`: Get all tags  
+- **GET** `/admin/tag/filter/:name`: Get tags by filter  
+- **GET** `/admin/tag/:id`: Get a tag by ID  
+- **PUT** `/admin/tag/:id`: Update a tag by ID  
+- **DELETE** `/admin/tag/:id`: Delete a tag by ID  
+- **POST** `/admin/add-governor`: Add a new governor  
+- **GET** `/admin/complaints`: Get all complaints  
+- **GET** `/admin/getAllRevenue`: Get total revenue  
+- **PUT** `/admin/complaints/:id`: Update a complaint by ID  
+- **DELETE** `/admin/deleteByCreator/:creatorId`: Delete posts by creator ID  
+- **DELETE** `/admin/deleteTourGuide/:id`: Delete tour guide by ID  
+- **DELETE** `/admin/deleteAdvertiser/:id`: Delete advertiser by ID  
+- **GET** `/admin/userCounts`: Get user counts  
+- **GET** `/admin/filteredrevenueadmin`: Get filtered admin revenue  
+
+---
+
+## Guest Related Operations
+
+- **POST** `/guest/login`: User login  
+- **POST** `/guest/tourist-signup`: Tourist signup  
+- **POST** `/guest/others-signup`: Signup for other roles (TourGuide, Advertiser, Seller)  
+- **GET** `/guest/get-itineraries`: Get all itineraries  
+- **GET** `/guest/get-activities`: Get all activities  
+- **GET** `/guest/get-historicalPlaces`: Get all historical places  
+- **GET** `/guest/filter-activities`: Filter activities  
+- **GET** `/guest/get-activities-sorted`: Get sorted activities  
+- **GET** `/guest/get-itineraries-sorted`: Get sorted itineraries  
+- **GET** `/guest/filter-itineraries`: Filter itineraries  
+- **GET** `/guest/filter-historicalPlaces`: Filter historical places  
+- **GET** `/guest/get-historicalPlaces-sorted`: Get sorted historical places  
+
+---
+
+## Login Related Operations
+
+- **POST** `/login/`: User login  
+
+---
+
+## Post Related Operations
+
+- **POST** `/posts/posts`: Create a post  
+- **GET** `/posts/posts`: Get all posts  
+- **PUT** `/posts/posts/:id`: Update a post by ID  
+- **DELETE** `/posts/posts/:id`: Delete a post by ID  
+
+---
+
+## User Related Operations
+
+- **GET** `/users/`: Get users  
+- **GET** `/users/all`: Get all users  
+- **DELETE** `/users/:id`: Delete a user by ID  
+- **GET** `/users/about`: Get a single user  
+- **PUT** `/users/update`: Update a user  
+- **POST** `/users/create`: Create a new profile  
+- **GET** `/users/:id`: Get a profile by ID  
+- **PUT** `/users/:id`: Update a profile by ID  
+- **PUT** `/users/Status/:id`: Update user status by ID  
+
 
 ### Tests
 Postman
