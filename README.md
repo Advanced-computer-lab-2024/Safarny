@@ -20,6 +20,18 @@ CommonJs
 ![pref.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/pref.png)
 ![Cart.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/Cart.png)
 ![open.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/open.png)
+![Header.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/Header.png)  
+![Hotel.jpg](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/Hotel.jpg)  
+![Products2.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/Products2.png)  
+![Profile Page.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/Profile%20Page.png)  
+![Search2.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/Search2.png)  
+![Sign up.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/Sign%20up.png)  
+![Update2.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/Update2.png)  
+![View2.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/View2.png)  
+![create2.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/create2.png)  
+![flight2.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/flight2.png)  
+![hotel2.png](https://github.com/Advanced-computer-lab-2024/Safarny/blob/main/src/client/Assets/Img/hotel2.png)
+
 
 
 
