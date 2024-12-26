@@ -110,7 +110,7 @@ const Homepage = () => {
   );
 
   const scrollToSection = (ref) => {
-    ref.current?.scrollIntoView({ 
+    ref.current?.scrollIntoView({
       behavior: 'smooth',
       block: 'start'
     });
@@ -124,7 +124,7 @@ const Homepage = () => {
       { icon: 'fas fa-sign-in-alt', title: 'Sign In', link: '/signin' },
       { icon: 'fas fa-user', title: 'Sign Up as Tourist', link: '/signup' },
       { icon: 'fas fa-briefcase', title: 'Sign Up as Business', link: '/signupextra' },
-    ].filter(item => 
+    ].filter(item =>
       item.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
@@ -134,7 +134,7 @@ const Homepage = () => {
     };
 
     return (
-      <div 
+      <div
         className={`${styles.searchOverlay} ${isSearchOpen ? styles.searchOpen : ''}`}
         onClick={(e) => {
           if (e.target === e.currentTarget) setIsSearchOpen(false);
@@ -153,7 +153,7 @@ const Homepage = () => {
                 className={styles.searchInput}
               />
             </div>
-            <button 
+            <button
               className={styles.closeSearch}
               onClick={() => setIsSearchOpen(false)}
             >
@@ -186,21 +186,21 @@ const Homepage = () => {
 
   const TextSizeControl = () => (
     <div className={styles.textSizeControl}>
-      <button 
+      <button
         onClick={() => setFontSize(prev => Math.max(0.8, prev - 0.1))}
         className={styles.textSizeButton}
         aria-label="Decrease text size"
       >
         <span className={styles.sizeText}>a</span>
       </button>
-      <button 
+      <button
         onClick={() => setFontSize(1)}
         className={styles.textSizeButton}
         aria-label="Reset text size"
       >
         <span className={styles.sizeText}>Aa</span>
       </button>
-      <button 
+      <button
         onClick={() => setFontSize(prev => Math.min(1.3, prev + 0.1))}
         className={styles.textSizeButton}
         aria-label="Increase text size"
@@ -212,7 +212,7 @@ const Homepage = () => {
 
   return (
     <>
-      <div 
+      <div
         className={styles.progressBar}
         style={{ width: `${scrollProgress}%` }}
       />
@@ -224,8 +224,8 @@ const Homepage = () => {
             <img src={Logo} alt="Safarny Logo" className={styles.logo} />
             <h1 className={styles.title}>Safarny</h1>
           </div>
-          
-          <button 
+
+          <button
             className={`${styles.burgerMenu} ${menuOpen ? styles.active : ''}`}
             onClick={toggleMenu}
             aria-label="Toggle navigation"
@@ -236,8 +236,8 @@ const Homepage = () => {
           </button>
 
           {menuOpen && (
-            <div 
-              className={styles.menuOverlay} 
+            <div
+              className={styles.menuOverlay}
               onClick={toggleMenu}
             />
           )}
@@ -245,9 +245,9 @@ const Homepage = () => {
           <div className={`${styles.nav} ${menuOpen ? styles.navOpen : ''} ${isMenuAnimating ? styles.animating : ''}`}>
             <Link to="/GuidePageGuest" className={styles.button}>Guide Page</Link>
             <Link to="/signin" className={styles.button}>Sign In</Link>
-            
+
             <div className={styles.dropdown}>
-              <button 
+              <button
                 className={`${styles.button} ${styles.dropdownToggle}`}
                 onClick={toggleDropdown}
               >
@@ -269,36 +269,36 @@ const Homepage = () => {
       </header>
 
       <div className={styles.sideNav}>
-        <button 
+        <button
           onClick={() => scrollToSection(introRef)}
           className={styles.sideNavButton}
           aria-label="Scroll to Home"
         >
           <div className={styles.navCircle}>
             <span className={styles.navIcon}>
-              <i className="fas fa-home"></i>
+              ↑
             </span>
             <span className={styles.navLabel}>Home</span>
           </div>
         </button>
-        <button 
+        <button
           onClick={() => scrollToSection(featuresRef)}
           className={styles.sideNavButton}
           aria-label="Scroll to Features"
         >
           <div className={styles.navCircle}>
             <span className={styles.navIcon}>
-              <i className="fas fa-compass"></i>
+              ↓
             </span>
             <span className={styles.navLabel}>Explore</span>
           </div>
         </button>
       </div>
 
-      <div 
+      <div
         className={styles.container}
-        style={{ 
-          '--font-size-multiplier': fontSize 
+        style={{
+          '--font-size-multiplier': fontSize
         }}
       >
         <main className="container py-5">
@@ -306,7 +306,7 @@ const Homepage = () => {
             <LoadingSpinner />
           ) : (
             <>
-              <section 
+              <section
                 ref={introRef}
                 className={`${styles.intro} text-center min-vh-100 d-flex align-items-center justify-content-center`}
               >
@@ -322,45 +322,36 @@ const Homepage = () => {
                 </div>
               </section>
 
-              <section 
+              <section
                 ref={featuresRef}
                 className={`${styles.features} py-5`}
               >
-                <div className="row g-4">
-                  {isLoading ? (
-                    <>
-                      <div className="col-md-4"><SkeletonCard /></div>
-                      <div className="col-md-4"><SkeletonCard /></div>
-                      <div className="col-md-4"><SkeletonCard /></div>
-                    </>
-                  ) : (
-                    [
-                      { image: image4, title: "Upcoming Activities", link: "/UpcomingActivites" },
-                      { image: image5, title: "Historical Places", link: "/historical-places" },
-                      { image: image6, title: "Upcoming Itineraries", link: "/UpcomingItineraries" },
-                    ].map((feature, index) => (
-                      <div className="col-md-4" key={index}>
-                        <Link 
-                          to={feature.link} 
-                          className={`${styles.card} text-decoration-none`}
-                        >
-                          <div className={styles.cardInner}>
-                            <div className={styles.cardImage}>
-                              <img 
-                                src={feature.image} 
-                                alt={feature.title}
-                                className="img-fluid"
-                              />
-                            </div>
-                            <div className={styles.cardOverlay}>
-                              <h5 className={styles.cardTitle}>{feature.title}</h5>
-                              <div className={styles.cardArrow}>→</div>
-                            </div>
-                          </div>
-                        </Link>
+                <div className={styles.featuresGrid}>
+                  {[
+                    { image: image4, title: "Upcoming Activities", link: "/UpcomingActivites" },
+                    { image: image5, title: "Historical Places", link: "/historical-places" },
+                    { image: image6, title: "Upcoming Itineraries", link: "/UpcomingItineraries" },
+                  ].map((feature, index) => (
+                    <Link
+                      key={index}
+                      to={feature.link}
+                      className={styles.featureCard}
+                    >
+                      <div className={styles.cardInner}>
+                        <div className={styles.cardImageWrapper}>
+                          <img
+                            src={feature.image}
+                            alt={feature.title}
+                            className={styles.cardImage}
+                          />
+                        </div>
+                        <div className={styles.cardContent}>
+                          <h3 className={styles.cardTitle}>{feature.title}</h3>
+                          <div className={styles.cardArrow}>→</div>
+                        </div>
                       </div>
-                    ))
-                  )}
+                    </Link>
+                  ))}
                 </div>
               </section>
             </>

@@ -9,6 +9,9 @@ import styles from './SignUp.module.css';
 import Modal from 'react-modal';
 import { storage } from '../../../server/config/Firebase';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { FcGoogle } from 'react-icons/fc';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+
 const countries = [
   "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
   "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia",
@@ -67,6 +70,17 @@ const SignUp = () => {
   const [photoURL, setPhotoURL] = useState('');
   const age = DOB ? calculateAge(DOB) : null;
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState({
+    score: 0,
+    requirements: {
+      length: false,
+      uppercase: false,
+      lowercase: false,
+      number: false,
+      special: false
+    }
+  });
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -155,8 +169,39 @@ const SignUp = () => {
     });
   };
 
+  const checkPasswordStrength = (password) => {
+    const requirements = {
+      length: password.length >= 8,
+      uppercase: /[A-Z]/.test(password),
+      lowercase: /[a-z]/.test(password),
+      number: /[0-9]/.test(password),
+      special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+    };
+
+    let score = Object.values(requirements).filter(Boolean).length;
+    
+    setPasswordStrength({
+      score,
+      requirements
+    });
+
+    return score;
+  };
+
+  const getStrengthClass = (score) => {
+    if (score <= 2) return 'weak';
+    if (score <= 4) return 'medium';
+    return 'strong';
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const strengthScore = checkPasswordStrength(password);
+    if (strengthScore < 3) {
+      setError("Please create a stronger password that meets the requirements.");
+      return;
+    }
 
     if (!termsAccepted) {
       setError('You must accept the terms and conditions to sign up.');
@@ -193,6 +238,52 @@ const SignUp = () => {
     }
   };
 
+  const handleGoogleSignUp = async () => {
+    try {
+      const auth = getAuth();
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      
+      const userData = {
+        email: result.user.email,
+        username: result.user.displayName,
+        nationality: 'Not Specified',
+        walletcurrency: 'USD',
+        mobile: '0',
+        DOB: new Date(),
+        employed: 'No',
+        photo: result.user.photoURL,
+        role: "Tourist",
+        password: Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8)
+      };
+
+      try {
+        const response = await axios.post('/signup', userData, {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+
+        if (response.data.token) {
+          setSuccess(true);
+          setError('');
+          localStorage.setItem('token', response.data.token);
+          localStorage.setItem('user', JSON.stringify(response.data.data.user));
+          setTimeout(() => {
+            navigate('/profile');
+          }, 1500);
+        }
+      } catch (err) {
+        const errorMessage = err.response?.data?.error || 'Error creating account';
+        console.error('Backend error details:', err.response?.data);
+        setError(errorMessage);
+      }
+    } catch (error) {
+      console.error('Google sign in error:', error);
+      setError('Failed to sign in with Google');
+    }
+  };
+
   return (
     <div className={styles.pageWrapper}>
       <Header />
@@ -201,114 +292,164 @@ const SignUp = () => {
         <div className={styles.formContainer}>
           <h1 className={styles.heading}>Create Account</h1>
           
+          <button 
+            className={styles.googleButton}
+            onClick={handleGoogleSignUp}
+          >
+            <FcGoogle size={20} />
+            Sign up with Google
+          </button>
+          
+          <div className={styles.divider}>
+            <span>or sign up with email</span>
+          </div>
+          
           {success && <div className={styles.alert + " " + styles.success}>Sign up successful!</div>}
           {error && <div className={styles.alert + " " + styles.error}>{error}</div>}
 
           <form onSubmit={handleSubmit} className={styles.form}>
-            <div className={styles.inputGroup}>
-              <label htmlFor="username" className={styles.label}>Name</label>
-              <input
-                type="text"
-                id="username"
-                className={styles.input}
-                value={username}
-                onChange={(e) => setUserName(e.target.value)}
-                required
-                placeholder="Enter your name"
-              />
+            {/* Personal Information Section */}
+            <div className={styles.formSection}>
+              <h2 className={styles.sectionTitle}>Personal Information</h2>
+              <div className={styles.sectionContent}>
+                <div className={styles.inputGroup}>
+                  <label htmlFor="username">Name</label>
+                  <input
+                    type="text"
+                    id="username"
+                    value={username}
+                    onChange={(e) => setUserName(e.target.value)}
+                    required
+                    placeholder="Enter your name"
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label htmlFor="dob">Date of Birth</label>
+                  <DatePicker
+                    id="dob"
+                    selected={DOB}
+                    onChange={(date) => setDob(date)}
+                    placeholderText="Select your date of birth"
+                    required
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label htmlFor="nationality">Nationality</label>
+                  <select
+                    id="nationality"
+                    value={nationality}
+                    onChange={handleCountryChange}
+                    required
+                  >
+                    <option value="">Select Country of Origin</option>
+                    {countries.map((country) => (
+                      <option key={country} value={country}>{country}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
             </div>
 
-            <div className={styles.inputGroup}>
-              <label htmlFor="email" className={styles.label}>Email</label>
-              <input
-                type="email"
-                id="email"
-                className={styles.input}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="Enter your email"
-              />
+            {/* Account Information Section */}
+            <div className={styles.formSection}>
+              <h2 className={styles.sectionTitle}>Account Details</h2>
+              <div className={styles.sectionContent}>
+                <div className={styles.inputGroup}>
+                  <label htmlFor="email">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    placeholder="Enter your email"
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label htmlFor="password">Password</label>
+                  <input
+                    type="password"
+                    id="password"
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      checkPasswordStrength(e.target.value);
+                    }}
+                    required
+                    placeholder="Enter your password"
+                  />
+                  <div className={styles.passwordRequirements}>
+                    <p className={styles.requirementsTitle}>Password must contain:</p>
+                    <ul className={styles.requirementList}>
+                      <li className={`${styles.requirementItem} ${passwordStrength.requirements.length ? styles.valid : styles.invalid}`}>
+                        {passwordStrength.requirements.length ? "✓" : "○"} At least 8 characters
+                      </li>
+                      <li className={`${styles.requirementItem} ${passwordStrength.requirements.uppercase ? styles.valid : styles.invalid}`}>
+                        {passwordStrength.requirements.uppercase ? "✓" : "○"} One uppercase letter
+                      </li>
+                      <li className={`${styles.requirementItem} ${passwordStrength.requirements.lowercase ? styles.valid : styles.invalid}`}>
+                        {passwordStrength.requirements.lowercase ? "✓" : "○"} One lowercase letter
+                      </li>
+                      <li className={`${styles.requirementItem} ${passwordStrength.requirements.number ? styles.valid : styles.invalid}`}>
+                        {passwordStrength.requirements.number ? "✓" : "○"} One number
+                      </li>
+                      <li className={`${styles.requirementItem} ${passwordStrength.requirements.special ? styles.valid : styles.invalid}`}>
+                        {passwordStrength.requirements.special ? "✓" : "○"} One special character (!@#$%^&*(),.?":{}|)
+                      </li>
+                    </ul>
+                    {password && (
+                      <div className={styles.strengthIndicator}>
+                        <div className={`${styles.strengthBar} ${styles[getStrengthClass(passwordStrength.score)]}`} />
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label htmlFor="mobile">Mobile</label>
+                  <input
+                    type="tel"
+                    id="mobile"
+                    value={mobile}
+                    onChange={(e) => setMobile(e.target.value)}
+                    required
+                    placeholder="Enter your mobile number"
+                  />
+                </div>
+              </div>
             </div>
 
-            <div className={styles.inputGroup}>
-              <label htmlFor="password" className={styles.label}>Password</label>
-              <input
-                type="password"
-                id="password"
-                className={styles.input}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                placeholder="Enter your password"
-              />
-            </div>
+            {/* Additional Information Section */}
+            <div className={styles.formSection}>
+              <h2 className={styles.sectionTitle}>Additional Information</h2>
+              <div className={styles.sectionContent}>
+                <div className={styles.inputGroup}>
+                  <label htmlFor="employed">Employment Status</label>
+                  <select
+                    id="employed"
+                    value={employed}
+                    onChange={(e) => setEmployed(e.target.value)}
+                    required
+                  >
+                    <option value="">Select employment status</option>
+                    <option value="Yes">Employed</option>
+                    <option value="No">Not Employed</option>
+                  </select>
+                </div>
 
-            <div className={styles.inputGroup}>
-              <label htmlFor="dob" className={styles.label}>Date of Birth</label>
-              <DatePicker
-                id="dob"
-                selected={DOB}
-                onChange={(date) => setDob(date)}
-                className={styles.input}
-                placeholderText="Select your date of birth"
-                required
-              />
-            </div>
-
-            <div className={styles.inputGroup}>
-              <label htmlFor="mobile" className={styles.label}>Mobile</label>
-              <input
-                type="text"
-                id="mobile"
-                className={styles.input}
-                value={mobile}
-                onChange={(e) => setMobile(e.target.value)}
-                required
-                placeholder="Enter your mobile number"
-              />
-            </div>
-
-            <div className={styles.inputGroup}>
-              <label htmlFor="nationality" className={styles.label}>Nationality</label>
-              <select
-                id="nationality"
-                className={styles.input}
-                value={nationality}
-                onChange={handleCountryChange}
-                required
-              >
-                <option value="">Select Country of Origin</option>
-                {countries.map((country) => (
-                  <option key={country} value={country}>{country}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className={styles.inputGroup}>
-              <label htmlFor="employed" className={styles.label}>Employment Status</label>
-              <select
-                id="employed"
-                className={styles.input}
-                value={employed}
-                onChange={(e) => setEmployed(e.target.value)}
-                required
-              >
-                <option value="">Select employment status</option>
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-              </select>
-            </div>
-
-            <div className={styles.inputGroup}>
-              <label htmlFor="photo" className={styles.label}>Photo</label>
-              <input
-                type="file"
-                id="photo"
-                className={styles.input}
-                onChange={handlePhotoChange}
-                required
-              />
+                <div className={styles.inputGroup}>
+                  <label htmlFor="photo">Profile Photo</label>
+                  <input
+                    type="file"
+                    id="photo"
+                    onChange={handlePhotoChange}
+                    required
+                  />
+                </div>
+              </div>
             </div>
 
             <div className={styles.terms}>
@@ -322,16 +463,12 @@ const SignUp = () => {
                 I agree to the terms and conditions
               </label>
               <div className={styles.termsText}>
-                <p>
-                  <span onClick={openModal}>
-                    Click here to read the terms and conditions
-                  </span>
-                </p>
+                <span onClick={openModal}>Click here to read the terms and conditions</span>
               </div>
             </div>
 
             <button type="submit" className={styles.submitButton}>
-              Sign Up
+              Create Account
             </button>
 
             <div className={styles.links}>

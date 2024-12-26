@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import Footer from '/src/client/Components/Footer/Footer';
 import Header from '../Header/Header';
 import styles from './SignIn.module.css';
+import { FcGoogle } from 'react-icons/fc';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
@@ -11,6 +13,72 @@ const SignIn = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const auth = getAuth();
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      
+      try {
+        // First check if user exists
+        const checkUserResponse = await axios.get(`http://localhost:3000/guest/check-user/${result.user.email}`);
+        
+        if (!checkUserResponse.data.exists) {
+          // If user doesn't exist, redirect to signup
+          navigate('/signup');
+          return;
+        }
+
+        // If user exists, proceed with Google login
+        const response = await axios.post('http://localhost:3000/guest/google-login', {
+          email: result.user.email,
+          googleId: result.user.uid,
+        });
+
+        const { type, Status, id } = response.data;
+        const userId = id;
+
+        if (type === 'admin' || type === 'Admin') {
+          setSuccess(true);
+          setError('');
+          navigate('/admin', { state: { userId } });
+          return;
+        }
+
+        if (type === 'Tourist') {
+          setSuccess(true);
+          setError('');
+          navigate('/Profile', { state: { userId } });
+          return;
+        }
+
+        if (Status !== 'Accepted') {
+          setError('Your account is not accepted yet. Please wait for approval.');
+          setSuccess(false);
+          return;
+        }
+
+        setSuccess(true);
+        setError('');
+        if (['Seller', 'TourGuide', 'Advertiser', 'TourismGovernor'].includes(type)) {
+          navigate('/Profile', { state: { userId } });
+        }
+      } catch (err) {
+        if (err.response?.status === 404) {
+          // User doesn't exist, redirect to signup
+          navigate('/signup');
+        } else {
+          setError(err.response?.data?.message || 'An unexpected error occurred');
+          console.error('Backend error details:', err.response?.data);
+        }
+        setSuccess(false);
+      }
+    } catch (error) {
+      console.error('Google sign in error:', error);
+      setError('Failed to sign in with Google');
+    }
+  };
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -75,6 +143,18 @@ const SignIn = () => {
           
           {success && <div className={styles.alert + " " + styles.success}>Sign in successful!</div>}
           {error && <div className={styles.alert + " " + styles.error}>{error}</div>}
+
+          <button 
+            className={styles.googleButton}
+            onClick={handleGoogleSignIn}
+          >
+            <FcGoogle size={20} />
+            Sign in with Google
+          </button>
+          
+          <div className={styles.divider}>
+            <span>or sign in with email</span>
+          </div>
 
           <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.inputGroup}>

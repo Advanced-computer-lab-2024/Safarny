@@ -32,6 +32,7 @@ const emailRoutes = require('./routes/emailRoutes');
 const notificationRoutes = require('./routes/NotificationsRoutes');
 const authRoutes = require('./routes/passwordOTPRoutes');
 const promoCodeRoutes = require("./routes/PromoCodeRoutes.js");
+const signUp = require("./routes/signUpRoutes.js");
 
 dotenv.config();
 
@@ -90,6 +91,8 @@ app.use("/notification", notificationRoutes);
 app.use('/api/auth', authRoutes);
 
 app.use("/promocodes", promoCodeRoutes);
+
+app.use("/signup", signUp);
 
 ViteExpress.listen(app, 3000, () => {
   console.log(`Server running on port: ${port}`);
