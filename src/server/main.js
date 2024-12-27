@@ -15,9 +15,9 @@ const DB = require("./config/DB.js");
 const historicalplacesRoutes = require("./routes/historicalplacesRoutes.js");
 // const tagsRoutes = require("./routes/tagsRoutes.js");
 // const touristUpdate = require("./routes/touristUpdateInfoRoutes.js");
- const ActivityCategoriesRoutes = require("./routes/ActivityCategoriesRoutes.js");
- const activityRoutes = require("./routes/activityRoutes.js");
- const ItineraryRoutes = require("./routes/itineraryRoutes.js");
+const ActivityCategoriesRoutes = require("./routes/ActivityCategoriesRoutes.js");
+const activityRoutes = require("./routes/activityRoutes.js");
+const ItineraryRoutes = require("./routes/itineraryRoutes.js");
 const guestRoutes = require("./routes/guestRoutes.js");
 const tourGuideRoutes = require("./routes/tourGuideRoutes.js");
 const touristRoutes = require("./routes/touristRoutes.js");
@@ -33,6 +33,7 @@ const notificationRoutes = require('./routes/NotificationsRoutes');
 const authRoutes = require('./routes/passwordOTPRoutes');
 const promoCodeRoutes = require("./routes/PromoCodeRoutes.js");
 const signUp = require("./routes/signUpRoutes.js");
+const analyticsRoutes = require('./routes/analyticsRoutes');
 
 dotenv.config();
 
@@ -58,7 +59,7 @@ DB();
 
 app.use("/admin", adminRoutes);
 
-app.use("/advertiser",AdvertiserRoutes);
+app.use("/advertiser", AdvertiserRoutes);
 
 app.use("/guest", guestRoutes);
 
@@ -72,7 +73,7 @@ app.use("/toursimgovernor", ToursimGovernerRoutes);
 
 app.use('/activities', activityRoutes);
 
-app.use('/transport',transportRoutes);
+app.use('/transport', transportRoutes);
 
 app.use('/itineraries', ItineraryRoutes);
 
@@ -93,6 +94,8 @@ app.use('/api/auth', authRoutes);
 app.use("/promocodes", promoCodeRoutes);
 
 app.use("/signup", signUp);
+
+app.use('/api/analytics', analyticsRoutes);
 
 ViteExpress.listen(app, 3000, () => {
   console.log(`Server running on port: ${port}`);

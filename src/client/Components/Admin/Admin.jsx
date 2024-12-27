@@ -23,7 +23,32 @@ import Logo from '/src/client/Assets/Img/logo.png';
 import Footer from '../Footer/Footer';
 import Tags from './tagAdmin';
 import ActivityCategory from './ActivityCategory';
+import { Line, Bar, Doughnut } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
 
+// Register ChartJS components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const Admin = () => {
   const location = useLocation();
@@ -70,6 +95,30 @@ const Admin = () => {
   //header items
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
+
+  // Add new state variables for analytics
+  const [revenueData, setRevenueData] = useState({
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    datasets: [{
+      label: 'Monthly Revenue',
+      data: [0, 0, 0, 0, 0, 0],
+      borderColor: 'rgb(75, 192, 192)',
+      tension: 0.1
+    }]
+  });
+
+  const [userTypeData, setUserTypeData] = useState({
+    labels: ['Tourists', 'Tour Guides', 'Sellers', 'Advertisers'],
+    datasets: [{
+      data: [0, 0, 0, 0],
+      backgroundColor: [
+        '#FF6384',
+        '#36A2EB',
+        '#FFCE56',
+        '#4BC0C0'
+      ]
+    }]
+  });
 
   const handleManageTagsClick = () => {
     setActiveView("tags");
@@ -371,6 +420,82 @@ const Admin = () => {
     console.log('Selected Section:', selectedSection);
   }, [selectedSection]);
 
+  const fetchAnalyticsData = async () => {
+    try {
+      // Fetch revenue data
+      const revenueResponse = await axios.get('http://localhost:3000/api/analytics/revenue');
+      const monthlyRevenue = revenueResponse.data;
+      
+      // Fetch user distribution data
+      const usersResponse = await axios.get('http://localhost:3000/api/analytics/users');
+      const userDistribution = usersResponse.data;
+
+      // Update revenue chart data
+      setRevenueData({
+        labels: monthlyRevenue.map(item => item.month),
+        datasets: [{
+          label: 'Monthly Revenue (EGP)',
+          data: monthlyRevenue.map(item => item.amount),
+          borderColor: 'rgb(75, 192, 192)',
+          tension: 0.1,
+          fill: true,
+          backgroundColor: 'rgba(75, 192, 192, 0.1)'
+        }]
+      });
+
+      // Update user distribution chart data
+      setUserTypeData({
+        labels: ['Tourists', 'Tour Guides', 'Sellers', 'Advertisers'],
+        datasets: [{
+          data: [
+            userDistribution.tourists,
+            userDistribution.tourGuides,
+            userDistribution.sellers,
+            userDistribution.advertisers
+          ],
+          backgroundColor: [
+            '#FF6384',
+            '#36A2EB',
+            '#FFCE56',
+            '#4BC0C0'
+          ]
+        }]
+      });
+
+    } catch (error) {
+      console.error('Error fetching analytics data:', error);
+    }
+  };
+
+  // Add this useEffect to fetch data when component mounts
+  useEffect(() => {
+    fetchAnalyticsData();
+    // Set up auto-refresh every 5 minutes
+    const interval = setInterval(fetchAnalyticsData, 300000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  // Add this component for the analytics section
+  const AnalyticsSection = () => (
+    <div className={styles.analyticsGrid}>
+      <div className={styles.chartCard}>
+        <h3>Revenue Trends</h3>
+        <Line data={revenueData} options={{
+          responsive: true,
+          maintainAspectRatio: false
+        }} />
+      </div>
+      <div className={styles.chartCard}>
+        <h3>User Distribution</h3>
+        <Doughnut data={userTypeData} options={{
+          responsive: true,
+          maintainAspectRatio: false
+        }} />
+      </div>
+    </div>
+  );
+
   return (
     <div className={styles.adminLayout}>
       <Navbar bg="light" expand="lg" className={`${styles.header} ${window.scrollY > 50 ? styles.translucent : ''}`}>
@@ -444,6 +569,51 @@ const Admin = () => {
                       <div className={`${styles.iconBox} ${styles.successBox}`}>
                         <i className="fas fa-user-plus"></i>
                       </div>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+
+            <Row className="mb-4">
+              <Col lg={6} md={12} className="mb-4">
+                <Card className={`${styles.chartCard} h-100`}>
+                  <Card.Body>
+                    <h5 className="mb-4">Revenue Trends</h5>
+                    <div className={styles.chartContainer}>
+                      <Line 
+                        data={revenueData} 
+                        options={{
+                          responsive: true,
+                          maintainAspectRatio: false,
+                          plugins: {
+                            legend: {
+                              position: 'bottom'
+                            }
+                          }
+                        }} 
+                      />
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col lg={6} md={12} className="mb-4">
+                <Card className={`${styles.chartCard} h-100`}>
+                  <Card.Body>
+                    <h5 className="mb-4">User Distribution</h5>
+                    <div className={styles.chartContainer}>
+                      <Doughnut 
+                        data={userTypeData} 
+                        options={{
+                          responsive: true,
+                          maintainAspectRatio: false,
+                          plugins: {
+                            legend: {
+                              position: 'bottom'
+                            }
+                          }
+                        }} 
+                      />
                     </div>
                   </Card.Body>
                 </Card>
