@@ -19,7 +19,7 @@ const BookTransport = () => {
   const fetchTransports = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:3000/transport/transports");
+      const response = await axios.get("/transport/transports");
       setTransports(response.data);
     } catch (error) {
       console.error("Error fetching transports:", error);
@@ -44,7 +44,7 @@ const BookTransport = () => {
       : [...transport.tourists, userId];
 
     try {
-      await axios.put(`http://localhost:3000/transport/transports/${transport._id}`, {
+      await axios.put(`/transport/transports/${transport._id}`, {
         tourists: updatedTourists,
       });
       setTransports((prevTransports) =>

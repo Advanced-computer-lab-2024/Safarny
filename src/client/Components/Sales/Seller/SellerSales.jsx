@@ -36,7 +36,7 @@ const SellerSales = () => {
     const getRevenueBySeller = async (id) => {
         try {
             setLoading(true);
-            const response = await fetch(`http://localhost:3000/seller/getTotalRevenueByseller/${id}`);
+            const response = await fetch(`/seller/getTotalRevenueByseller/${id}`);
             const data = await response.json();
             setRevenue(data.totalRevenue);
             setError(null);
@@ -52,7 +52,7 @@ const SellerSales = () => {
         try {
             setLoading(true);
             const response = await fetch(
-                `http://localhost:3000/seller/filteredRevenueByseller/${id}?month=${month}&year=${year}`
+                `/seller/filteredRevenueByseller/${id}?month=${month}&year=${year}`
             );
             const data = await response.json();
             setFilteredRevenue(data.totalRevenue);

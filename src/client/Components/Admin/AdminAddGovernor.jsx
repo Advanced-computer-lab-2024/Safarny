@@ -34,7 +34,7 @@ const AdminAddGovernor = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/admin/add-governor", {
+      const response = await fetch("/admin/add-governor", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

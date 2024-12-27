@@ -47,11 +47,11 @@ const WishList = () => {
 
   const handleAddToCartClick = async (product) => {
     try {
-      const profileResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
+      const profileResponse = await axios.get(`/tourist/${userId}`);
       const currentCart = profileResponse.data.cart || [];
       const updatedCart = [...currentCart, product._id];
 
-      await axios.put(`http://localhost:3000/tourist/${userId}`, {
+      await axios.put(`/tourist/${userId}`, {
         id: userId,
         cart: updatedCart,
       });

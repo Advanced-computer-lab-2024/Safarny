@@ -36,7 +36,7 @@ const EditTransport = () => {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        `http://localhost:3000/transport/transports/advertiser/${advertiserId}`
+        `/transport/transports/advertiser/${advertiserId}`
       );
       setTransports(response.data);
     } catch (error) {
@@ -73,7 +73,7 @@ const EditTransport = () => {
     e.preventDefault();
     try {
       await axios.put(
-        `http://localhost:3000/transport/transports/${editTransport._id}`,
+        `/transport/transports/${editTransport._id}`,
         {
           ...formData,
           advertiserId,
@@ -93,7 +93,7 @@ const EditTransport = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this transport?")) {
       try {
-        await axios.delete(`http://localhost:3000/transport/transports/${id}`);
+        await axios.delete(`/transport/transports/${id}`);
         setMessage("Transport deleted successfully!");
         setMessageType("success");
         fetchTransports();

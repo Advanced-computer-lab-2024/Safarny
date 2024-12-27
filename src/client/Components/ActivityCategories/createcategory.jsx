@@ -10,7 +10,7 @@ const CreateCategory = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/admin/category', { type: categoryType });
+      const response = await axios.post('/admin/category', { type: categoryType });
       setMessage('Category created successfully!');
       setCategoryType('');
       navigate('/admin'); // Navigate back to the Admin page

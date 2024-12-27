@@ -23,7 +23,7 @@ const Search = () => {
 
     setIsSearching(true);
     try {
-      const response = await axios.get("http://localhost:3000/tourist/search", {
+      const response = await axios.get("/tourist/search", {
         params: { query, type },
       });
 

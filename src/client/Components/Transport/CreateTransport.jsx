@@ -76,7 +76,7 @@ const CreateTransport = () => {
       console.log('Sending data:', formattedData); // Debug log
 
       const response = await axios.post(
-        "http://localhost:3000/transport/transports", 
+        "/transport/transports", 
         formattedData,
         {
           headers: {

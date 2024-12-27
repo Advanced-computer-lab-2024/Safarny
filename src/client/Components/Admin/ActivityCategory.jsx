@@ -31,7 +31,7 @@ const ActivityCategory = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:3000/admin/category/${id}`); // Ensure this is the correct endpoint
+            await axios.delete(`/admin/category/${id}`); // Ensure this is the correct endpoint
             setMessage('Category deleted successfully!');
             setCategory(category.filter(ActivityCategory => ActivityCategory._id !== id)); // Use _id for MongoDB
         } catch (error) {

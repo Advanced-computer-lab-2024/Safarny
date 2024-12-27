@@ -48,7 +48,7 @@ export default function MyOrders() {
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://localhost:3000/tourist/order/getOrdersByUserId/${userId}`
+          `/tourist/order/getOrdersByUserId/${userId}`
         );
         setOrders(response.data);
       } catch (error) {
@@ -63,9 +63,9 @@ export default function MyOrders() {
 
   const handleCancelOrder = async (orderId) => {
     try {
-      await axios.put(`http://localhost:3000/tourist/order/cancel/${orderId}`);
+      await axios.put(`/tourist/order/cancel/${orderId}`);
       const response = await axios.get(
-        `http://localhost:3000/tourist/order/getOrdersByUserId/${userId}`
+        `/tourist/order/getOrdersByUserId/${userId}`
       );
       setOrders(response.data);
     } catch (error) {

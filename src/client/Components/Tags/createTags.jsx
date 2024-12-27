@@ -10,7 +10,7 @@ const CreateTags = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/admin/tag', { name: tagName });
+      const response = await axios.post('/admin/tag', { name: tagName });
       setMessage('Tag created successfully!');
       setTagName('');
       navigate('/admin'); // Navigate back to the Admin page

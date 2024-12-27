@@ -49,7 +49,7 @@ const UpcomingActivities = () => {
     }
 
     try {
-      const response = await axios.get(`http://localhost:3000/tourist/${touristId}`);
+      const response = await axios.get(`/tourist/${touristId}`);
       const user = response.data;
       setUserRole(user.role);
       setWallet(user.wallet);
@@ -147,20 +147,20 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
         // First, fetch the user's preference tags
         let userPreferenceTags = [];
         if (touristId) {
-          const userResponse = await axios.get(`http://localhost:3000/tourist/${touristId}`);
+          const userResponse = await axios.get(`/tourist/${touristId}`);
           userPreferenceTags = userResponse.data.preferencestags || [];
         }
 
-        let url = `http://localhost:3000/guest/get-activities-sorted?sortBy=${sortCriteria}:desc`;
+        let url = `/guest/get-activities-sorted?sortBy=${sortCriteria}:desc`;
 
         if (filterCriteria === "budget") {
-          url = `http://localhost:3000/guest/filter-activities?minBudget=${budget[0]}&maxBudget=${budget[1]}`;
+          url = `/guest/filter-activities?minBudget=${budget[0]}&maxBudget=${budget[1]}`;
         } else if (filterCriteria === "date") {
-          url = `http://localhost:3000/guest/filter-activities?&date=${dateRange}`;
+          url = `/guest/filter-activities?&date=${dateRange}`;
         } else if (filterCriteria === "category" && selectedCategories.length > 0) {
-          url = `http://localhost:3000/guest/filter-activities?&category=${selectedCategories.join(",")}`;
+          url = `/guest/filter-activities?&category=${selectedCategories.join(",")}`;
         } else if (filterCriteria === "averageRating") {
-          url = `http://localhost:3000/guest/filter-activities?&averageRating=${averageRating}`;
+          url = `/guest/filter-activities?&averageRating=${averageRating}`;
         }
 
         console.log('Fetching from URL:', url);
@@ -200,7 +200,7 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:3000/advertiser/GetCategories");
+        const response = await fetch("/advertiser/GetCategories");
         const categories = await response.json();
         setAvailableCategories(categories);
       } catch (error) {
@@ -245,7 +245,7 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
       console.log("User ID:", userId);
   
       // Fetch the current user profile
-      const profileResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
+      const profileResponse = await axios.get(`/tourist/${userId}`);
       const currentActivities = profileResponse.data.activities || [];
   
       // Check if the activity is already in the user's activities
@@ -258,7 +258,7 @@ const convertPrice = (price, fromCurrency, toCurrency) => {
       const updatedActivities = [...currentActivities, activity._id];
   
       // Update the user's profile with the updated activities array
-      await axios.put(`http://localhost:3000/tourist/${userId}`, {
+      await axios.put(`/tourist/${userId}`, {
         id: userId,
         activities: updatedActivities,
       });

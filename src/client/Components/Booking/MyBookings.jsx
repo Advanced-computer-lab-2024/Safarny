@@ -31,7 +31,7 @@ const MyBookings = () => {
 
         const fetchBookings = async () => {
                 try {
-                        const response = await axios.get(`http://localhost:3000/tourist/bookings/${userId}`);
+                        const response = await axios.get(`/tourist/bookings/${userId}`);
                         const bookingsWithTourGuide = await Promise.all(
                                 response.data.map(async (booking) => {
                                         try {
@@ -42,10 +42,10 @@ const MyBookings = () => {
                                                 let tourGuideComments = [];
 
                                                 if (booking.itinerary && booking.itinerary._id) {
-                                                        const itineraryResponse = await axios.get(`http://localhost:3000/itineraries/${booking.itinerary._id}`);
+                                                        const itineraryResponse = await axios.get(`/itineraries/${booking.itinerary._id}`);
                                                         try {
                                                                 if (booking.itinerary && booking.itinerary._id) {
-                                                                        const iteneraryCommentsResponse = await axios.get(`http://localhost:3000/tourist/comments/itinerary/${booking.itinerary._id}`);
+                                                                        const iteneraryCommentsResponse = await axios.get(`/tourist/comments/itinerary/${booking.itinerary._id}`);
                                                                         iteneraryComments = iteneraryCommentsResponse.data;
                                                                 }
                                                         } catch (error) {
@@ -53,11 +53,11 @@ const MyBookings = () => {
                                                         }
                                                         tourGuideId = itineraryResponse.data.createdby;
                                                 } else if (booking.activity && booking.activity._id) {
-                                                        const activityResponse = await axios.get(`http://localhost:3000/activities/${booking.activity._id}`);
+                                                        const activityResponse = await axios.get(`/activities/${booking.activity._id}`);
                                                         tourGuideId = activityResponse.data.createdby;
                                                         try {
                                                                 if (booking.activity && booking.activity._id) {
-                                                                        const activityCommentsResponse = await axios.get(`http://localhost:3000/tourist/comments/activity/${booking.activity._id}`);
+                                                                        const activityCommentsResponse = await axios.get(`/tourist/comments/activity/${booking.activity._id}`);
                                                                         activityComments = activityCommentsResponse.data;
                                                                 }
                                                         } catch (error) {
@@ -66,11 +66,11 @@ const MyBookings = () => {
                                                 }
                                                 if (tourGuideId && /^[a-fA-F0-9]{24}$/.test(tourGuideId)) {
                                                         try {
-                                                                const tourGuideResponse = await axios.get(`http://localhost:3000/tourist/${tourGuideId}`);
+                                                                const tourGuideResponse = await axios.get(`/tourist/${tourGuideId}`);
                                                                 tourGuideUsername = tourGuideResponse.data.username;
                                                                 try {
                                                                         if (tourGuideId && /^[a-fA-F0-9]{24}$/.test(tourGuideId)) {
-                                                                                const tourGuideCommentsResponse = await axios.get(`http://localhost:3000/tourist/comments/tourguide/${tourGuideId}`);
+                                                                                const tourGuideCommentsResponse = await axios.get(`/tourist/comments/tourguide/${tourGuideId}`);
                                                                                 tourGuideComments = tourGuideCommentsResponse.data;
                                                                         }
                                                                 } catch (error) {
@@ -147,11 +147,11 @@ const MyBookings = () => {
                 try {
                         let endpoint = "";
                         if (bookingType === "itinerary") {
-                                endpoint = `http://localhost:3000/itineraries/updaterating/${bookingTypeId}`;
+                                endpoint = `/itineraries/updaterating/${bookingTypeId}`;
                         } else if (bookingType === "activity") {
-                                endpoint = `http://localhost:3000/activities/updaterating/${bookingTypeId}`;
+                                endpoint = `/activities/updaterating/${bookingTypeId}`;
                         } else if (bookingType === "historicalPlace") {
-                                endpoint = `http://localhost:3000/historicalplaces/updaterating/${bookingTypeId}`;
+                                endpoint = `/historicalplaces/updaterating/${bookingTypeId}`;
                         }
 
                         await axios.put(endpoint, { rating });
@@ -174,7 +174,7 @@ const MyBookings = () => {
                         if (!/^[a-fA-F0-9]{24}$/.test(stringTourGuideId)) {
                                 throw new Error("Invalid tour guide ID");
                         }
-                        await axios.put(`http://localhost:3000/tourguide/updaterating/`, { id: stringTourGuideId, newRating: rating });
+                        await axios.put(`/tourguide/updaterating/`, { id: stringTourGuideId, newRating: rating });
                         setTourGuideRatings((prevRatings) => ({
                                 ...prevRatings,
                                 [stringTourGuideId]: rating,
@@ -191,15 +191,15 @@ const MyBookings = () => {
                 try {
                         if (booking.historicalPlace) {
                                 await axios.put(
-                                        `http://localhost:3000/tourist/bookings/${booking._id}/cancel/historicalPlace`
+                                        `/tourist/bookings/${booking._id}/cancel/historicalPlace`
                                 );
                         } else if (booking.activity) {
                                 await axios.put(
-                                        `http://localhost:3000/tourist/bookings/${booking._id}/cancel`
+                                        `/tourist/bookings/${booking._id}/cancel`
                                 );
                         } else if (booking.itinerary) {
                                 await axios.put(
-                                        `http://localhost:3000/tourist/bookings/${booking._id}/cancel`
+                                        `/tourist/bookings/${booking._id}/cancel`
                                 );
                         }
                         fetchBookings();
@@ -229,13 +229,13 @@ const MyBookings = () => {
         const sendReminderEmail = async () => {
                 try {
                         // Fetch the user's email using the userId
-                        const userResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
+                        const userResponse = await axios.get(`/tourist/${userId}`);
                         const userEmail = userResponse.data.email;
                         const userName = userResponse.data.name;
 
                         // Fetch the data for the activities/itineraries
-                        const activitiesResponse = await axios.get(`http://localhost:3000/tourist/activities/${userId}`);
-                        const itinerariesResponse = await axios.get(`http://localhost:3000/tourist/itineraries/${userId}`);
+                        const activitiesResponse = await axios.get(`/tourist/activities/${userId}`);
+                        const itinerariesResponse = await axios.get(`/tourist/itineraries/${userId}`);
                         const activities = Array.isArray(activitiesResponse.data) ? activitiesResponse.data : [];
                         const itineraries = Array.isArray(itinerariesResponse.data) ? itinerariesResponse.data : [];
 
@@ -250,7 +250,7 @@ const MyBookings = () => {
                         const formattedData = `Activities:\n${formattedActivities}\n\nItineraries:\n${formattedItineraries}`;
 
                         // Send the email with the formatted string
-                        await axios.post("http://localhost:3000/email/send-tourist-reminder-email", {
+                        await axios.post("/email/send-tourist-reminder-email", {
                                 email: userEmail,
                                 name: userName,
                                 eventName: "Your Upcoming Activities and Itineraries",
@@ -267,7 +267,7 @@ const MyBookings = () => {
         const sendReminderNotification = async (userId) => {
                 try {
                         // Fetch the user's bookings using the userId
-                        const bookingsResponse = await axios.get(`http://localhost:3000/tourist/bookings/${userId}`);
+                        const bookingsResponse = await axios.get(`/tourist/bookings/${userId}`);
                         const bookings = bookingsResponse.data;
 
                         // Loop over the bookings and send a notification for each booking after today
@@ -277,7 +277,7 @@ const MyBookings = () => {
                                         const title = `Reminder for your booking on ${booking.bookingDate}`;
                                         const message = `You have a booking for ${booking.itinerary ? booking.itinerary.name : booking.activity ? booking.activity.location : 'an activity'} on ${booking.bookingDate}.`;
 
-                                        const response = await axios.post('http://localhost:3000/notification/create', {
+                                        const response = await axios.post('/notification/create', {
                                                 title,
                                                 message,
                                                 userId,

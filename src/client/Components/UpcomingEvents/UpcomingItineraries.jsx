@@ -46,7 +46,7 @@ const UpcomingItineraries = () => {
   const fetchUserRole = async () => {
     try {
       // Replace `userId` with the actual user ID if available
-      const response = await axios.get(`http://localhost:3000/tourist/${userId}`);
+      const response = await axios.get(`/tourist/${userId}`);
       setUserRole(response.data.role); // Store user role in state
       const user = response.data;
       setWallet(user.wallet);
@@ -146,7 +146,7 @@ const handleArchiveToggle = async (ItineraryId, isArchived) => {
 
   const fetchTags = async () => {
     try {
-      const response = await fetch("http://localhost:3000/tourguide/get-tags");
+      const response = await fetch("/tourguide/get-tags");
       if (!response.ok) {
         throw new Error("Failed to fetch tags");
       }
@@ -169,17 +169,17 @@ const handleArchiveToggle = async (ItineraryId, isArchived) => {
       }).toString();
 
       // First, fetch the user's preference tags
-      const userResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
+      const userResponse = await axios.get(`/tourist/${userId}`);
       const userPreferenceTags = userResponse.data.preferencestags || [];
 
       let response;
       if (whichResponse) {
         response = await fetch(
-          `http://localhost:3000/guest/get-itineraries-sorted?${queryParams}`
+          `/guest/get-itineraries-sorted?${queryParams}`
         );
       } else {
         response = await fetch(
-          `http://localhost:3000/guest/filter-itineraries?${queryParams}`
+          `/guest/filter-itineraries?${queryParams}`
         );
       }
 
@@ -238,7 +238,7 @@ const handleArchiveToggle = async (ItineraryId, isArchived) => {
       console.log("User ID:", userId);
   
       // Fetch the current user profile
-      const profileResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
+      const profileResponse = await axios.get(`/tourist/${userId}`);
       const currentItineraries = profileResponse.data.itineraries || [];
   
       // Check if the itinerary is already in the user's itineraries
@@ -251,7 +251,7 @@ const handleArchiveToggle = async (ItineraryId, isArchived) => {
       const updatedItineraries = [...currentItineraries, itinerary._id];
   
       // Update the user's profile with the updated itineraries array
-      await axios.put(`http://localhost:3000/tourist/${userId}`, {
+      await axios.put(`/tourist/${userId}`, {
         id: userId,
         itineraries: updatedItineraries,
       });

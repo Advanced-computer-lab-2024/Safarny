@@ -8,7 +8,7 @@ const Getcategory = () => {
   useEffect(() => {
     const fetchcategory = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/admin/category');
+        const response = await axios.get('/admin/category');
         setcategory(response.data);
       } catch (error) {
         console.error('Error fetching categories:', error);

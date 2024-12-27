@@ -38,7 +38,7 @@ const UpdateProfile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/tourist/${userId}`);
+        const response = await axios.get(`/tourist/${userId}`);
         console.log('Fetched user data:', response.data);
         const { email, password, username, role } = response.data;
 
@@ -63,7 +63,7 @@ const UpdateProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`http://localhost:3000/tourist/${userId}`, {
+      const response = await axios.put(`/tourist/${userId}`, {
         ...userInfo,
         id: userId, // Include userId in the request body
         addresses: userInfo.addresses // Include addresses in the request

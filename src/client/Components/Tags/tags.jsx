@@ -10,7 +10,7 @@ const Tags = () => {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/tag'); // Ensure this is the correct endpoint
+        const response = await axios.get('/tag'); // Ensure this is the correct endpoint
         if (Array.isArray(response.data)) {
           setTags(response.data);
         } else {
@@ -28,7 +28,7 @@ const Tags = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/tag/${id}`); // Ensure this is the correct endpoint
+      await axios.delete(`/tag/${id}`); // Ensure this is the correct endpoint
       setMessage('Tag deleted successfully!');
       setTags(tags.filter(tag => tag._id !== id)); // Use _id for MongoDB
     } catch (error) {

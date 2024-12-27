@@ -10,7 +10,7 @@ const Plans = () => {
   useEffect(() => {
     const fetchItineraries = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/iternary/get');
+        const response = await axios.get('/iternary/get');
         console.log(response.data);  // Check the structure of the response
         // Assuming the response.data is an array, otherwise adjust the structure
         setItineraries(Array.isArray(response.data) ? response.data : []); // Ensure it's an array

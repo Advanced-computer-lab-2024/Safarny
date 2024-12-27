@@ -11,7 +11,7 @@ const Editcategory = () => {
   useEffect(() => {
     const fetchcategory = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/admin/category/${id}`);
+        const response = await axios.get(`/admin/category/${id}`);
         setcategoryName(response.data.type);
       } catch (error) {
         console.error('Error fetching category:', error);
@@ -25,7 +25,7 @@ const Editcategory = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:3000/admin/category/${id}`, { type: categoryName });
+      await axios.put(`/admin/category/${id}`, { type: categoryName });
       setMessage('Category updated successfully!');
       navigate('/admin'); // Navigate back to the Admin page
     } catch (error) {

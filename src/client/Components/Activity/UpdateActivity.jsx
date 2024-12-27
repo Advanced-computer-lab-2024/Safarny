@@ -39,16 +39,16 @@ const UpdateActivity = () => {
     const fetchData = async () => {
       try {
         const activityResponse = await axios.get(
-          `http://localhost:3000/advertiser/activities/user/${userId}`
+          `/advertiser/activities/user/${userId}`
         );
         setActivities(activityResponse.data);
 
         const categoriesResponse = await axios.get(
-          "http://localhost:3000/advertiser/GetCategories"
+          "/advertiser/GetCategories"
         );
         setCategories(categoriesResponse.data || []);
 
-        const tagsResponse = await axios.get("http://localhost:3000/admin/tag");
+        const tagsResponse = await axios.get("/admin/tag");
         setTags(tagsResponse.data || []);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -109,7 +109,7 @@ const handleSubmit = async (e) => {
 
   try {
     const response = await axios.put(
-      `http://localhost:3000/advertiser/${selectedActivity._id}`,
+      `/advertiser/${selectedActivity._id}`,
       payload
     );
     
@@ -119,13 +119,13 @@ const handleSubmit = async (e) => {
       if (activityDetails.bookingOpen) {
         try {
           const savedUsersResponse = await axios.get(
-            `http://localhost:3000/tourist/getUsersBySavedActivity/${selectedActivity._id}`
+            `/tourist/getUsersBySavedActivity/${selectedActivity._id}`
           );
           const savedUsers = savedUsersResponse.data;
 
           if (savedUsers && savedUsers.length > 0) {
             const notificationPromises = savedUsers.map((user) =>
-              axios.post('http://localhost:3000/notification/create', {
+              axios.post('/notification/create', {
                 title: `Activity "${selectedActivity.location}" is now open for booking`,
                 message: `The activity "${selectedActivity.location}" on ${selectedActivity.date} at ${selectedActivity.time} is now open for booking.`,
                 userId: user._id,

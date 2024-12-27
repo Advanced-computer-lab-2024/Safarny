@@ -152,13 +152,13 @@ const Profile = () => {
 
         if (userData.role === "TourGuide") {
           const itinerariesResponse = await axios.get(
-            `http://localhost:3000/tourguide/get-my-tourguide-itineraries/${userId}`
+            `/tourguide/get-my-tourguide-itineraries/${userId}`
           );
           setItineraries(itinerariesResponse.data);
           
           // Get monthly sales for tour guide
           const salesResponse = await fetch(
-            `http://localhost:3000/tourguide/reportsales/${userId}?month=${currentMonth}&year=${currentYear}`
+            `/tourguide/reportsales/${userId}?month=${currentMonth}&year=${currentYear}`
           );
           const salesData = await salesResponse.json();
           setFilteredRevenue(salesData.totalRevenue);
@@ -166,13 +166,13 @@ const Profile = () => {
         
         else if (userData.role === "Advertiser") {
           const transportsResponse = await axios.get(
-            `http://localhost:3000/transport/transports/advertiser/${userId}`
+            `/transport/transports/advertiser/${userId}`
           );
           setTransports(transportsResponse.data);
           
           // Get monthly sales for advertiser
           const salesResponse = await fetch(
-            `http://localhost:3000/advertiser/reportsales/${userId}?month=${currentMonth}&year=${currentYear}`
+            `/advertiser/reportsales/${userId}?month=${currentMonth}&year=${currentYear}`
           );
           const salesData = await salesResponse.json();
           setAdvertiserFilteredRevenue(salesData.totalRevenue);
@@ -189,7 +189,7 @@ const Profile = () => {
         }
         
         else if (userData.role === "TourismGovernor") {
-          const placesResponse = await axios.get("http://localhost:3000/toursimgovernor/places");
+          const placesResponse = await axios.get("/toursimgovernor/places");
           setPlaces(placesResponse.data);
         }
       } catch (error) {

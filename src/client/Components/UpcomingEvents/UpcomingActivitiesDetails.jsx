@@ -26,7 +26,7 @@ const UpcomingActivitiesDetails = () => {
     useEffect(() => {
         const fetchActivity = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/activities/${id}`);
+                const response = await axios.get(`/activities/${id}`);
                 setActivity(response.data);
                 setLoading(false);
             } catch (err) {

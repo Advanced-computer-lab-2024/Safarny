@@ -54,11 +54,11 @@ const ReadHistoricalPlace = () => {
       // First get user preferences if userId exists
       let userPreferences = [];
       if (userId) {
-        const userResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
+        const userResponse = await axios.get(`/tourist/${userId}`);
         userPreferences = userResponse.data.preferedhistoricaltags || [];
       }
 
-      const response = await axios.get("http://localhost:3000/toursimgovernor/places");
+      const response = await axios.get("/toursimgovernor/places");
       let placesData = response.data;
 
       if (Array.isArray(placesData)) {
@@ -86,7 +86,7 @@ const ReadHistoricalPlace = () => {
   const fetchUserInfo = async () => {
     try {
       const response = await axios.get(
-          `http://localhost:3000/tourist/${userId}`
+          `/tourist/${userId}`
       );
       const userData = response.data;
       setUserInfo(userData);
@@ -106,7 +106,7 @@ const ReadHistoricalPlace = () => {
   const fetchHistoricalPlacesByGovernor = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/toursimgovernor/places/governor/${userInfo.userId}`
+        `/toursimgovernor/places/governor/${userInfo.userId}`
       );
       const placesData = response.data;
 
@@ -170,7 +170,7 @@ const ReadHistoricalPlace = () => {
   const handleDeleteHistoricalPlace = async (placeId) => {
     try {
       await axios.delete(
-        `http://localhost:3000/toursimgovernor/places/${placeId}`
+        `/toursimgovernor/places/${placeId}`
       );
       setPlaces((prevPlaces) =>
         prevPlaces.filter((place) => place._id !== placeId)

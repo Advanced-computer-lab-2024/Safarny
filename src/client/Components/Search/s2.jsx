@@ -15,7 +15,7 @@ const UpcomingActivities = () => {
     const fetchActivities = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3000/guest/get-activities-sorted?sortBy=${sortCriteria}:asc`
+          `/guest/get-activities-sorted?sortBy=${sortCriteria}:asc`
         );
 
         if (!response.ok) {

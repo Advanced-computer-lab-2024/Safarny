@@ -26,7 +26,7 @@ export default function DataTable() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/admin/getUsers?role=Admin');
+                const response = await axios.get('/admin/getUsers?role=Admin');
                 const formattedRows = response.data.map((user) => ({
                     id: user._id,
                     username: user.username,
@@ -52,7 +52,7 @@ export default function DataTable() {
         try {
             await Promise.all(
                 selectedRows.map(rowId =>
-                    axios.delete(`http://localhost:3000/admin/deleteUser/${rowId}`)
+                    axios.delete(`/admin/deleteUser/${rowId}`)
                 )
             );
             setRows(rows.filter(row => !selectedRows.includes(row.id)));
@@ -66,7 +66,7 @@ export default function DataTable() {
         try {
             await Promise.all(
                 selectedRows.map(rowId =>
-                    axios.put(`http://localhost:3000/admin/UpdateProfileById`, {
+                    axios.put(`/admin/UpdateProfileById`, {
                         id: rowId,
                         password: newPassword,
                     })

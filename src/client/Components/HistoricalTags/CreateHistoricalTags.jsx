@@ -15,7 +15,7 @@ const CreateHistoricalTags = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3000/toursimgovernor/historical-tags', { name: tagName });
+      await axios.post('/toursimgovernor/historical-tags', { name: tagName });
       setMessage('Historical tag created successfully!');
       setMessageType('success');
       setTagName('');
@@ -102,7 +102,7 @@ export default CreateHistoricalTags;
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
 //     try {
-//       const response = await axios.post('http://localhost:3000/toursimgovernor/historical-tags', { name: tagName }); // Update the endpoint accordingly
+//       const response = await axios.post('/toursimgovernor/historical-tags', { name: tagName }); // Update the endpoint accordingly
 //       setMessage('Historical tag created successfully!'); // Success message
 //       setTagName(''); // Clear input field
 //       navigate('/'); // Navigate back to the Admin page or another relevant page

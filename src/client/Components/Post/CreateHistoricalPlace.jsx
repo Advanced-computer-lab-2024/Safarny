@@ -50,7 +50,7 @@ const CreateHistoricalPlace = () => {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/toursimgovernor/gettags'); // Update with your actual API endpoint
+        const response = await axios.get('/toursimgovernor/gettags'); // Update with your actual API endpoint
         setTags(response.data);
       } catch (error) {
         console.error('Error fetching tags:', error);
@@ -77,7 +77,7 @@ const CreateHistoricalPlace = () => {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/toursimgovernor/gettags');
+        const response = await axios.get('/toursimgovernor/gettags');
         setAvailableTags(response.data);
       } catch (error) {
         console.error('Error fetching tags:', error);
@@ -206,7 +206,7 @@ const CreateHistoricalPlace = () => {
 
       console.log('Data sent in POST request:', placeData); // Print data to console
 
-      await axios.post('http://localhost:3000/toursimgovernor/placesId', placeData);
+      await axios.post('/toursimgovernor/placesId', placeData);
       handleCloseModal();
       navigate('/');
     } catch (error) {

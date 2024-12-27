@@ -23,7 +23,7 @@ const UpdateHistoricalPlace = () => {
     const fetchPlaceById = async () => {
       try {
         console.log(`Fetching place with ID: ${id}`); // Log the ID
-        const response = await axios.get(`http://localhost:3000/toursimgovernor/places/${id}`);
+        const response = await axios.get(`/toursimgovernor/places/${id}`);
         setPlace(response.data);
         setFormData(response.data); // Initialize the form with fetched data
         setLoading(false);
@@ -49,7 +49,7 @@ const UpdateHistoricalPlace = () => {
     setUpdating(true); // Set updating to true when starting the update
     try {
       console.log(`Updating place with ID: ${id}`); // Log the ID
-      await axios.put(`http://localhost:3000/toursimgovernor/places/${id}`, formData);
+      await axios.put(`/toursimgovernor/places/${id}`, formData);
       alert('Historical place updated successfully');
     } catch (err) {
       console.error('Error updating historical place:', err);

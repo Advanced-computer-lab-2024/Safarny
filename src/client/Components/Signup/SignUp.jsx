@@ -224,7 +224,7 @@ const SignUp = () => {
         photo: photoURL
       };
 
-      const response = await axios.post('http://localhost:3000/guest/tourist-signup', userData);
+      const response = await axios.post('/guest/tourist-signup', userData);
       if (response.status === 201) {
         setSuccess(true);
         setError('');

@@ -11,7 +11,7 @@ const EditTags = () => {
   useEffect(() => {
     const fetchTag = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/admin/tag/${id}`);
+        const response = await axios.get(`/admin/tag/${id}`);
         setTagName(response.data.name);
       } catch (error) {
         console.error('Error fetching tag:', error);
@@ -25,7 +25,7 @@ const EditTags = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:3000/admin/tag/${id}`, { name: tagName });
+      await axios.put(`/admin/tag/${id}`, { name: tagName });
       setMessage('Tag updated successfully!');
       navigate('/admin'); // Navigate back to the Admin page
     } catch (error) {

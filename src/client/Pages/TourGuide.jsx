@@ -99,19 +99,19 @@ export default function TourGuide() {
       try {
         // const userId = "670155dc63c71fd000903246";
         const profileResponse = await axios.get(
-          `http://localhost:3000/tourguide/get-my-tourguide-details?id=${userId}`
+          `/tourguide/get-my-tourguide-details?id=${userId}`
         );
         setProfile(profileResponse.data);
 
         const itinerariesResponse = await axios.get(
-          `http://localhost:3000/tourguide/get-my-tourguide-itineraries/${userId}`
+          `/tourguide/get-my-tourguide-itineraries/${userId}`
         );
         setItineraries(itinerariesResponse.data);
         console.log("itineraries: ", itinerariesResponse.data);
         const counts = await Promise.all(
           itinerariesResponse.data.map(async (itineraries) => {
               try {
-                  const countRes = await fetch(`http://localhost:3000/tourguide/getClientsByItinerary/${itineraries._id}`);
+                  const countRes = await fetch(`/tourguide/getClientsByItinerary/${itineraries._id}`);
                   const countData = await countRes.json();
                  
                   return { [itineraries._id]: countData.boughtCount };
@@ -127,11 +127,11 @@ export default function TourGuide() {
 
         // Fetch activities and tags
         const activitiesResponse = await axios.get(
-          "http://localhost:3000/tourguide/get-activities"
+          "/tourguide/get-activities"
         );
         setActivities(activitiesResponse.data); // Assuming it's an array of activities
         const tagsResponse = await axios.get(
-          "http://localhost:3000/tourguide/get-tags"
+          "/tourguide/get-tags"
         );
         setTags(tagsResponse.data); // Assuming it's an array of tags
       } catch (error) {
@@ -157,7 +157,7 @@ export default function TourGuide() {
     e.preventDefault();
     try {
       const response = await axios.post(
-          "http://localhost:3000/tourguide/create-itineraries",
+          "/tourguide/create-itineraries",
           { ...newItinerary, createdby: userId, currency: selectedCurrency }
       );
       setItineraries([...itineraries, response.data]);
@@ -181,7 +181,7 @@ export default function TourGuide() {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:3000/tourguide/edit-my-tourguide-profile/${profile.id}`,
+        `/tourguide/edit-my-tourguide-profile/${profile.id}`,
         profile
       );
       setProfile(response.data);
@@ -198,7 +198,7 @@ export default function TourGuide() {
   const handleEditClick = async (itineraryId) => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/tourguide/get-itineraries/${itineraryId}`
+        `/tourguide/get-itineraries/${itineraryId}`
       );
       setSelectedItinerary(response.data);
       setEditModalOpen(true); // Open the edit modal
@@ -211,11 +211,11 @@ export default function TourGuide() {
   const handleDeleteClick = async (itineraryId) => {
     try {
       await axios.delete(
-        `http://localhost:3000/tourguide/delete-itineraries/${itineraryId}`
+        `/tourguide/delete-itineraries/${itineraryId}`
       );
       // Refresh the itineraries list
       const response = await axios.get(
-        `http://localhost:3000/tourguide/get-my-tourguide-itineraries/${userId}`
+        `/tourguide/get-my-tourguide-itineraries/${userId}`
       );
       setItineraries(response.data);
       setSnackbar({
@@ -240,7 +240,7 @@ export default function TourGuide() {
       const { rating, averageRating, ...itineraryToUpdate } = updatedItinerary;
 
       const response = await axios.put(
-        `http://localhost:3000/tourguide/edit-itineraries/${updatedItinerary._id}`,
+        `/tourguide/edit-itineraries/${updatedItinerary._id}`,
         itineraryToUpdate
       );
 

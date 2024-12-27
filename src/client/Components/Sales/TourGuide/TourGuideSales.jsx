@@ -34,7 +34,7 @@ const TourGuideSales = () => {
 
     const getRevenueByTourGuide = async (id) => {
         try {
-            const response = await fetch(`http://localhost:3000/tourguide/getItineraryRevenueByTourGuide/${id}`);
+            const response = await fetch(`/tourguide/getItineraryRevenueByTourGuide/${id}`);
             const data = await response.json();
             setRevenue(data.totalRevenue);
         } catch (error) {
@@ -44,7 +44,7 @@ const TourGuideSales = () => {
 
     const getBoughtCountByTourGuide = async (id) => {
         try {
-            const response = await fetch(`http://localhost:3000/tourguide/getItineraryClients/${id}`);
+            const response = await fetch(`/tourguide/getItineraryClients/${id}`);
             const data = await response.json();
             setBoughtCount(data.totalBought);
         } catch (error) {
@@ -54,7 +54,7 @@ const TourGuideSales = () => {
 
     const getTouristsByTourGuideAndDate = async (id, month, year) => {
         try {
-            const response = await fetch(`http://localhost:3000/tourguide/report/${id}?month=${month}&year=${year}`);
+            const response = await fetch(`/tourguide/report/${id}?month=${month}&year=${year}`);
             const data = await response.json();
             const sumOfTourists = data.reduce((total, activity) => total + activity.totalTourists, 0);
             setTotalTourists(sumOfTourists);
@@ -65,7 +65,7 @@ const TourGuideSales = () => {
 
     const filteredRevenueByTourGuide = async (id, month, year) => {
         try {
-            const response = await fetch(`http://localhost:3000/tourguide/reportsales/${id}?month=${month}&year=${year}`);
+            const response = await fetch(`/tourguide/reportsales/${id}?month=${month}&year=${year}`);
             const data = await response.json();
             setFilteredRevenue(data.totalRevenue);
         } catch (error) {

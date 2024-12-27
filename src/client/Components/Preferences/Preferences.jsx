@@ -23,13 +23,13 @@ const Preferences = () => {
     const fetchData = async() => {
       try {
         setLoading(true);
-        const tagsResponse = await axios.get('http://localhost:3000/admin/tag');
+        const tagsResponse = await axios.get('/admin/tag');
         setTags(tagsResponse.data);
         
-        const historicalTagsResponse = await axios.get('http://localhost:3000/toursimgovernor/gettags');
+        const historicalTagsResponse = await axios.get('/toursimgovernor/gettags');
         setHistoricalTags(historicalTagsResponse.data);
         
-        const userResponse = await axios.get(`http://localhost:3000/tourist/${touristId}`);
+        const userResponse = await axios.get(`/tourist/${touristId}`);
         if (userResponse.data.preferencestags) {
           setSelectedTags(userResponse.data.preferencestags);
         }
@@ -55,7 +55,7 @@ const Preferences = () => {
         preferedhistoricaltags: selectedHistoricalTags
       });
 
-      const response = await axios.put(`http://localhost:3000/tourist/${touristId}`, {
+      const response = await axios.put(`/tourist/${touristId}`, {
         preferencestags: selectedTags,
         preferedhistoricaltags: selectedHistoricalTags
       });

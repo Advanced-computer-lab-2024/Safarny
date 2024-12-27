@@ -423,11 +423,11 @@ const Admin = () => {
   const fetchAnalyticsData = async () => {
     try {
       // Fetch revenue data
-      const revenueResponse = await axios.get('http://localhost:3000/api/analytics/revenue');
+      const revenueResponse = await axios.get('/api/analytics/revenue');
       const monthlyRevenue = revenueResponse.data;
       
       // Fetch user distribution data
-      const usersResponse = await axios.get('http://localhost:3000/api/analytics/users');
+      const usersResponse = await axios.get('/api/analytics/users');
       const userDistribution = usersResponse.data;
 
       // Update revenue chart data

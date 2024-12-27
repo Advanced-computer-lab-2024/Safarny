@@ -15,7 +15,7 @@ const DeleteHistoricalPlace = () => {
   useEffect(() => {
     const fetchPlaceById = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/toursimgovernor/places/${id}`);
+        const response = await axios.get(`/toursimgovernor/places/${id}`);
         setPlace(response.data);
         setLoading(false);
       } catch (err) {
@@ -31,7 +31,7 @@ const DeleteHistoricalPlace = () => {
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this place?')) {
       try {
-        await axios.delete(`http://localhost:3000/toursimgovernor/places/${id}`);
+        await axios.delete(`/toursimgovernor/places/${id}`);
         alert('Historical place deleted successfully');
         navigate('/'); // Redirect to home or list page after deletion
       } catch (err) {

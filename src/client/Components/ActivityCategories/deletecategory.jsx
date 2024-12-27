@@ -8,7 +8,7 @@ const Deletecategory = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.delete(`http://localhost:3000/admin/category/${categoryId}`);
+      await axios.delete(`/admin/category/${categoryId}`);
       setMessage('Category deleted successfully!');
       setcategoryId('');
     } catch (error) {

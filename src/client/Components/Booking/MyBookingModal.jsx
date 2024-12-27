@@ -254,7 +254,7 @@ function DeliveryStep({
 
     const fetchAddresses = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/tourist/${userId}`);
+            const response = await axios.get(`/tourist/${userId}`);
             setUserAddresses(response.data.addresses || []);
         } catch (error) {
             console.error('Error fetching addresses:', error);
@@ -290,11 +290,11 @@ function DeliveryStep({
 
         try {
             // Get current user data
-            const response = await axios.get(`http://localhost:3000/tourist/${userId}`);
+            const response = await axios.get(`/tourist/${userId}`);
             const currentAddresses = response.data.addresses || [];
 
             // Update user profile with new address
-            await axios.put(`http://localhost:3000/tourist/${userId}`, {
+            await axios.put(`/tourist/${userId}`, {
                 addresses: [...currentAddresses, newAddress]
             });
 
@@ -595,7 +595,7 @@ function FinishStep({
                 console.log("Booking created:", bookingData);
 
                 response = await axios.post(
-                    "http://localhost:3000/tourist/bookings",
+                    "/tourist/bookings",
                     bookingData
                 );
             } else if (bookingType === "historicalPlace") {
@@ -603,7 +603,7 @@ function FinishStep({
                 console.log("Booking created:", bookingData);
 
                 response = await axios.post(
-                    "http://localhost:3000/tourist/bookings/historicalPlace",
+                    "/tourist/bookings/historicalPlace",
                     bookingData
                 );
             }
@@ -623,7 +623,7 @@ function FinishStep({
                         pointsEarned: response.data.pointsEarned || 0
                     };
 
-                    await axios.post('http://localhost:3000/tourist/bookings/send-receipt', emailData);
+                    await axios.post('/tourist/bookings/send-receipt', emailData);
                     console.log('Receipt email sent successfully');
                 } catch (error) {
                     console.error('Error sending receipt email:', error);

@@ -8,7 +8,7 @@ const DeleteTags = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.delete(`http://localhost:3000/tag/${tagId}`);
+      await axios.delete(`/tag/${tagId}`);
       setMessage('Tag deleted successfully!');
       setTagId('');
     } catch (error) {

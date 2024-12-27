@@ -23,7 +23,7 @@ const PaymentModal = ({ addresses, userId, isOpen, onRequestClose, bookingType, 
         console.log("Booking created:", bookingData);
 
         response = await axios.post(
-            "http://localhost:3000/tourist/bookings",
+            "/tourist/bookings",
             bookingData
         );
       } else if (bookingType === "historicalPlace") {
@@ -31,7 +31,7 @@ const PaymentModal = ({ addresses, userId, isOpen, onRequestClose, bookingType, 
         console.log("Booking created:", bookingData);
 
         response = await axios.post(
-            "http://localhost:3000/tourist/bookings/historicalPlace",
+            "/tourist/bookings/historicalPlace",
             bookingData
         );
       }
@@ -51,7 +51,7 @@ const PaymentModal = ({ addresses, userId, isOpen, onRequestClose, bookingType, 
             pointsEarned: response.data.pointsEarned || 0
           };
 
-          await axios.post('http://localhost:3000/tourist/bookings/send-receipt', emailData);
+          await axios.post('/tourist/bookings/send-receipt', emailData);
           console.log('Receipt email sent successfully');
         } catch (error) {
           console.error('Error sending receipt email:', error);

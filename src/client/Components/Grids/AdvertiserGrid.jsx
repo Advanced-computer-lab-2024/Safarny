@@ -68,7 +68,7 @@ export default function DataTable4() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/admin/getUsers?role=Advertiser');
+                const response = await axios.get('/admin/getUsers?role=Advertiser');
                 const formattedRows = response.data.map((user) => ({
                     id: user._id,
                     username: user.username,
@@ -95,7 +95,7 @@ export default function DataTable4() {
         try {
             await Promise.all(
                 selectedRows.map(rowId =>
-                    axios.delete(`http://localhost:3000/admin/deleteAdvertiser/${rowId}`)
+                    axios.delete(`/admin/deleteAdvertiser/${rowId}`)
                 )
             );
             setRows(rows.filter(row => !selectedRows.includes(row.id)));
@@ -109,7 +109,7 @@ export default function DataTable4() {
         try {
             await Promise.all(
                 selectedRows.map(rowId =>
-                    axios.put(`http://localhost:3000/admin/updateUserStatus/${rowId}`, { Status: "Accepted" })
+                    axios.put(`/admin/updateUserStatus/${rowId}`, { Status: "Accepted" })
                 )
             );
             setRows(rows.map(row => selectedRows.includes(row.id) ? { ...row, Status: "Accepted" } : row));

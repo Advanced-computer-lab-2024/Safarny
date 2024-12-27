@@ -10,7 +10,7 @@ const ActivityCategory = () => {
   useEffect(() => {
     const fetchcategory = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/admin/category'); // Ensure this is the correct endpoint
+        const response = await axios.get('/admin/category'); // Ensure this is the correct endpoint
         if (Array.isArray(response.data)) {
           setcategory(response.data);
         } else {
@@ -28,7 +28,7 @@ const ActivityCategory = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/admin/category/${id}`); // Ensure this is the correct endpoint
+      await axios.delete(`/admin/category/${id}`); // Ensure this is the correct endpoint
       setMessage('Category deleted successfully!');
       setcategory(categories.filter(ActivityCategory => ActivityCategory._id !== id)); // Use _id for MongoDB
     } catch (error) {

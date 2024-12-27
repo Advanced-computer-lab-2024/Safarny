@@ -34,7 +34,7 @@ const AdvertiserSales = () => {
 
     const getRevenueByAdvertiser = async (id) => {
         try {
-            const response = await fetch(`http://localhost:3000/advertiser/getRevenueByAdvertiser/${id}`);
+            const response = await fetch(`/advertiser/getRevenueByAdvertiser/${id}`);
             const data = await response.json();
             setRevenue(data.totalRevenue);
         } catch (error) {
@@ -44,7 +44,7 @@ const AdvertiserSales = () => {
 
     const getBoughtCountByAdvertiser = async (id) => {
         try {
-            const response = await fetch(`http://localhost:3000/advertiser/getnumofclients_activity/${id}`);
+            const response = await fetch(`/advertiser/getnumofclients_activity/${id}`);
             const data = await response.json();
             setBoughtCount(data.totalBought);
         } catch (error) {
@@ -54,7 +54,7 @@ const AdvertiserSales = () => {
 
     const getTouristsByActivityAndDate = async (id, month, year) => {
         try {
-            const response = await fetch(`http://localhost:3000/advertiser/report/${id}?month=${month}&year=${year}`);
+            const response = await fetch(`/advertiser/report/${id}?month=${month}&year=${year}`);
             const data = await response.json();
             const sumOfTourists = data.reduce((total, activity) => total + activity.totalTourists, 0);
             setTotalTourists(sumOfTourists);
@@ -64,7 +64,7 @@ const AdvertiserSales = () => {
     };
 
     const filteredRevenueByAdvertiser = async (id, month, year) => {
-        const response = await fetch(`http://localhost:3000/advertiser/reportsales/${id}?month=${month}&year=${year}`);
+        const response = await fetch(`/advertiser/reportsales/${id}?month=${month}&year=${year}`);
         const data = await response.json();
         setFilteredRevenue(data.totalRevenue);
     };

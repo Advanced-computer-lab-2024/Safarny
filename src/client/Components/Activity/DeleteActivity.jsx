@@ -18,7 +18,7 @@ const DeleteActivity = () => {
         const fetchActivities = async () => {
             try {
                 setIsLoading(true);
-                const response = await axios.get(`http://localhost:3000/advertiser/activities/user/${userId}`);
+                const response = await axios.get(`/advertiser/activities/user/${userId}`);
                 
                 if (response.data && Array.isArray(response.data)) {
                     setActivities(response.data);
@@ -49,7 +49,7 @@ const DeleteActivity = () => {
         }
 
         try {
-            await axios.delete(`http://localhost:3000/advertiser/${selectedActivityId}`);
+            await axios.delete(`/advertiser/${selectedActivityId}`);
             setActivities(activities.filter(activity => activity._id !== selectedActivityId));
             setSelectedActivityId('');
             setMessage('Activity deleted successfully!');

@@ -141,11 +141,11 @@ const ProductList = () => {
       const updatedProduct = { ...product, quantity: product.quantity - 1, purchasedCount: product.purchasedCount + 1 };
       await axios.put(`/admin/products/${product._id}`, updatedProduct);
       await axios.put(`/admin/products/${product._id}`, updatedProduct);
-      const profileResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
+      const profileResponse = await axios.get(`/tourist/${userId}`);
       const currentPosts = profileResponse.data.posts || [];
       const updatedPosts = [...currentPosts, product._id];
 
-      await axios.put(`http://localhost:3000/tourist/${userId}`, {
+      await axios.put(`/tourist/${userId}`, {
         id: userId,
         posts: updatedPosts,
         wallet: wallet - convertedPrice,
@@ -163,14 +163,14 @@ const ProductList = () => {
       console.log("userid: ", userId);
   
       // Fetch the current user data to get the existing cart
-      const profileResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
+      const profileResponse = await axios.get(`/tourist/${userId}`);
       const currentCart = profileResponse.data.cart || [];
   
       // Add the product ID to the cart array
       const updatedCart = [...currentCart, product._id];
   
       // Update the user profile with the new cart
-      await axios.put(`http://localhost:3000/tourist/${userId}`, {
+      await axios.put(`/tourist/${userId}`, {
         id: userId,
         cart: updatedCart,
       });

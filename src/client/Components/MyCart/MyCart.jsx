@@ -166,7 +166,7 @@ const Cart = () => {
 
       // Fetch the current user profile
       const profileResponse = await axios.get(
-          `http://localhost:3000/tourist/${userId}`
+          `/tourist/${userId}`
       );
       const currentPosts = profileResponse.data.posts || [];
       const updatedPosts = [
@@ -175,7 +175,7 @@ const Cart = () => {
       ];
 
       // Update the user's profile with the new wallet and posts
-      await axios.put(`http://localhost:3000/tourist/${userId}`, {
+      await axios.put(`/tourist/${userId}`, {
         id: userId,
         posts: updatedPosts,
         wallet: wallet - totalPrice,
@@ -236,7 +236,7 @@ const Cart = () => {
       console.log("User ID: ", userId);
       // Fetch the user's current cart
       const profileResponse = await axios.get(
-          `http://localhost:3000/tourist/${userId}`
+          `/tourist/${userId}`
       );
       const currentCart = profileResponse.data.cart || [];
 
@@ -244,7 +244,7 @@ const Cart = () => {
       const updatedCart = currentCart.filter((id) => id !== product._id);
 
       // Update the user's profile with the updated cart
-      await axios.put(`http://localhost:3000/tourist/${userId}`, {
+      await axios.put(`/tourist/${userId}`, {
         id: userId,
         cart: updatedCart,
       });

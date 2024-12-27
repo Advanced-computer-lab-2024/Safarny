@@ -17,7 +17,7 @@ const ReadHistoricalPlaceDetails = () => {
     useEffect(() => {
         const fetchPlaceById = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/toursimgovernor/places/${id}`);
+                const response = await axios.get(`/toursimgovernor/places/${id}`);
                 setPlace(response.data);
                 setLoading(false);
             } catch (err) {

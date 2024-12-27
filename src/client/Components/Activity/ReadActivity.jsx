@@ -26,7 +26,7 @@ const ReadActivities = () => {
     useEffect(() => {
         const fetchActivities = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/advertiser/activities/user/${userId}`);
+                const response = await fetch(`/advertiser/activities/user/${userId}`);
 
                 if (!response.ok) {
                     if (response.status === 404) {
@@ -51,7 +51,7 @@ const ReadActivities = () => {
                 const counts = await Promise.all(
                     data.map(async (activity) => {
                         try {
-                            const countRes = await fetch(`http://localhost:3000/advertiser/getClientsByActivity/${activity._id}`);
+                            const countRes = await fetch(`/advertiser/getClientsByActivity/${activity._id}`);
                             const countData = await countRes.json();
                             return { [activity._id]: countData.boughtCount };
                         } catch {
@@ -71,7 +71,7 @@ const ReadActivities = () => {
 
         const fetchCategories = async () => {
             try {
-                const response = await fetch('http://localhost:3000/advertiser/GetCategories');
+                const response = await fetch('/advertiser/GetCategories');
                 const data = await response.json();
                 const categoryMap = data.reduce((acc, category) => {
                     acc[category._id] = category.type;
@@ -85,7 +85,7 @@ const ReadActivities = () => {
 
         const fetchTags = async () => {
             try {
-                const response = await fetch('http://localhost:3000/admin/tag');
+                const response = await fetch('/admin/tag');
                 const data = await response.json();
                 const tagMap = data.reduce((acc, tag) => {
                     acc[tag._id] = tag.name;

@@ -305,7 +305,7 @@ function DeliveryStep({
   const fetchAddresses = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/tourist/${userId}`
+        `/tourist/${userId}`
       );
       setUserAddresses(response.data.addresses || []);
     } catch (error) {
@@ -350,12 +350,12 @@ function DeliveryStep({
     try {
       // Get current user data
       const response = await axios.get(
-        `http://localhost:3000/tourist/${userId}`
+        `/tourist/${userId}`
       );
       const currentAddresses = response.data.addresses || [];
 
       // Update user profile with new address
-      await axios.put(`http://localhost:3000/tourist/${userId}`, {
+      await axios.put(`/tourist/${userId}`, {
         addresses: [...currentAddresses, newAddress],
       });
 
@@ -641,7 +641,7 @@ function FinishStep({
     setClickedSumit(true);
     try {
       const response = await axios.post(
-          "http://localhost:3000/tourist/order/checkout",
+          "/tourist/order/checkout",
           {
             userId,
             items: cartItems.map((item) => ({
@@ -661,7 +661,7 @@ function FinishStep({
       console.log("Order saved successfully:", response.data);
 
       // Fetch user data
-      const userResponse = await axios.get(`http://localhost:3000/tourist/${userId}`);
+      const userResponse = await axios.get(`/tourist/${userId}`);
       const user = userResponse.data;
 
       // Calculate loyalty points based on loyalty level

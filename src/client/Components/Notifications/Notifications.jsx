@@ -13,7 +13,7 @@ const Notifications = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/notification/getNotifications/${userId}`);
+        const response = await axios.get(`/notification/getNotifications/${userId}`);
         setNotifications(response.data);
       } catch (error) {
         console.error('Error fetching notifications:', error);
@@ -25,7 +25,7 @@ const Notifications = () => {
 
   const markAsRead = async (notificationId) => {
     try {
-      await axios.put(`http://localhost:3000/notification/update/${notificationId}`);
+      await axios.put(`/notification/update/${notificationId}`);
       setNotifications((prevNotifications) =>
         prevNotifications.map((notification) =>
           notification._id === notificationId ? { ...notification, read: true } : notification

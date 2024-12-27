@@ -65,7 +65,7 @@ export default function DataTable3() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/admin/getUsers?role=Seller');
+        const response = await axios.get('/admin/getUsers?role=Seller');
         const formattedRows = response.data.map((user) => ({
           id: user._id,
           username: user.username,
@@ -91,7 +91,7 @@ export default function DataTable3() {
     try {
       await Promise.all(
           selectedRows.map(rowId =>
-              axios.delete(`http://localhost:3000/admin/deleteUser/${rowId}`)
+              axios.delete(`/admin/deleteUser/${rowId}`)
           )
       );
       // Refetch data or update state to remove deleted rows
@@ -106,7 +106,7 @@ export default function DataTable3() {
     try {
       await Promise.all(
           selectedRows.map(rowId =>
-              axios.put(`http://localhost:3000/admin/updateUserStatus/${rowId}`, { Status: "Accepted" })
+              axios.put(`/admin/updateUserStatus/${rowId}`, { Status: "Accepted" })
           )
       );
       // Optionally refetch data or update the state

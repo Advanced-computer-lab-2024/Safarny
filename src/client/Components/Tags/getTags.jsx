@@ -7,7 +7,7 @@ const GetTags = () => {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/tag');
+        const response = await axios.get('/tag');
         setTags(response.data);
       } catch (error) {
         console.error('Error fetching tags:', error);
