@@ -263,14 +263,14 @@ const SignUp = () => {
             'Content-Type': 'application/json',
           }
         });
-
+        const userId = response.data.data.user._id;
         if (response.data.token) {
           setSuccess(true);
           setError('');
           localStorage.setItem('token', response.data.token);
           localStorage.setItem('user', JSON.stringify(response.data.data.user));
           setTimeout(() => {
-            navigate('/profile');
+            navigate('/Profile', { state: { userId } });
           }, 1500);
         }
       } catch (err) {
