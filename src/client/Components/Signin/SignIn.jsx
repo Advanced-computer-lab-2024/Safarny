@@ -22,7 +22,7 @@ const SignIn = () => {
       
       try {
         // First check if user exists
-        const checkUserResponse = await axios.get(`http://localhost:3000/guest/check-user/${result.user.email}`);
+        const checkUserResponse = await axios.get(`/guest/check-user/${result.user.email}`);
         
         if (!checkUserResponse.data.exists) {
           // If user doesn't exist, redirect to signup
@@ -31,7 +31,7 @@ const SignIn = () => {
         }
 
         // If user exists, proceed with Google login
-        const response = await axios.post('http://localhost:3000/guest/google-login', {
+        const response = await axios.post('/guest/google-login', {
           email: result.user.email,
           googleId: result.user.uid,
         });
@@ -87,7 +87,7 @@ const SignIn = () => {
     const userData = { email, password };
 
     try {
-      const response = await axios.post('http://localhost:3000/guest/login', userData);
+      const response = await axios.post('/guest/login', userData);
 
       // Assuming 'type', 'status', and 'id' are part of the response data
       const { type, Status, id } = response.data;
