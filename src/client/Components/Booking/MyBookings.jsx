@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./MyBookings.module.css";
-import Header from "/src/client/components/Header/Header";
-import Footer from "/src/client/components/Footer/Footer";
+import Header from "/src/client/Components/Header/Header";
+import Footer from "/src/client/Components/Footer/Footer";
 import axios from "axios";
 import { CircularProgress, MenuItem, Select, FormControl, InputLabel, Button } from "@mui/material";
 import { FaCalendar, FaMapMarkerAlt, FaUser, FaStar, FaComments, FaHistory, FaClock } from "react-icons/fa";

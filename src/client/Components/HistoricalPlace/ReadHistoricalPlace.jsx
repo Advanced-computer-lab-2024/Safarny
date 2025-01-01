@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import Footer from "/src/client/components/Footer/Footer";
-import Header from "/src/client/components/Header/Header";
+import Footer from "/src/client/Components/Footer/Footer";
+import Header from "/src/client/Components/Header/Header";
 import styles from "./ReadHistoricalPlace.module.css";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import {FormControl, InputLabel, Select, MenuItem, CircularProgress} from "@mui/material";

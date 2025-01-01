@@ -14,8 +14,8 @@ import {
 } from "@mui/icons-material";
 import { FaBox, FaMapMarkerAlt, FaCreditCard, FaCalendar, FaDollarSign } from 'react-icons/fa';
 import styles from "./MyOrders.module.css";
-import Header from "/src/client/components/Header/Header";
-import Footer from "/src/client/components/Footer/Footer";
+import Header from "/src/client/Components/Header/Header";
+import Footer from "/src/client/Components/Footer/Footer";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 

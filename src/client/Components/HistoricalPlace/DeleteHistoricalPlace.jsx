@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Logo from '/src/client/Assets/Img/logo.png';
+import Logo from '/src/client/Assets/Img/Logo.png';
 import Footer from '/src/client/Components/Footer/Footer';
 import styles from './DeleteHistoricalPlace.module.css'; // Import the CSS module
 

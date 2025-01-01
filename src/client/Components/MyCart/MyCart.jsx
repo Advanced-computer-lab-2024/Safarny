@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import Footer from "/src/client/components/Footer/Footer";
-import Header from "/src/client/components/Header/Header";
+import Footer from "/src/client/Components/Footer/Footer";
+import Header from "/src/client/Components/Header/Header";
 import styles from "./MyCart.module.css";
 import StarRatings from "react-star-ratings";
 import CheckoutModal from "../MyOrder/CheckoutModal.jsx";
