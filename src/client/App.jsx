@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Homepage from "/src/client/Components/Home/Homepage";
 import Footer from "/src/client/Components/Footer/Footer";
 import SignIn from "/src/client/Components/Signin/SignIn";
-import SignUp from "/src/client/Components/Signup/Signup";
+import SignUp from "/src/client/Components/Signup/SignUp";
 import SignUpExtra from "./Components/SignupExtra/SignUpExtra";
 import TourGuide from "./Pages/TourGuide";
 // import Advertiser from './pages/Advertiser';
