@@ -45,6 +45,10 @@ const port = process.env.PORT || 3000;
 
 DB();
 
+app.get("/healthz", (req, res) => {
+  res.status(200).send("OK");
+});
+
 // app.use("/posting", Posts);
 // app.use("/signup", signUp);
 // app.use("/signup/addadmin", signUp);
@@ -97,6 +101,6 @@ app.use("/signup", signUp);
 
 app.use('/api/analytics', analyticsRoutes);
 
-ViteExpress.listen(app, 3000, () => {
-  console.log(`Server running on port: ${port}`);
+ViteExpress.listen(app, process.env.PORT || 3000, () => {
+  console.log(`Server running on port: ${process.env.PORT || 3000}`);
 });
