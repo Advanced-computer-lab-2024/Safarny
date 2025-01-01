@@ -19,7 +19,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from '../../../server/config/Firebase';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import styles from './Admin.module.css';
-import Logo from '/src/client/Assets/Img/logo.png';
+import Logo from '/src/client/Assets/Img/Logo.png';
 import Footer from '../Footer/Footer';
 import Tags from './tagAdmin';
 import ActivityCategory from './ActivityCategory';
