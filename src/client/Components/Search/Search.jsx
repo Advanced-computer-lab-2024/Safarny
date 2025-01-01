@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Footer from "/src/client/components/Footer/Footer";
-import Header from '/src/client/components/Header/Header';
+import Footer from "/src/client/Components/Footer/Footer";
+import Header from '/src/client/Components/Header/Header';
 import Logo from "/src/client/Assets/Img/logo.png";
 import styles from "./Search.module.css";
 import { Link } from "react-router-dom";

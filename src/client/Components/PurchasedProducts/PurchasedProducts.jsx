@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
-import Footer from '/src/client/components/Footer/Footer';
-import Header from '/src/client/components/Header/Header';
+import Footer from '/src/client/Components/Footer/Footer';
+import Header from '/src/client/Components/Header/Header';
 import styles from './PurchasedProducts.module.css';
 import StarRatings from 'react-star-ratings';
 import 'bootstrap/dist/css/bootstrap.min.css';

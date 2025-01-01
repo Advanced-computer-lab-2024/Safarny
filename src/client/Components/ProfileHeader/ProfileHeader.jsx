@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Navbar, Nav, Button, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { FaSearch, FaCog, FaArrowLeft } from 'react-icons/fa'; // Font Awesome Icons
-import Logo from '/src/client/Assets/Img/logo.png';
+import Logo from '/src/client/Assets/Img/Logo.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ProfileHeader.css';
 

@@ -5,8 +5,8 @@ import { FaClock, FaTicketAlt, FaMapMarkerAlt, FaCalendar, FaStar } from 'react-
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import Header from '/src/client/components/Header/Header';
-import Footer from '/src/client/components/Footer/Footer';
+import Header from '/src/client/Components/Header/Header';
+import Footer from '/src/client/Components/Footer/Footer';
 import styles from './UpcomingActivities.module.css';
 
 // Fix for default marker icon

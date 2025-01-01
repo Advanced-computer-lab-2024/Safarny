@@ -13,8 +13,8 @@ import axios from "axios";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "/src/server/config/Firebase";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Footer from "/src/client/components/Footer/Footer";
-import Header from "/src/client/components/Header/Header";
+import Footer from "/src/client/Components/Footer/Footer";
+import Header from "/src/client/Components/Header/Header";
 import styles from './Seller.module.css';
 import { Rating } from "@mui/material";
 

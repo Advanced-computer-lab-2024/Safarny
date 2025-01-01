@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./UpcomingItinerary.module.css";
-import Footer from "/src/client/components/Footer/Footer";
+import Footer from "/src/client/Components/Footer/Footer";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   CircularProgress,

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import Footer from '/src/client/components/Footer/Footer';
+import Footer from '/src/client/Components/Footer/Footer';
 import styles from './WishList.module.css';
-import Header from '/src/client/components/Header/Header';
+import Header from '/src/client/Components/Header/Header';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMoon, FiSun, FiShoppingCart, FiHeart, FiTrash2 } from 'react-icons/fi';
 import { toast, ToastContainer } from 'react-toastify';
