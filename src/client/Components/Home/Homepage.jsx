@@ -9,7 +9,7 @@ import image4 from '/src/client/Assets/Img/image4.jpg';
 import image5 from '/src/client/Assets/Img/image5.jpg';
 import image6 from '/src/client/Assets/Img/image6.jpg';
 import Logo from '/src/client/Assets/Img/Logo.png';
-import Footer from '/src/client/components/Footer/Footer';
+import Footer from '/src/client/Components/Footer/Footer';
 
 const Homepage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
