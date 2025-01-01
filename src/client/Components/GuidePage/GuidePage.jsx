@@ -5,7 +5,7 @@ import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import profile from '/src/client/Assets/Img/profile.png';
 import Ranks from '/src/client/Assets/Img/Ranks.png';
-import Bar from '/src/client/Assets/Img/sidebar.png';
+// import Bar from '/src/client/Assets/Img/sidebar.png';
 import act from '/src/client/Assets/Img/act.png';
 import iti from '/src/client/Assets/Img/Iti2.png';
 import places from '/src/client/Assets/Img/places2.png'; 

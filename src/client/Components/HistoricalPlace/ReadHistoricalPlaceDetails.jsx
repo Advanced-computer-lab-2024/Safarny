@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { FaClock, FaTicketAlt, FaMapMarkerAlt, FaTags } from 'react-icons/fa';
-import Logo from '/src/client/Assets/Img/logo.png';
+import Logo from '/src/client/Assets/Img/Logo.png';
 import Footer from '/src/client/Components/Footer/Footer';
 import styles from './ReadHistoricalPlaceDetails.module.css';
 import Header from '/src/client/Components/Header/Header';
