@@ -80,9 +80,9 @@ import GuidePage from "./Components/GuidePage/GuidePage";
 import GuidePageGuest from "./Components/GuidePage/GuidePageGuest";
 
 // Importing new comment components
-import CreateCommentForActivity from "./Components/Comments/CreateCommentForActivity";
-import CreateCommentForItinerary from "./Components/Comments/CreateCommentForItinerary";
-import CreateCommentForTourGuide from "./Components/Comments/CreateCommentForTourGuide";
+import CreateCommentForActivity from "./Components/comments/CreateCommentForActivity";
+import CreateCommentForItinerary from "./Components/comments/CreateCommentForItinerary";
+import CreateCommentForTourGuide from "./Components/comments/CreateCommentForTourGuide";
 import PasswordRecovery from "./Components/PasswordRecovery/PasswordRecovery";
 import Notifications from "./Components/Notifications/Notifications";
 import PaymentModal from './Components/Booking/PaymentModal';
