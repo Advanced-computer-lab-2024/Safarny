@@ -12,7 +12,7 @@ import places from '/src/client/Assets/Img/places2.png';
 import open2 from '/src/client/Assets/Img/open2.png';
 import create from '/src/client/Assets/Img/create2.png';
 import view from '/src/client/Assets/Img/View2.png';
-import products from '/src/client/Assets/Img/products2.png';
+import products from '/src/client/Assets/Img/Products2.png';
 import orders from '/src/client/Assets/Img/orders.png';
 import update from '/src/client/Assets/Img/Update2.png';
 import flight from '/src/client/Assets/Img/flight2.png';
