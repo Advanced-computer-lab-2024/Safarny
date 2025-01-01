@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
-import Logo from '/src/client/Assets/Img/logo.png';
-import Footer from '/src/client/components/Footer/Footer';
+import Logo from '/src/client/Assets/Img/Logo.png';
+import Footer from '/src/client/Components/Footer/Footer';
 import styles from './UpdateHistoricalPlace.module.css'; // Import the CSS module
 
 const UpdateHistoricalPlace = () => {
