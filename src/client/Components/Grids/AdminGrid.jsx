@@ -7,7 +7,7 @@ import { Modal, CircularProgress } from '@mui/material';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
-// Define the column
+// Define the columns
 const columns = [
     { field: 'id', headerName: 'ID', width: 230 },
     { field: 'username', headerName: 'Username', width: 130 },
